@@ -1,0 +1,201 @@
+$cor-azul-padrao: #002e9d;
+
+body {
+  display: flex;
+  height: 100%;
+  min-height: 100vh;
+  flex-direction: column;
+  background-color: #eeeeee;
+  // background-color: #ff207a;
+  background-image: url("../src/assets/GESAClow.gif");
+}
+
+main {
+  flex: 1 0 auto;
+}
+
+.form-config {
+  background:#ffffff;
+}
+
+.tabs .indicator{
+  background-color: $cor-azul-padrao;
+}
+
+.ui.table td {
+  padding: 0;
+  text-align: center;
+}
+
+// table tbody tr td{
+//   padding-top: 0px;
+//   padding-bottom: 0px;
+// }
+
+blockquote{
+  border-left: 5px solid $cor-azul-padrao;
+}
+
+div.container.form{
+  padding-top: 3%;
+}
+
+
+.containerVisualizar {
+  width: 90%;
+}
+
+.btn-row {
+    background: $cor-azul-padrao;
+    margin-top: 2%;
+}
+
+div.tabular.menu a.item{
+  pointer-events: none;
+  cursor: default;
+}
+
+a.ui.button,
+a.ui.button:active,
+a.ui.button:focus,
+button.ui.button,
+button.ui.button:active,
+button.ui.button:focus,
+div.ui.big.label,
+div.ui.big.label:active,
+div.ui.big.label:focus{
+  background-color: $cor-azul-padrao;
+  color: #ffffff;
+}
+
+a.ui.button:hover, button.ui.button:hover, div.ui.big.label:hover{
+  background-color: #4183c4;
+  color: #ffffff;
+}
+
+// TITULO DO SEARCH DA TABELA - INICIO
+table.ui.celled.table
+tbody
+td.ui.center.aligned.collapsing{
+  padding-left: 1px;
+  padding-right: 1px;
+}
+
+th.ui.center.aligned.collapsing
+div.ui.icon.input
+input.tituloTabela.inputMini{
+  width: 70px;
+}
+
+th.ui.center.aligned.collapsing
+div.ui.icon.input
+input.tituloTabela.inputP{
+  width: 120px;
+}
+
+th.ui.center.aligned.collapsing
+div.ui.icon.input
+input.tituloTabela.inputPequeno{
+  width: 90px;
+}
+
+th.ui.center.aligned.collapsing
+div.ui.icon.input
+input.tituloTabela.inputMediano{
+  width: 155px;
+}
+
+th.ui.center.aligned.collapsing
+div.ui.icon.input
+input.tituloTabela.inputMedio{
+  width: 170px;
+}
+
+th.ui.center.aligned.collapsing
+div.ui.icon.input
+input.tituloTabela::-webkit-input-placeholder { /* WebKit browsers */
+  color: black;
+  font-weight: bold;
+}
+
+th.ui.center.aligned.collapsing
+div.ui.icon.input
+input.tituloTabela:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+  color: black;
+  font-weight: bold;
+}
+
+th.ui.center.aligned.collapsing
+div.ui.icon.input
+input.tituloTabela::-moz-placeholder { /* Mozilla Firefox 19+ */
+  color: black;
+  font-weight: bold;
+}
+
+th.ui.center.aligned.collapsing
+div.ui.icon.input
+input.tituloTabela:-ms-input-placeholder { /* Internet Explorer 10+ */
+  color: black;
+  font-weight: bold;
+}
+
+//----FOCUS-----
+th.ui.center.aligned.collapsing
+div.ui.icon.input
+input.tituloTabela:focus::-webkit-input-placeholder { /* WebKit browsers */
+  color: rgb(163, 163, 163);
+  font-weight: bold;
+}
+
+th.ui.center.aligned.collapsing
+div.ui.icon.input
+input.tituloTabela:focus:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+  color: rgb(163, 163, 163);;
+  font-weight: bold;
+}
+
+th.ui.center.aligned.collapsing
+div.ui.icon.input
+input.tituloTabela:focus::-moz-placeholder { /* Mozilla Firefox 19+ */
+  color: rgb(163, 163, 163);;
+  font-weight: bold;
+}
+
+th.ui.center.aligned.collapsing
+div.ui.icon.input
+input.tituloTabela:focus:-ms-input-placeholder { /* Internet Explorer 10+ */
+  color: rgb(163, 163, 163);;
+  font-weight: bold;
+}
+
+th.ui.center.aligned.collapsing p.acaoTable{
+  width: 80px;
+}
+
+div.invalid-feedback {
+  display: none;
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: 90%;
+  color: #9f3a38;
+}
+
+div.invalid-feedback.active {
+  display: block;
+}
+
+sui-pagination.ui.pagination.menu
+a.item.active {
+  background-color: #8ca1d3;
+  color: white;
+  font-weight: bold;
+  border-radius: 2px;
+}
+
+div.ui.compact.right.floated.segment {
+  margin-right: 0;
+}
+
+
+
+// FIM

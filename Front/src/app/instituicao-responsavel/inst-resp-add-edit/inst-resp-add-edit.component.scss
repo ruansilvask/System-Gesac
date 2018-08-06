@@ -1,0 +1,28 @@
+$cor-azul-padrao: #002e9d;
+.container {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  margin-top: 10vh;
+}
+
+.btn-next,
+.btn-envio {
+  background: $cor-azul-padrao;
+  margin-top: 1%;
+}
+
+.btn-tipologia{
+  background-color: $cor-azul-padrao;
+}
+
+.btnAdd{
+  margin-top: 24px;
+}
+
+
+
+
+
+
+

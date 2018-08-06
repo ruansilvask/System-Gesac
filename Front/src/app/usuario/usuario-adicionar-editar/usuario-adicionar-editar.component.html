@@ -1,0 +1,109 @@
+<div class="ui container">
+  <div class="ui segment">
+    <sui-tabset>
+      <!-- Tabs Menu -->
+      <div class="ui top attached tabular menu">
+        <a class="item" suiTabHeader="1">Usuário</a>
+      </div>
+      <!-- Fim Tabs Menu -->
+
+      <!-- Tabs Contrato -->
+      <div class="ui bottom attached segment" suiTabContent="1">
+        <form class="ui form" #fAddUsuario="ngForm" (ngSubmit)="salvarUsuario(fAddUsuario)">
+          <div class="four fields">
+              <div class="field">
+                  <label>Status</label>
+                  <sui-radio-button name="status" value="A" [ngModel]="usuario.status" required>Ativo</sui-radio-button>
+                  <sui-radio-button name="status" value="I" [ngModel]="usuario.status" required>Inativo</sui-radio-button>
+                </div>
+            <div class="field">
+              <label>Nome</label>
+              <input type="text" name="nome" maxlength="100" [ngModel]="usuario.nome" placeholder="Nome" required>
+            </div>
+            <div class="field">
+              <label>Login</label>
+              <input type="text" name="login" maxlength="45" [ngModel]="usuario.login" placeholder="Login" required>
+            </div>
+            <div class="field">
+                <label>Email</label>
+                <input type="email" name="email" maxlength="45" [ngModel]="usuario.email" placeholder="Email" pattern="^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required>
+              </div>
+          </div>
+          <div class="field">
+              <div class="fields" *ngIf="!edicao">
+                  <div class="four wide field">
+                      <label>Digite a senha</label>
+                      <input type="password" #senha name="senha" maxlength="45" [ngModel]="usuario.senha" placeholder="Senha" required (ngModelChange)="inserirSenha($event)">
+                    </div>
+                    <div class="four wide field">
+                        <label>Digite a senha novamente</label>
+                        <input type="password" name="senhaNovamente" maxlength="45" [ngModel]="usuario.senhaNovamente" (ngModelChange)="verificarsenha($event, senha.value)" [disabled]="!senhaPreenchida" placeholder="Digite novamente" required>
+                      </div>
+              </div>
+              <div class="fields" *ngIf="edicao">
+                  <div class="sixteen wide field">
+                      <button class="ui button left floated" type="button" (click)="abreFechaModal()">
+                        Alterar Senha
+                      </button>
+                    </div>
+              </div>
+          </div>
+          <div class="field">
+            <div class="fields">
+              <div class="sixteen wide field">
+                  <button type="button" class="ui left labeled icon google plus button" routerLink="/usuario">
+                    <i class="angle double left icon"></i>
+                    Cancelar
+                  </button>
+                <button class="ui right labeled icon button right floated" [disabled]="!senhaCorreta || fAddUsuario.invalid" type="submit">
+                  <i class="angle double right icon"></i>
+                  Salvar
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+        <!-- Modal alterar senha -->
+        <sui-modal *ngIf="trocarSenha" [isClosable]="false" [size]="'mini'" #modal>
+            <div class="header">
+                <div class="ui grid">
+                  <div class="fourteen wide column">
+                   Alterar Senha
+                  </div>
+                  <div class="one wide column">
+                    <i class="close red link icon" (click)="abreFechaModal()"></i>
+                  </div>
+                </div>
+              </div>
+          <div class="content">
+              <form class="ui form" #fPutSenha="ngForm" (ngSubmit)="AlterarSenha(fPutSenha)">
+                  <div class="field">
+                    <label>Senha antiga</label>
+                    <input type="password" #senhaAntiga name="senhaAntiga" maxlength="45" ngModel required  placeholder="Senha antiga">
+                  </div>
+                  <div class="field">
+                    <label>Nova senha</label>
+                    <input type="password" #senhaNova name="senha" maxlength="45" ngModel required [disabled]="!senhaAntiga.value" placeholder="Nova senha">
+                  </div>
+                  <div class="field">
+                    <label>Digite a nova senha novamente</label>
+                    <input type="password" #senhaNovamente name="senhaNovamente" maxlength="45" ngModel required [disabled]="!senhaAntiga.value || !senhaNova.value" placeholder="Nova senha novamente">
+                  </div>
+                  <div class="ui stackable two column grid">
+                      <div class="column">
+                          <button class="ui red button left floated" (click)="abreFechaModal()">Cancelar</button>
+                      </div>
+                      <div class="column">
+                          <button class="ui button right floated" type="submit" [disabled]="fPutSenha.invalid" autofocus>Alterar senha</button>
+                      </div>
+                  </div>
+                </form>
+          </div>
+
+      </sui-modal>
+        <!-- Modal alterar senha -->
+      </div>
+      <!-- Fim Tabs Contrato -->
+    </sui-tabset>
+  </div>
+</div>

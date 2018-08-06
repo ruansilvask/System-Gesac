@@ -1,0 +1,33 @@
+$cor-azul-padrao: #002e9d;
+
+.container{
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  margin-top: 10vh;
+  margin-bottom: 10vh;
+}
+
+.ui.card {
+    margin: 0em 0;
+    margin-left: 6%;
+    margin-top: 3%;
+}
+
+
+.btnAdd{
+  margin-top: 22px;
+}
+
+.ui.btnColor.button{
+   background-color: red;
+}
+
+
+.ng-invalid.ng-touched:not(form) {
+border: 1px solid red;
+}
+
+.ng-valid:not(form) {
+border: 1px solid green;
+}

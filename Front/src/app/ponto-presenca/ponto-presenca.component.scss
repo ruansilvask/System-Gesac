@@ -1,0 +1,20 @@
+$cor-azul-padrao: #002e9d;
+
+.container{
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  margin-top: 10vh;
+  margin-bottom: 10vh;
+}
+
+.containerVisualizar {
+  width: 90%;
+}
+
+
+.text-area {
+  margin-top: 0px; 
+  margin-bottom: 0px; 
+  height: 112px;
+}

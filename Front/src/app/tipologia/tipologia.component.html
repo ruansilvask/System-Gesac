@@ -1,0 +1,92 @@
+<sui-dimmer class="inverted" [(isDimmed)]="segmentDimmed" [isClickable]="false">
+    <div class="ui massive text loader">Carregando...</div>
+</sui-dimmer>
+<div class="ui container containerVisualizar">
+
+        <!-- Tabs Contrato -->
+        <div class="ui bottom attached segment column">
+          <form class="ui form" [formGroup]="formTipologias">
+            <div class="ui right aligned grid stackable">
+              <div class=" left floated left aligned sixteen wide column">
+                <div class="ui segment">
+                  <div class="field">
+                    <div class="fields">
+                      <div class="sixteen wide field">
+                        <label>Nome</label>
+                        <input type="text" maxlength="45" placeholder="Nome" formControlName="nome" required>
+                      </div>
+                      <div class="three wide field">
+                        <button class="ui right floated labeled icon button btnAdd" (click)="salvarTipologia()" [disabled]="formTipologias.invalid">
+                          <i class="plus icon"></i>
+                          Adicionar
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <!-- Fim Tabs Contrato -->
+        <div class="ui stackable one column grid">
+          <div class="column">
+            <div class="ui compact right floated segment"><p><strong>{{totalItens}} {{(totalItens !== 1) ? 'itens' : 'item'}}</strong></p></div>
+          </div>
+        </div>
+    <table class="ui celled table">
+      <thead>
+        <tr>
+          <th class="ui center aligned collapsing">
+              <div class="ui icon input">
+                <input class="tituloTabela" type="text" name="nome" [(ngModel)]="filtros.nome" placeholder="Nome">
+                <i class="search icon"></i>
+              </div>
+            </th>
+            <th class="ui center aligned collapsing">
+                Ações
+              </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let tipo of tipologias | filterTipologia:filtros.nome; index as i">
+          <td>
+            <div class="ui grid">
+              <div class="fourteen wide column">
+                  <div class="ui fluid input">
+                      <input type="text" [(ngModel)]="tipo.nome" #nomeTipologia placeholder="Procurar" [disabled]="desabilitado !== i">
+                    </div>
+              </div>
+              <div class="two wide column" *ngIf="desabilitado === i">
+                  <button class="ui button" (click)="editarTipologia(tipo, i)">Salvar</button>
+              </div>
+            </div>
+          </td>
+          <td class="ui center aligned collapsing">
+            <a class="mini ui icon button circular" (click)='desabilitarInput(i)' suiPopup popupHeader="Editar" popupInverted="true">
+              <i class="pencil alternate icon"></i>
+            </a>
+            <a class="mini ui icon button circular" (click)='removerTipologia(tipo)' suiPopup popupHeader="Remover" popupInverted="true">
+              <i class="trash alternate icon"></i>
+            </a>
+          </td>
+        </tr>
+
+      </tbody>
+      <tfoot>
+        <tr>
+            <th colspan="7">
+                <div class="ui right floated pagination menu">
+                    <sui-pagination [collectionSize]='totalItens'
+                                    [pageSize]="itensPagina"
+                                    [maxSize]="10"
+                                    [hasEllipses]="true"
+                                    [(page)]="pagina"
+                                    (click)="mudarPagina(pagina)"
+                                    >
+                    </sui-pagination>
+                </div>
+              </th>
+        </tr>
+      </tfoot>
+    </table>

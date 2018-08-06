@@ -1,0 +1,28 @@
+$cor-azul-padrao: #002e9d;
+
+.container{
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  margin-top: 10vh;
+  margin-bottom: 10vh;
+}
+
+.ui.card {
+    margin: 0em 0;
+    margin-left: 6%;
+    margin-top: 3%;
+}
+
+.ui.button{
+  background-color: $cor-azul-padrao;
+  color: white;
+}
+
+.btnAdd{
+  margin-top: 24px;
+}
+
+.ui.btnColor.button{
+   background-color: #db2828;
+}

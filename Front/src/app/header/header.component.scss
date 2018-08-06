@@ -1,0 +1,32 @@
+$cor-azul-padrao: #002e9d;
+
+.ui.secondary.pointing.menu{
+  background-color: $cor-azul-padrao;
+  opacity: 0.9
+}
+
+.ui.secondary.pointing.menu .item{
+  color: white;
+}
+div.ui.secondary.pointing.menu a.item.active{
+  border-color: white
+}
+
+div.ui.secondary.pointing.menu a.item:hover{
+  background-color: #0133ab;
+}
+
+.bar{
+  background-color: white;
+  width: 1px;
+  height: 80%;
+  margin-top: 3%;
+}
+
+div.ui.pointing.dropdown.item div.menu {
+  background-color: white;
+}
+
+span.ui.basic.loading.button.btnLoading {
+  box-shadow: none;
+}

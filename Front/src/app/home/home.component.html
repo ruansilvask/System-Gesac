@@ -1,0 +1,13 @@
+<div style="text-align: center; margin-top: 2.5%;">
+    <iframe class="powerBiHome" src="https://app.powerbi.com/view?r=eyJrIjoiMWRlNGJmMzgtNDRkMy00YmI2LTkyNmQtZWUzMTE4MjkxOWUxIiwidCI6Ijg4MGRkN2YxLWQwMmMtNGUxOS04MTVmLTQ2NDlkMzNmNWM2MyJ9" frameborder="0"></iframe>
+</div>
+<div class="ui grid fluid container">
+  <div class="four wide column"></div>
+  <div class="four wide column"></div>
+  <div class="four wide column"></div>
+  <div class="four wide column">
+    <img src="../../assets/download.png" class="lobinho" [ngClass]="{'rodar': rodar == true}" (click)="latiu()">
+    <img *ngIf="latido === true" src="../../assets/download2.jpg" class="balao">
+    <img src="../../assets/logo.jpg" style="width: 320px; height: 130px;">
+  </div>
+</div>

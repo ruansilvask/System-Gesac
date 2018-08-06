@@ -1,0 +1,14 @@
+.ui.attached.menu:not(.tabular){
+    margin: 0%;
+}
+
+.ui.attached:not(.message)+.ui.attached.segment:not(.top){
+  margin-bottom: 0%;
+}
+
+.formatHeader{
+  position: absolute; 
+  z-index: 1; 
+  width: 100%;
+}
+

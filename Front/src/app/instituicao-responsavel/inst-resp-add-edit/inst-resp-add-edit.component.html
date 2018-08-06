@@ -1,0 +1,371 @@
+<sui-dimmer class="inverted" [(isDimmed)]="segmentDimmed" [isClickable]="false">
+  <div class="ui massive text loader">Carregando...</div>
+</sui-dimmer>
+<!-- <a   class="-floating -large  waves-light tooltipped  left" data-position="right" data-delay="20" data-tooltip="Voltar"  (click)="goBack()"><i>ar_back</i></a> -->
+<div class="ui container">
+<div class="ui segment">
+  <div class="">
+    <sui-tabset>
+      <div class="ui top attached tabular menu" style="text-align:center ">
+        <!-- [(isActive)]="active[i]" -->
+        <a class="item" suiTabHeader="1" [(isActive)]="instResp">Instituição
+          <br>Responsável</a>
+
+        <a class="item" suiTabHeader="2" [(isActive)]="contatos">Contatos</a>
+        <a class="item" suiTabHeader="3" [(isActive)]="respLegal">Representante
+          <br>Legal</a>
+
+      </div>
+
+      <!-- Inicio da aba 1 -->
+      <div class="ui bottom attached segment" suiTabContent="1">
+        <form  class="ui form error" #formInstRep="ngForm"
+          (ngSubmit)="submitInstResp(formInstRep)">
+
+          <div class="field">
+            <div class="fields">
+              <!-- Inicio da Linha 1 -->
+              <div [ngClass]="{'error': !btnInstResp && cnpj_instituicao.dirty}" class="ui  four wide field">
+                <label for="CNPJ">CNPJ</label>
+                <input placeholder="Ex: 99.999.999/9999-99" mask="00.000.000/0000-00" name="cnpj_instituicao" #cnpj_instituicao='ngModel'
+                  (ngModelChange)='cnpj(formInstRep)' [(ngModel)]="formInstituicaoResp.cnpj_instituicao" type="text">
+                <div class="invalid-feedback" [ngClass]="{'active': !btnInstResp && cnpj_instituicao.dirty}">
+                  CNPJ Inválido!
+                </div>
+              </div>
+              <div [ngClass]="{'error': nome.invalid && formInstRep.submitted}" class="ui eight wide field">
+                <label for="Nome">Nome </label>
+                <input placeholder="Nome da instituição" maxlength="100" name="nome" #nome='ngModel' [(ngModel)]="formInstituicaoResp.nome"
+                  id="Nome" type="text" required>
+                <div class="invalid-feedback" [ngClass]="{'active':  nome.invalid && formInstRep.submitted}">
+                  Nome obrigatório!
+                </div>
+              </div>
+              <div [ngClass]="{'error': sigla.invalid && formInstRep.submitted}" class="ui  four wide field error">
+                <label for="Sigla">Sigla</label>
+                <input placeholder="Sigla da instituição" maxlength="10" name="sigla" #sigla='ngModel' [(ngModel)]="formInstituicaoResp.sigla"
+                  id="Sigla" type="text" required>
+                  <div class="invalid-feedback" [ngClass]="{'active':   sigla.invalid && formInstRep.submitted}">
+                    Sigla obrigatório!
+                  </div>
+              </div>
+              <!-- Fim da Linha 1 -->
+            </div>
+
+          </div>
+
+          <div class="field">
+            <div class="two fields">
+              <div class="ui eight wide field">
+                <label for="Endereço">Endereço </label>
+                <input placeholder="Endereço da instituição" maxlength="255" name="endereco" [(ngModel)]="formInstituicaoResp.endereco" id="Endereço"
+                  type="text">
+              </div>
+              <div class="ui two wide field">
+                <label for="numero">N°</label>
+                <input placeholder="Número da Inst." name="numero" [(ngModel)]="formInstituicaoResp.numero" id="numero" type="text" mask="999999">
+              </div>
+              <div class="ui three wide field">
+                <label for="Bairro">Bairro </label>
+                <input placeholder="Bairro da instituição" maxlength="100" name="bairro" [(ngModel)]="formInstituicaoResp.bairro" id="Bairro"
+                  type="text">
+              </div>
+              <div class="ui three wide field">
+                <label for="complmento">Complemento</label>
+                <input maxlength="1000" name="complemento" [(ngModel)]="formInstituicaoResp.complemento" id="complmento" type="text">
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="two fields">
+
+              <div class="ui five wide field">
+                <label for="Cep">Cep </label>
+                <input name="cep" [(ngModel)]="formInstituicaoResp.cep" id="Cep" type="text" mask="99999-999">
+              </div>
+              <div class="ui five wide field">
+                <label for="Município">UF </label>
+                <select class="ui fluid dropdown" [(ngModel)]="formInstituicaoResp.uf" name="uf" (change)="selectEstado(formInstituicaoResp.uf)">
+                  <option value="">Selecione o estado</option>
+                  <option *ngFor="let uf of ufs" value="{{uf.uf}}">{{uf.uf}}</option>
+                </select>
+
+              </div>
+
+              <div class="ui six wide field">
+                <label for="Município">Município </label>
+                <select class="ui fluid dropdown" name="cod_ibge" [(ngModel)]="formInstituicaoResp.cod_ibge">
+                  <option *ngFor="let municipio of municipios" value="{{municipio.cod_ibge}}">{{municipio.nome_municipio}}</option>
+                </select>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="field">
+            <div class="two fields">
+              <div class="ui four wide field">
+                <label for="DOU">Diário Oficial da União</label>
+                <input name="dou" maxlength="45" [(ngModel)]="formInstituicaoResp.dou" id="DOU" type="text">
+              </div>
+              <div class="ui four wide field">
+                <label for="TC">Termo de cooperação</label>
+                <input name="termo_coop" maxlength="255" [(ngModel)]="formInstituicaoResp.termo_coop" id="TC" type="text">
+              </div>
+              <div class="ui four wide field">
+                <label for="NumProcesso">Número do processo</label>
+                <input mask="99999.999999/9999-99" name="num_processo" [(ngModel)]="formInstituicaoResp.num_processo" id="NumProcesso" type="text">
+              </div>
+              <div class="ui one wide field">
+                <div class="inline fields">
+                  <label>Pagadora?</label>
+                  <div class="field">
+                    <div class="ui radio checkbox">
+                      <input type="radio" (click)="pagadoraError = false; formInstituicaoResp.pagadora.value = '1' " name="pagadora" [(ngModel)]="formInstituicaoResp.pagadora" [value]='1' name="pagadora">
+                      <label>Sim</label>
+                    </div>
+                  </div>
+                  <div class="field">
+                    <div class="ui radio checkbox">
+                      <input type="radio" (change)="checkPagadora(formInstRep)" name="pagadora" #ngModel=ngModel [(ngModel)]="formInstituicaoResp.pagadora" [value]='0' name="pagadora">
+                      <label>Não</label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ui stackable four column grid">
+
+            <div *ngIf='pagadoraError'class='column'>
+              <div class="ui error message">
+                <div >
+                  <div class="header">Desaja visualizar os {{ gesacVinculado.length }} GESACs vinculados a está instituição?</div>
+                  <br>
+                  <div class="ui stackable two column grid">
+                    <div class="column">
+                      <button type="button" (click)='modalVinculados = true' class="ui left floated labeled icon mini ui button" >
+                        <i class="angle double right icon"></i>Sim</button>
+                    </div>
+                    <div class="column">
+                      <button type="button" (click)='pagadoraError = false' class="ui left red floated labeled icon mini ui button" >
+                        <i class="close white link icon"></i>Não</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <br/>
+          <div class="ui stackable two column grid">
+              <div class="column">
+                  <button [routerLink]="['/instResp']" class="ui left labeled icon google plus button" type="button" >
+                    <i class="angle double left icon"></i>Cancelar</button>
+                </div>
+            <div class="column">
+              <button type="submit" class="ui right labeled icon button right floated">
+                <i class="angle double right icon"></i>Próximo</button>
+            </div>
+          </div>
+        </form>
+
+        <!-- botão para a proxima aba -->
+      </div>
+
+      <!-- Inicio da aba 2 -->
+      <div class="ui bottom attached segment" suiTabContent="2">
+
+        <app-contato></app-contato>
+
+        <div class="ui stackable two column grid">
+          <div class="column">
+            <button class="ui left labeled icon button" (click)="voltarInstResp()">
+              <i class="angle double left icon"></i>Voltar</button>
+          </div>
+          <div class="column">
+            <button class="ui right labeled icon button right floated" (click)="respLegal = true; repLegal()">
+              <i class="angle double right icon"></i>
+              Próximo
+            </button>
+          </div>
+        </div>
+
+
+        <!-- <button class="ui right labeled icon button right floated" [disabled]="fAddContato.invalid" type="submit">
+
+        </button> -->
+
+      </div>
+
+      <!-- Inicio da aba 3 -->
+      <div class="ui bottom attached segment" suiTabContent="3">
+
+        <form class="ui form" #formRepreLegal="ngForm">
+
+
+          <div class="field">
+            <div class="left floated left aligned sixteen wide column">
+
+
+              <div class="ui raised segment">
+                <a class="ui blue ribbon label">REPRESENTANTE ATIVO</a>
+
+                <div [ngClass]="(templateValue==true)?'four column grid':'three column grid'" class="ui stackable">
+                  <div class="column">
+                    <label>Contato</label>
+                    <div class="field">
+                      <div class="ui left icon input">
+                        <select class="form-control" [(ngModel)]="repreLegalContato" (change)="checkData(repreLegalContato)" name="repreLegalContato">
+                          <option *ngFor="let contatoInstResp of contatoInstResps" [ngValue]="contatoInstResp.cod_pessoa">{{contatoInstResp.nome}}</option>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="column">
+                    <label>Data inicial</label>
+                    <div class="field">
+                      <div class="ui left icon input">
+                        <i class="calendar icon"></i>
+                        <input suiDatepicker name="data_inicial" [(ngModel)]="repreLegal.data_inicial" [pickerMode]="'date'" autocomplete="off" [pickerFirstDayOfWeek]="0"
+                          [pickerUseNativeOnMobile]="false" required>
+                      </div>
+                    </div>
+                  </div>
+                  <div *ngIf="templateValue==true" class="column">
+                    <label>Data final</label>
+                    <div class="field">
+                      <div class="ui left icon input">
+                        <i class="calendar icon"></i>
+                        <input suiDatepicker name="data_final" [(ngModel)]="repreLegal.data_final" [pickerMode]="'date'" autocomplete="off" [pickerFirstDayOfWeek]="0"
+                          [pickerUseNativeOnMobile]="false" required>
+                      </div>
+                    </div>
+                  </div>
+
+
+                  <div class="column">
+                    <button class="ui right floated labeled icon button btnAdd" (click)="submitRepLegal(formRepreLegal)">
+                      <i class="save plane icon"></i> Salvar</button>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="ui segment">
+            <a class="ui orange ribbon label">REPRESENTANTES INATIVOS</a>
+
+
+            <table class="ui ui selectable striped  table">
+              <thead>
+                <tr>
+                  <th>
+                    <sui-select icon="filter" [isSearchable]="true" placeholder="Nome" #filterSelect>
+                      <sui-select-option *ngFor="let o of filterSelect.filteredOptions" [value]="o"></sui-select-option>
+                    </sui-select>
+                  </th>
+                  <th>
+                    <sui-select icon="filter" [isSearchable]="true" placeholder="Data Inicial" #filterSelect>
+                      <sui-select-option *ngFor="let o of filterSelect.filteredOptions" [value]="o"></sui-select-option>
+                    </sui-select>
+                  </th>
+                  <th>
+                    <sui-select icon="filter" [isSearchable]="true" placeholder="Data Final" #filterSelect>
+                      <sui-select-option *ngFor="let o of filterSelect.filteredOptions" [value]="o"></sui-select-option>
+                    </sui-select>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngIf="repreInativos.length==0">
+                  <td colspan="4" class="ui center aligned segment">Sem representantes inativos</td>
+                </tr>
+                <tr *ngFor="let repreInativo of repreInativos">
+                  <td>{{ repreInativo.nome }}</td>
+                  <td>{{ repreInativo.data_inicial | date:'dd/MM/yyyy' }}</td>
+                  <td>{{ repreInativo.data_final | date:'dd/MM/yyyy' }}</td>
+                </tr>
+              </tbody>
+              <!-- <tfoot>
+                                    <tr>
+                                        <th colspan="7">
+                                            <div class="ui right floated pagination menu">
+                                                <sui-pagination [collectionSize]='totalItens'
+                                                                [pageSize]="numeroPagina"
+                                                                [maxSize]="10"
+                                                                [hasEllipses]="true"
+                                                                [(page)]="select"
+                                                                (click)="page(select)"
+                                                                >
+                                                </sui-pagination>
+                                            </div>
+                                        </th>
+                                    </tr>
+                                  </tfoot> -->
+            </table>
+          </div>
+        </form>
+
+        <br>
+        <!-- botão para a proxima aba -->
+        <div class="ui stackable two column grid">
+          <div class="column">
+            <button class="ui left labeled icon button" (click)="contatos = true">
+              <i class="angle double left icon"></i>Voltar</button>
+          </div>
+          <div class="column">
+            <button class="ui right labeled icon button right floated" [routerLink]="['/instResp']" (click)="submitRepLegal(formRepreLegal)">
+              <i class="paper plane icon"></i>Finalizar</button>
+          </div>
+        </div>
+
+      </div>
+    </sui-tabset>
+  </div>
+  </div>
+</div>
+
+   <!-- Modal alterar senha -->
+   <sui-modal *ngIf="modalVinculados" [isClosable]="false" [size]="'tiny'" #modal>
+      <div class="header">
+          <div class="ui grid">
+            <div class="fourteen wide column">
+             GESACS vínculados
+            </div>
+            <div class="one wide column">
+              <i class="close red link icon" (click)="modalVinculados = false"></i>
+            </div>
+          </div>
+        </div>
+    <div class="content">
+        <!-- <div class="ui stackable two column grid">
+            <div class="column">
+              <button (click)='copiarGesac(gesacVinculado)' class="ui left floated labeled icon mini ui button" >
+                <i class="angle double right icon"></i>Copiar GESACs</button>
+            </div>
+
+          </div> -->
+        <table class="ui unstackable table">
+            <thead>
+              <tr>
+                <th>Código GESAC</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr class="copyTR" *ngFor="let gesac of gesacVinculado" >
+                <td>{{ gesac.cod_gesac }}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="column">
+              <button class="ui red button left floated" (click)="modalVinculados = false">Fechar</button>
+          </div>
+          <br>
+    </div>
+
+</sui-modal>
+  <!-- Modal alterar senha -->

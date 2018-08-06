@@ -1,0 +1,869 @@
+<div class="ui container">
+  <div class="ui stackable one column grid">
+    <!--botão voltar menu principal-->
+    <div class="column">
+
+      <button class="ui labeled icon button" data-position="left" [routerLink]="['/pontPre']">
+        <i class="angle double left icon"></i>Voltar</button>
+    </div>
+  </div>
+
+  <div class="ui segment">
+    <sui-accordion [closeOthers]="false">
+
+      <!---------------------- Inicio Collapse de Ponto de Presença     ------------------------------------>
+      <sui-accordion-panel [isOpen]="true">
+
+        <div title>
+          <div class="ui big label">
+            <i class="dropdown icon"></i>
+            <span class="titleDel">Ponto de Presença</span>
+          </div>
+        </div>
+        <div content>
+          <div class="ui raised segment">
+            <div class="ui grid">
+              <div class="twelve wide column">
+                <h4 class="ui header">Estabelecimento:</h4>{{pontospresencas?.nome}}</div>
+              <div class="four wide column">
+                <h4 class="ui header">Município-Uf:</h4>{{pontospresencas?.municipio}}</div>
+              <div class="four wide column">
+                <h4 class="ui header">Status:</h4> {{pontospresencas?.descricao}}</div>
+              <div class="four wide column">
+                <h4 class="ui header">Cod. Gesac:</h4> {{pontospresencas?.cod_gesac}}</div>
+              <div class="four wide column">
+                <h4 class="ui header">Cod. Pid:</h4> {{pontospresencas?.cod_pid}}</div>
+              <div class="four wide column">
+                <h4 class="ui header">Cod. Inep: </h4>{{pontospresencas?.inep}}</div>
+              <div class="four wide column">
+                <h4 class="ui header">Empresa:</h4> {{pontospresencas?.empresa}}</div>
+              <div class="four wide column">
+                <h4 class="ui header">Contrato:</h4> {{pontospresencas?.num_contrato}}</div>
+              <div class="four wide column">
+                <h4 class="ui header">Lote:</h4> {{pontospresencas?.lote}}</div>
+              <div class="four wide column">
+                <h4 class="ui header">Velocidade:</h4> {{pontospresencas?.velocidade}}</div>
+              <div class="eight wide column">
+                <h4 class="ui header">Instituição Responsavel:</h4> {{pontospresencas?.instituicao_resp}}</div>
+              <div class="eight wide column">
+                <h4 class="ui header">Instituição Pagadora:</h4> {{pontospresencas?.instituicao_pag}}</div>
+            </div>
+          </div>
+        </div>
+
+      </sui-accordion-panel>
+      <!---------------------- Fim Collapse de Ponto de Presença     ------------------------------------>
+
+      <!---------------------- Inicio Collapse de Endereço     ------------------------------------>
+      <sui-accordion-panel>
+        <div title>
+          <div class="ui big label">
+            <i class="dropdown icon"></i>
+            <span class="titleDel">Endereço</span>
+          </div>
+        </div>
+
+        <div content *ngFor="let endereco of enderecos">
+
+          <div class="ui raised segment">
+            <div class="ui grid">
+
+              <div class="fourteen wide column">
+                <h4 class="ui header">Endereço:</h4>{{endereco?.endereco}} </div>
+
+              <div class="two wide column">
+                <h4 class="ui header">Nº:</h4>{{endereco?.numero}} </div>
+            </div>
+
+            <div class="ui grid">
+              <div class="four wide column">
+                <h4 class="ui header">Bairro:</h4>{{endereco?.bairro}}</div>
+
+              <div class="twelve wide column">
+                <h4 class="ui header">Complemento:</h4> {{endereco?.complemento}}</div>
+            </div>
+
+            <div class="ui grid">
+              <div class="two wide column">
+                <h4 class="ui header">Cep</h4> {{endereco?.cep | cep}}</div>
+              <div class="two wide column">
+                <h4 class="ui header">Área:</h4> {{endereco?.area}}</div>
+              <div class="four wide column">
+                <h4 class="ui header">Latitude: </h4>{{endereco?.latitude}}</div>
+              <div class="four wide column">
+                <h4 class="ui header">Longitude:</h4> {{endereco?.longitude}}</div>
+              <div class="two wide column">
+                <h4 class="ui header">Data Inicial:</h4>{{endereco?.data_inicio | date: 'dd/MM/yyyy'}}</div>
+              <div class="two wide column">
+                <h4 class="ui header">Data Final:</h4> {{endereco?.data_final | date: 'dd/MM/yyyy'}}</div>
+            </div>
+          </div>
+          <br>
+        </div>
+
+      </sui-accordion-panel>
+
+      <!---------------------- Fim Collapse de Endereço     ------------------------------------>
+
+      <!---------------------- Inicio Collapse de Tipologia     ------------------------------------>
+      <sui-accordion-panel>
+
+        <div title>
+          <div class="ui big label">
+            <i class="dropdown icon"></i>
+            <span class="titleDel">Tipologia</span>
+          </div>
+        </div>
+
+        <div content>
+          <div class="ui raised segment">
+            <div class="ui grid">
+              <div class="four wide column" *ngFor="let tipologia of tipologias">
+                <h4 class="ui header">{{tipologia.nome}}</h4>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </sui-accordion-panel>
+      <!---------------------- Fim Collapse de Tipologia     ------------------------------------>
+
+      <!---------------------- Inicio Collapse de Contato     ------------------------------------>
+
+      <sui-accordion-panel>
+        <div title class="ui big label">
+          <i class="dropdown icon"></i>
+          <span class="titleDel">Contatos</span>
+        </div>
+        <div content>
+          <div class="ui right aligned grid">
+            <div class="left floated left aligned sixteen wide column">
+              <div class="ui segment">
+                <div class="ui stackable one column grid">
+                  <div class="ui raised segment">
+                    <p></p>
+                    <div class="sixteen wide column">
+                      <table class="ui celled table structured">
+                        <thead>
+                          <tr class="">
+                            <th class="ui center aligned collapsing" rowspan="2">Name</th>
+                            <th class="ui center aligned collapsing" rowspan="2">Última Interação</th>
+                            <th class="ui center aligned collapsing" rowspan="2">Cargo</th>
+                            <th class="ui center aligned collapsing" rowspan="2">Observação</th>
+                            <th class="ui center aligned collapsing" rowspan="2">Tipo de Telefone</th>
+                            <th class="ui center aligned collapsing" rowspan="2">Telefone</th>
+                            <th class="ui center aligned collapsing" rowspan="2">Email</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <ng-template ngFor let-contato [ngForOf]='contatos | filterppContato'>
+                            <tr>
+                              <td [attr.rowspan]="contato.telefone.length" [innerHTML]="contato.nome || '-'"></td>
+                              <td [attr.rowspan]="contato.telefone.length" [innerHTML]="(contato.data | date:'dd/MM/y') || '-'"></td>
+                              <td [attr.rowspan]="contato.telefone.length" [innerHTML]="contato?.cargo || '-'"></td>
+                              <td [attr.rowspan]="contato.telefone.length" [innerHTML]="contato?.obs || '-'"></td>
+                              <ng-template ngFor let-i="index" let-contTel [ngForOf]='contato?.telefone'>
+                                <td *ngIf="i===0" [innerHTML]="contTel?.tipo | tipoTel"></td>
+                                <td *ngIf="i===0" [innerHTML]="contTel?.fone | telefone"></td>
+                                <td *ngIf="i===0" [innerHTML]="contTel?.email || '-'"></td>
+                              </ng-template>
+                            </tr>
+                            <ng-template ngFor let-j="index" let-tel [ngForOf]='contato?.telefone'>
+                              <tr *ngIf="j>0">
+                                <td [innerHTML]="tel?.tipo | tipoTel"></td>
+                                <td [innerHTML]="tel?.fone | telefone"></td>
+                                <td [innerHTML]="tel?.email || '-'"></td>
+                              </tr>
+                            </ng-template>
+                          </ng-template>
+                        </tbody>
+                      </table>
+                    </div>
+                    <p></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sui-accordion-panel>
+
+
+
+      <!---------------------- Fim Collapse de Contato     ------------------------------------>
+
+
+      <!---------------------- Inicio Collapse de Analisar     ------------------------------------>
+      <sui-accordion-panel [isOpen]="FecharCollapseAnalise" [isDisabled]="!abrirAnalisar">
+
+
+        <div *ngIf="abrirAnalisar" title>
+          <div class="ui big label">
+            <i class="dropdown icon"></i>
+            <span class="titleDel">Analisar</span>
+          </div>
+        </div>
+
+        <div *ngIf="!abrirAnalisar" title>
+          <div class="ui big label red" data-position="right center" data-tooltip="Este ponto precisa estar em analise!">
+            <i class="dropdown icon"></i>
+            <span class="titleDel">Analisar</span>
+          </div>
+        </div>
+
+        <div content>
+
+          <form class="ui form error" #analiseSubmit="ngForm">
+
+            <div class="ui stackable four column grid">
+              <div class="column">
+                <label>Número do doc. ofício</label>
+                <input [(ngModel)]="analiseDetalhe.num_oficio" maxlength="20" name="num_oficio" placeholder="Número do ofício" type="text">
+              </div>
+
+              <div class="column field" [ngClass]="{'error': !!analiseSubmit?._directives[1]?.control?.invalid && !!analiseSubmit?._directives[1]?.control?.dirty}">
+                <label>Número do doc. Sei</label>
+                <input [(ngModel)]="analiseDetalhe.num_doc_sei" minlength="7" maxlength="7" name="num_doc_sei" placeholder="Número do ofício"
+                  type="text">
+                <div class="invalid-feedback" [ngClass]="{'active':  !!analiseSubmit?._directives[1]?.control?.invalid && !!analiseSubmit?._directives[1]?.control?.dirty}">
+                  Telefone Inválido!
+                </div>
+              </div>
+
+              <div class="column">
+                <label>Data do Ofício </label>
+                <div class="field">
+                  <div class="ui left icon input">
+                    <i class="calendar icon"></i>
+                    <input [(ngModel)]="analiseDetalhe.data_oficio" name="data_oficio" suiDatepicker [pickerMode]="'date'" [pickerFirstDayOfWeek]="0"
+                      [pickerUseNativeOnMobile]="false">
+                  </div>
+                </div>
+              </div>
+
+
+              <div class="column">
+                <label>Data de Instalação</label>
+                <div class="field">
+                  <div class="ui left icon input">
+                    <i class="calendar icon"></i>
+                    <input [(ngModel)]="analiseDetalhe.data_instalacao" name="data_instalacao" suiDatepicker [pickerMode]="'date'" [pickerFirstDayOfWeek]="0"
+                      [pickerUseNativeOnMobile]="false">
+                  </div>
+                </div>
+              </div>
+
+            </div>
+
+
+
+            <div class="ui  grid">
+              <div class="seven wide column">
+                <label>Empresa</label>
+                <select class="ui fluid dropdown" [(ngModel)]="analiseDetalhe.cnpj_empresa" name="cnpj_empresa" required>
+                  <option value="">Selecione Contrato</option>
+                  <option *ngFor="let empresa of empresas" value="{{empresa.cnpj_empresa}}">{{empresa.empresa}}</option>
+                </select>
+              </div>
+
+              <div class="four wide column">
+                <label>Teste Vazão</label>
+                <input [(ngModel)]="analiseDetalhe.teste_vazao" maxlength="15" name="teste_vazao" placeholder="Teste Vazão" type="text">
+              </div>
+
+              <div class="three wide column centered row">
+                <label>TIPP</label>
+                <div class="field">
+                  <sui-radio-button [value]="1" [ngModel]="analiseDetalhe?.tipp" name="tipp">Sim</sui-radio-button>
+
+                  <sui-radio-button [value]="0" [ngModel]="analiseDetalhe?.tipp" name="tipp">Não</sui-radio-button>
+
+                </div>
+              </div>
+
+            </div>
+
+
+
+            <div class="ui stackable five column grid">
+
+              <div class="column">
+                <label>Estabelecimento está correto?</label>
+                <div class="field">
+                  <sui-radio-button [value]="1" [(ngModel)]="analiseDetalhe.estabelecimento" name="estabelecimento">Sim</sui-radio-button>
+
+                  <sui-radio-button [value]="0" [(ngModel)]="analiseDetalhe.estabelecimento" name="estabelecimento">Não</sui-radio-button>
+
+                </div>
+              </div>
+
+              <div class="column">
+                <label>Endereço está correto?</label>
+                <div class="field">
+                  <sui-radio-button [value]="1" [(ngModel)]="analiseDetalhe.endereco" name="endereco">Sim</sui-radio-button>
+
+                  <sui-radio-button [value]="0" [(ngModel)]="analiseDetalhe.endereco" name="endereco">Não</sui-radio-button>
+
+                </div>
+              </div>
+
+              <div class="column">
+                <label>Responsável técnico?</label>
+                <div class="field">
+                  <sui-radio-button [value]="1" [(ngModel)]="analiseDetalhe.tecnico_resp" name="tecnico_resp">Sim</sui-radio-button>
+
+                  <sui-radio-button [value]="0" [(ngModel)]="analiseDetalhe.tecnico_resp" name="tecnico_resp">Não</sui-radio-button>
+
+                </div>
+              </div>
+
+              <div class="column">
+                <label>As fotos estão de acordo?</label>
+                <div class="field">
+                  <sui-radio-button [value]="1" [(ngModel)]="analiseDetalhe.fotos" name="fotos">Sim</sui-radio-button>
+
+                  <sui-radio-button [value]="0" [(ngModel)]="analiseDetalhe.fotos" name="fotos">Não</sui-radio-button>
+
+                </div>
+              </div>
+
+              <div class="column">
+                <label>Acessando Internet?</label>
+                <div class="field">
+                  <sui-radio-button [value]="1" [(ngModel)]="analiseDetalhe.internet" name="internet">Sim</sui-radio-button>
+
+                  <sui-radio-button [value]="0" [(ngModel)]="analiseDetalhe.internet" name="internet">Não</sui-radio-button>
+
+                </div>
+              </div>
+
+            </div>
+
+            <div class="ui grid">
+
+              <div class="eight wide column">
+                <label>Nome responsável assinatura</label>
+                <input [(ngModel)]="analiseDetalhe.nome_resp" maxlength="100" name="nome_resp" placeholder="Nome responsável assinatura"
+                  type="text">
+              </div>
+
+              <div class="four wide column centered row">
+                <label>Responsável Assinatura</label>
+                <div class="field">
+                  <sui-radio-button [value]="1" [(ngModel)]="analiseDetalhe.assinatura_resp" name="assinatura_resp">Sim</sui-radio-button>
+
+                  <sui-radio-button [value]="0" [(ngModel)]="analiseDetalhe.assinatura_resp" name="assinatura_resp">Não</sui-radio-button>
+
+                </div>
+              </div>
+            </div>
+
+
+            <div class="ui stackable three column grid">
+
+
+              <div class="column field" [ngClass]="{'error':  !!analiseSubmit?._directives[21]?.control?.invalid}">
+                <label>Telefone</label>
+                <input [(ngModel)]="analiseDetalhe.telefone1" mask="(00) 00000-0000" minlength="10" name="telefone1" placeholder="Telefone"
+                  type="text">
+                <div class="invalid-feedback" [ngClass]="{'active':  !!analiseSubmit?._directives[21]?.control?.invalid}">
+                  Telefone Inválido!
+                </div>
+              </div>
+
+
+              <div class="column field" [ngClass]="{'error':  !!analiseSubmit?._directives[22]?.control?.invalid}">
+                <label>Telefone do responsável pela assinatura</label>
+                <input [(ngModel)]="analiseDetalhe.telefone2" mask="(00) 00000-0000" minlength="10" name="telefone2" placeholder="Telefone"
+                  type="text">
+                <div class="invalid-feedback" [ngClass]="{'active':  !!analiseSubmit?._directives[22]?.control?.invalid}">
+                  Telefone Inválido!
+                </div>
+              </div>
+
+              <div class="column field" [ngClass]="{'error':  !!analiseSubmit?._directives[23]?.control?.invalid}">
+                <label>Email do responsável pela assinatura</label>
+                <input [(ngModel)]="analiseDetalhe.email" maxlength="100" name="email" pattern="^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
+                  placeholder="E-mail" type="text">
+                <div class="invalid-feedback" [ngClass]="{'active':  !!analiseSubmit?._directives[23]?.control?.invalid}">
+                  Email Inválido!
+                </div>
+              </div>
+
+            </div>
+
+
+            <!--
+              <div class="ui stackable four column grid">
+                <div class="column">
+                  <label>Latitude</label>
+                  <input  [(ngModel)]="analiseDetalhe.latitude" name="latitude" placeholder="Latitude" type="text">
+                </div>
+
+                <div class="column">
+                  <label>Longitude</label>
+                  <input  [(ngModel)]="analiseDetalhe.longitude" name="longitude" placeholder="Longitude" type="text">
+                </div>
+              </div> -->
+            <h3 class=" invalid-feedback active">
+              Latitude e longitude desativados temporariamente.
+            </h3>
+
+            <div class="ui stackable four column grid">
+              <div class="column">
+                <label>Latitude</label>
+                <input placeholder="Latitude" type="text">
+              </div>
+
+              <div class="column">
+                <label>Longitude</label>
+                <input placeholder="Longitude" type="text">
+              </div>
+            </div>
+
+
+
+            <div class="ui stackable one column grid">
+
+              <div class="column">
+                <label>Obeservação</label>
+                <textarea [(ngModel)]="analiseDetalhe.obs" name="obs" maxlength="1000" placeholder="Observação" style="margin-top: 0px; margin-bottom: 0px; height: 112px;">
+                  </textarea>
+              </div>
+
+            </div>
+
+
+            <div class="ui grid">
+              <div class="two wide column">
+                <button [disabled]="analiseSubmit.invalid" (click)="salvarAnalise(analiseSubmit)" class="ui blue icon button">{{ this.btnsAnalise.descricao[0] }}</button>
+              </div>
+
+              <div class="four wide column">
+                <button [disabled]="analiseSubmit.invalid" class="ui red button" (click)="justificativa = true;" >{{ this.btnsAnalise.descricao[1] }}</button>
+              </div>
+
+
+            </div>
+
+        <!-- Modal da justificativa da analise caso a analise negado -->
+
+        <sui-modal *ngIf="justificativa === true" [isClosable]="false" [transition]="'scale'" [transitionDuration]="500" #modal>
+            <div class="header">Justificativa</div>
+            <div class="content">
+
+              <form class="ui form error">
+
+                <div class="ui stackable one column grid">
+
+                  <div  class="column" [ngClass]="{'error': errorJustificativa}">
+                    <label>Você tem certeza que deseja Rejeitar essa analise ?</label>
+                    <textarea  [(ngModel)]="analiseDetalhe.justificativa"  name="justificativa" style="margin-top: 0px; margin-bottom: 0px; height: 112px;" placeholder="Escreva sua justificativa aqui..." [required]="true"></textarea>
+                    <div class="invalid-feedback" [ngClass]="{'active': errorJustificativa }">
+                        Justificativa obrigatória!
+                      </div>
+                  </div>
+
+                </div>
+
+              </form>
+            </div>
+            <div class="actions">
+              <button class="ui red button" (click)="justificativa = false">Cancel</button>
+              <button class="ui green button" (click)="salvarAnalise(analiseSubmit)" autofocus>OK</button>
+            </div>
+          </sui-modal>
+
+
+          </form>
+
+
+
+        </div>
+      </sui-accordion-panel>
+      <!---------------------- Fim Collapse de Analisar     ------------------------------------>
+
+
+      <!---------------------- Inicio Collapse de Interação     ------------------------------------>
+      <sui-accordion-panel [isOpen]="false">
+
+        <div title>
+          <div class="ui big label">
+            <i class="dropdown icon"></i>
+            <span class="titleDel">Interação</span>
+          </div>
+        </div>
+        <div class="ui segment" content>
+          <form class="ui form" #formInteracao='ngForm' (ngSubmit)="submitInteracao(formInteracao)">
+
+            <div class="ui grid">
+              <div class="eight wide column">
+                <label for="Nome">Nome </label>
+                <select class="ui fluid dropdown" name="cod_pessoa" [(ngModel)]="formInteracao.value.cod_pessoa">
+                  <option value="">Selecione o pessoa</option>
+                  <option *ngFor="let pessoa of pessoasInterecao" value="{{pessoa.cod_pessoa}}">{{pessoa.nome}}</option>
+                </select>
+              </div>
+
+              <div class="eight wide column">
+                <label>Assunto</label>
+                <input name="assunto" #assunto='ngModel' ngModel placeholder="assunto" type="text" maxlength="100">
+              </div>
+
+              <div [ngClass]="{'error': relato.invalid && relato.dirty}" class="sixteen wide column field">
+                <label>Relato</label>
+                <textarea name="relato" #relato='ngModel' ngModel placeholder="relato" type="text" maxlength="1000" required></textarea>
+              </div>
+            </div>
+
+            <br>
+            <button [disabled]="formInteracao.invalid === true" class="ui button" type="submit">Salvar interação</button>
+
+
+          </form>
+          <br>
+          <div class="ui stackable four column grid">
+
+
+            <div *ngIf='relato.invalid && relato.dirty' class='wide column'>
+              <div class="ui error message">
+                <div>
+                  <div class="header">Relato obrigatório</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </sui-accordion-panel>
+      <!---------------------- Fim Collapse de Interação     ------------------------------------>
+
+
+      <!---------------------- Inicio Collapse de Historico     ------------------------------------>
+      <sui-accordion-panel [isOpen]="false">
+
+        <div title>
+          <div class="ui big label">
+            <i class="dropdown icon"></i>
+            <span class="titleDel">Historico de Ações</span>
+          </div>
+        </div>
+
+
+        <div content>
+
+          <table class="ui selectable table">
+            <thead>
+              <tr>
+                <th class="ui center aligned collapsing">
+                  <ng-template let-option #optionTemplate>
+                    {{ option.name }}
+                  </ng-template>
+                  <sui-select class="selection" [(ngModel)]="hitorico" [options]="options" labelField="name" [optionTemplate]="optionTemplate"
+                    [isSearchable]="false" placeholder='Selecione a ação' #templated>
+                    <sui-select-option *ngFor="let o of templated.filteredOptions" [value]="o"></sui-select-option>
+                  </sui-select>
+                </th>
+                <th class="ui center aligned collapsing">Data</th>
+                <th class="ui center aligned collapsing">Usuário</th>
+                <th class="ui center aligned collapsing">Visualizar</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let historicoAcao of pontoHistorico | filterHistoricoAcoes : hitorico ; index as posicao" class="ui center aligned collapsing">
+                <td>{{historicoAcao.acao}}</td>
+                <td>{{historicoAcao.data| date : 'dd/MM/y HH:mm:ss'}}</td>
+                <!-- <td>{{historicoAcao.data}}</td> -->
+
+                <td>{{historicoAcao.usuario}}</td>
+                <td>
+                  <a class="mini ui icon button circular" (click)="openModal(historicoAcao.acao, historicoAcao)" suiPopup popupHeader="Visualizar"
+                    popupInverted="true">
+                    <i class="search icon"></i>
+                  </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </sui-accordion-panel>
+      <!---------------------- Fim Collapse de Historico     ------------------------------------>
+
+
+    </sui-accordion>
+  </div>
+</div>
+
+<!---------------------- Modais de analise, interação e solicitação   ------------------------------------>
+
+
+<sui-modal *ngIf="abrirNodal" [isClosable]="false" [transition]="'scale'" [transitionDuration]="500" #modal>
+
+  <div class="header">
+    <div class="ui grid">
+      <div class="fifteen wide column">
+        {{condicao}}
+      </div>
+      <div class="one wide column">
+        <i class="close red link icon" (click)="closeModal(false)"></i>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="content" [ngSwitch]="condicao">
+
+    <div *ngSwitchCase="'analise'">
+
+      <form class="ui form">
+        <div class="ui stackable four column grid">
+          <div class="column">
+            <label>Número do doc. ofício </label>
+            <input [readonly]="true" [value]="historicoAnalises.num_oficio" placeholder="Número do ofício" type="text">
+          </div>
+
+          <div class="column">
+            <label>Número do doc. Sei</label>
+            <input [readonly]="true" [value]="historicoAnalises.num_doc_sei" placeholder="Número do ofício" type="text">
+          </div>
+
+          <div class="column">
+            <label>Data do Ofício </label>
+            <div class="field">
+              <div class="ui left icon input">
+                <i class="calendar icon"></i>
+                <input [readonly]="true" [value]="historicoAnalises.data_oficio | date : 'dd/MM/y'">
+              </div>
+            </div>
+          </div>
+
+          <div class="column">
+            <label>Data de Instalação</label>
+            <div class="field">
+              <div class="ui left icon input">
+                <i class="calendar icon"></i>
+                <input [readonly]="true" [value]="historicoAnalises.data_instalacao | date : 'dd/MM/y'">
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+
+
+        <div class="ui  grid">
+          <div class="seven wide column">
+            <label>Empresa </label>
+            <input [readonly]="true" [value]="historicoAnalises.empresa" placeholder="Empresa" type="text">
+          </div>
+
+          <div class="four wide column">
+            <label>Teste Vazão</label>
+            <input [readonly]="true" [value]="historicoAnalises.teste_vazao" placeholder="Teste Vazão" type="text">
+          </div>
+          <div class="three wide column centered row">
+            <label>TIPP</label>
+            <div class="field">
+              <sui-radio-button [isDisabled]="'true'" [value]="1" [ngModel]="historicoAnalises.tipp" name="tipp">Sim</sui-radio-button>
+
+              <sui-radio-button [isDisabled]="'true'" [value]="0" [ngModel]="historicoAnalises.tipp" name="tipp">Não</sui-radio-button>
+
+            </div>
+          </div>
+
+        </div>
+
+
+
+        <div class="ui stackable five column grid">
+
+          <div class="column">
+            <label>Estabelecimento está correto?</label>
+            <div class="field">
+              <sui-radio-button [isDisabled]="'true'" [value]="1" [ngModel]="historicoAnalises.estabelecimento" name="estabelecimento">Sim</sui-radio-button>
+
+              <sui-radio-button [isDisabled]="'true'" [value]="0" [ngModel]="historicoAnalises.estabelecimento" name="estabelecimento">Não</sui-radio-button>
+
+            </div>
+          </div>
+
+          <div class="column">
+            <label>Endereço está correto?</label>
+            <div class="field">
+              <sui-radio-button [isDisabled]="'true'" [value]="1" [ngModel]="historicoAnalises.endereco" name="endereco">Sim</sui-radio-button>
+
+              <sui-radio-button [isDisabled]="'true'" [value]="0" [ngModel]="historicoAnalises.endereco" name="endereco">Não</sui-radio-button>
+
+            </div>
+          </div>
+
+          <div class="column">
+            <label>Responsável técnico?</label>
+            <div class="field">
+              <sui-radio-button [isDisabled]="'true'" [value]="1" [ngModel]="historicoAnalises.tecnico_resp" name="tecnico_resp">Sim</sui-radio-button>
+
+              <sui-radio-button [isDisabled]="'true'" [value]="0" [ngModel]="historicoAnalises.tecnico_resp" name="tecnico_resp">Não</sui-radio-button>
+
+            </div>
+          </div>
+
+          <div class="column">
+            <label>As fotos estão de acordo?</label>
+            <div class="field">
+              <sui-radio-button [isDisabled]="'true'" [value]="1" [ngModel]="historicoAnalises.fotos" name="fotos">Sim</sui-radio-button>
+
+              <sui-radio-button [isDisabled]="'true'" [value]="0" [ngModel]="historicoAnalises.fotos" name="fotos">Não</sui-radio-button>
+
+            </div>
+          </div>
+
+          <div class="column">
+            <label>Acessando Internet?</label>
+            <div class="field">
+              <sui-radio-button [isDisabled]="'true'" [value]="1" [ngModel]="historicoAnalises.internet" name="internet">Sim</sui-radio-button>
+
+              <sui-radio-button [isDisabled]="'true'" [value]="0" [ngModel]="historicoAnalises.internet" name="internet">Não</sui-radio-button>
+
+            </div>
+          </div>
+
+        </div>
+
+
+
+        <div class="ui grid">
+
+          <div class="eight wide column">
+            <label>Nome responsável assinatura</label>
+            <input [readonly]="true" [value]="historicoAnalises.nome_resp" placeholder="Nome responsável assinatura" type="text">
+          </div>
+
+          <div class="four wide column centered row">
+            <label>Responsável Assinatura</label>
+            <div class="field">
+              <sui-radio-button [isDisabled]="'true'" [value]="1" [ngModel]="historicoAnalises.assinatura_resp" name="assinatura_resp">Sim</sui-radio-button>
+
+              <sui-radio-button [isDisabled]="'true'" [value]="0" [ngModel]="historicoAnalises.assinatura_resp" name="assinatura_resp">Não</sui-radio-button>
+
+            </div>
+          </div>
+        </div>
+
+
+
+        <div class="ui stackable three column grid">
+
+          <div class="column">
+            <label>Telefone</label>
+            <input [readonly]="true" [value]="historicoAnalises.telefone1" type="text">
+          </div>
+
+          <div class="column">
+            <label>Telefone do responsável pela assinatura</label>
+            <input [readonly]="true" [value]="historicoAnalises.telefone2" type="text">
+          </div>
+
+          <div class="column">
+            <label>Email do responsável pela assinatura</label>
+            <input [readonly]="true" [value]="historicoAnalises.email" placeholder="E-mail" type="text">
+          </div>
+        </div>
+
+        <div class="ui stackable four column grid">
+          <div class="column">
+            <label>Latitude</label>
+            <input [readonly]="true" [value]="historicoAnalises.num_doc_sei" placeholder="Latitude" type="text">
+          </div>
+          <div class="column">
+            <label>Longitude</label>
+            <input [readonly]="true" [value]="historicoAnalises.num_doc_sei" placeholder="Longitude" type="text">
+          </div>
+        </div>
+
+        <div class="ui stackable one column grid">
+          <div class="column">
+            <label>Obeservação</label>
+            <textarea [readonly]="true" [value]="historicoAnalises.obs" placeholder="Observação" style="margin-top: 0px; margin-bottom: 0px; height: 112px;">
+              </textarea>
+          </div>
+        </div>
+
+      </form>
+    </div>
+
+    <!-- INICIO da Ação de interação -->
+    <div *ngSwitchCase="'interação'">
+      <div class="ui segment">
+        <form class="ui form">
+          <div class="two fields">
+            <div class=" field">
+              <label>Nome</label>
+              <input [readonly]="true" [ngModel]='interacao?.nome' name="nome" type="text">
+            </div>
+
+            <div class="field">
+              <label>Assunto</label>
+              <input [readonly]="true" [ngModel]='interacao?.assunto' name="assunto" type="text">
+            </div>
+          </div>
+          <div class="fields">
+            <div class="one field">
+              <label>Relato</label>
+              <div class="ui floating message">
+                <p>{{interacao?.relato}}</p>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    <!-- FIM da Ação de interação -->
+
+
+    <!-- INICIO da Ação de solicitaão -->
+    <div *ngSwitchCase="'solicitação'">
+      <div class="ui segment">
+        <form class="ui form">
+          <div class="fields">
+            <div class="eleven wide field">
+              <label>Solicitação Realizada</label>
+              <input [readonly]="true" [ngModel]='solicitacao?.descricao' name="descricao" type="text">
+            </div>
+            <div class="five wide field">
+              <label>Data do Registro Solicitação</label>
+              <input [readonly]="true" [ngModel]='solicitacao?.data_sistema | date : "dd/MM/y HH:mm:ss"' name="data_sistema" type="text">
+            </div>
+          </div>
+          <div class="fields">
+            <div class="six wide field">
+              <label>N° do processo SEI</label>
+              <input [readonly]="true" [ngModel]='solicitacao?.num_doc_sei' name="num_doc_sei" type="text">
+            </div>
+            <div class="five wide field">
+              <label>N° do ofício</label>
+              <input [readonly]="true" [ngModel]='solicitacao?.num_oficio' name="num_oficio" type="text">
+            </div>
+            <div class="five wide field">
+              <label>Data do Ofício</label>
+              <input [readonly]="true" [ngModel]='solicitacao?.data_oficio | date : "dd/MM/y"' name="data_oficio" type="text">
+            </div>
+          </div>
+
+        </form>
+      </div>
+    </div>
+    <!-- FIM da Ação de solicitaão -->
+    <!--<p *ngSwitchDefault>
+
+      </p>-->
+  </div>
+
+  <div class="actions">
+    <button class="ui red button" (click)="closeModal(false)">Fechar</button>
+  </div>
+</sui-modal>
+
+
+

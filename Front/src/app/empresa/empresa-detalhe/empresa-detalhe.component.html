@@ -1,0 +1,222 @@
+<div class="ui container">
+    <div class="ui stackable one column grid">
+        <!--botão voltar menu principal-->
+        <div class="column">
+
+          <button class="ui labeled icon button" data-position="left" [routerLink]="['/empresa']">
+            <i class="angle double left icon"></i>Voltar</button>
+        </div>
+      </div>
+  <sui-accordion [closeOthers]="false" class="segment">
+
+    <!--inicio de ponto de Contrato-->
+    <sui-accordion-panel [isOpen]="true">
+      <div title class="ui big label">
+        <i class="dropdown icon"></i> Empresa
+      </div>
+      <div content>
+        <div class="ui grid segment">
+          <div class="three wide column">
+            <h4 class="ui header">CNPJ:</h4> {{empresas?.cnpj_empresa | cnpj}}</div>
+          <div class="six wide column">
+            <h4 class="ui header">Empresa:</h4> {{empresas?.empresa}}</div>
+          <div class="five wide column">
+            <h4 class="ui header">Endereço:</h4> {{empresas?.endereco}}</div>
+          <div class="two wide column">
+            <h4 class="ui header">Nº:</h4> {{empresas?.numero}}</div>
+          <div class="three wide column">
+            <h4 class="ui header">Bairro:</h4> {{empresas?.bairro}}</div>
+          <div class="four wide column">
+            <h4 class="ui header">Complemento:</h4> {{empresas?.complemento}}</div>
+          <div class="two wide column">
+            <h4 class="ui header">Cep:</h4>{{empresas?.cep | cep}}</div>
+          <div class="two wide column">
+            <h4 class="ui header">Estado:</h4>{{empresas?.uf}}</div>
+          <div class="four wide column">
+            <h4 class="ui header">Município:</h4>{{empresas?.nome_municipio}}</div>
+        </div>
+      </div>
+
+    </sui-accordion-panel>
+    <!--fim de ponto de Contrato-->
+
+    <!--inicio da empresa contatos-->
+    <sui-accordion-panel [isOpen]="false">
+        <div title class="ui big label">
+            <i class="dropdown icon"></i>
+            <span class="titleDel">Contatos da Empresa</span>
+          </div>
+          <div content>
+            <div class="ui right aligned grid">
+              <div class="left floated left aligned sixteen wide column">
+                <div class="ui segment">
+                  <div class="ui stackable one column grid">
+                    <div class="ui raised segment">
+                      <p></p>
+
+                      <div class="sixteen wide column">
+                        <table class="ui celled table structured">
+                          <thead>
+                            <tr class="">
+                              <th class="center aligned" rowspan="2">Name</th>
+                              <th class="center aligned" rowspan="2">Cargo</th>
+                              <th class="center aligned" rowspan="2">Observação</th>
+                              <th class="center aligned" rowspan="2">Tipo de Telefone</th>
+                              <th class="center aligned" rowspan="2">Telefone</th>
+                              <th class="center aligned" rowspan="2">Email</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <ng-template ngFor let-contato [ngForOf]='contatosEmpresas | filterEmpresa'>
+                              <tr>
+                                <td [attr.rowspan]="contato.telefone.length" [innerHTML]="contato.nome || '-'"></td>
+                                <td [attr.rowspan]="contato.telefone.length" [innerHTML]="contato.cargo || '-'"></td>
+                                <td [attr.rowspan]="contato.telefone.length" [innerHTML]="contato.obs || '-'"></td>
+                                <ng-template ngFor let-i="index" let-contTel [ngForOf]='contato?.telefone'>
+                                  <td *ngIf="i===0" [innerHTML]="contTel?.tipo | tipoTel"></td>
+                                  <td *ngIf="i===0" [innerHTML]="contTel?.fone | telefone "></td>
+                                  <td *ngIf="i===0" [innerHTML]="contTel?.email || '-'"></td>
+                                </ng-template>
+                              </tr>
+                              <ng-template ngFor let-j="index" let-tel [ngForOf]='contato?.telefone'>
+                                <tr *ngIf="j>0">
+                                  <td [innerHTML]="tel?.tipo | tipoTel"></td>
+                                  <td [innerHTML]="tel?.fone | telefone "></td>
+                                  <td [innerHTML]="tel?.email || '-'"></td>
+                                </tr>
+                              </ng-template>
+                            </ng-template>
+                          </tbody>
+                        </table>
+                      </div>
+                      <p></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+    </sui-accordion-panel>
+
+    <!--fim da empresa contatos-->
+
+<!--inicio de ponto de lotes-->
+<!-- <sui-accordion-panel>
+        <div title class="ui big label">
+          <i class="dropdown icon"></i> Lotes
+        </div>
+        <div content>
+            <table class="ui celled table">
+                <thead>
+                  <tr>
+                    <th>
+                        <sui-select icon="filter" [options]="filters" [isSearchable]="true" placeholder="Lote" #filterSelect>
+                            <sui-select-option *ngFor="let o of filterSelect.filteredOptions" [value]="o"></sui-select-option>
+                          </sui-select>
+                    </th>
+                    <th>
+                        <sui-select icon="filter" [options]="filters" [isSearchable]="true" placeholder="Velocidade" #filterSelect>
+                            <sui-select-option *ngFor="let o of filterSelect.filteredOptions" [value]="o"></sui-select-option>
+                          </sui-select>
+                    </th>
+                    <th>
+                        <sui-select icon="filter" [options]="filters" [isSearchable]="true" placeholder="Preço" #filterSelect>
+                            <sui-select-option *ngFor="let o of filterSelect.filteredOptions" [value]="o"></sui-select-option>
+                          </sui-select>
+                    </th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>teste</td>
+                    <td>teste</td>
+                    <td>teste</td>
+                    <td class="tdAcoes">
+                        <a class="ui icon button circular" suiPopup popupHeader="Visualizar" popupInverted="true"> <i class="search icon"></i> </a>
+                        <a class="ui icon button circular" suiPopup popupHeader="Editar" popupInverted="true">  <i class="pencil alternate icon"></i></a>
+                        <a class="ui icon button circular" suiPopup popupHeader="Remover" popupInverted="true">  <i class="trash alternate icon"></i></a>
+                    </td>
+                  </tr>
+                </tbody>
+                <tfoot>
+                  <tr>
+                    <th colspan="5">
+                      <div class="ui right floated pagination menu">
+                        <a class="icon item">
+                          <i class="left chevron icon"></i>
+                        </a>
+                        <a class="item">1</a>
+                        <a class="item">2</a>
+                        <a class="item">3</a>
+                        <a class="item">4</a>
+                        <a class="icon item">
+                          <i class="right chevron icon"></i>
+                        </a>
+                      </div>
+                    </th>
+                  </tr>
+                </tfoot>
+              </table>
+        </div>
+
+      </sui-accordion-panel> -->
+<!--fim de ponto de lotes-->
+
+
+<sui-accordion-panel>
+  <!-- <div title class="ui big label">
+            <i class="dropdown icon"></i>
+            <span class="titleDel">Lotes</span>
+          </div>
+          <div content>
+            <div class="ui right aligned grid">
+              <div class="left floated left aligned sixteen wide column">
+                <div class="ui segment">
+                  <div class="ui stackable one column grid">
+                    <div class="ui raised segment">
+                      <p></p>
+
+                      <div class="sixteen wide column">
+                        <table class="ui celled table structured">
+                          <thead>
+                            <tr class="">
+                              <th rowspan="2">Lotes</th>
+                              <th rowspan="2">Velocidades</th>
+                              <th rowspan="2">Preços</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <ng-template ngFor let-contrato [ngForOf]='contratos | filterppContratoLote'>
+                              <tr>
+                                <td [attr.rowspan]="contato.telefone.length" [innerHTML]="lote.lote || '-'"></td>
+                                <td [attr.rowspan]="contato.telefone.length" [innerHTML]="contato.cargo || '-'"></td>
+                                <td [attr.rowspan]="contato.telefone.length" [innerHTML]="contato.obs || '-'"></td>
+                                <ng-template ngFor let-i="index" let-contTel [ngForOf]='contato?.telefone'>
+                                  <td *ngIf="i===0" [innerHTML]="contTel?.tipo || '-'"></td>
+                                  <td *ngIf="i===0" [innerHTML]="contTel?.fone || '-'"></td>
+                                  <td *ngIf="i===0" [innerHTML]="contTel?.email || '-'"></td>
+                                </ng-template>
+                              </tr>
+                              <ng-template ngFor let-j="index" let-tel [ngForOf]='contato?.telefone'>
+                                <tr *ngIf="j>0">
+                                  <td [innerHTML]="tel?.tipo || '-'"></td>
+                                  <td [innerHTML]="tel?.fone || '-'"></td>
+                                  <td [innerHTML]="tel?.email || '-'"></td>
+                                </tr>
+                              </ng-template>
+                            </ng-template>
+                          </tbody>
+                        </table>
+                      </div>
+                      <p></p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div> -->
+</sui-accordion-panel>
+
+</sui-accordion>
+</div>

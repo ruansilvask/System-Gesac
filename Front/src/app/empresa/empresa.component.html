@@ -1,0 +1,87 @@
+<sui-dimmer class="inverted" [(isDimmed)]="segmentDimmed" [isClickable]="false">
+    <div class="ui massive text loader">Carregando...</div>
+</sui-dimmer>
+<div class="ui container containerVisualizar">
+
+    <div class="ui stackable two column grid">
+      <div class="column">
+        <button class="ui labeled icon button" data-position="left" [routerLink]="['novo']">
+          <i class="right plus circle icon"></i>Adicionar Empresas</button>
+      </div>
+      <div class="column">
+          <div class="ui compact right floated segment"><p><strong>{{totalItens}} {{(totalItens !== 1) ? 'itens' : 'item'}}</strong></p></div>
+        </div>
+    </div>
+
+    <table class="ui celled table">
+      <thead>
+        <tr>
+          <th class="ui center aligned collapsing">
+              <div class="ui icon input">
+                <input class="tituloTabela" type="text" name="cnpj" [(ngModel)]="filtros.cnpj" placeholder="CNPJ" (ngModelChange)="filtroEmpresa(filtros)">
+                <i class="search icon"></i>
+              </div>
+            </th>
+          <th class="ui center aligned collapsing">
+              <div class="ui icon input">
+                <input class="tituloTabela" type="text" name="empresa" [(ngModel)]="filtros.empresa" placeholder="Empresa" (ngModelChange)="filtroEmpresa(filtros)">
+                <i class="search icon"></i>
+              </div>
+            </th>
+          <th class="ui center aligned collapsing">
+              <div class="ui icon input">
+                <input class="tituloTabela" type="text" name="municipio" [(ngModel)]="filtros.municipio" placeholder="Município" (ngModelChange)="filtroEmpresa(filtros)">
+                <i class="search icon"></i>
+              </div>
+            </th>
+          <th class="ui center aligned collapsing">
+              <div class="ui icon input">
+                <input class="tituloTabela" type="text" name="uf" [(ngModel)]="filtros.uf" placeholder="Uf" (ngModelChange)="filtroEmpresa(filtros)">
+                <i class="search icon"></i>
+              </div>
+            </th>
+            <th class="ui center aligned collapsing">
+                <p class="acaoTable">Ações</p>
+              </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngIf="!empresas">
+          <td colspan="5" class="center aligned">Nenhum registro encontrado.</td>
+        </tr>
+        <tr *ngFor="let empresa of empresas">
+          <td [innerHTML]="empresa.cnpj_empresa | cnpj"></td>
+          <td [innerHTML]="empresa.empresa"></td>
+          <td [innerHTML]="empresa.nome_municipio"></td>
+          <td [innerHTML]="empresa.uf"></td>
+          <td class="ui center aligned collapsing">
+          <a class="mini ui icon button circular" suiPopup popupHeader="Visualizar" [routerLink]="[empresa.cnpj_empresa, 'detalhe']" popupInverted="true" disabled>
+                  <i class="search icon"></i>
+                </a>
+            <a class="mini ui icon  button circular" [routerLink]="[empresa.cnpj_empresa]" suiPopup popupHeader="Editar" popupInverted="true">
+              <i class="pencil alternate icon"></i>
+            </a>
+            <a class="mini ui icon  button circular" suiPopup popupHeader="Remover" popupInverted="true" (click)="deletarEmpresa(empresa)">
+              <i class="trash alternate icon"></i>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+      <tfoot *ngIf="empresas">
+        <tr>
+          <th colspan="5">
+            <div class="ui right floated pagination menu">
+                <sui-pagination [collectionSize]='totalItens'
+                                [pageSize]="itensPagina"
+                                [maxSize]="10"
+                                [hasEllipses]="true"
+                                [(page)]="pagina"
+                                (click)="page(pagina)"
+                                >
+                </sui-pagination>
+            </div>
+          </th>
+        </tr>
+      </tfoot>
+    </table>
+  </div>

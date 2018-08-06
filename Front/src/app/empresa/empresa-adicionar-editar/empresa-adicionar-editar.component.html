@@ -1,0 +1,145 @@
+<div class="ui container">
+    <div class="ui  segment">
+  <sui-tabset>
+    <!-- Tabs Menu -->
+    <div class="ui top attached tabular menu">
+      <a class="item" suiTabHeader="1" [(isActive)]="empresas">Empresa</a>
+      <a class="item" suiTabHeader="2" [(isActive)]="contatos">Contato</a>
+    </div>
+    <!-- Fim Tabs Menu -->
+
+    <!-- Tabs Empresa -->
+    <div class="ui bottom attached segment" suiTabContent="1">
+      <form class="ui form error" #fAddEmpresa="ngForm" (ngSubmit)="salvarEmpresa(fAddEmpresa, radio)">
+        <div class="field">
+          <div class="fields">
+            <div class="three wide field" [ngClass]="{'error': cnpj_empresa.invalid && cnpj_empresa.dirty || !cnpjValido && cnpj_empresa.dirty}">
+              <label>CNPJ</label>
+              <input type="text" mask="00.000.000/0000-00" ng-minlength="14" name="cnpj_empresa" placeholder="CNPJ" #cnpj_empresa="ngModel"
+                [(ngModel)]="empresaForm.cnpj_empresa" (ngModelChange)="cnpjValid(cnpj_empresa.value)" required [readonly]="editCnpj">
+              <div class="invalid-feedback" [ngClass]="{'active': !temCnpj(cnpj_empresa.value) && cnpj_empresa.invalid && cnpj_empresa.dirty}">
+                CNPJ é obrigatório.
+              </div>
+              <div class="invalid-feedback" [ngClass]="{'active': temCnpj(cnpj_empresa.value) && !cnpjValido && cnpj_empresa.dirty}">
+                CNPJ inválido.
+              </div>
+            </div>
+            <div class="four wide field" [ngClass]="{'error': empresa.invalid && empresa.dirty}">
+              <label>Nome da empresa</label>
+              <input type="text" name="empresa" maxlength="100" placeholder="Nome da empresa" #empresa="ngModel" [(ngModel)]="empresaForm.empresa" required>
+              <div class="invalid-feedback" [ngClass]="{'active': empresa.invalid && empresa.dirty}">
+                Nome da empresa é obrigatório.
+              </div>
+            </div>
+            <div class="seven wide field">
+              <label>Endereço</label>
+              <input type="text" name="endereco" maxlength="255" placeholder="Endereço" #endereco="ngModel" [(ngModel)]="empresaForm.endereco">
+            </div>
+            <div class="two wide field">
+              <label>N°</label>
+              <input type="text" name="numero" maxlength="45" placeholder="N°" #numero="ngModel" [(ngModel)]="empresaForm.numero">
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <div class="fields">
+            <div class="four wide field">
+              <label>Bairro</label>
+              <input type="text" name="bairro" maxlength="100" placeholder="Bairro" #bairro="ngModel" [(ngModel)]="empresaForm.bairro">
+            </div>
+            <div class="four wide field">
+              <label>Complemento</label>
+              <input type="text" name="complemento" maxlength="1000" placeholder="Complemento" #complemento="ngModel" [(ngModel)]="empresaForm.complemento">
+            </div>
+            <div class="two wide field">
+              <label>Cep</label>
+              <input type="text" mask="00.000-000" name="cep" placeholder="Cep" #cep="ngModel" [(ngModel)]="empresaForm.cep" minlength="8">
+            </div>
+            <div class="three wide field" [ngClass]="{'error': uf.invalid && uf.dirty}">
+              <label>Estado</label>
+              <select class="ui fluid dropdown" name="estado" #uf="ngModel" [(ngModel)]="empresaForm.uf" (change)="selectEstado(empresaForm.uf)"
+                required>
+                <option value="">Selecione o estado</option>
+                <option *ngFor="let uf of ufs" value="{{uf.uf}}" [innerHTML]="uf.uf"></option>
+              </select>
+              <div class="invalid-feedback" [ngClass]="{'active': uf.invalid && uf.dirty}">
+                Estado é obrigatório.
+              </div>
+            </div>
+            <div class="three wide field" [ngClass]="{'error': cod_ibge.invalid && cod_ibge.dirty}">
+              <label>Município</label>
+              <select class="ui fluid dropdown" name="cod_ibge" #cod_ibge="ngModel" [(ngModel)]="empresaForm.cod_ibge" required>
+                <option value="">Selecione o município</option>
+                <option *ngFor="let municipio of municipios" value="{{municipio.cod_ibge}}" [innerHTML]="municipio.nome_municipio"></option>
+              </select>
+              <div class="invalid-feedback" [ngClass]="{'active': cod_ibge.invalid && cod_ibge.dirty}">
+                Município é obrigatório.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <div class="fields">
+            <div class="eight wide field" [ngClass]="{'error': consorcio && cnpj_empresa_pai.invalid && cnpj_empresa_pai.dirty}">
+              <label>Esta empresa tem um contrato com o Ministério da Ciência, Tecnologia, Inovações e Comunicações ?</label>
+              <sui-radio-button name="radio" value="sim" [(ngModel)]="radio" (ngModelChange)="radioConsorcio(radio)" required [isDisabled]="desabilitarRadio">Sim</sui-radio-button>
+              <sui-radio-button name="radio" value="nao" [(ngModel)]="radio" (ngModelChange)="radioConsorcio(radio)" required [isDisabled]="desabilitarRadio">Não</sui-radio-button>
+            </div>
+            <div class="eight wide field" [hidden]="!consorcio" [ngClass]="{'error': consorcio && cnpj_empresa_pai.invalid && cnpj_empresa_pai.dirty}">
+              <label>Selecione a empresa reponsavel pelo contrato:</label>
+              <select class="ui fluid dropdown" name="cnpj_empresa_pai" #cnpj_empresa_pai="ngModel" [(ngModel)]="empresaForm.cnpj_empresa_pai"
+                required>
+                <option value="">Selecione a empresa</option>
+                <option *ngFor="let emp of empresasPai" value="{{emp?.cnpj_empresa}}">{{emp?.empresa}}</option>
+              </select>
+              <div class="invalid-feedback" [ngClass]="{'active': consorcio && cnpj_empresa_pai.invalid && cnpj_empresa_pai.dirty}">
+                Empresa pai é obrigatória.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="fields">
+            <div class="sixteen wide field">
+              <button type="button" class="ui left labeled icon google plus button" routerLink="/empresa">
+                <i class="angle double left icon"></i>
+                Cancelar
+              </button>
+            </div>
+            <div class="sixteen wide field">
+              <button class="ui right labeled icon button right floated" type="submit" [disabled]="fAddEmpresa.invalid || !cnpjValido">
+                <i class="angle double right icon"></i>
+                Próximo
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <!-- Fim Tabs Empresa -->
+
+    <!-- Tabs Contato -->
+    <div class="ui bottom attached segment" suiTabContent="2">
+      <app-contato></app-contato>
+
+      <div class="ui stackable two column grid">
+        <div class="column">
+          <button class="ui left labeled icon button" (click)="voltarEmpresa()">
+            <i class="angle double left icon"></i>
+            Voltar
+          </button>
+        </div>
+        <div class="column">
+          <button class="ui button right floated" (click)="concluirEmpresa()">
+            Concluir
+          </button>
+        </div>
+      </div>
+
+
+    </div>
+    <!-- Fim Tabs Contato -->
+  </sui-tabset>
+</div>
+</div>

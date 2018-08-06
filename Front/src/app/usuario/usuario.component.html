@@ -1,0 +1,87 @@
+<div class="ui container containerVisualizar">
+
+    <div class="ui stackable two column grid">
+      <div class="column">
+        <button class="ui labeled icon button" data-position="left" [routerLink]="['novo']">
+          <i class="right plus circle icon"></i>Adicionar Usuários</button>
+      </div>
+      <div class="column">
+          <div class="ui compact right floated segment"><p><strong>{{totalItens}} {{(totalItens !== 1) ? 'itens' : 'item'}}</strong></p></div>
+        </div>
+    </div>
+
+    <sui-dimmer class="inverted" [(isDimmed)]="segmentDimmed" [isClickable]="false">
+        <div class="ui massive text loader">Carregando...</div>
+    </sui-dimmer>
+    <table class="ui celled table">
+      <thead>
+        <tr>
+            <th class="ui center aligned collapsing">
+                <div class="ui icon input">
+                  <sui-select class="selection"
+                  [(ngModel)]="filtros.status"
+                  placeholder="Status"
+                  #select>
+                      <sui-select-option *ngFor="let option of filteredOptions"
+                                        [value]="option.value" [innerHTML]="option.status">
+                      </sui-select-option>
+                  </sui-select>
+                  </div>
+              </th>
+          <th class="ui center aligned collapsing">
+              <div class="ui icon input">
+                <input class="tituloTabela" type="text" name="nome" [(ngModel)]="filtros.nome" placeholder="Nome">
+                <i class="search icon"></i>
+              </div>
+            </th>
+          <th class="ui center aligned collapsing">
+              <div class="ui icon input">
+                <input class="tituloTabela" type="text" name="login" [(ngModel)]="filtros.login" placeholder="Login">
+                <i class="search icon"></i>
+              </div>
+            </th>
+          <th class="ui center aligned collapsing">
+              <div class="ui icon input">
+                <input class="tituloTabela" type="text" name="email" [(ngModel)]="filtros.email" placeholder="Email">
+                <i class="search icon"></i>
+              </div>
+            </th>
+            <th class="ui center aligned collapsing">
+                <p class="acaoTable">Ações</p>
+              </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let usuario of usuarios | filterUsuario:filtros.status:filtros.nome:filtros.login:filtros.email">
+          <td [innerHTML]="usuario.statusII"></td>
+          <td [innerHTML]="usuario.nome"></td>
+          <td [innerHTML]="usuario.login"></td>
+          <td [innerHTML]="usuario.email"></td>
+          <td class="ui center aligned collapsing">
+            <a class="mini ui icon button circular" [routerLink]="[usuario.cod_usuario]" suiPopup popupHeader="Editar" popupInverted="true">
+              <i class="pencil alternate icon"></i>
+            </a>
+            <a class="mini ui icon button circular" suiPopup popupHeader="Remover" popupInverted="true" (click)="removerUsuario(usuario)">
+              <i class="trash alternate icon"></i>
+            </a>
+          </td>
+        </tr>
+      </tbody>
+      <tfoot>
+        <tr>
+          <th colspan="5">
+            <div class="ui right floated pagination menu">
+                <sui-pagination [collectionSize]='totalItens'
+                                [pageSize]="itensPagina"
+                                [maxSize]="10"
+                                [hasEllipses]="true"
+                                [(page)]="pagina"
+                                (click)="mudarPagina(pagina)"
+                                >
+                </sui-pagination>
+            </div>
+          </th>
+        </tr>
+      </tfoot>
+    </table>
+  </div>

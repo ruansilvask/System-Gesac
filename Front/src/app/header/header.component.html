@@ -1,0 +1,29 @@
+
+<div class="ui secondary pointing menu" *ngIf="isLogado()" >
+  <a class="item" routerLinkActive="active" [routerLink]="['home']">Início</a>
+  <a class="item" routerLinkActive="active" [routerLink]="['pontPre']">Ponto de Presença</a>
+  <a class="item" routerLinkActive="active" [routerLink]="['instResp']">Instituição Responsável</a>
+  <a class="item" routerLinkActive="active" [routerLink]="['empresa']">Empresas</a>
+  <a class="item" routerLinkActive="active" [routerLink]="['contrato']">Contratos</a>
+  <a class="item" routerLinkActive="active" [routerLink]="['tipologia']">Tipologia</a>
+  <a class="item" *ngIf="verificarCode()" routerLinkActive="active" [routerLink]="['usuario']"> Usuário</a>
+      <div class="ui dropdown item" suiDropdown autoClose="disabled">
+        <div class="text">Relatório</div>
+        <i class="dropdown icon"></i>
+        <div class="menu" suiDropdownMenu>
+            <div class="item" (click)="gerarExel()">
+              Gerar excel
+              <span *ngIf="baixando" class="ui basic loading button btnLoading"></span>
+            </div>
+            <a class="item" href="https://app.powerbi.com/view?r=eyJrIjoiMWRlNGJmMzgtNDRkMy00YmI2LTkyNmQtZWUzMTE4MjkxOWUxIiwidCI6Ijg4MGRkN2YxLWQwMmMtNGUxOS04MTVmLTQ2NDlkMzNmNWM2MyJ9"
+            target="_blank">Power BI</a>
+        </div>
+        </div>
+  <div class="right menu">
+    <a class="ui item" [routerLink]="['usuario',usuario.cod_usuario]" [innerHTML]="usuario.nome"></a>
+    <div class="bar"></div>
+    <a class="ui item" (click)="logout()">
+      Logout
+    </a>
+  </div>
+</div>

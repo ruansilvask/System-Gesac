@@ -1,0 +1,287 @@
+<div class="ui container">
+  <div class="ui segment">
+  <sui-tabset>
+    <!-- Tabs Menu -->
+    <div class="ui top attached tabular menu">
+      <a class="item" suiTabHeader="1" [(isActive)]="contratos">Contratos</a>
+      <a class="item" suiTabHeader="2" [(isActive)]="lotes">Lotes</a>
+    </div>
+    <!-- Fim Tabs Menu -->
+
+    <!-- Tabs Contrato -->
+    <div class="ui bottom attached segment" suiTabContent="1">
+      <form class="ui form error" #fAddContato="ngForm" (ngSubmit)="salvarContato(fAddContato)">
+        <div class="four fields">
+          <div class="field" [ngClass]="{'error': cnpj_empresa.invalid && cnpj_empresa.dirty}">
+            <label>Selecionar Empresa</label>
+            <select class="ui fluid dropdown" name="cnpj_empresa" #cnpj_empresa="ngModel" [ngModel]="bContratos.cnpj_empresa" required>
+              <option value="">Selecione a empresa</option>
+              <option *ngFor="let empresa of selectEmpresa" value="{{empresa.cnpj_empresa}}" [innerHTML]="empresa.empresa"></option>
+            </select>
+            <div class="invalid-feedback" [ngClass]="{'active': cnpj_empresa.invalid && cnpj_empresa.dirty}">
+              Empresa é obrigatório.
+            </div>
+          </div>
+          <div class="field" [ngClass]="{'error': num_contrato.invalid && num_contrato.dirty}">
+            <label>Nº de contrato</label>
+            <input type="text" name="num_contrato" mask="00.0000.00/0000" minlength="12" #num_contrato="ngModel" [ngModel]="bContratos.num_contrato" placeholder="Nº de contrato" required>
+            <div class="invalid-feedback" [ngClass]="{'active': num_contrato.value.length === 0 && num_contrato.invalid && num_contrato.dirty}">
+              Número do contrato é obrigatório.
+            </div>
+            <div class="invalid-feedback" [ngClass]="{'active': num_contrato.value.length > 0 && num_contrato.invalid && num_contrato.dirty}">
+                Número do contrato inválido.
+            </div>
+          </div>
+          <div class="field" [ngClass]="{'error': quant_pontos.invalid && quant_pontos.dirty}">
+            <label>Quantidade de pontos</label>
+            <input type="text" name="quant_pontos" maxlength="6" #quant_pontos="ngModel" [ngModel]="bContratos.quant_pontos" placeholder="Quantidade de pontos" required>
+            <div class="invalid-feedback" [ngClass]="{'active': quant_pontos.invalid && quant_pontos.dirty}">
+              Quantidade de pontos é obrigatória.
+            </div>
+          </div>
+          <div class="field" [ngClass]="{'error': processo_sei.invalid && processo_sei.dirty}">
+            <label>Processo SEI</label>
+            <input type="text" mask="00000.000000/0000-00" minlength="17" clearIfNotMatch="true" name="processo_sei" #processo_sei="ngModel" [ngModel]="bContratos.processo_sei" placeholder="processo SEI" required>
+            <div class="invalid-feedback" [ngClass]="{'active': !temProcSei(processo_sei.value) && processo_sei.dirty}">
+              Processo SEI é obrigatório.
+            </div>
+            <div class="invalid-feedback" [ngClass]="{'active': temProcSei(processo_sei.value) && processo_sei.invalid && processo_sei.dirty}">
+              Processo SEI inválido.
+            </div>
+          </div>
+        </div>
+        <div class="field">
+          <div class="fields">
+            <div class="four wide field" [ngClass]="{'error': data_inicio.invalid && data_inicio.value != undefined}">
+              <label>Data de início do contrato</label>
+              <div class="field">
+                <div class="ui left icon input">
+                  <i class="calendar icon"></i>
+                  <input placeholder="Selecione a data"
+                  suiDatepicker
+                  name="data_inicio"
+                  [ngModel]="bContratos.data_inicio"
+                  [pickerMode]="'date'"
+                  [pickerFirstDayOfWeek]="0"
+                  [pickerUseNativeOnMobile]="false"
+                  autocomplete="off"
+                  #data_inicio="ngModel"
+                  required
+                  readonly>
+                </div>
+              </div>
+              <div class="invalid-feedback" [ngClass]="{'active': data_inicio.invalid && data_inicio.value != undefined}">
+                Data de início é obrigatória.
+              </div>
+            </div>
+            <div class="four wide field" [ngClass]="{'error': data_fim.invalid && data_fim.value != undefined}">
+              <label>Data de fim do contrato</label>
+              <div class="field">
+                <div class="ui left icon input">
+                  <i class="calendar icon"></i>
+                  <input placeholder="Selecione a data"
+                  suiDatepicker
+                  name="data_fim"
+                  [ngModel]="bContratos.data_fim"
+                  [pickerMode]="'date'"
+                  [pickerFirstDayOfWeek]="0"
+                  [pickerUseNativeOnMobile]="false"
+                  autocomplete="off"
+                  #data_fim="ngModel"
+                  required
+                  readonly>
+                </div>
+              </div>
+              <div class="invalid-feedback" [ngClass]="{'active': data_fim.invalid && data_fim.value != undefined}">
+                Data de fim é obrigatória.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="field">
+          <div class="fields">
+            <div class="sixteen wide field">
+                <button type="button" class="ui left labeled icon google plus button" routerLink="/contrato">
+                  <i class="angle double left icon"></i>
+                  Cancelar
+                </button>
+              <button class="ui right labeled icon button right floated" [disabled]="fAddContato.invalid" type="submit">
+                <i class="angle double right icon"></i>
+                Próximo
+              </button>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <!-- Fim Tabs Contrato -->
+
+    <!-- Tabs Lotes -->
+    <div class="ui bottom attached segment form" suiTabContent="2">
+
+
+
+        <!--Inicio de LOTES -->
+        <form class="ui form" #formAddLote="ngForm" (ngSubmit)="enviarNome(formAddLote)">
+          <div class="ui stackable four column grid">
+
+            <div class="thirteen wide column">
+                <div class="field">
+                  <label>Nome do Lote</label>
+                  <input type="text" name="nomeLote" required ngModel placeholder="Digite o nome do Lote" [disabled]="desabilitarCampos" />
+                </div>
+            </div>
+
+            <div class="three wide column centered grid">
+              <button class="ui button btnAdd right floated" [disabled]="desabilitarCampos || formAddLote.invalid">Adicionar Lote</button>
+            </div>
+          </div>
+        </form>
+
+        <!--Fim de Pessoas -->
+
+        <div class="ui form" *ngIf="desabilitarCampos">
+          <div class="ui right aligned grid stackable">
+            <div class=" left floated left aligned sixteen wide column">
+              <div class="ui segment">
+                  <a class="ui orange ribbon label">INFORMAÇÕES DO LOTE</a>
+                  <p></p>
+                  <form #formEditLotes="ngForm" (ngSubmit)="alterarLote(formEditLotes)">
+              <div class="field">
+                <div class="fields">
+                    <div class="four wide field">
+                      <label>Nome do lote</label>
+                      <input type="text" placeholder="Nome do lote" name="lote" [ngModel]="alterLote.lote" required>
+                    </div>
+                    <div class="four wide field">
+                        <button class="ui button btnAdd" [disabled]="formEditLotes.invalid || formEditLotes.pristine">
+                            Salvar alteração
+                          </button>
+                    </div>
+                </div>
+                </div>
+                </form>
+                <form #formLotes="ngForm" (ngSubmit)="addVelocidade(formLotes)">
+                <div class="field">
+                <div class="fields">
+                  <div class="nine wide field">
+                    <label>Velocidade</label>
+                    <input type="text" placeholder="Velocidade" name="descricao" ngModel required>
+                  </div>
+                  <div class="six wide field">
+                    <label>Preço</label>
+                    <input type="text" currencyMask [options]="currencyOptions" placeholder="Preço" name="preco" ngModel required>
+                  </div>
+
+                  <div class="two wide field">
+                      <button type="submit" class="ui button btnAdd" [disabled]="formLotes.invalid">
+                          Adicionar
+                        </button>
+                  </div>
+                </div>
+              </div>
+            </form>
+              <div class="sixteen wide column">
+                <table class="ui selectable striped table">
+                  <thead>
+                    <tr>
+                      <th class="ui center aligned collapsing" >Velocidade</th>
+                      <th class="ui center aligned collapsing" >Preço</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let velo of velocidadeArray">
+                      <td class="ui center aligned collapsing" [innerHTML]="velo.descricao"></td>
+                      <td class="ui center aligned collapsing" [innerHTML]="velo.preco | currency:'BRL':'pt'"></td>
+                    </tr>
+
+                  </tbody>
+                </table>
+              </div>
+              <p></p>
+              <div class="ui stackable two column grid">
+                  <div class="column">
+                    <button class="ui button" (click)="cancelarInfLote()">
+                      Concluir
+                    </button>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <br>
+      <div class="left floated left aligned sixteen wide column">
+          <div class="ui raised segment" *ngIf="lotesCadastrados">
+            <a class="ui red ribbon label">LOTES CADASTRADOS</a>
+            <p></p>
+
+            <div class="ui stackable one column grid">
+
+              <div class="sixteen wide column">
+                <table class="ui selectable two column table">
+                  <thead>
+                    <tr>
+                      <!-- <th>Código do Lote</th> -->
+                      <th class="ui center aligned collapsing">Lote</th>
+                      <th class="ui right aligned collapsing">Ações</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let lote of lotesCadastrados" >
+                      <!-- <td [innerHTML]="lote.cod_lote"></td> -->
+                      <td class="ui center aligned collapsing" [innerHTML]="lote.lote"></td>
+                      <td class="ui right aligned collapsing">
+                          <a class="mini ui icon button circular" suiPopup popupHeader="Editar" popupInverted="true" (click)="visuLote(lote)">
+                              <i class="pencil icon"></i>
+                            </a>
+                            <a class="mini ui icon button circular" suiPopup popupHeader="Excluir" popupInverted="true" (click)="deleteLote(lote)">
+                              <i class="trash alternate icon"></i>
+                            </a>
+                        </td>
+                    </tr>
+                  </tbody>
+                  <tfoot>
+                      <tr><th colspan="3">
+                        <div class="ui right floated pagination menu">
+                            <sui-pagination [collectionSize]='totalItens'
+                                            [pageSize]="itensPagina"
+                                            [maxSize]="10"
+                                            [hasEllipses]="true"
+                                            [(page)]="pagina"
+                                            (click)="mudarPagina(pagina)"
+                                            >
+                            </sui-pagination>
+                        </div>
+                      </th>
+                    </tr></tfoot>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <br/>
+        <!-- botões para avançar e retroceder-->
+        <div class="field">
+            <div class="two fields">
+              <div class="field">
+                <button class="ui left labeled icon button" (click)="voltarContrato()">
+                  <i class="angle double left icon"></i>
+                  Voltar
+                </button>
+              </div>
+              <div class="field">
+                <button class="ui button right floated" (click)="concluirContrato()">
+                  Concluir
+                </button>
+              </div>
+            </div>
+          </div>
+    </div>
+    <!-- Fim Tabs Velocidades -->
+  </sui-tabset>
+</div>
+</div>

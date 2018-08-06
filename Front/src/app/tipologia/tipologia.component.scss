@@ -1,0 +1,17 @@
+$cor-azul-padrao: #002e9d;
+
+.container{
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  margin-top: 10vh;
+  margin-bottom: 10vh;
+}
+
+.btnAdd{
+  margin-top: 24px;
+}
+
+.containerVisualizar {
+  width: 90%;
+}

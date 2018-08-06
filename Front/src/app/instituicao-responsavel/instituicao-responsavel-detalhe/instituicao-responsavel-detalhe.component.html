@@ -1,0 +1,172 @@
+<div class="ui container">
+
+  <div class="ui stackable one column grid">
+    <!--botão voltar menu principal-->
+    <div class="column">
+
+      <button class="ui labeled icon button" data-position="left" [routerLink]="['/instResp']">
+        <i class="angle double left icon"></i>Voltar</button>
+    </div>
+  </div>
+  <div class="ui segment">
+    <sui-accordion [closeOthers]="false">
+
+      <!--inicio de Dados da Empresa:-->
+      <sui-accordion-panel [isOpen]="true">
+        <div title class="ui big label">
+          <i class="dropdown icon "></i>
+          <span class="titleDel">Dados da Empresa</span>
+        </div>
+
+        <div content>
+          <div class="ui grid">
+            <div class="four wide column">
+              <h4 class="ui header">
+                CNPJ: </h4>{{ instiResp?.cnpj_instituicao | cnpj}}</div>
+            <div class="four wide column">
+              <h4 class="ui header">
+                Nome: </h4>{{ instiResp?.nome }}</div>
+            <div class="four wide column">
+              <h4 class="ui header">
+                Sigla:</h4>{{ instiResp?.sigla }}</div>
+            <div class="four wide column">
+              <h4 class="ui header">
+                Diario Oficial da União:</h4>{{ instiResp?.dao }}</div>
+            <div class="four wide column">
+              <h4 class="ui header">
+                Instituição Pagadora:</h4>{{ instiResp?.pagadora }}</div>
+            <div class="four wide column">
+              <h4 class="ui header">
+                Termo de coperação:</h4>{{ instiResp?.termo_coop }}</div>
+            <div class="four wide column">
+              <h4 class="ui header">
+                Número do processo:</h4>{{ instiResp?.num_processo }}</div>
+          </div>
+        </div>
+
+        <div content>
+          <div class="ui grid">
+            <div class="four wide column">
+              <h4 class="ui header">Endereço:</h4> {{ instiResp?.endereco }}</div>
+            <div class="four wide column">
+              <h4 class="ui header">Nº:</h4> {{ instiResp?.numero }}</div>
+            <div class="four wide column">
+              <h4 class="ui header">Bairro:</h4> {{ instiResp?.bairro }}</div>
+            <div class="four wide column">
+              <h4 class="ui header">Complemento:</h4> {{ instiResp?.complemento }}</div>
+            <div class="four wide column">
+              <h4 class="ui header">Cep</h4> {{ instiResp?.cep | cep}}</div>
+          </div>
+        </div>
+
+      </sui-accordion-panel>
+      <!--fim de Dados da Empresa:-->
+
+
+      <!--inicio de Representante Legal-->
+      <sui-accordion-panel>
+        <div title class="ui big label">
+          <i class="dropdown icon"></i>
+          <span class="titleDel">Representante Legal</span>
+        </div>
+        <div content>
+          <div class="ui right aligned grid">
+            <!--Inicio de Pessoas -->
+            <div class="left floated left aligned sixteen wide column">
+
+              <div class="ui segment">
+
+                <div class="ui stackable one column grid">
+
+                  <div class="ui raised segment">
+
+                    <p></p>
+                    <div class="sixteen wide column">
+                      <table class="ui selectable table celled structured ">
+                        <thead>
+                          <tr>
+                            <th rowspan="1">Status</th>
+                            <th rowspan="1">Name</th>
+                            <th rowspan="1">Data Inicial</th>
+                            <th rowspan="1">Data Final</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr  [ngClass]="{'positive' : representate.status === 'A', 'negative' : representate.status === 'I'}" *ngFor="let representate of representantesLegais">
+                            <td [innerHTML]="representate.statusII"></td>
+                            <td [innerHTML]="representate.nome"></td>
+                            <td [innerHTML]="representate.data_inicial | date:'dd/MM/y'"></td>
+                            <td [innerHTML]="representate.data_final | date:'dd/MM/y'"></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <p></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sui-accordion-panel>
+
+
+      <!--inicio de Contatos da Instituição -->
+      <sui-accordion-panel>
+        <div title class="ui big label">
+          <i class="dropdown icon"></i>
+          <span class="titleDel">Contatos da Instituição</span>
+        </div>
+        <div content>
+          <div class="ui right aligned grid">
+            <div class="left floated left aligned sixteen wide column">
+              <div class="ui segment">
+                <div class="ui stackable one column grid">
+                  <div class="ui raised segment">
+                    <p></p>
+                    <div class="sixteen wide column">
+                      <table class="ui celled structured table">
+                        <thead>
+                          <tr>
+                            <th rowspan="2">Name</th>
+                            <th rowspan="2">Cargo</th>
+                            <th rowspan="2">Observação</th>
+                            <th rowspan="2">Tipo de Telefone</th>
+                            <th rowspan="2">Telefone</th>
+                            <th rowspan="2">Email</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            <ng-template ngFor let-contato [ngForOf]='contatosRepre | filterRepre'>
+                              <tr>
+                                <td [attr.rowspan]="contato.telefones.length" [innerHTML]="contato.nome || '-'"></td>
+                                <td [attr.rowspan]="contato.telefones.length" [innerHTML]="contato.cargo || '-'"></td>
+                                <td [attr.rowspan]="contato.telefones.length" [innerHTML]="contato.obs || '-'"></td>
+                                <ng-template ngFor let-i="index" let-contTel [ngForOf]='contato.telefones'>
+                                  <td *ngIf="i===0" [innerHTML]="contTel?.tipo || '-'"></td>
+                                  <td *ngIf="i===0" [innerHTML]="contTel?.fone | telefone"></td>
+                                  <td *ngIf="i===0" [innerHTML]="contTel?.email || '-'"></td>
+                                </ng-template>
+                              </tr>
+                              <ng-template ngFor let-j="index" let-tel [ngForOf]='contato.telefones'>
+                                <tr *ngIf="j>0">
+                                  <td [innerHTML]="tel?.tipo || '-'"></td>
+                                  <td [innerHTML]="tel?.fone | telefone"></td>
+                                  <td [innerHTML]="tel?.email || '-'"></td>
+                                </tr>
+                              </ng-template>
+                            </ng-template>
+                          </tbody>
+                      </table>
+                    </div>
+                    <p></p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sui-accordion-panel>
+    </sui-accordion>
+  </div>
+</div>

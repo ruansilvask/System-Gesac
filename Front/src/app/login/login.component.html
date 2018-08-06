@@ -1,0 +1,51 @@
+<!-- Para entender o Leyout, Aplique uma cor para cada classe column, exemplo: column black -->
+<div class="ui stackable padded equal height grid center aligned">
+    <div class="ui stackable equal height grid center aligned">
+      <div class="one wide  column "></div>
+      <div class="sixteen wide column ">
+
+        <div class="ui middle center aligned grid sixteen wide mobile sixteen wide tablet sixteen wide computer stackable">
+
+          <div class="column">
+
+            <!-- Título -->
+            <h2 class="ui blue image header segment stacked secondary ">
+              <div class="content pink">
+                GESAC
+              </div>
+            </h2>
+
+            <form class="ui large form segment stacked secondary" #formLogin="ngForm" (ngSubmit)="fazerLogin()">
+                <!-- campo 1 -->
+              <div class="field" [ngClass]="{'error': login.invalid && login.dirty}">
+                  <div class="ui left icon input">
+                    <input type="text" name="login" #login="ngModel" [(ngModel)]="usuario.nome" maxlength="45" placeholder="Login" required>
+                    <i class="user icon"></i>
+                  </div>
+                  <div class="invalid-feedback" [ngClass]="{'active': login.invalid && login.dirty}">
+                    Login obrigatório.
+                  </div>
+                </div>
+
+                <!-- campo 2 -->
+                <div class="field" [ngClass]="{'error': senha.invalid && senha.dirty}">
+                  <div class="ui left icon input">
+                    <input type="password" name="senha" #senha="ngModel" [(ngModel)]="usuario.senha" maxlength="45" placeholder="Senha" required>
+                    <i class="lock icon"></i>
+                  </div>
+                  <div class="invalid-feedback" [ngClass]="{'active': senha.invalid && senha.dirty}">
+                      Senha obrigatória.
+                    </div>
+                </div>
+                <!-- Botão de logar -->
+                <input type="submit" class="ui blue submit button" value="Entrar" [disabled]="formLogin.invalid"/>
+
+              </form>
+          </div>
+        </div>
+      </div>
+      <div class="one wide column"></div>
+    </div>
+  </div>
+
+  <!--(click)="fazerLogin()" [routerLink]="['menu']" -->

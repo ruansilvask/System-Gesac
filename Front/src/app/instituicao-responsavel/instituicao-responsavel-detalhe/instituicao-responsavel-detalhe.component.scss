@@ -1,0 +1,18 @@
+.container {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+  margin-top: 10vh;
+}
+
+td.tdAcoes{
+  text-align: center;
+}
+
+.titleDel{
+  font-size: 0.8em;
+}
+
+.ui.structured.celled.table tr td, .ui.structured.celled.table tr th {
+  border: 1px solid rgba(0,0,0,0.4);
+}

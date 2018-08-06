@@ -1,0 +1,296 @@
+<div class="ui right aligned grid">
+
+  <!--Inicio de Pessoas -->
+  <div class="left floated left aligned sixteen wide column">
+
+    <div class="ui segment">
+
+      <div class="ui stackable one column grid">
+
+        <div class="ui raised segment">
+          <a class="ui blue ribbon label">PESSOAS</a>
+          <p></p>
+          <div class="sixteen wide column">
+            <table class="ui selectable table">
+              <thead>
+                <tr>
+                  <th>Identificador</th>
+                  <th>Name</th>
+                  <th>Empresa/Instituição/PID</th>
+                  <th class="right aligned">Selecionar</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngIf="!contatos">
+                  <td colspan="9" class="center aligned">Nenhum registro encontrado.</td>
+                </tr>
+                <tr *ngFor="let contato of contatos; index as i">
+                  <td [innerHTML]="contato.cod_pessoa"></td>
+                  <td [innerHTML]="contato.nomePessoa"></td>
+                  <td [innerHTML]="contato.entidade"></td>
+                  <td class="right aligned">
+                    <div class="field">
+                        <input type="radio" name="radiogroup"
+                        [value]="contato"
+                        (click)="infoContato(contato)"
+                        [disabled]="desabilitarCampos">
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+              <tfoot *ngIf="contatos">
+                <tr>
+                  <th colspan="5">
+                    <div class="ui right floated pagination menu">
+                        <sui-pagination [collectionSize]='totalItens'
+                                        [pageSize]="itensPagina"
+                                        [maxSize]="10"
+                                        [hasEllipses]="true"
+                                        [(page)]="pagina"
+                                        (click)="page(pagina)"
+                                        >
+                        </sui-pagination>
+                    </div>
+                  </th>
+                </tr>
+              </tfoot>
+            </table>
+
+          </div>
+          <p></p>
+          <form class="ui form" #fBuscaPessoa="ngForm" (ngSubmit)="enviarNome(fBuscaPessoa.value.nome)">
+          <div class="ui stackable two column grid">
+            <div class="twelve wide column">
+                <div class="field">
+                  <label>Nome da Pessoa</label>
+                  <input type="text" name="nome" ngModel (ngModelChange)="buscaPessoa($event)" placeholder="Digite o nome da Pessoa"
+                    [disabled]="desabilitarCampos" autocomplete="off" required>
+                </div>
+            </div>
+            <div class="four wide column centered grid">
+              <input type="submit" value="Salvar caso não exista" class="ui  primary button btnAdd" [disabled]="desabilitarCampos || fBuscaPessoa.invalid">
+            </div>
+          </div>
+        </form>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+  <!--Fim de Pessoas -->
+
+
+  <!--Inicio de Inf Contatos -->
+
+  <div class="left floated left aligned sixteen wide column">
+    <div class="ui raised segment" *ngIf="aparecerInfContato === true">
+      <a class="ui orange ribbon label">INFORMAÇÕES DO CONTATO</a>
+      <p></p>
+      <form #fAddContato="ngForm" (ngSubmit)="salvarContato(fAddContato)">
+        <div class="ui form">
+          <div class="fields">
+            <div class="four wide field">
+              <label>Nome</label>
+              <input type="text" name="nome" placeholder="Nome" [ngModel]="contatoInfo?.nome" readonly>
+            </div>
+            <div class="four wide field">
+              <label>Cargo</label>
+              <input type="text" name="cargo" placeholder="Cargo" [ngModel]="contatoInfo?.cargo">
+            </div>
+            <div class="eight wide field">
+              <label>Observação</label>
+              <input type="text" name="obs" placeholder="Observação" [ngModel]="contatoInfo?.obs">
+            </div>
+          </div>
+        </div>
+
+      <div class="ui stackable four column grid">
+
+        <div class="sixteen wide column">
+
+          <div class="ui form">
+            <form #fAddTel="ngForm" (ngSubmit)="addTelefone(fAddTel)">
+            <div class="fields">
+
+              <div class="four wide field">
+                <div class="field">
+                  <label>Tipo Telefone</label>
+                  <select class="ui fluid dropdown" name="tipo" [(ngModel)]="adicionarTelefone.tipo">
+                    <option value="">Selecione o tipo telefone</option>
+                    <option value="M">Móvel</option>
+                    <option value="C">Casa</option>
+                    <option value="T">Tabalho</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="three wide field">
+                <label>Telefone</label>
+                <input type="text" mask="(00) 00000-0000" placeholder="Telefone" name="fone" minlength="10" [(ngModel)]="adicionarTelefone.fone">
+              </div>
+
+              <div class="eight wide field">
+                <label>E-mail</label>
+                <input type="email" placeholder="E-mail" name="email" [(ngModel)]="adicionarTelefone.email" pattern="^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+              </div>
+
+              <div class="two wide field">
+                  <button type="submit" class="ui button btnAdd" [disabled]="fAddTel.invalid">
+                      Adicionar
+                    </button>
+              </div>
+
+            </div>
+          </form>
+          </div>
+        </div>
+
+        <div class="sixteen wide column">
+          <table class="ui selectable striped table">
+            <thead>
+              <tr>
+                <th class="ui center aligned collapsing" >Fone</th>
+                <th class="ui center aligned collapsing" >E-mail</th>
+                <th>Ações</th>
+
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let contatoRetorno of contatosRetorno">
+                <td [innerHTML]="contatoRetorno?.fone | telefone"></td>
+                <td [innerHTML]="contatoRetorno?.email"></td>
+                <td class="ui center aligned collapsing">
+                    <a class="mini ui icon button circular" suiPopup popupHeader="Editar telefone/e-mail" popupInverted="true" (click)="editarTelefonesCadastrados(contatoRetorno)">
+                      <i class="pencil alternate icon"></i>
+                    </a>
+                    <a class="mini ui icon button circular" suiPopup popupHeader="Remover telefone/e-mail" popupInverted="true" (click)="deletarTelefoneCadastrado(contatoRetorno)">
+                      <i class="trash alternate icon"></i>
+                    </a>
+                </td>
+              </tr>
+
+            </tbody>
+          </table>
+
+        </div>
+
+      </div>
+      <p></p>
+
+      <div class="ui stackable two column grid">
+
+        <div class="column">
+          <button class="ui btnColor button" (click)="cancelarInfContato()">
+            Cancelar
+          </button>
+        </div>
+
+        <div class="column">
+          <button type="submit" class="ui button right floated" [disabled]="fAddContato.invalid">
+              Salvar contato
+          </button>
+        </div>
+
+      </div>
+    </form>
+    </div>
+  </div>
+
+  <!-- Modal alterar senha -->
+  <sui-modal *ngIf="trocarTelefone" [isClosable]="false" [size]="'normal'" #modal>
+    <div class="header">
+        <div class="ui grid">
+          <div class="fourteen wide column">
+           Alterar Telefone
+          </div>
+          <div class="one wide column">
+            <i class="close red link icon" (click)="abreFechaModal()"></i>
+          </div>
+        </div>
+      </div>
+  <div class="content">
+      <form class="ui form" #fPutTelefone="ngForm" (ngSubmit)="AlterarTelefone(fPutTelefone)">
+        <div class="fields">
+
+          <div class="four wide field">
+            <div class="field">
+              <label>Tipo Telefone</label>
+              <select class="ui fluid dropdown" name="tipo" [ngModel]="alterTelefone.tipo">
+                <option value="">Selecione o tipo telefone</option>
+                <option value="M">Móvel</option>
+                <option value="C">Casa</option>
+                <option value="T">Tabalho</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="three wide field">
+            <label>Telefone</label>
+            <input type="text" mask="(00) 00000-0000" placeholder="Telefone" name="fone" minlength="10" [ngModel]="alterTelefone.fone">
+          </div>
+
+          <div class="nine wide field">
+            <label>E-mail</label>
+            <input type="email" placeholder="E-mail" name="email" [ngModel]="alterTelefone.email" pattern="^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+          </div>
+
+        </div>
+          <div class="two fields">
+              <div class="field">
+                  <button class="ui btnColor button left floated" (click)="abreFechaModal()">Cancelar</button>
+              </div>
+              <div class="field">
+                  <button class="ui button right floated" type="submit" [disabled]="fPutTelefone.invalid" autofocus>Salvar alterações</button>
+              </div>
+          </div>
+        </form>
+  </div>
+
+</sui-modal>
+<!-- Modal alterar senha -->
+
+  <!--Fim Contatos -->
+
+  <!--Inicio Pessoas Ponto -->
+  <div class="left floated left aligned sixteen wide column">
+    <div class="ui raised segment" *ngIf="contatosCadastrados.length !== 0">
+      <a class="ui red ribbon label">PESSOAS CADASTRADAS</a>
+      <p></p>
+
+      <div class="ui stackable one column grid">
+
+        <div class="sixteen wide column">
+          <table class="ui selectable striped three column table">
+            <thead>
+              <tr>
+                <th class="ui center aligned collapsing">Nome</th>
+                <th class="ui center aligned collapsing">Cargo</th>
+                <th class="ui right aligned collapsing">Ações</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let contato of contatosCadastrados" >
+                <td  [innerHTML]="contato.nome"></td>
+                <td  [innerHTML]="contato.cargo"></td>
+                <td class="ui right aligned collapsing">
+                    <a class="mini ui icon button circular" suiPopup popupHeader="Editar contato" popupInverted="true" (click)="editarContatoCadastrado(contato)">
+                      <i class="pencil alternate icon"></i>
+                    </a>
+                    <a class="mini ui icon button circular" suiPopup popupHeader="Desvincular contato" popupInverted="true" (click)="deletarContatoCadastrado(contato)">
+                      <i class="trash alternate icon"></i>
+                    </a>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <!--Fim Pessoas Ponto -->
+</div>
