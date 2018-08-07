@@ -225,6 +225,7 @@ export class PontoPresencaAddEditComponent implements OnInit {
         });
     } else {
       this.pontoPresencaService.postPontoPresenca(this.pontoPresenca).subscribe(dados => {
+        console.log(dados);
         this.codGesac = dados;
         this.contatoService.getContatos(this.codGesac, 'ponto');
         this.secondActive = true;
@@ -234,7 +235,7 @@ export class PontoPresencaAddEditComponent implements OnInit {
   }
 
   mostrarBtn() {
-    (this.enderecos.length !== 0) ? this.mostrarBotao = true : this.mostrarBotao = false;
+      (!!this.enderecos) ? this.mostrarBotao = true : this.mostrarBotao = false;
   }
 
   /*
@@ -296,7 +297,7 @@ export class PontoPresencaAddEditComponent implements OnInit {
   salvarEndereco(form) {
     // mostrar botão "adicionar endereco" (quando clicado limpar os campos do endereco e setar variavel da clausula if)
     if (!this.AlterEnd) {
-      (this.enderecos.length !== 0) ? form.value.cod_endereco = this.enderecos[0].cod_endereco + 1 : form.value.cod_endereco = 1;
+      (!!this.enderecos) ? form.value.cod_endereco = this.enderecos[0].cod_endereco + 1 : form.value.cod_endereco = 1;
       form.value.cod_pid = this.pontoPresenca.cod_pid;
       form.value.latitude = null;
       form.value.longitude = null;
