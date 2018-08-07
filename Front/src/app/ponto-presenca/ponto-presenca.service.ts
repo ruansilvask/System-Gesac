@@ -98,7 +98,6 @@ export class PontoPresencaService {
   * Protocolo HTTP do Endereco para salvar no banco
   */
   postEndereco(form) {
-    console.log(form);
     return this.http
       .post<PontoPresenca>(`${GESAC_API}pontoEndereco`, form)
       .map(res => res);
