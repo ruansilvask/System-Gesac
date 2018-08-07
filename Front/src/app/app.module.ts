@@ -12,7 +12,6 @@ import { SuiModule, SuiCheckboxModule, SuiRatingModule } from 'ng2-semantic-ui';
 import { JwtInterceptor, AuthenticationService } from './services/index';
 
 import { AuthGuard } from './guards/auth.guard.service';
-import { AppService } from './app.service';
 import { ContratoService } from './contrato/contrato.service';
 import { AuthService } from './login/auth.service';
 
@@ -26,6 +25,14 @@ import { HeaderComponent } from './header/header.component';
 import { HomeComponent } from './home/home.component';
 import { LoginComponent } from './login/login.component';
 import { UsuarioService } from './usuario/usuario.service';
+
+import { ApiServiceEstadoMunicipio } from './api-services/api-services-estado-municipio';
+import { ApiServicesPagination } from './api-services/api-services-pagination';
+import { ApiServiceCnpj } from './api-services/api-services-cnpj';
+import { ApiServicesData } from './api-services/api-services-data';
+import { ApiServicesMsg } from './api-services/api-services-msg';
+import { ApiServiceHandleError } from './api-services/api-service-handleError';
+import { ApiServiceExcel } from './api-services/api-service-excel';
 
 
 @NgModule({
@@ -48,7 +55,13 @@ import { UsuarioService } from './usuario/usuario.service';
     FooterComponent
   ],
   providers: [
-    AppService,
+    ApiServicesPagination,
+    ApiServicesMsg,
+    ApiServiceEstadoMunicipio,
+    ApiServicesData,
+    ApiServiceCnpj,
+    ApiServiceExcel,
+    ApiServiceHandleError,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: JwtInterceptor,

@@ -1,10 +1,12 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
 import { Location } from '@angular/common';
 
+
+
 import { InstRespService } from './instituicao-responsavel.service';
-import { SuiModalService } from 'ng2-semantic-ui';
-import { AppService } from '../app.service';
 import Swal from 'sweetalert2';
+import { ApiServicesMsg } from './../api-services/api-services-msg';
+import { ApiServicesPagination } from './../api-services/api-services-pagination';
 
 @Component({
   selector: 'app-instresp-resp',
@@ -31,10 +33,10 @@ export class InstRespComponent implements OnInit {
   modalActions = new EventEmitter<string>();
 
   constructor(
+    private apiServicesMsg: ApiServicesMsg,
     private location: Location,
     private instituicaoResponsavelService: InstRespService,
-    private modalService: SuiModalService,
-    private appService: AppService
+    private apiServicesPagination: ApiServicesPagination
   ) {}
 
   // Carregar Insituições responsaveis
@@ -49,7 +51,7 @@ export class InstRespComponent implements OnInit {
   funcaoPaginacao(array) {
     let pagina;
     this.totalItens = array.length;
-    this.allArrays = this.appService.pagination(
+    this.allArrays = this.apiServicesPagination.pagination(
       array,
       this.numeroPagina
     );
@@ -70,13 +72,13 @@ export class InstRespComponent implements OnInit {
       if (instResp) {
         this.instituicaoResponsavelService.deleteInstResp(instResp.cod_instituicao).subscribe(
           res => {
-            this.appService.setMsg('success', 'Instituições responsável excluída com sucesso.', 3000);
+            this.apiServicesMsg.setMsg('success', 'Instituições responsável excluída com sucesso.', 3000);
             this.getInstituicoes();
           },
           erro => Swal('Erro', `${erro.error}`, 'error')
         );
       } else if (result.dismiss === Swal.DismissReason.cancel) {
-        this.appService.setMsg('error', 'Ação cancelada.', 3000);
+        this.apiServicesMsg.setMsg('error', 'Ação cancelada.', 3000);
       }
     });
   }

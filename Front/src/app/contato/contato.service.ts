@@ -1,4 +1,4 @@
-import { AppService } from './../app.service';
+
 import { HttpClient } from '@angular/common/http';
 import { Injectable, EventEmitter } from '@angular/core';
 
@@ -12,8 +12,7 @@ export class ContatoService {
   emitirCodContatos = new EventEmitter();
 
   constructor(
-    private http: HttpClient,
-    private appService: AppService
+    private http: HttpClient
   ) { }
 
 // INICIO GETS E POST CONTATOS

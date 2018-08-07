@@ -4,9 +4,14 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NgForm } from '@angular/forms';
 
 import { InstRespService } from './../instituicao-responsavel.service';
-import { AppService } from '../../app.service';
 import { ContatoService } from '../../contato/contato.service';
+import pt from 'ng2-semantic-ui/locales/pt';
 import Swal from 'sweetalert2';
+import { SuiLocalizationService } from 'ng2-semantic-ui';
+import { ApiServiceCnpj } from '../../api-services/api-services-cnpj';
+import { ApiServiceEstadoMunicipio } from '../../api-services/api-services-estado-municipio';
+import { ApiServicesData } from './../../api-services/api-services-data';
+import { ApiServicesMsg } from './../../api-services/api-services-msg';
 
 declare var $: any;
 
@@ -59,18 +64,25 @@ export class InstRespAddEditComponent implements OnInit {
 
   constructor(
     // public modalService: SuiModalService,
+    private apiServicesMsg: ApiServicesMsg,
+    private localizationService: SuiLocalizationService,
     private location: Location,
     private serviceInstiResp: InstRespService,
-    private appService: AppService,
+    private apiServiceEstadoMunicipio: ApiServiceEstadoMunicipio,
+    private apiServiceCnpj: ApiServiceCnpj,
     private route: ActivatedRoute,
     private router: Router,
-    private contatoService: ContatoService
-  ) {}
+    private contatoService: ContatoService,
+    private apiServicesData: ApiServicesData
+  ) {
+    localizationService.load('pt', pt);
+    localizationService.setLanguage('pt');
+  }
 
   ngOnInit() {
     this.instResp = true;
     setTimeout(() => {
-      this.ufs = this.appService.getEstados();
+      this.ufs = this.apiServiceEstadoMunicipio.getEstados();
     }, 200);
     this.route.params.subscribe(res => (this.params = res));
     this.formInstituicaoResp = {
@@ -115,7 +127,7 @@ export class InstRespAddEditComponent implements OnInit {
         .putInstResp(this.params.id, this.formInstituicaoResp)
         .subscribe(
           res => {
-            this.appService.setMsg(
+            this.apiServicesMsg.setMsg(
               'success',
               'Instituição Responsável atualizada com sucesso',
               5000
@@ -133,7 +145,7 @@ export class InstRespAddEditComponent implements OnInit {
         .postInstResp(this.formInstituicaoResp)
         .subscribe(
           res => {
-            this.appService.setMsg(
+            this.apiServicesMsg.setMsg(
               'success',
               'Instituição Responsável adicionada com sucesso',
               5000
@@ -145,7 +157,7 @@ export class InstRespAddEditComponent implements OnInit {
         );
     }
   } else {
-    this.appService.setMsg(
+    this.apiServicesMsg.setMsg(
                 'error',
                 'Nome e Campo são obrigatórios',
                 5000
@@ -292,7 +304,7 @@ export class InstRespAddEditComponent implements OnInit {
         if (this.represetanteLegalTodos[i].data_final === null) {
           this.represetanteLegalTodos[
             i
-          ].data_final = this.appService.formatData(new Date());
+          ].data_final = this.apiServicesData.formatData(new Date());
         }
 
         this.putRepreLegal(
@@ -314,12 +326,12 @@ export class InstRespAddEditComponent implements OnInit {
     delete dados.obs;
     delete dados.statusII;
 
-    dados.data_inicial = this.appService.formatData(dados.data_inicial);
-    dados.data_final = this.appService.formatData(dados.data_final);
+    dados.data_inicial = this.apiServicesData.formatData(dados.data_inicial);
+    dados.data_final = this.apiServicesData.formatData(dados.data_final);
 
     this.serviceInstiResp.putRepLegalInstResp(dados, id).subscribe(
       res => {
-        this.appService.setMsg(
+        this.apiServicesMsg.setMsg(
           'success',
           `Representante legal atualizado com sucesso`,
           5000
@@ -334,10 +346,10 @@ export class InstRespAddEditComponent implements OnInit {
   postRepreLegal() {
     this.repreLegalContatoSubmit.status = 'A';
 
-    this.repreLegalContatoSubmit.data_inicial = this.appService.formatData(
+    this.repreLegalContatoSubmit.data_inicial = this.apiServicesData.formatData(
       this.repreLegal.data_inicial
     );
-    this.repreLegalContatoSubmit.data_final = this.appService.formatData(
+    this.repreLegalContatoSubmit.data_final = this.apiServicesData.formatData(
       this.repreLegal.data_final
     );
 
@@ -349,7 +361,7 @@ export class InstRespAddEditComponent implements OnInit {
     this.serviceInstiResp
       .postRepLegalInstResp(this.repreLegalContatoSubmit)
       .subscribe(res => {
-        this.appService.setMsg('success', `Representante legal adicionado com sucesso`, 5000 );
+        this.apiServicesMsg.setMsg('success', `Representante legal adicionado com sucesso`, 5000 );
       },
       erro => {
         Swal('Erro', `${erro.error}`, 'error');
@@ -461,7 +473,7 @@ export class InstRespAddEditComponent implements OnInit {
         if (formInstRep.value.cnpj_instituicao.length === 0) {
           this.btnInstResp = true;
         } else {
-          if (this.appService.validarCNPJ(formInstRep.value.cnpj_instituicao)) {
+          if (this.apiServiceCnpj.validarCNPJ(formInstRep.value.cnpj_instituicao)) {
             this.btnInstResp = true;
           } else {
             this.btnInstResp = false;
@@ -500,7 +512,7 @@ export class InstRespAddEditComponent implements OnInit {
   }
 
   selectEstado(uf) {
-    this.municipios = this.appService.getMunicipios(uf);
+    this.municipios = this.apiServiceEstadoMunicipio.getMunicipios(uf);
   }
 
   goBack() {

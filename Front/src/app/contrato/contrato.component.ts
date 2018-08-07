@@ -1,4 +1,4 @@
-import { AppService } from './../app.service';
+import { ApiServicesPagination } from './../api-services/api-services-pagination';
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 
@@ -36,13 +36,13 @@ allArrays: any;
   constructor(
     private contratoService: ContratoService,
     private location: Location,
-    private appService: AppService
+    private apiServicesPagination: ApiServicesPagination
   ) {}
 
   funcaoPaginacao(array) {
     let pagina;
     this.totalItens = array.length;
-    this.allArrays = this.appService.pagination(
+    this.allArrays = this.apiServicesPagination.pagination(
       array,
       this.itensPagina
     );

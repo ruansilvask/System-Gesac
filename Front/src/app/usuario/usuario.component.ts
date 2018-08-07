@@ -1,10 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { UsuarioService } from './usuario.service';
 
-import { AppService } from '../app.service';
+
 // import Swal from 'sweetalert2';
 import { Router } from '../../../node_modules/@angular/router';
 import { AuthenticationService } from '../services';
+import { ApiServicesMsg } from '../api-services/api-services-msg';
+import { ApiServicesPagination } from './../api-services/api-services-pagination';
 
 @Component({
   selector: 'app-usuario',
@@ -13,8 +15,9 @@ import { AuthenticationService } from '../services';
 })
 export class UsuarioComponent implements OnInit {
   constructor(
+    private apiServicesMsg: ApiServicesMsg,
     private authenticationService: AuthenticationService,
-    private appService: AppService,
+    private apiServicesPagination: ApiServicesPagination,
     private usuarioService: UsuarioService,
     private router: Router
   ) {}
@@ -49,7 +52,7 @@ export class UsuarioComponent implements OnInit {
       this.usuarioService.getUsuarios()
         .subscribe(usuarios => {
         this.totalItens = usuarios.length;
-        this.todosUsuarios = this.appService.pagination(usuarios, this.itensPagina);
+        this.todosUsuarios = this.apiServicesPagination.pagination(usuarios, this.itensPagina);
         this.usuarios = this.todosUsuarios[0];
         this.segmentDimmed = false;
       });
@@ -73,15 +76,15 @@ export class UsuarioComponent implements OnInit {
     //     .subscribe(
     //       res => {
     //         this.getUsuarios();
-    //         this.appService.setMsg('success', `Usuário excluído com sucesso.`, 3000);
+    //         this.apiServicesMsg.setMsg('success', `Usuário excluído com sucesso.`, 3000);
     //       },
     //       erro => Swal('Erro', `${erro.error}`, 'error')
     //     );
     //   } else if (result.dismiss === Swal.DismissReason.cancel) {
-    //     this.appService.setMsg('error', 'Ação cancelada.', 3000);
+    //     this.apiServicesMsg.setMsg('error', 'Ação cancelada.', 3000);
     //   }
     // });
-    this.appService.setMsg('warning', `Você não tem permissão para executar esta ação.`, 5000);
+    this.apiServicesMsg.setMsg('warning', `Você não tem permissão para executar esta ação.`, 5000);
   }
 
   /*

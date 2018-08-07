@@ -220,7 +220,7 @@ module.exports = function(app){
 
 
 //*************** Rotas em municipio ***************//
-    app.route('/gesac/municipio')
+    app.route('/gesac/municipio/:uf')
         .get(municipio.listaMunicipio)
 
     app.route('/gesac/uf')

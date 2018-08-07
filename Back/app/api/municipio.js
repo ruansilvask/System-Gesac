@@ -6,8 +6,9 @@ module.exports = function(app){
     api.listaMunicipio = (req, res) => {
         const connection = app.conexao.conexaoBD();
         const municipioDAO = new app.infra.MunicipioDAO(connection);
+        const { uf } = req.params;
 
-        municipioDAO.listarMunicipio((erro, resultado) => {
+        municipioDAO.listarMunicipio(uf, (erro, resultado) => {
             erro ? (console.log(erro), res.status(500).send(app.api.erroPadrao())) : res.status(200).json(resultado);
         });
 

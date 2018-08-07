@@ -2,9 +2,9 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
 
-import { AppService } from './../app.service';
 import { GESAC_API } from '../app.api';
 import { Tipologia } from './tipologia.model';
+import { ApiServiceHandleError } from '../api-services/api-service-handleError';
 
 
 
@@ -12,13 +12,13 @@ import { Tipologia } from './tipologia.model';
 export class TipologiaService {
   constructor(
     private http: HttpClient,
-    private appService: AppService
+    private apiServiceHandleError: ApiServiceHandleError
   ) {}
 
   getTipologias() {
     return this.http
       .get<Tipologia>(`${GESAC_API}tipologia`)
-      .catch(this.appService.handleError);
+      .catch(this.apiServiceHandleError.handleError);
   }
 
   postTipologia(dados) {

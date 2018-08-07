@@ -5,13 +5,12 @@ import { Response } from '@angular/http';
 
 import { GESAC_API } from '../app.api';
 import { InstituicaoResp } from './instituicao-responsavel.model';
-import { AppService } from '../app.service';
 
 @Injectable()
 export class InstRespService {
   idRepLegalPut: any;
 
-  constructor(private http: HttpClient, private appService: AppService) {}
+  constructor(private http: HttpClient) {}
 
   // INSTITUIÇÃO RESPONSAVEL
 

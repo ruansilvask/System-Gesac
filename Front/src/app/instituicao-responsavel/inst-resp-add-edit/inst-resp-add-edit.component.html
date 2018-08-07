@@ -228,8 +228,16 @@
                     <div class="field">
                       <div class="ui left icon input">
                         <i class="calendar icon"></i>
-                        <input suiDatepicker name="data_inicial" [(ngModel)]="repreLegal.data_inicial" [pickerMode]="'date'" autocomplete="off" [pickerFirstDayOfWeek]="0"
-                          [pickerUseNativeOnMobile]="false" required>
+                        <input
+                        suiDatepicker
+                        name="data_inicial"
+                        [(ngModel)]="repreLegal.data_inicial"
+                        [pickerMode]="'date'"
+                        autocomplete="off"
+                        [pickerFirstDayOfWeek]="0"
+                        [pickerUseNativeOnMobile]="false"
+                        required
+                        readonly>
                       </div>
                     </div>
                   </div>

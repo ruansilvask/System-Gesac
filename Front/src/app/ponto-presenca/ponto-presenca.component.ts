@@ -4,10 +4,14 @@ import { Location } from '@angular/common';
 import { NgForm } from '@angular/forms';
 
 import { PontoPresencaService } from './ponto-presenca.service';
-import { AppService } from '../app.service';
 import { empty } from 'rxjs/observable/empty';
 import { SuiLocalizationService } from '../../../node_modules/ng2-semantic-ui';
 import pt from 'ng2-semantic-ui/locales/pt';
+
+import { ApiServiceEstadoMunicipio } from '../api-services/api-services-estado-municipio';
+import { ApiServicesData } from './../api-services/api-services-data';
+import { ApiServicesMsg } from './../api-services/api-services-msg';
+import { ApiServicesPagination } from './../api-services/api-services-pagination';
 
 @Component({
   selector: 'app-ponto-presenca',
@@ -91,10 +95,13 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
   pontoPresencaPag: any;
 
   constructor(
+    private apiServicesMsg: ApiServicesMsg,
     private localizationService: SuiLocalizationService,
     private location: Location,
     private pontoPresencaService: PontoPresencaService,
-    private appService: AppService
+    private apiServicesPagination: ApiServicesPagination,
+    private apiServicesData: ApiServicesData,
+    private apiServiceEstadoMunicipio: ApiServiceEstadoMunicipio
   ) {
     localizationService.load('pt', pt);
     localizationService.setLanguage('pt'); }
@@ -116,11 +123,11 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
   }
 
   getEstados() {
-    this.ufsPP = this.appService.getEstados();
+    this.ufsPP = this.apiServiceEstadoMunicipio.getEstados();
   }
 
   selectEstado(uf) {
-    this.municipios = this.appService.getMunicipios(uf);
+    this.municipios = this.apiServiceEstadoMunicipio.getMunicipios(uf);
   }
 
   getStatusPP() {
@@ -132,7 +139,7 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     setTimeout(() => {
-      this.ufs = this.appService.getEstados();
+      this.ufs = this.apiServiceEstadoMunicipio.getEstados();
     }, 500);
     this.loadPontoPre();
     this.botoesMSA = false;
@@ -176,7 +183,7 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
 
   funcaoPaginacao(array) {
     this.totalItens = array.length;
-    this.allArrays = this.appService.pagination(
+    this.allArrays = this.apiServicesPagination.pagination(
       array,
       this.numeroPagina
     );
@@ -261,7 +268,7 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
     for (let i = 0; i < this.pontoPresencaStatus.length; i++) {
       if (this.pontoPresencaStatus[i] !== undefined) {
         if (this.pontoPresencaStatus[0] !== this.pontoPresencaStatus[i]) {
-          this.appService.setMsg('warning', 'Não é possivel executar esta ação, status diferentes.', 5000);
+          this.apiServicesMsg.setMsg('warning', 'Não é possivel executar esta ação, status diferentes.', 5000);
           this.statusDiferentes = true;
           break;
         }
@@ -282,7 +289,7 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
 
   ActiveMsgReturnSolicitation() {
     if (this.multiplasSolicitacoes.length === 0) {
-      this.appService.setMsg('warning', 'Não é possivel executar esta ação, pois não há solicitações possíveis para este Status!', 5000);
+      this.apiServicesMsg.setMsg('warning', 'Não é possivel executar esta ação, pois não há solicitações possíveis para este Status!', 5000);
       this.abrirNodal = false;
     } else {
       this.abrirNodal = true;
@@ -291,7 +298,7 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
 
   enviarMS(fmsolicitacoes: NgForm) {
     console.log(fmsolicitacoes.value);
-    // fmsolicitacoes.value.data_oficio = this.appService.formatData(fmsolicitacoes.value.data_oficio);
+    // fmsolicitacoes.value.data_oficio = this.apiServicesData.formatData(fmsolicitacoes.value.data_oficio);
     // if (!this.analiseShow) {
     //   delete fmsolicitacoes.value.cnpj_empresa;
     //   this.solicitacaoSubmit = true;
@@ -328,7 +335,7 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
       this.pendenciaShow = true;
     } else {
       this.analiseShow = false;
-      this.pendenciaShow = false
+      this.pendenciaShow = false;
     }
   }
 

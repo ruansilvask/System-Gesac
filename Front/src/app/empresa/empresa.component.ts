@@ -1,9 +1,12 @@
-import { AppService } from './../app.service';
+import { ApiServicesMsg } from './../api-services/api-services-msg';
 import { Component, OnInit } from '@angular/core';
 
 import { SuiModalService } from 'ng2-semantic-ui';
 import { EmpresaService } from './empresa.service';
+
 import Swal from 'sweetalert2';
+
+import { ApiServicesPagination } from './../api-services/api-services-pagination';
 
 @Component({
   selector: 'app-empresa',
@@ -30,9 +33,10 @@ export class EmpresaComponent implements OnInit {
   pagina = 1;
 
   constructor(
+    private apiServicesMsg: ApiServicesMsg,
     private empresaService: EmpresaService,
     private modalService: SuiModalService,
-    private appService: AppService
+    private apiServicesPagination: ApiServicesPagination
   ) { }
 
   /*
@@ -49,7 +53,7 @@ export class EmpresaComponent implements OnInit {
   funcaoPaginacao(array) {
     let pagina;
     this.totalItens = array.length;
-    this.allArrays = this.appService.pagination(
+    this.allArrays = this.apiServicesPagination.pagination(
       array,
       this.itensPagina
     );
@@ -77,12 +81,12 @@ export class EmpresaComponent implements OnInit {
             res => {
               this.getEmpresas();
               event.stopPropagation();
-              this.appService.setMsg('success', 'Empresa deletada com sucesso.', 3000);
+              this.apiServicesMsg.setMsg('success', 'Empresa deletada com sucesso.', 3000);
             },
             erro => Swal('Erro', `${erro.error}`, 'error')
           );
       } else if (result.dismiss === Swal.DismissReason.cancel) {
-        this.appService.setMsg('error', 'Ação cancelada.', 3000);
+        this.apiServicesMsg.setMsg('error', 'Ação cancelada.', 3000);
       }
     });
   }
