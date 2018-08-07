@@ -1,3 +1,4 @@
+import { ApiServicesData } from './../../api-services/api-services-data';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
@@ -6,7 +7,9 @@ import { SuiModalService } from 'ng2-semantic-ui';
 import { PontoPresencaService } from '../ponto-presenca.service';
 import { NgForm } from '@angular/forms';
 import { ContatoService } from '../../contato/contato.service';
-import { AppService } from '../../app.service';
+
+import { ApiServicesMsg } from './../../api-services/api-services-msg';
+
 import Swal from 'sweetalert2';
 
 @Component({
@@ -89,13 +92,14 @@ export class PontoPresencaDetalheComponent implements OnInit {
   hitorico: any;
 
   constructor(
+    private apiServicesMsg: ApiServicesMsg,
     private modalService: SuiModalService,
     private pontoPresencaService: PontoPresencaService,
     private contatoService: ContatoService,
     private route: ActivatedRoute,
     private router: Router,
     private location: Location,
-    private appService: AppService
+    private apiServicesData: ApiServicesData
   ) { }
 
   ngOnInit() {
@@ -193,7 +197,7 @@ export class PontoPresencaDetalheComponent implements OnInit {
         this.abrirAnalisar = false;
         this.justificativa = false;
         this.FecharCollapseAnalise = false;
-        this.appService.setMsg(
+        this.apiServicesMsg.setMsg(
           'success',
           'Análise atualizada com sucesso',
           5000
@@ -210,7 +214,7 @@ export class PontoPresencaDetalheComponent implements OnInit {
     this.pontoPresencaService.postAnalise(analise).subscribe(
       res => {
         this.getPontoHistorico(),
-          this.appService.setMsg(
+          this.apiServicesMsg.setMsg(
             'success',
             'Análise atualizada com sucesso',
             5000
@@ -239,7 +243,7 @@ export class PontoPresencaDetalheComponent implements OnInit {
   correcaoDataInt(data) {
     data = new Date(data);
     const hora = data.toString().slice(15, 24);
-    data = this.appService.formatData(data);
+    data = this.apiServicesData.formatData(data);
     data += hora;
     return data;
   }
@@ -342,7 +346,7 @@ export class PontoPresencaDetalheComponent implements OnInit {
     this.pontoPresencaService.postInteracao(formInteracao.value).subscribe(
       res => {
         this.getPontoHistorico(),
-          this.appService.setMsg(
+          this.apiServicesMsg.setMsg(
             'success',
             'Interação realizada com sucesso!',
             3000
@@ -385,10 +389,10 @@ export class PontoPresencaDetalheComponent implements OnInit {
   }
 
   salvarAnalise(analise) {
-    analise.value.data_oficio = this.appService.formatData(
+    analise.value.data_oficio = this.apiServicesData.formatData(
       analise.value.data_oficio
     );
-    analise.value.data_instalacao = this.appService.formatData(
+    analise.value.data_instalacao = this.apiServicesData.formatData(
       analise.value.data_instalacao
     );
 

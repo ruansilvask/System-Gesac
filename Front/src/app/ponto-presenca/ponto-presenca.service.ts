@@ -6,7 +6,6 @@ import 'rxjs/add/operator/map';
 
 import { GESAC_API } from '../app.api';
 import { PontoPresenca } from './ponto-presenca.model';
-import { AppService } from '../app.service';
 import { Contrato } from '../contrato/contrato.model';
 import { InstituicaoResp } from '../instituicao-responsavel/instituicao-responsavel.model';
 
@@ -16,7 +15,7 @@ export class PontoPresencaService {
     'Content-Type': 'application/json'
   });
 
-  constructor(private http: HttpClient, private appService: AppService) {}
+  constructor(private http: HttpClient) {}
 
   /*
   * Protocolos HTTP do Ponto de presenca

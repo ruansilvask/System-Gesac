@@ -1,9 +1,11 @@
+import { ApiServicesMsg } from './../../api-services/api-services-msg';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { AppService } from '../../app.service';
 import { EmpresaService } from './../empresa.service';
 import { ContatoService } from '../../contato/contato.service';
+import { ApiServiceCnpj } from '../../api-services/api-services-cnpj';
+import { ApiServiceEstadoMunicipio } from '../../api-services/api-services-estado-municipio';
 
 import { Empresa } from './../empresa.model';
 import { SuiModalService } from 'ng2-semantic-ui';
@@ -68,7 +70,9 @@ export class EmpresaAdicionarEditarComponent implements OnInit {
   };
 
   constructor(
-    private appService: AppService,
+    private apiServicesMsg: ApiServicesMsg,
+    private apiServiceEstadoMunicipio: ApiServiceEstadoMunicipio,
+    private apiServiceCnpj: ApiServiceCnpj,
     private empresaService: EmpresaService,
     private contatoService: ContatoService,
     private route: ActivatedRoute,
@@ -94,7 +98,7 @@ export class EmpresaAdicionarEditarComponent implements OnInit {
   */
   selectEstado(uf) {
     this.empresaForm.cod_ibge = null;
-    this.municipios = this.appService.getMunicipios(uf);
+    this.municipios = this.apiServiceEstadoMunicipio.getMunicipios(uf);
   }
 
   /*
@@ -126,7 +130,7 @@ export class EmpresaAdicionarEditarComponent implements OnInit {
         this.codigo = form.cnpj_empresa;
         this.contatoService.getContatos(this.codigo, 'empresa');
         this.contatos = true;
-        this.appService.setMsg('success', 'Editado com sucesso.', 3000);
+        this.apiServicesMsg.setMsg('success', 'Editado com sucesso.', 3000);
       });
     } else {
       this.empresaService.postEmpresa(form)
@@ -134,7 +138,7 @@ export class EmpresaAdicionarEditarComponent implements OnInit {
         this.codigo = form.cnpj_empresa;
         this.contatoService.getContatos(this.codigo, 'empresa');
         this.contatos = true;
-        this.appService.setMsg('success', 'Cadastrada com sucesso.', 3000);
+        this.apiServicesMsg.setMsg('success', 'Cadastrada com sucesso.', 3000);
       },
       erro =>
       Swal('Erro', `${erro.error}`, 'error')
@@ -161,7 +165,7 @@ export class EmpresaAdicionarEditarComponent implements OnInit {
   }
 
   cnpjValid(cnpj) {
-    this.cnpjValido = this.appService.validarCNPJ(this.empresaForm.cnpj_empresa);
+    this.cnpjValido = this.apiServiceCnpj.validarCNPJ(this.empresaForm.cnpj_empresa);
   }
 
   temCnpj(cnpj) {
@@ -186,7 +190,7 @@ export class EmpresaAdicionarEditarComponent implements OnInit {
       /*
       * Trás os estados do banco
       */
-      this.ufs = this.appService.getEstados();
+      this.ufs = this.apiServiceEstadoMunicipio.getEstados();
       /*
       * Trás as empresas pai do banco
       */
@@ -218,7 +222,7 @@ export class EmpresaAdicionarEditarComponent implements OnInit {
               }
             });
           } else {
-            this.municipios = this.appService.getMunicipios(dados[0].uf);
+            this.municipios = this.apiServiceEstadoMunicipio.getMunicipios(dados[0].uf);
 
             if (dados[0].cnpj_empresa === dados[0].cnpj_empresa_pai) {
               this.radioConsorcio('sim');

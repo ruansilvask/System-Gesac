@@ -1,4 +1,4 @@
-import { ConfirmModal } from './../../modal/modal.component';
+import { ApiServicesData } from './../../api-services/api-services-data';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
@@ -8,11 +8,17 @@ import { SuiModalService } from 'ng2-semantic-ui/dist/public';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 
-import { AppService } from '../../app.service';
+
 import { ContatoService } from '../../contato/contato.service';
 import { PontoPresenca } from '../ponto-presenca.model';
 import { PontoPresencaService } from '../ponto-presenca.service';
 import Swal from 'sweetalert2';
+
+import { ConfirmModal } from './../../modal/modal.component';
+
+
+import { ApiServicesMsg } from './../../api-services/api-services-msg';
+import { ApiServiceEstadoMunicipio } from '../../api-services/api-services-estado-municipio';
 
 @Component({
   selector: 'app-ponto-presenca-add-edit',
@@ -37,7 +43,8 @@ export class PontoPresencaAddEditComponent implements OnInit {
   codGesac: any;
   codEndereco: any;
   ufs: any;
-  municipios: any;
+  municipiosUf = [];
+  municipios = [];
   lotes: any;
   velocidades: any;
   instituicoesResp: any;
@@ -107,13 +114,15 @@ export class PontoPresencaAddEditComponent implements OnInit {
 
 
   constructor(
-    private appService: AppService,
+    private apiServicesMsg: ApiServicesMsg,
+    private apiServiceEstadoMunicipio: ApiServiceEstadoMunicipio,
     private pontoPresencaService: PontoPresencaService,
     private http: HttpClient,
     private router: Router,
     private modalService: SuiModalService,
     private contatoService: ContatoService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private apiServicesData: ApiServicesData
   ) {
     this.firstActive = true;
     // this.thirdActive = true;
@@ -124,7 +133,7 @@ export class PontoPresencaAddEditComponent implements OnInit {
   * Método para trazer os municípios de acordo com a uf selecionada
   */
   selectEstado(uf) {
-    this.municipios = this.appService.getMunicipios(uf);
+    this.municipios = this.apiServiceEstadoMunicipio.getMunicipios(uf);
   }
 
   /*
@@ -140,8 +149,8 @@ export class PontoPresencaAddEditComponent implements OnInit {
   /*
  * Método para trazer os lotes de acordo com o contrtato selecionada
  */
-  selectContrato(pontoPresenca) {
-    this.pontoPresencaService.getLotes(pontoPresenca).subscribe(lotes => {
+  selectContrato(num_contrato) {
+    this.pontoPresencaService.getLotes(num_contrato).subscribe(lotes => {
       this.lotes = lotes;
     }
     );
@@ -150,8 +159,8 @@ export class PontoPresencaAddEditComponent implements OnInit {
   /*
  * Método para trazer os velocidade de acordo com o lote selecionada
  */
-  selectlote(pontoPresenca) {
-    this.pontoPresencaService.getVelocidade(pontoPresenca).subscribe(velocidades => {
+  selectlote(num_lote) {
+    this.pontoPresencaService.getVelocidade(num_lote).subscribe(velocidades => {
       this.velocidades = velocidades;
     }
     );
@@ -291,7 +300,7 @@ export class PontoPresencaAddEditComponent implements OnInit {
       form.value.cod_pid = this.pontoPresenca.cod_pid;
       form.value.latitude = null;
       form.value.longitude = null;
-      form.value.data_inicio = this.appService.formatData(new Date());
+      // form.value.data_inicio = this.apiServicesData.formatData(new Date());
         this.pontoPresencaService.postEndereco(form.value).subscribe(dados => {
             this.getPontoPrensencaEnderecosId(this.codGesac);
             this.cancelAddEndereco();
@@ -388,13 +397,13 @@ export class PontoPresencaAddEditComponent implements OnInit {
             res => {
             this.removido = res;
             this.tipologiaIdPontoPr();
-            this.appService.setMsg('success', 'Tipologia removida com sucesso.', 3000);
+            this.apiServicesMsg.setMsg('success', 'Tipologia removida com sucesso.', 3000);
           },
           erro => Swal('Erro', `${erro.error}`, 'error')
         );
         }
       } else if (result.dismiss === Swal.DismissReason.cancel) {
-        this.appService.setMsg('error', 'Ação cancelada.', 3000);
+        this.apiServicesMsg.setMsg('error', 'Ação cancelada.', 3000);
       }
     });
   }
@@ -410,7 +419,7 @@ export class PontoPresencaAddEditComponent implements OnInit {
   ngOnInit(): void {
     this.route.params.subscribe(res => this.params = res);
     setTimeout(() => {
-      this.ufs = this.appService.getEstados();
+      this.ufs = this.apiServiceEstadoMunicipio.getEstados();
       /*
      * Trás os estados do banco
      */
@@ -425,7 +434,7 @@ export class PontoPresencaAddEditComponent implements OnInit {
       if (this.params.id) {
         this.pontoPresencaService.getPontoPresencaPorId(this.params.id)
         .subscribe(dados => {
-          this.municipios = this.appService.getMunicipios(dados[0].uf);
+          this.municipios = this.apiServiceEstadoMunicipio.getMunicipios(dados[0].uf);
           this.selectContrato(dados[0].num_contrato);
           this.selectlote(dados[0].cod_lote);
           setTimeout(() => {

@@ -13,7 +13,7 @@ import { FilterRepresentantePipe } from './filter-representantes.pipe';
     imports: [
       SharedModule,
       InstRespRoutingModule,
-      ContatoModule
+      ContatoModule,
     ],
     declarations: [
         InstRespComponent,

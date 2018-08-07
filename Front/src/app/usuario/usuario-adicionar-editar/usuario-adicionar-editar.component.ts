@@ -5,8 +5,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { UsuarioService } from './../usuario.service';
 import { SuiModalService } from 'ng2-semantic-ui';
 import Swal from 'sweetalert2';
-import { AppService } from '../../app.service';
 import { AuthenticationService } from '../../services';
+import { ApiServicesMsg } from './../../api-services/api-services-msg';
 
 @Component({
   selector: 'app-usuario-adicionar-editar',
@@ -32,7 +32,7 @@ export class UsuarioAdicionarEditarComponent implements OnInit {
   };
 
   constructor(
-    private appService: AppService,
+    private apiServicesMsg: ApiServicesMsg,
     private usuarioService: UsuarioService,
     private route: ActivatedRoute,
     private router: Router,
@@ -54,12 +54,12 @@ export class UsuarioAdicionarEditarComponent implements OnInit {
           res => {
             this.authenticationService.getUser();
             this.router.navigate(['usuario']);
-            this.appService.setMsg('success', `As alterações foram salvas com sucesso.`, 3000);
+            this.apiServicesMsg.setMsg('success', `As alterações foram salvas com sucesso.`, 3000);
           },
           erro => Swal('Erro', `${erro.error}`, 'error')
         );
       } else {
-        this.appService.setMsg('warning', `Você não tem permissão para editar usuário.`, 3000);
+        this.apiServicesMsg.setMsg('warning', `Você não tem permissão para editar usuário.`, 3000);
       }
     } else {
       if (this.authenticationService.verificaUser() === '1') {
@@ -69,15 +69,15 @@ export class UsuarioAdicionarEditarComponent implements OnInit {
         .subscribe(
           res => {
             this.router.navigate(['usuario']);
-            this.appService.setMsg('success', `Usuário adicionado com sucesso.`, 3000);
+            this.apiServicesMsg.setMsg('success', `Usuário adicionado com sucesso.`, 3000);
           },
           erro => Swal('Erro', `${erro.error}`, 'error')
         );
       } else {
-        this.appService.setMsg('warning', `As senhas não coincidem.`, 5000);
+        this.apiServicesMsg.setMsg('warning', `As senhas não coincidem.`, 5000);
       }
     } else {
-      this.appService.setMsg('warning', `Você não tem permissão para adicionar usuário.`, 3000);
+      this.apiServicesMsg.setMsg('warning', `Você não tem permissão para adicionar usuário.`, 3000);
     }
     }
   }
@@ -93,13 +93,13 @@ export class UsuarioAdicionarEditarComponent implements OnInit {
       .subscribe(
         res =>  {
           this.msg = res;
-          this.appService.setMsg('success', `${this.msg.msg}`, 3000);
+          this.apiServicesMsg.setMsg('success', `${this.msg.msg}`, 3000);
               this.trocarSenha = false;
             },
-        erro => this.appService.setMsg('warning', `${erro.error}`, 5000)
+        erro => this.apiServicesMsg.setMsg('warning', `${erro.error}`, 5000)
       );
     } else {
-      this.appService.setMsg('warning', `A "Nova senha" não coincide com "Digite a nova senha novamente".`, 5000);
+      this.apiServicesMsg.setMsg('warning', `A "Nova senha" não coincide com "Digite a nova senha novamente".`, 5000);
     }
   }
 

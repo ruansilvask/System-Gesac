@@ -3,7 +3,6 @@ import { Injectable } from '@angular/core';
 import { Response } from '@angular/http';
 
 import 'rxjs/add/operator/map';
-import { AppService } from './../app.service';
 
 import { GESAC_API } from '../app.api';
 import { Contrato } from './contrato.model';
@@ -13,8 +12,7 @@ import { Lote } from './lote.model';
 export class ContratoService {
 
   constructor(
-    private http: HttpClient,
-    private appService: AppService
+    private http: HttpClient
   ) { }
 
   // CONTRATOS

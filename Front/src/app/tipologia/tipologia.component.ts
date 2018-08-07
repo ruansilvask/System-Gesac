@@ -1,4 +1,5 @@
-import { AppService } from './../app.service';
+import { ApiServicesMsg } from './../api-services/api-services-msg';
+import { ApiServicesPagination } from './../api-services/api-services-pagination';
 import { Component, OnInit } from '@angular/core';
 
 import { TipologiaService } from './tipologia.service';
@@ -29,7 +30,8 @@ export class TipologiaComponent implements OnInit {
  pagina = 1;
 
   constructor(
-    private appService: AppService,
+    private apiServicesMsg: ApiServicesMsg,
+    private apiServicesPagination: ApiServicesPagination,
     private tipologiaService: TipologiaService,
     private formBuilder: FormBuilder,
     private modalService: SuiModalService
@@ -50,7 +52,7 @@ export class TipologiaComponent implements OnInit {
       .getTipologias()
       .subscribe(tipologias => {
         this.totalItens = tipologias.length;
-        this.todasTipologias = this.appService.pagination(tipologias, this.itensPagina);
+        this.todasTipologias = this.apiServicesPagination.pagination(tipologias, this.itensPagina);
         this.tipologias = this.todasTipologias[0];
         this.segmentDimmed = false;
       });
@@ -72,12 +74,12 @@ export class TipologiaComponent implements OnInit {
           .subscribe(
             res => {
             this.getTipologias();
-            this.appService.setMsg('success', 'Tipologia excluída com sucesso.', 3000);
+            this.apiServicesMsg.setMsg('success', 'Tipologia excluída com sucesso.', 3000);
           },
           erro => Swal('Erro', `${erro.error}`, 'error')
         );
       } else if (result.dismiss === Swal.DismissReason.cancel) {
-        this.appService.setMsg('error', 'Ação cancelada.', 3000);
+        this.apiServicesMsg.setMsg('error', 'Ação cancelada.', 3000);
       }
     });
   }
@@ -98,12 +100,12 @@ export class TipologiaComponent implements OnInit {
           res => {
           this.getTipologias();
           this.formTipologias.reset();
-          this.appService.setMsg('success', 'Tipologia cadastrada com sucesso.', 3000);
+          this.apiServicesMsg.setMsg('success', 'Tipologia cadastrada com sucesso.', 3000);
         },
         erro => Swal('Erro', `${erro.error}`, 'error')
       );
       } else if (result.dismiss === Swal.DismissReason.cancel) {
-        this.appService.setMsg('error', 'Ação cancelada.', 3000);
+        this.apiServicesMsg.setMsg('error', 'Ação cancelada.', 3000);
       }
     });
   }
@@ -124,7 +126,7 @@ export class TipologiaComponent implements OnInit {
     .subscribe(
       res => {
         this.desabilitado = !i;
-        this.appService.setMsg('success', 'Tipologia editada com sucesso.', 3000);
+        this.apiServicesMsg.setMsg('success', 'Tipologia editada com sucesso.', 3000);
       }
     );
   }

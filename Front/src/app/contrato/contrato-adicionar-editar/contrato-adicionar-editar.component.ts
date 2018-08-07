@@ -1,3 +1,6 @@
+import { ApiServicesData } from './../../api-services/api-services-data';
+import { ApiServicesMsg } from './../../api-services/api-services-msg';
+import {ApiServicesPagination } from './../../api-services/api-services-pagination';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
@@ -5,7 +8,6 @@ import { NgForm } from '@angular/forms';
 import { SuiLocalizationService } from 'ng2-semantic-ui';
 
 import { ContratoService } from './../contrato.service';
-import { AppService } from '../../app.service';
 import { EmpresaService } from '../../empresa/empresa.service';
 
 import { Contrato } from '../contrato.model';
@@ -99,11 +101,13 @@ export class ContratoAdicionarEditarComponent implements OnInit {
   */
 
   constructor(
+    private apiServicesMsg: ApiServicesMsg,
     private localizationService: SuiLocalizationService,
-    private appService: AppService,
+    private apiServicesPagination: ApiServicesPagination,
     private empresaService: EmpresaService,
     private contratoService: ContratoService,
     private route: ActivatedRoute,
+    private apiServicesData: ApiServicesData,
     private router: Router
   ) {
     localizationService.load('pt', pt);
@@ -115,8 +119,8 @@ export class ContratoAdicionarEditarComponent implements OnInit {
   * caso o contrato já exista
   */
   salvarContato(form) {
-    form.value.data_inicio = this.appService.formatData(form.value.data_inicio);
-    form.value.data_fim = this.appService.formatData(form.value.data_fim);
+    form.value.data_inicio = this.apiServicesData.formatData(form.value.data_inicio);
+    form.value.data_fim = this.apiServicesData.formatData(form.value.data_fim);
     this.fContratos = form.value;
     if (this.params.id) {
       this.contratoService
@@ -124,7 +128,7 @@ export class ContratoAdicionarEditarComponent implements OnInit {
         .subscribe(
           res => {
             this.irParaLote(this.params.id);
-            this.appService.setMsg('success', 'Contrato editado com sucesso.', 3000);
+            this.apiServicesMsg.setMsg('success', 'Contrato editado com sucesso.', 3000);
           },
           erro => Swal('Erro', `${erro.error}`, 'error')
         );
@@ -134,7 +138,7 @@ export class ContratoAdicionarEditarComponent implements OnInit {
         .subscribe(
           res => {
             this.irParaLote(form.value.num_contrato);
-            this.appService.setMsg('success', 'Contrato cadastrado com sucesso.', 3000);
+            this.apiServicesMsg.setMsg('success', 'Contrato cadastrado com sucesso.', 3000);
           },
           erro => Swal('Erro', `${erro.error}`, 'error')
         );
@@ -210,12 +214,12 @@ export class ContratoAdicionarEditarComponent implements OnInit {
             formAddLote.reset();
             this.velocidadeArray = [];
             this.desabilitarCampos = true;
-            this.appService.setMsg('success', 'Lote adicionado com sucesso.', 3000);
+            this.apiServicesMsg.setMsg('success', 'Lote adicionado com sucesso.', 3000);
             },
             erro => Swal('Erro', `${erro.error}`, 'error')
         );
       } else if (result.dismiss === Swal.DismissReason.cancel) {
-        this.appService.setMsg('error', 'Ação cancelada.', 3000);
+        this.apiServicesMsg.setMsg('error', 'Ação cancelada.', 3000);
       }
     });
   }
@@ -247,12 +251,12 @@ export class ContratoAdicionarEditarComponent implements OnInit {
           this.getVelocidades(this.alterLote.cod_lote);
           formLotes.reset();
           delete this.fVelocidade;
-          this.appService.setMsg('success', 'Velocidade adicionada com sucesso.', 3000);
+          this.apiServicesMsg.setMsg('success', 'Velocidade adicionada com sucesso.', 3000);
           },
           erro => Swal('Erro', `${erro.error}`, 'error')
       );
       } else if (result.dismiss === Swal.DismissReason.cancel) {
-        this.appService.setMsg('error', 'Ação cancelada.', 3000);
+        this.apiServicesMsg.setMsg('error', 'Ação cancelada.', 3000);
       }
     });
   }
@@ -273,7 +277,7 @@ export class ContratoAdicionarEditarComponent implements OnInit {
       .getLotes(numContrato)
       .subscribe(lotesCadastrados => {
           this.totalItens = lotesCadastrados.length;
-          this.todosLotesCadastrados = this.appService.pagination(lotesCadastrados, this.itensPagina);
+          this.todosLotesCadastrados = this.apiServicesPagination.pagination(lotesCadastrados, this.itensPagina);
           this.lotesCadastrados = this.todosLotesCadastrados[0];
       });
   }
@@ -321,12 +325,12 @@ export class ContratoAdicionarEditarComponent implements OnInit {
             this.alterLote.lote = this.resposta.lote;
             lote.reset();
             this.getLotes(this.alterLote.num_contrato);
-            this.appService.setMsg('success', 'Nome alterado com sucesso.', 3000);
+            this.apiServicesMsg.setMsg('success', 'Nome alterado com sucesso.', 3000);
             },
             erro => Swal('Erro', `${erro.error}`, 'error')
           );
       } else if (result.dismiss === Swal.DismissReason.cancel) {
-        this.appService.setMsg('error', 'Ação cancelada.', 3000);
+        this.apiServicesMsg.setMsg('error', 'Ação cancelada.', 3000);
       }
   });
   }
@@ -349,12 +353,12 @@ export class ContratoAdicionarEditarComponent implements OnInit {
           res => {
           this.getLotes(this.fContratos.num_contrato);
           this.cancelarInfLote();
-          this.appService.setMsg('success', 'Lote excluído com sucesso.', 3000);
+          this.apiServicesMsg.setMsg('success', 'Lote excluído com sucesso.', 3000);
           },
           erro => Swal('Erro', `${erro.error}`, 'error')
         );
       } else if (result.dismiss === Swal.DismissReason.cancel) {
-        this.appService.setMsg('error', 'Ação cancelada.', 3000);
+        this.apiServicesMsg.setMsg('error', 'Ação cancelada.', 3000);
       }
     });
   }

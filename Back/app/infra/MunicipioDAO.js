@@ -3,9 +3,11 @@ function MunicipioDAO(connection){
 }
 
 //---------------Querys de Municipios---------------//
-//Lista os Municipios.
-MunicipioDAO.prototype.listarMunicipio = function(callback){
-	this._connection.query('SELECT * FROM municipio ORDER BY uf, nome_municipio', callback);
+//Lista os Municipios da UF.
+MunicipioDAO.prototype.listarMunicipio = function(uf, callback){
+	console.log(uf);
+	this._connection.query(`SELECT cod_ibge, nome_municipio, uf FROM municipio WHERE uf = "${uf}"`, callback);
+	// SELECT * FROM municipio ORDER BY uf, nome_municipio -- Select anterior, trocado dia 06/08/18
 }
 
 

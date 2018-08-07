@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { AppService } from '../../app.service';
 import { EmpresaService } from '../empresa.service';
 import { ContatoService } from '../../contato/contato.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -18,7 +17,6 @@ export class EmpresaDetalheComponent implements OnInit {
   contatosEmpresas: any;
 
   constructor(
-    private appService: AppService,
     private empresaService: EmpresaService,
     private contatoService: ContatoService,
     private route: ActivatedRoute,
