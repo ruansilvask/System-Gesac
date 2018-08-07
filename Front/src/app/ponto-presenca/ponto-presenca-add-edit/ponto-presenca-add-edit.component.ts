@@ -8,14 +8,12 @@ import { SuiModalService } from 'ng2-semantic-ui/dist/public';
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 
-
 import { ContatoService } from '../../contato/contato.service';
 import { PontoPresenca } from '../ponto-presenca.model';
 import { PontoPresencaService } from '../ponto-presenca.service';
 import Swal from 'sweetalert2';
 
 import { ConfirmModal } from './../../modal/modal.component';
-
 
 import { ApiServicesMsg } from './../../api-services/api-services-msg';
 import { ApiServiceEstadoMunicipio } from '../../api-services/api-services-estado-municipio';
@@ -26,7 +24,6 @@ import { ApiServiceEstadoMunicipio } from '../../api-services/api-services-estad
   styleUrls: ['./ponto-presenca-add-edit.component.scss']
 })
 export class PontoPresencaAddEditComponent implements OnInit {
-
   /*
   *   Variaveis do de manipulacão das informacões de tipologia
   */
@@ -94,7 +91,7 @@ export class PontoPresencaAddEditComponent implements OnInit {
 *   Variaveis do formulario de tipologia
 */
   tipologiaPontoPresenca = {
-    cod_tipologia: '',
+    cod_tipologia: ''
   };
 
   contratos: any;
@@ -112,7 +109,6 @@ export class PontoPresencaAddEditComponent implements OnInit {
   contatos: Observable<PontoPresenca[]>;
   private termosDaBusca: Subject<string> = new Subject<string>();
 
-
   constructor(
     private apiServicesMsg: ApiServicesMsg,
     private apiServiceEstadoMunicipio: ApiServiceEstadoMunicipio,
@@ -127,7 +123,6 @@ export class PontoPresencaAddEditComponent implements OnInit {
     this.firstActive = true;
     // this.thirdActive = true;
   }
-
 
   /*
   * Método para trazer os municípios de acordo com a uf selecionada
@@ -145,15 +140,13 @@ export class PontoPresencaAddEditComponent implements OnInit {
     });
   }
 
-
   /*
  * Método para trazer os lotes de acordo com o contrtato selecionada
  */
   selectContrato(num_contrato) {
     this.pontoPresencaService.getLotes(num_contrato).subscribe(lotes => {
       this.lotes = lotes;
-    }
-    );
+    });
   }
 
   /*
@@ -162,8 +155,7 @@ export class PontoPresencaAddEditComponent implements OnInit {
   selectlote(num_lote) {
     this.pontoPresencaService.getVelocidade(num_lote).subscribe(velocidades => {
       this.velocidades = velocidades;
-    }
-    );
+    });
   }
 
   /*
@@ -194,19 +186,23 @@ export class PontoPresencaAddEditComponent implements OnInit {
     *Método para trazer o endereco de ponto de presenca do bd
     */
   getPontoPrensencaEndereco() {
-    this.pontoPresencaService.getEnderecoPorIdVisu(this.codGesac).subscribe(dados => {
-      this.enderecoPontPre = dados[0];
-    });
+    this.pontoPresencaService
+      .getEnderecoPorIdVisu(this.codGesac)
+      .subscribe(dados => {
+        this.enderecoPontPre = dados[0];
+      });
   }
 
   /*
   *Método para trazer os enderecos de ponto de presenca do bd
   */
   getPontoPrensencaEnderecosId(codGesac) {
-    this.pontoPresencaService.getEnderecoPorIdVisu(codGesac).subscribe(dados => {
-      this.enderecos = dados;
-      // (dados.length !== 0) ? this.mostrarBotao = true : this.mostrarBotao = false;
-    });
+    this.pontoPresencaService
+      .getEnderecoPorIdVisu(codGesac)
+      .subscribe(dados => {
+        this.enderecos = dados;
+        // (dados.length !== 0) ? this.mostrarBotao = true : this.mostrarBotao = false;
+      });
   }
 
   /*
@@ -216,26 +212,28 @@ export class PontoPresencaAddEditComponent implements OnInit {
     delete this.pontoPresenca.uf;
     if (this.params.id) {
       form.value.cod_gesac = this.codGesac;
-      this.pontoPresencaService.putPontoPresenca(this.pontoPresenca.cod_pid, form.value)
-      .subscribe(dados => {
+      this.pontoPresencaService
+        .putPontoPresenca(this.pontoPresenca.cod_pid, form.value)
+        .subscribe(dados => {
           this.resp = dados;
           this.contatoService.getContatos(this.params.id, 'ponto');
           this.secondActive = true;
           this.mostrarBtn();
         });
     } else {
-      this.pontoPresencaService.postPontoPresenca(this.pontoPresenca).subscribe(dados => {
-        console.log(dados);
-        this.codGesac = dados;
-        this.contatoService.getContatos(this.codGesac, 'ponto');
-        this.secondActive = true;
-        this.mostrarBtn();
-      });
+      this.pontoPresencaService
+        .postPontoPresenca(this.pontoPresenca)
+        .subscribe(dados => {
+          this.codGesac = dados;
+          this.contatoService.getContatos(this.codGesac, 'ponto');
+          this.secondActive = true;
+          this.mostrarBtn();
+        });
     }
   }
 
   mostrarBtn() {
-      (!!this.enderecos) ? this.mostrarBotao = true : this.mostrarBotao = false;
+    !!this.enderecos ? (this.mostrarBotao = true) : (this.mostrarBotao = false);
   }
 
   /*
@@ -260,14 +258,13 @@ export class PontoPresencaAddEditComponent implements OnInit {
       this.AlterEnd = false;
       this.thirdActive = true;
     } else {
-      this.modalService
-        .open(
-          new ConfirmModal(
-            'Erro',
-            'Adicione um endereço para prosseguir.',
-            'mini'
-          )
-        );
+      this.modalService.open(
+        new ConfirmModal(
+          'Erro',
+          'Adicione um endereço para prosseguir.',
+          'mini'
+        )
+      );
     }
   }
 
@@ -295,28 +292,28 @@ export class PontoPresencaAddEditComponent implements OnInit {
 * Métodos para salvar/editar o Endereco no banco, caso seja passado um id na rota ocorrerá um put, caso contrario será um post
 */
   salvarEndereco(form) {
-    // mostrar botão "adicionar endereco" (quando clicado limpar os campos do endereco e setar variavel da clausula if)
+    // mostrar botão 'adicionar endereco' (quando clicado limpar os campos do endereco e setar variavel da clausula if)
     if (!this.AlterEnd) {
-      (!!this.enderecos) ? form.value.cod_endereco = this.enderecos[0].cod_endereco + 1 : form.value.cod_endereco = 1;
+      !!this.enderecos
+        ? (form.value.cod_endereco = this.enderecos[0].cod_endereco + 1)
+        : (form.value.cod_endereco = 1);
       form.value.cod_pid = this.pontoPresenca.cod_pid;
       form.value.latitude = null;
       form.value.longitude = null;
       // form.value.data_inicio = this.apiServicesData.formatData(new Date());
-        this.pontoPresencaService.postEndereco(form.value).subscribe(dados => {
-            this.getPontoPrensencaEnderecosId(this.codGesac);
-            this.cancelAddEndereco();
+      this.pontoPresencaService.postEndereco(form.value).subscribe(dados => {
+        this.getPontoPrensencaEnderecosId(this.codGesac);
+        this.cancelAddEndereco();
+      });
+    } else {
+      this.pontoPresencaService
+        .putEndereco(this.codGesac, this.enderecos[0].cod_endereco, form.value)
+        .subscribe(resp => {
+          this.getPontoPrensencaEnderecosId(this.codGesac);
+          this.cancelAddEndereco();
         });
-
-      } else {
-        this.pontoPresencaService.putEndereco(this.codGesac, this.enderecos[0].cod_endereco, form.value)
-          .subscribe(resp => {
-              this.getPontoPrensencaEnderecosId(this.codGesac);
-              this.cancelAddEndereco();
-          });
-
-      }
-
     }
+  }
 
   /*
   * Método para retornar para a aba de adicionar/editar endereco
@@ -333,7 +330,6 @@ export class PontoPresencaAddEditComponent implements OnInit {
     }
   }
 
-
   editEndAtul() {
     this.AlterEnd = true;
     this.mostrarBotao = false;
@@ -344,37 +340,41 @@ export class PontoPresencaAddEditComponent implements OnInit {
   * Métodos para salvara tipologia no banco
   */
   salvarTiplogia(form) {
-
     if (this.params.id) {
       this.tipologia = {
         cod_tipologia: this.tipologiaPontoPresenca.cod_tipologia,
         cod_pid: this.pontoPresenca.cod_pid
       };
-      this.pontoPresencaService.postTipologia(this.tipologia).subscribe(resp => {
-        this.resp = resp;
-        this.tipologiaIdPontoPr();
-      });
+      this.pontoPresencaService
+        .postTipologia(this.tipologia)
+        .subscribe(resp => {
+          this.resp = resp;
+          this.tipologiaIdPontoPr();
+        });
     } else {
       this.tipologia = {
         cod_tipologia: this.tipologiaPontoPresenca.cod_tipologia,
         cod_gesac: this.codGesac
       };
-      this.pontoPresencaService.postTipologia(this.tipologia).subscribe(resp => {
-        this.resp = resp;
-        this.tipologiaIdPontoPr();
-      });
+      this.pontoPresencaService
+        .postTipologia(this.tipologia)
+        .subscribe(resp => {
+          this.resp = resp;
+          this.tipologiaIdPontoPr();
+        });
     }
   }
-
 
   /*
   * Métodos para trazer a tiplogia pelo id do ponto de presenca do gesac
   */
   tipologiaIdPontoPr() {
     if (this.codGesac) {
-      this.pontoPresencaService.getTipologiaPP(this.codGesac).subscribe(dados => {
-        this.tipologiasGuardadas = dados;
-      });
+      this.pontoPresencaService
+        .getTipologiaPP(this.codGesac)
+        .subscribe(dados => {
+          this.tipologiasGuardadas = dados;
+        });
     }
   }
 
@@ -384,31 +384,37 @@ export class PontoPresencaAddEditComponent implements OnInit {
   removerTipologia(tipologia) {
     Swal({
       title: 'Você tem certeza?',
-      html: `Tem certeza que deseja remover a tiplogia <i>${tipologia.nome}</i>?`,
+      html: `Tem certeza que deseja remover a tiplogia <i>${
+        tipologia.nome
+      }</i>?`,
       type: 'question',
       showCancelButton: true,
       confirmButtonText: 'Sim, remover!',
       cancelButtonText: 'Não, mater',
       reverseButtons: true
-    }).then((result) => {
+    }).then(result => {
       if (result.value) {
         if (this.codGesac) {
-          this.pontoPresencaService.removeTipologiaId(this.codGesac, tipologia.cod_tipologia)
-          .subscribe(
-            res => {
-            this.removido = res;
-            this.tipologiaIdPontoPr();
-            this.apiServicesMsg.setMsg('success', 'Tipologia removida com sucesso.', 3000);
-          },
-          erro => Swal('Erro', `${erro.error}`, 'error')
-        );
+          this.pontoPresencaService
+            .removeTipologiaId(this.codGesac, tipologia.cod_tipologia)
+            .subscribe(
+              res => {
+                this.removido = res;
+                this.tipologiaIdPontoPr();
+                this.apiServicesMsg.setMsg(
+                  'success',
+                  'Tipologia removida com sucesso.',
+                  3000
+                );
+              },
+              erro => Swal('Erro', `${erro.error}`, 'error')
+            );
         }
       } else if (result.dismiss === Swal.DismissReason.cancel) {
         this.apiServicesMsg.setMsg('error', 'Ação cancelada.', 3000);
       }
     });
   }
-
 
   backPP() {
     this.router.navigate(['/pontPre']);
@@ -418,7 +424,7 @@ export class PontoPresencaAddEditComponent implements OnInit {
   * Métodos que serão executados quando o componente é iniciado
   */
   ngOnInit(): void {
-    this.route.params.subscribe(res => this.params = res);
+    this.route.params.subscribe(res => (this.params = res));
     setTimeout(() => {
       this.ufs = this.apiServiceEstadoMunicipio.getEstados();
       /*
@@ -428,26 +434,26 @@ export class PontoPresencaAddEditComponent implements OnInit {
       this.instituicaoResponsavel();
       this.tipologiaPontoPr();
 
-
       /*
           * Condicão para que caso exista parâmetro na rota será carregado os dados da empresa cadastrada
           */
       if (this.params.id) {
-        this.pontoPresencaService.getPontoPresencaPorId(this.params.id)
-        .subscribe(dados => {
-          this.municipios = this.apiServiceEstadoMunicipio.getMunicipios(dados[0].uf);
-          this.selectContrato(dados[0].num_contrato);
-          this.selectlote(dados[0].cod_lote);
-          setTimeout(() => {
-            this.pontoPresenca = dados[0];
-            this.codGesac = dados[0].cod_gesac;
-            this.tipologiaIdPontoPr();
+        this.pontoPresencaService
+          .getPontoPresencaPorId(this.params.id)
+          .subscribe(dados => {
+            this.municipios = this.apiServiceEstadoMunicipio.getMunicipios(
+              dados[0].uf
+            );
+            this.selectContrato(dados[0].num_contrato);
+            this.selectlote(dados[0].cod_lote);
+            setTimeout(() => {
+              this.pontoPresenca = dados[0];
+              this.codGesac = dados[0].cod_gesac;
+              this.tipologiaIdPontoPr();
               this.getPontoPrensencaEnderecosId(this.codGesac);
             }, 200);
           });
       }
     }, 200);
-
   }
 }
-
