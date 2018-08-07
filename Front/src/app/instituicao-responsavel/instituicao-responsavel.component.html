@@ -51,13 +51,13 @@
         <td>{{ instituicaoResp.nome }}</td>
         <td>{{ instituicaoResp.sigla }}</td>
         <td class="ui center aligned">
-          <a class="mini ui icon button circular" [routerLink]="['visu' ,instituicaoResp?.cod_instituicao]" suiPopup popupHeader="Visualizar" popupInverted="true">
+          <a class="mini ui icon button circular" [routerLink]="['visu' ,instituicaoResp?.cod_instituicao]" suiPopup popupHeader="Detalhe" popupInverted="true">
             <i class="search icon"></i>
           </a>
           <a class="mini ui icon  button circular" [routerLink]="['edit' ,instituicaoResp?.cod_instituicao]" suiPopup popupHeader="Editar" popupInverted="true">
             <i class="pencil alternate icon"></i>
           </a>
-          <a class="mini ui icon  button circular" (click)="deletarInstResp(instituicaoResp)"  suiPopup popupHeader="Deletar" popupInverted="true">
+          <a class="mini ui icon  button circular" (click)="deletarInstResp(instituicaoResp)"  suiPopup popupHeader="Excluir" popupInverted="true">
             <i class="trash alternate icon"></i>
           </a>
         </td>
