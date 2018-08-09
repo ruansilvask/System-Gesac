@@ -136,6 +136,12 @@ module.exports = (app) => {
                         cellStyle: '', 
                         width: 220 
                     },
+                    cep: {
+                        displayName: 'CEP',
+                        headerStyle: styles.header,
+                        cellStyle: '', 
+                        width: 100
+                    },
                     complemento: {
                         displayName: 'Complemento',
                         headerStyle: styles.header,
