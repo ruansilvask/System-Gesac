@@ -13,7 +13,7 @@
 
         <!--incio da aba Ponto de presença-->
         <div class="ui bottom attached segment" suiTabContent="1">
-          <form class="ui form" #fAddPontoPresenca="ngForm" (ngSubmit)="salvarPontoPresenca(fAddPontoPresenca)">
+          <form class="ui form error" #fAddPontoPresenca="ngForm" (ngSubmit)="salvarPontoPresenca(fAddPontoPresenca)">
             <!--<h4 class="ui dividing header">Shipping Information</h4>-->
             <div class="field">
               <div class="two fields">
@@ -158,7 +158,7 @@
 
           </div>
           <div class="ui segment" *ngIf="!mostrarBotao">
-            <form class="ui form" #fAddEndereco="ngForm" (ngSubmit)="salvarEndereco(fAddEndereco)">
+            <form class="ui form error" #fAddEndereco="ngForm" (ngSubmit)="salvarEndereco(fAddEndereco)">
               <div class="field">
                 <div class="fields">
 
@@ -283,7 +283,7 @@
 
         <!--incio da aba Tipologia-->
         <div class="ui bottom attached segment" suiTabContent="3">
-          <form class="ui form" #fAddTiplogia="ngForm" (ngSubmit)="salvarTiplogia(fAddTiplogia)">
+          <form class="ui form error" #fAddTiplogia="ngForm" (ngSubmit)="salvarTiplogia(fAddTiplogia)">
 
             <div class="ui stackable two column grid">
 

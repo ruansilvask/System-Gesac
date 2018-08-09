@@ -39,6 +39,11 @@ build/Release
 node_modules/
 jspm_packages/
 assets/
+conexao/
+services/
+
+# Arquivos para ignorar
+app.api.ts
 
 
 # TypeScript v1 declaration files
