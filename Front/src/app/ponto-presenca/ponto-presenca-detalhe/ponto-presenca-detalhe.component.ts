@@ -135,6 +135,7 @@ export class PontoPresencaDetalheComponent implements OnInit {
       .getEnderecoDetalhe(this.codGesac)
       .subscribe(dados => {
         this.enderecos = dados;
+        console.log(this.enderecos);
       });
   }
 
