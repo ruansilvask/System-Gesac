@@ -55,7 +55,7 @@
         <td [innerHTML]="contrato.quant_pontos"></td>
         <td [innerHTML]="contrato.processo_sei | sei"></td>
         <td class="ui center aligned collapsing">
-          <a class="mini ui icon button circular" suiPopup popupHeader="Visualizar" [routerLink]="[contrato.num_contrato, 'detalhe']" popupInverted="true" disabled>
+          <a class="mini ui icon button circular" suiPopup popupHeader="Detalhe" [routerLink]="[contrato.num_contrato, 'detalhe']" popupInverted="true" disabled>
             <i class="search icon"></i>
           </a>
           <a class="mini ui icon  button circular" suiPopup popupHeader="Editar" popupInverted="true" [routerLink]="[contrato.num_contrato]">

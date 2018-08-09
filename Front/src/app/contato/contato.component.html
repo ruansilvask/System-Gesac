@@ -132,14 +132,14 @@
                 <input type="text" mask="(00) 00000-0000" placeholder="Telefone" name="fone" minlength="10" [(ngModel)]="adicionarTelefone.fone">
               </div>
 
-              <div class="eight wide field">
+              <div class="seven wide field">
                 <label>E-mail</label>
                 <input type="email" placeholder="E-mail" name="email" [(ngModel)]="adicionarTelefone.email" pattern="^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
               </div>
 
-              <div class="two wide field">
+              <div class="three wide field">
                   <button type="submit" class="ui button btnAdd" [disabled]="fAddTel.invalid">
-                      Adicionar
+                      Adicionar telefone
                     </button>
               </div>
 
@@ -147,12 +147,12 @@
           </form>
           </div>
         </div>
-
         <div class="sixteen wide column">
           <table class="ui selectable striped table">
             <thead>
               <tr>
                 <th class="ui center aligned collapsing" >Fone</th>
+                <th class="ui center aligned collapsing" >Tipo do telefone</th>
                 <th class="ui center aligned collapsing" >E-mail</th>
                 <th>Ações</th>
 
@@ -161,6 +161,7 @@
             <tbody>
               <tr *ngFor="let contatoRetorno of contatosRetorno">
                 <td [innerHTML]="contatoRetorno?.fone | telefone"></td>
+                <td [innerHTML]="contatoRetorno?.tipo | tipoTel"></td>
                 <td [innerHTML]="contatoRetorno?.email"></td>
                 <td class="ui center aligned collapsing">
                     <a class="mini ui icon button circular" suiPopup popupHeader="Editar telefone/e-mail" popupInverted="true" (click)="editarTelefonesCadastrados(contatoRetorno)">

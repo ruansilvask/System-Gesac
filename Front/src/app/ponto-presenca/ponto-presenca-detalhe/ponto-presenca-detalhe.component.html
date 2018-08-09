@@ -267,12 +267,12 @@
               </div>
 
               <div class="four wide column">
-                <label>Teste Vazão</label>
+                <label>Teste vazão</label>
                 <input [(ngModel)]="analiseDetalhe.teste_vazao" maxlength="15" name="teste_vazao" placeholder="Teste Vazão" type="text">
               </div>
 
               <div class="three wide column centered row">
-                <label>TIPP</label>
+                <label>TIPP apresentado?</label>
                 <div class="field">
                   <sui-radio-button [value]="1" [ngModel]="analiseDetalhe?.tipp" name="tipp">Sim</sui-radio-button>
 
@@ -308,7 +308,7 @@
               </div>
 
               <div class="column">
-                <label>Responsável técnico?</label>
+                <label>Assinatura responsável técnico?</label>
                 <div class="field">
                   <sui-radio-button [value]="1" [(ngModel)]="analiseDetalhe.tecnico_resp" name="tecnico_resp">Sim</sui-radio-button>
 
@@ -342,13 +342,13 @@
             <div class="ui grid">
 
               <div class="eight wide column">
-                <label>Nome responsável assinatura</label>
+                <label>Nome responsável ponto</label>
                 <input [(ngModel)]="analiseDetalhe.nome_resp" maxlength="100" name="nome_resp" placeholder="Nome responsável assinatura"
                   type="text">
               </div>
 
               <div class="four wide column centered row">
-                <label>Responsável Assinatura</label>
+                <label>Responsável assinou?</label>
                 <div class="field">
                   <sui-radio-button [value]="1" [(ngModel)]="analiseDetalhe.assinatura_resp" name="assinatura_resp">Sim</sui-radio-button>
 
@@ -363,7 +363,7 @@
 
 
               <div class="column field" [ngClass]="{'error':  !!analiseSubmit?._directives[21]?.control?.invalid}">
-                <label>Telefone</label>
+                <label>Telefone 1</label>
                 <input [(ngModel)]="analiseDetalhe.telefone1" mask="(00) 00000-0000" minlength="10" name="telefone1" placeholder="Telefone"
                   type="text">
                 <div class="invalid-feedback" [ngClass]="{'active':  !!analiseSubmit?._directives[21]?.control?.invalid}">
@@ -373,7 +373,7 @@
 
 
               <div class="column field" [ngClass]="{'error':  !!analiseSubmit?._directives[22]?.control?.invalid}">
-                <label>Telefone do responsável pela assinatura</label>
+                <label>Telefone 2</label>
                 <input [(ngModel)]="analiseDetalhe.telefone2" mask="(00) 00000-0000" minlength="10" name="telefone2" placeholder="Telefone"
                   type="text">
                 <div class="invalid-feedback" [ngClass]="{'active':  !!analiseSubmit?._directives[22]?.control?.invalid}">
@@ -382,7 +382,7 @@
               </div>
 
               <div class="column field" [ngClass]="{'error':  !!analiseSubmit?._directives[23]?.control?.invalid}">
-                <label>Email do responsável pela assinatura</label>
+                <label>Email</label>
                 <input [(ngModel)]="analiseDetalhe.email" maxlength="100" name="email" pattern="^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
                   placeholder="E-mail" type="text">
                 <div class="invalid-feedback" [ngClass]="{'active':  !!analiseSubmit?._directives[23]?.control?.invalid}">
@@ -660,11 +660,11 @@
           </div>
 
           <div class="four wide column">
-            <label>Teste Vazão</label>
+            <label>Teste vazão</label>
             <input [readonly]="true" [value]="historicoAnalises.teste_vazao" placeholder="Teste Vazão" type="text">
           </div>
           <div class="three wide column centered row">
-            <label>TIPP</label>
+            <label>TIPP apresentado?</label>
             <div class="field">
               <sui-radio-button [isDisabled]="'true'" [value]="1" [ngModel]="historicoAnalises.tipp" name="tipp">Sim</sui-radio-button>
 
@@ -700,7 +700,7 @@
           </div>
 
           <div class="column">
-            <label>Responsável técnico?</label>
+            <label>Assinatura responsável técnico?</label>
             <div class="field">
               <sui-radio-button [isDisabled]="'true'" [value]="1" [ngModel]="historicoAnalises.tecnico_resp" name="tecnico_resp">Sim</sui-radio-button>
 
@@ -736,12 +736,12 @@
         <div class="ui grid">
 
           <div class="eight wide column">
-            <label>Nome responsável assinatura</label>
+            <label>Nome responsável ponto</label>
             <input [readonly]="true" [value]="historicoAnalises.nome_resp" placeholder="Nome responsável assinatura" type="text">
           </div>
 
           <div class="four wide column centered row">
-            <label>Responsável Assinatura</label>
+            <label>Responsável assinou?</label>
             <div class="field">
               <sui-radio-button [isDisabled]="'true'" [value]="1" [ngModel]="historicoAnalises.assinatura_resp" name="assinatura_resp">Sim</sui-radio-button>
 
@@ -756,17 +756,17 @@
         <div class="ui stackable three column grid">
 
           <div class="column">
-            <label>Telefone</label>
+            <label>Telefone 1</label>
             <input [readonly]="true" [value]="historicoAnalises.telefone1" type="text">
           </div>
 
           <div class="column">
-            <label>Telefone do responsável pela assinatura</label>
+            <label>Telefone 2</label>
             <input [readonly]="true" [value]="historicoAnalises.telefone2" type="text">
           </div>
 
           <div class="column">
-            <label>Email do responsável pela assinatura</label>
+            <label>Email</label>
             <input [readonly]="true" [value]="historicoAnalises.email" placeholder="E-mail" type="text">
           </div>
         </div>
@@ -838,7 +838,7 @@
           </div>
           <div class="fields">
             <div class="six wide field">
-              <label>N° do processo SEI</label>
+              <label>Processo documento SEI</label>
               <input [readonly]="true" [ngModel]='solicitacao?.num_doc_sei' name="num_doc_sei" type="text">
             </div>
             <div class="five wide field">

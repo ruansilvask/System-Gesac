@@ -3,8 +3,6 @@ import { HttpModule } from '@angular/http';
 import { SharedModule } from '../pipes/shared.module';
 import '../util/rxjs-extensions';
 
-import { FilterHistoricoAcoesPipe } from './filter-historico-acoes.pipe';
-import { FilterPontoPresencaContatoPipe } from './filter-ponto-presenca-contato.pipe';
 import { PontoPresencaRoutingModule } from './ponto-presenca.routing.module';
 import { PontoPresencaAddEditComponent } from './ponto-presenca-add-edit/ponto-presenca-add-edit.component';
 import { PontoPresencaDetalheComponent } from './ponto-presenca-detalhe/ponto-presenca-detalhe.component';
@@ -23,8 +21,6 @@ import { ContatoModule } from './../contato/contato.module';
         PontoPresencaAddEditComponent,
         PontoPresencaComponent,
         PontoPresencaDetalheComponent,
-        FilterHistoricoAcoesPipe,
-        FilterPontoPresencaContatoPipe
     ],
     exports: [
         PontoPresencaComponent

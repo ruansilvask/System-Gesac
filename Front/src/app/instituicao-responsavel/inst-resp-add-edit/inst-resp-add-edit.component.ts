@@ -137,8 +137,8 @@ export class InstRespAddEditComponent implements OnInit {
           },
           erro => Swal('Erro', `${erro.error}`, 'error')
         );
-
       this.contatoService.getContatos(this.params.id, 'instituicao');
+
     } else {
       delete this.formInstituicaoResp.uf;
       this.serviceInstiResp
@@ -152,6 +152,7 @@ export class InstRespAddEditComponent implements OnInit {
             );
             this.contatos = true;
             this.instituicaoRespResponse = res;
+            this.contatoService.getContatos(res, 'instituicao');
           },
           erro => Swal('Erro', `${erro.error}`, 'error')
         );
