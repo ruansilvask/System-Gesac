@@ -65,7 +65,7 @@
 
         <div content *ngFor="let endereco of enderecos">
 
-          <div class="ui raised segment">
+          <div class="ui raised segment" [ngStyle]="{'backgroundColor': endereco.data_final ? 'gray' : 'white' }">
             <div class="ui grid">
 
               <div class="fourteen wide column">
