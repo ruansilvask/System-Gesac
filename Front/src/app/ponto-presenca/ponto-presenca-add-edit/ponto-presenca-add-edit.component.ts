@@ -17,6 +17,7 @@ import { ConfirmModal } from './../../modal/modal.component';
 
 import { ApiServicesMsg } from './../../api-services/api-services-msg';
 import { ApiServiceEstadoMunicipio } from '../../api-services/api-services-estado-municipio';
+import { PontoPresencaEndereco } from './ponto_presenca-endereco.model';
 
 @Component({
   selector: 'app-ponto-presenca-add-edit',
@@ -48,8 +49,19 @@ export class PontoPresencaAddEditComponent implements OnInit {
   instituicoesRespPag: any[] = [];
   params: any;
   mostrarBotao: boolean;
-  AlterEnd = false;
-  enderecos: any;
+  controleVericicacaoEnderecos = [];
+  enderecos: PontoPresencaEndereco = {
+    cod_endereco: null,
+    endereco: '',
+    numero: '',
+    bairro: '',
+    complemento: '',
+    cep: '',
+    area: '',
+    latitude: null,
+    longitude: null
+  };
+
   /*
 *   Variaveis do formulario do Ponto de Presenca
 */
@@ -71,7 +83,7 @@ export class PontoPresencaAddEditComponent implements OnInit {
 *   Variaveis do formulario do Endereco
 */
   enderecoPontPre = {
-    cod_endereco: '',
+    cod_endereco: null,
     endereco: '',
     numero: '',
     bairro: '',
@@ -189,19 +201,12 @@ export class PontoPresencaAddEditComponent implements OnInit {
     this.pontoPresencaService
       .getEnderecoPorIdVisu(this.codGesac)
       .subscribe(dados => {
-        this.enderecoPontPre = dados[0];
-      });
-  }
+        this.enderecos = dados[0];
 
-  /*
-  *Método para trazer os enderecos de ponto de presenca do bd
-  */
-  getPontoPrensencaEnderecosId(codGesac) {
-    this.pontoPresencaService
-      .getEnderecoPorIdVisu(codGesac)
-      .subscribe(dados => {
-        this.enderecos = dados;
-        // (dados.length !== 0) ? this.mostrarBotao = true : this.mostrarBotao = false;
+        dados[0] === undefined
+          ? this.controleVericicacaoEnderecos = []
+          : this.controleVericicacaoEnderecos = dados[0];
+
       });
   }
 
@@ -209,7 +214,6 @@ export class PontoPresencaAddEditComponent implements OnInit {
   * Métodos para salvar/editar o Ponto de Presenca no banco, caso seja passado um id na rota ocorrerá um put, caso contrario será um post
   */
   salvarPontoPresenca(form) {
-    delete this.pontoPresenca.uf;
     if (this.params.id) {
       form.value.cod_gesac = this.codGesac;
       this.pontoPresencaService
@@ -233,7 +237,8 @@ export class PontoPresencaAddEditComponent implements OnInit {
   }
 
   mostrarBtn() {
-    !!this.enderecos ? (this.mostrarBotao = true) : (this.mostrarBotao = false);
+    this.controleVericicacaoEnderecos.length !== 0
+      ? (this.mostrarBotao = true) : (this.mostrarBotao = false);
   }
 
   /*
@@ -243,10 +248,8 @@ export class PontoPresencaAddEditComponent implements OnInit {
     this.firstActive = true;
     if (this.params.id) {
       this.router.navigate(['pontPre', this.params.id]);
-      this.AlterEnd = false;
     } else if (this.codGesac) {
       this.router.navigate(['pontPre', this.codGesac]);
-      this.AlterEnd = false;
       this.ngOnInit();
     } else {
       this.router.navigate(['pontPre/novo']);
@@ -254,8 +257,9 @@ export class PontoPresencaAddEditComponent implements OnInit {
   }
 
   irTipologia() {
-    if (this.enderecos.length > 0) {
-      this.AlterEnd = false;
+    console.log(this.controleVericicacaoEnderecos.length);
+    
+    if (this.controleVericicacaoEnderecos.length !== 0 ) {
       this.thirdActive = true;
     } else {
       this.modalService.open(
@@ -270,12 +274,10 @@ export class PontoPresencaAddEditComponent implements OnInit {
 
   cancelAddEndereco() {
     this.mostrarBotao = true;
-    this.AlterEnd = false;
   }
 
   adicionarnewEnd() {
     this.mostrarBotao = false;
-    this.AlterEnd = false;
     this.enderecoPontPre = {
       cod_endereco: '',
       endereco: '',
@@ -292,28 +294,25 @@ export class PontoPresencaAddEditComponent implements OnInit {
 * Métodos para salvar/editar o Endereco no banco, caso seja passado um id na rota ocorrerá um put, caso contrario será um post
 */
   salvarEndereco(form) {
+
     // mostrar botão 'adicionar endereco' (quando clicado limpar os campos do endereco e setar variavel da clausula if)
-    if (!this.AlterEnd) {
-      !!this.enderecos
-        ? (form.value.cod_endereco = this.enderecos[0].cod_endereco + 1)
-        : (form.value.cod_endereco = 1);
-      form.value.cod_pid = this.pontoPresenca.cod_pid;
-      form.value.latitude = null;
-      form.value.longitude = null;
-      // form.value.data_inicio = this.apiServicesData.formatData(new Date());
-      this.pontoPresencaService.postEndereco(form.value).subscribe(dados => {
-        this.getPontoPrensencaEnderecosId(this.codGesac);
-        this.cancelAddEndereco();
-      });
-    } else {
-      this.pontoPresencaService
-        .putEndereco(this.codGesac, this.enderecos[0].cod_endereco, form.value)
-        .subscribe(resp => {
-          this.getPontoPrensencaEnderecosId(this.codGesac);
-          this.cancelAddEndereco();
-        });
-    }
+    this.controleVericicacaoEnderecos.length !== 0
+      ? (form.value.cod_endereco = this.enderecos.cod_endereco + 1)
+      : (form.value.cod_endereco = 1);
+
+    form.value.cod_gesac = this.codGesac;
+    form.value.latitude = null;
+    form.value.longitude = null;
+    form.value.data_inicio = this.apiServicesData.formatData(new Date());
+    this.pontoPresencaService.postEndereco(form.value).subscribe(dados => {
+      this.getPontoPrensencaEndereco();
+      this.cancelAddEndereco();
+      this.mostrarBotao = true;
+    });
+
+
   }
+
 
   /*
   * Método para retornar para a aba de adicionar/editar endereco
@@ -331,7 +330,6 @@ export class PontoPresencaAddEditComponent implements OnInit {
   }
 
   editEndAtul() {
-    this.AlterEnd = true;
     this.mostrarBotao = false;
     this.getPontoPrensencaEndereco();
   }
@@ -386,7 +384,7 @@ export class PontoPresencaAddEditComponent implements OnInit {
       title: 'Você tem certeza?',
       html: `Tem certeza que deseja remover a tiplogia <i>${
         tipologia.nome
-      }</i>?`,
+        }</i>?`,
       type: 'question',
       showCancelButton: true,
       confirmButtonText: 'Sim, remover!',
@@ -425,6 +423,8 @@ export class PontoPresencaAddEditComponent implements OnInit {
   */
   ngOnInit(): void {
     this.route.params.subscribe(res => (this.params = res));
+
+
     setTimeout(() => {
       this.ufs = this.apiServiceEstadoMunicipio.getEstados();
       /*
@@ -435,9 +435,11 @@ export class PontoPresencaAddEditComponent implements OnInit {
       this.tipologiaPontoPr();
 
       /*
-          * Condicão para que caso exista parâmetro na rota será carregado os dados da empresa cadastrada
-          */
+      * Condicão para que caso exista parâmetro na rota será carregado os dados da empresa cadastrada
+      */
       if (this.params.id) {
+        this.codGesac = this.params.id;
+        this.getPontoPrensencaEndereco();
         this.pontoPresencaService
           .getPontoPresencaPorId(this.params.id)
           .subscribe(dados => {
@@ -448,9 +450,7 @@ export class PontoPresencaAddEditComponent implements OnInit {
             this.selectlote(dados[0].cod_lote);
             setTimeout(() => {
               this.pontoPresenca = dados[0];
-              this.codGesac = dados[0].cod_gesac;
               this.tipologiaIdPontoPr();
-              this.getPontoPrensencaEnderecosId(this.codGesac);
             }, 200);
           });
       }

@@ -1,5 +1,7 @@
 <div class="ui container">
   <div class="ui  segment">
+ <a class="ui ribbon label"><h4>{{pontoPresenca.cod_gesac}}, {{pontoPresenca.nome}}</h4></a>
+              <p></p>
     <div class="row ">
       <sui-tabset>
         <div class="ui top attached tabular menu">
@@ -23,7 +25,7 @@
 
                 <div class="three wide field">
                   <label>Inep</label>
-                  <input type="text" name="inep" placeholder="inep" [(ngModel)]="pontoPresenca.inep" #inep>
+                  <input type="text" name="inep" placeholder="inep" maxlength="15" [(ngModel)]="pontoPresenca.inep" #inep>
                 </div>
 
                 <div class="three wide field">
@@ -141,7 +143,7 @@
               <div class="ui buttons">
                   <button class="ui right labeled icon facebook button" (click)="adicionarnewEnd(fAddEndereco)">
                       <i class="right plus circle icon"></i>
-                      Adicionar um Novo Endereço
+                      Atualizar Endereço
                     </button>
                 <!-- <button class="ui facebook  button" (click)="adicionarnewEnd(fAddEndereco)">Adicionar um Novo Endereço</button>
                 <div class="or" data-text="ou"></div>
@@ -186,12 +188,12 @@
               <div class="ui grid">
                 <div class="three wide column">
                   <label for="cep">CEP</label>
-                  <input id="cep" type="text" mask="00.000-000" class="validate" name="cep" [(ngModel)]="enderecoPontPre.cep" >
+                  <input id="cep" type="text" mask="00.000-000" class="validate" name="cep" [(ngModel)]="enderecoPontPre.cep" required>
                 </div>
 
                 <div class="three wide column">
                   <label>Area</label>
-                  <select class="ui fluid dropdown" name="area" [(ngModel)]="enderecoPontPre.area" >
+                  <select class="ui fluid dropdown" name="area" [(ngModel)]="enderecoPontPre.area" required>
                     <option value="" selected>Selecione a Área</option>
                     <option value="Rural" selected>Rural</option>
                     <option value="Urbano" selected>Urbano</option>
@@ -226,40 +228,40 @@
           </div>
 
           <!--Inicio Endereço -->
-          <div class="left floated left aligned sixteen wide column" *ngFor="let endereco of enderecos">
+          <div class="left floated left aligned sixteen wide column" *ngIf="controleVericicacaoEnderecos.length !== 0">
             <div class="ui raised segment">
               <a class="ui red ribbon label">Endereço Atual</a>
               <p></p>
               <div class="ui grid">
                 <div class="fourteen wide column">
-                  <h4 class="ui header">Endereço:</h4> {{endereco.endereco}}</div>
+                  <h4 class="ui header">Endereço:</h4>{{enderecos?.endereco}}</div>
 
                 <div class="two wide column">
-                  <h4 class="ui header">Nº:</h4>{{endereco.numero}}</div>
+                  <h4 class="ui header">Nº:</h4>{{enderecos?.numero}}</div>
               </div>
 
 
               <div class="ui grid">
                 <div class="four wide column">
-                  <h4 class="ui header">Bairro:</h4> {{endereco.bairro}}</div>
+                  <h4 class="ui header">Bairro:</h4> {{enderecos?.bairro}}</div>
 
                 <div class="twelve wide column">
-                  <h4 class="ui header">Complemento:</h4> {{endereco.complemento}}</div>
+                  <h4 class="ui header">Complemento:</h4> {{enderecos?.complemento}}</div>
               </div>
 
               <div class="ui grid">
                 <div class="two wide column">
-                  <h4 class="ui header">Cep</h4>{{endereco.cep | cep}}</div>
+                  <h4 class="ui header">Cep</h4>{{enderecos?.cep | cep}}</div>
                 <div class="two wide column">
-                  <h4 class="ui header">Área:</h4>{{endereco.area}}</div>
+                  <h4 class="ui header">Área:</h4>{{enderecos?.area}}</div>
                 <div class="four wide column">
-                  <h4 class="ui header">Latitude: </h4>{{endereco.latitude}}</div>
+                  <h4 class="ui header">Latitude: </h4>{{enderecos?.latitude}}</div>
                 <div class="four wide column">
-                  <h4 class="ui header">Longitude:</h4>{{endereco.longitude}}</div>
+                  <h4 class="ui header">Longitude:</h4>{{enderecos?.longitude}}</div>
                 <div class="two wide column">
-                  <h4 class="ui header">Data Inicial:</h4>{{endereco.data_inicio | date:'dd/MM/y'}}</div>
+                  <h4 class="ui header">Data Inicial:</h4>{{enderecos?.data_inicio | date:'dd/MM/y'}}</div>
                 <div class="two wide column">
-                  <h4 class="ui header">Data Final:</h4>{{endereco.data_final | date:'dd/MM/y'}}</div>
+                  <h4 class="ui header">Data Final:</h4>{{enderecos?.data_final | date:'dd/MM/y'}}</div>
               </div>
             </div>
           </div>
