@@ -10,7 +10,7 @@ EmpresaDAO.prototype.listarEmpresa = function(callback){
 
 //Lista as Empresas com base no cnpj_empresa.
 EmpresaDAO.prototype.listarEmpresaCnpj = function(cnpj_empresa, callback){
-	this._connection.query(`SELECT empresa.*, municipio.uf, municipio.nome_municipio FROM empresa INNER JOIN municipio ON empresa.cod_ibge = municipio.cod_ibge WHERE cnpj_empresa = ${cnpj_empresa}`, callback);
+	this._connection.query(`SELECT empresa.*, empresa2.empresa AS empresa_pai, municipio.uf, municipio.nome_municipio FROM empresa INNER JOIN municipio ON empresa.cod_ibge = municipio.cod_ibge INNER JOIN empresa AS empresa2 ON empresa.cnpj_empresa_pai = empresa2.cnpj_empresa WHERE empresa.cnpj_empresa = ${cnpj_empresa}`, callback);
 }
 
 //Lista as Empresas Pai.

@@ -432,7 +432,7 @@ export class ContratoAdicionarEditarComponent implements OnInit {
       * Método que carrega as empresas que podem ser escolhidas no cadastro do contrato
       */
       this.empresaService
-        .getEmpresas()
+        .getEmpresasPai()
         .subscribe(dados => {this.selectEmpresa = dados; });
 
       /*

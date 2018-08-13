@@ -7,6 +7,7 @@ import { PontoPresencaService } from './ponto-presenca.service';
 import { empty } from 'rxjs/observable/empty';
 import { SuiLocalizationService } from 'ng2-semantic-ui';
 import pt from 'ng2-semantic-ui/locales/pt';
+import Swal from 'sweetalert2';
 
 import { ApiServiceEstadoMunicipio } from '../api-services/api-services-estado-municipio';
 import { ApiServicesData } from '../api-services/api-services-data';
@@ -299,51 +300,50 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
     }
   }
 
-  enviarMS(fmsolicitacoes: NgForm) {
-    console.log(fmsolicitacoes.value);
-    // fmsolicitacoes.value.data_oficio = this.apiServicesData.formatData(fmsolicitacoes.value.data_oficio);
-    // if (!this.analiseShow) {
-    //   delete fmsolicitacoes.value.cnpj_empresa;
-    //   this.solicitacaoSubmit = true;
-    // } else if (this.analiseShow && fmsolicitacoes.value.cnpj_empresa) {
-    //   this.solicitacaoSubmit = true;
-    // } else {
-    //   this.solicitacaoSubmit = false;
-    //   this.erroEmpresa = true;
-    // }
-
-    // if (this.solicitacaoSubmit) {
-    //     fmsolicitacoes.value.cod_gesac = this.pontpresenCod_gesac;
-    //     this.abrirNodal = false;
-    //     this.analiseShow = false;
-    //     this.pontoPresencaService.postMSolicitacoes(fmsolicitacoes.value).subscribe(resp => {
-    //       this.resp = resp;
-    //       this.mSolicitacoes = {
-    //         tipo_solicitacao: '',
-    //         num_doc_sei: null,
-    //         num_oficio: null,
-    //         data_oficio: null,
-    //         cnpj_empresa: ''
-    //       };
-    //       fmsolicitacoes.reset();
-    //       this.loadPontoPre();
-    //     });
-    //   }
-  }
-
-/*
+  /*
  * Função para verificar a data
  */
-VerificarData(data_oficio) {
- const dataAtual = this.apiServicesData.formatData(new Date());
- data_oficio  = this.apiServicesData.formatData(data_oficio);
- if (data_oficio !== null && data_oficio > dataAtual) {
-  console.log(dataAtual);
-  console.log(data_oficio);
-   alert('Data Oficio seleciona: ' + data_oficio + ' é maior que Data Altual: ' + dataAtual);
- }
-}
+  verificarData(data_oficio) {
+    const dataAtual = this.apiServicesData.formatData(new Date());
+    data_oficio  = this.apiServicesData.formatData(data_oficio);
+    return (data_oficio !== null && data_oficio <= dataAtual);
+  }
 
+  enviarMS(fmsolicitacoes: NgForm) {
+    if (this.verificarData(fmsolicitacoes.value.data_oficio)) {
+      console.log(fmsolicitacoes.value);
+      // fmsolicitacoes.value.data_oficio = this.apiServicesData.formatData(fmsolicitacoes.value.data_oficio);
+      // if (!this.analiseShow) {
+      //   delete fmsolicitacoes.value.cnpj_empresa;
+      //   this.solicitacaoSubmit = true;
+      // } else if (this.analiseShow && fmsolicitacoes.value.cnpj_empresa) {
+      //   this.solicitacaoSubmit = true;
+      // } else {
+      //   this.solicitacaoSubmit = false;
+      //   this.erroEmpresa = true;
+      // }
+
+      // if (this.solicitacaoSubmit) {
+      //     fmsolicitacoes.value.cod_gesac = this.pontpresenCod_gesac;
+      //     this.abrirNodal = false;
+      //     this.analiseShow = false;
+      //     this.pontoPresencaService.postMSolicitacoes(fmsolicitacoes.value).subscribe(resp => {
+      //       this.resp = resp;
+      //       this.mSolicitacoes = {
+      //         tipo_solicitacao: '',
+      //         num_doc_sei: null,
+      //         num_oficio: null,
+      //         data_oficio: null,
+      //         cnpj_empresa: ''
+      //       };
+      //       fmsolicitacoes.reset();
+      //       this.loadPontoPre();
+      //     });
+      //   }
+    } else {
+      Swal('', 'A Data do Ofício selecionada é maior que Data Atual', 'warning');
+    }
+  }
 
   ActiveInputAnalise(mSolicitacoes) {
     if ( mSolicitacoes === '6' || mSolicitacoes === '7' || mSolicitacoes === '8' || mSolicitacoes === '9') {

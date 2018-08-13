@@ -143,7 +143,6 @@
                     <input placeholder="Selecione a data"
                     suiDatepicker
                     name="data_oficio"
-                    (pickerSelectedDateChange)="VerificarData(mSolicitacoes.data_oficio)"
                     [(ngModel)]="mSolicitacoes.data_oficio"
                     [pickerMode]="'date'"
                     [pickerFirstDayOfWeek]="0"
@@ -180,7 +179,7 @@
             <div class="ui stackable one column grid" *ngIf="pendenciaShow">
               <div class="column">
                 <label>Motivo da Pendência</label>
-                <textarea [ngClass]="{'error': motivo.invalid && motivo.dirty }" #motivo="ngModel" [(ngModel)]="mSolicitacoes.motivo" name="pendencia" maxlength="1000" placeholder="Motivo da Pendência" 
+                <textarea [ngClass]="{'error': motivo.invalid && motivo.dirty }" #motivo="ngModel" [(ngModel)]="mSolicitacoes.motivo" name="pendencia" maxlength="1000" placeholder="Motivo da Pendência"
                 style="margin-top: 0px; margin-bottom: 0px; height: 112px;" required></textarea>
                 <div class="invalid-feedback" [ngClass]="{'active': motivo.invalid && motivo.dirty}">
                   Motivo da Pendência é um campo obrigatório!

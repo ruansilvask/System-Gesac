@@ -266,7 +266,6 @@ export class PontoPresencaDetalheComponent implements OnInit {
       .getPontoHistorico(this.params.id)
       .subscribe(res => {
         this.pontoHistorico = res;
-  
         // delete  this.pontoHistorico[0].data;
         // delete  this.pontoHistorico[0].cod_analise;
         // delete  this.pontoHistorico[0].tipo_solicitacao;

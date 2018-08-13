@@ -1,8 +1,6 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
 import { Location } from '@angular/common';
 
-
-
 import { InstRespService } from './instituicao-responsavel.service';
 import Swal from 'sweetalert2';
 import { ApiServicesMsg } from '../api-services/api-services-msg';
@@ -17,12 +15,20 @@ export class InstRespComponent implements OnInit {
   filtros = {
     cnpj: '',
     nome: '',
-    sigla: ''
+    sigla: '',
+    pagadora: ''
   };
   instituicoesResp: any;
   collapValue: boolean;
   segmentDimmed: any;
   itens: any[] = ['1'];
+  pagadoraFilter: any;
+
+  optionsPontoPre: any = [
+    { descricao: 'Sim', value: 1 },
+    { descricao: 'Não', value: 0 },
+    { descricao: 'Todos', value: 3 }
+  ];
 
   allArrays: any;
   numeroPagina = 50;
@@ -41,8 +47,7 @@ export class InstRespComponent implements OnInit {
 
   // Carregar Insituições responsaveis
   getInstituicoes() {
-    this.instituicaoResponsavelService.getInstResps().subscribe(
-      dados => {
+    this.instituicaoResponsavelService.getInstResps().subscribe(dados => {
       this.instituicoesResp = dados;
       this.funcaoPaginacao(this.instituicoesResp);
     });
@@ -68,15 +73,21 @@ export class InstRespComponent implements OnInit {
       confirmButtonText: 'Sim, excluir!',
       cancelButtonText: 'Não, mater',
       reverseButtons: true
-    }).then((result) => {
+    }).then(result => {
       if (instResp) {
-        this.instituicaoResponsavelService.deleteInstResp(instResp.cod_instituicao).subscribe(
-          res => {
-            this.apiServicesMsg.setMsg('success', 'Instituições responsável excluída com sucesso.', 3000);
-            this.getInstituicoes();
-          },
-          erro => Swal('Erro', `${erro.error}`, 'error')
-        );
+        this.instituicaoResponsavelService
+          .deleteInstResp(instResp.cod_instituicao)
+          .subscribe(
+            res => {
+              this.apiServicesMsg.setMsg(
+                'success',
+                'Instituições responsável excluída com sucesso.',
+                3000
+              );
+              this.getInstituicoes();
+            },
+            erro => Swal('Erro', `${erro.error}`, 'error')
+          );
       } else if (result.dismiss === Swal.DismissReason.cancel) {
         this.apiServicesMsg.setMsg('error', 'Ação cancelada.', 3000);
       }
@@ -91,17 +102,54 @@ export class InstRespComponent implements OnInit {
     this.instituicoesRespPag = this.allArrays[pagina - 1];
   }
 
-  filtroInstResp(filtros): any {
-    if (!filtros.cnpj && !filtros.nome && !filtros.sigla) {
+  filtroInstResp(filtros, pagadora): any {
+    if (!filtros.cnpj && !filtros.nome && !filtros.sigla && !filtros.pagadora) {
       this.funcaoPaginacao(this.instituicoesResp);
     } else {
       let valida;
       const instResps = this.instituicoesResp.filter(resp => {
+        // gambiarra para arrumar o filtro da pagadora
+        if (filtros.pagadora.value !== 3) {
+          if (resp.pagadora === 1) {
+            this.pagadoraFilter = 'Sim';
+          } else if (resp.pagadora === 0) {
+            this.pagadoraFilter = 'Não';
+          } else {
+            this.pagadoraFilter = '';
+          }
+        } else {
+          filtros.pagadora = '';
+        }
         valida = true;
-        if ((filtros.cnpj && resp.cnpj_instituicao == null) ||
-           (filtros.cnpj && !resp.cnpj_instituicao.toLowerCase().includes(filtros.cnpj.toLowerCase()))) {valida = false; }
-        if (filtros.nome && !resp.nome.toLowerCase().includes(filtros.nome.toLowerCase())) {valida = false; }
-        if (filtros.sigla && !resp.sigla.toLowerCase().includes(filtros.sigla.toLowerCase())) {valida = false; }
+        if (
+          (filtros.cnpj && resp.cnpj_instituicao == null) ||
+          (filtros.cnpj &&
+            !resp.cnpj_instituicao
+              .toLowerCase()
+              .includes(filtros.cnpj.toLowerCase()))
+        ) {
+          valida = false;
+        }
+        if (
+          filtros.nome &&
+          !resp.nome.toLowerCase().includes(filtros.nome.toLowerCase())
+        ) {
+          valida = false;
+        }
+        if (
+          filtros.sigla &&
+          !resp.sigla.toLowerCase().includes(filtros.sigla.toLowerCase())
+        ) {
+          valida = false;
+        }
+        if (
+          filtros.pagadora &&
+          !this.pagadoraFilter
+            .toLowerCase()
+            .includes(filtros.pagadora.descricao.toLowerCase())
+        ) {
+          valida = false;
+        }
         return valida;
       });
       this.funcaoPaginacao(instResps);

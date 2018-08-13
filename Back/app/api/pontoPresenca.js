@@ -89,36 +89,49 @@ module.exports = function(app){
     api.salvaPontoEndereco = (req, res) => {
         const knex = app.conexao.conexaoBDKnex();
         const endereco = req.body;
-        const { cod_endereco, cod_pid} = req.body;
+        const { cod_endereco, cod_gesac } = req.body;
 
-        if(cod_endereco === 1){
-            knex('endereco').insert(endereco)
-                .then(resultado => {
-                    knex.destroy();
-                    res.status(200).end();
-                })
-                .catch(erro => {
-                    console.log(erro);
-                    knex.destroy();
-                    res.status(500).send(app.api.erroPadrao());
-                });
-        } else {
-            let data_final = req.body.data_inicio;
-            
-            knex('endereco').insert(endereco)
-                .then(resultado => {
-                    return knex('endereco').where('cod_endereco', cod_endereco-1).andWhere('cod_pid', cod_pid).update({ data_final })
+        knex.select('cod_pid').from('gesac').where('cod_gesac', cod_gesac)
+            .then(resultado => {
+                const cod_pid = resultado[0].cod_pid;
+
+                delete endereco.cod_gesac;
+                endereco.cod_pid = cod_pid;
+
+                if(cod_endereco === 1){
+                    knex('endereco').insert(endereco)
                         .then(result => {
                             knex.destroy();
                             res.status(200).end();
                         })
-                })
-                .catch(erro => {
-                    console.log(erro);
-                    knex.destroy();
-                    res.status(500).send(app.api.erroPadrao());
-                });
-        }
+                        .catch(erro => {
+                            console.log(erro);
+                            knex.destroy();
+                            res.status(500).send(app.api.erroPadrao());
+                        });
+                } else {
+                    let data_final = req.body.data_inicio;
+                    
+                    knex('endereco').insert(endereco)
+                        .then(result => {
+                            return knex('endereco').where('cod_endereco', cod_endereco-1).andWhere('cod_pid', cod_pid).update({ data_final })
+                                .then(result => {
+                                    knex.destroy();
+                                    res.status(200).end();
+                                })
+                        })
+                        .catch(erro => {
+                            console.log(erro);
+                            knex.destroy();
+                            res.status(500).send(app.api.erroPadrao());
+                        });
+                }
+            })
+            .catch(erro => {
+                console.log(erro);
+                knex.destroy();
+                res.status(500).send(app.api.erroPadrao());
+            });
     };
     
     //Lista as informações de todos os Endereço de um Ponto de Presença.
