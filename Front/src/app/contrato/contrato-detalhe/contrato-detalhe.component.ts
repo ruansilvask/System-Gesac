@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { ContratoService } from './../contrato.service';
+import { ContratoService } from '../contrato.service';
 import { SuiModalService } from 'ng2-semantic-ui';
 
 

@@ -3,10 +3,10 @@ import { UsuarioService } from './usuario.service';
 
 
 // import Swal from 'sweetalert2';
-import { Router } from '../../../node_modules/@angular/router';
+import { Router } from '@angular/router';
 import { AuthenticationService } from '../services';
 import { ApiServicesMsg } from '../api-services/api-services-msg';
-import { ApiServicesPagination } from './../api-services/api-services-pagination';
+import { ApiServicesPagination } from '../api-services/api-services-pagination';
 
 @Component({
   selector: 'app-usuario',

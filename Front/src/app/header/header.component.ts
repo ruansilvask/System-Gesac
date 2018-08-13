@@ -1,11 +1,11 @@
-import { ApiServicesMsg } from './../api-services/api-services-msg';
+import { ApiServicesMsg } from '../api-services/api-services-msg';
 import { Component, OnInit } from '@angular/core';
 
 import { AuthenticationService } from '../services';
 import { UsuarioService } from '../usuario/usuario.service';
 import { saveAs } from 'file-saver';
 import Swal from 'sweetalert2';
-import { Router } from '../../../node_modules/@angular/router';
+import { Router } from '@angular/router';
 import { ApiServiceExcel } from '../api-services/api-service-excel';
 
 @Component({

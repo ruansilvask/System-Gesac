@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http';
-import { GESAC_API } from './../app.api';
+import { GESAC_API } from '../app.api';
 import { Injectable } from '@angular/core';
 import { Usuario } from '../login/usuario';
 

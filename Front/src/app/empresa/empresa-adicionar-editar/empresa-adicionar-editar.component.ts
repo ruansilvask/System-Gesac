@@ -1,13 +1,13 @@
-import { ApiServicesMsg } from './../../api-services/api-services-msg';
+import { ApiServicesMsg } from '../../api-services/api-services-msg';
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 
-import { EmpresaService } from './../empresa.service';
+import { EmpresaService } from '../empresa.service';
 import { ContatoService } from '../../contato/contato.service';
 import { ApiServiceCnpj } from '../../api-services/api-services-cnpj';
 import { ApiServiceEstadoMunicipio } from '../../api-services/api-services-estado-municipio';
 
-import { Empresa } from './../empresa.model';
+import { Empresa } from '../empresa.model';
 import { SuiModalService } from 'ng2-semantic-ui';
 import Swal from 'sweetalert2';
 

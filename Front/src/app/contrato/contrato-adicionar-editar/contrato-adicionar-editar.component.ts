@@ -1,13 +1,13 @@
-import { ApiServicesData } from './../../api-services/api-services-data';
-import { ApiServicesMsg } from './../../api-services/api-services-msg';
-import {ApiServicesPagination } from './../../api-services/api-services-pagination';
+import { ApiServicesData } from '../../api-services/api-services-data';
+import { ApiServicesMsg } from '../../api-services/api-services-msg';
+import {ApiServicesPagination } from '../../api-services/api-services-pagination';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 
 import { SuiLocalizationService } from 'ng2-semantic-ui';
 
-import { ContratoService } from './../contrato.service';
+import { ContratoService } from '../contrato.service';
 import { EmpresaService } from '../../empresa/empresa.service';
 
 import { Contrato } from '../contrato.model';

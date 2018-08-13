@@ -111,35 +111,46 @@
 
         <div class="sixteen wide column">
 
-          <div class="ui form">
+          <div class="ui form error">
             <form #fAddTel="ngForm" (ngSubmit)="addTelefone(fAddTel)">
-            <div class="fields">
-
-              <div class="four wide field">
-                <div class="field">
-                  <label>Tipo Telefone</label>
-                  <select class="ui fluid dropdown" name="tipo" [(ngModel)]="adicionarTelefone.tipo">
+              <div class="fields">
+                <div class="four wide field" [ngClass]="{'error': adicionarTelefone.fone.length !== 0 && !fone.invalid && tipo.value === ''}">
+                  <div class="field">
+                    <label>Tipo Telefone</label>
+                  <select class="ui fluid dropdown" name="tipo" #tipo='ngModel' [(ngModel)]="adicionarTelefone.tipo" [required]="true">
                     <option value="">Selecione o tipo telefone</option>
                     <option value="M">Móvel</option>
                     <option value="C">Casa</option>
                     <option value="T">Tabalho</option>
                   </select>
+                  <div class="invalid-feedback" [ngClass]="{'active': adicionarTelefone.fone.length !== 0 && !fone.invalid && tipo.value === ''}">
+                      Tipo e telefone são obrigátorios para salvar um novo telefone
+                    </div>
                 </div>
               </div>
 
-              <div class="three wide field">
+              <div class="three wide field" [ngClass]="{'error': fone.invalid ||  fone.dirty && adicionarTelefone.tipo !== '' && adicionarTelefone.fone.length === 0}">
                 <label>Telefone</label>
-                <input type="text" mask="(00) 00000-0000" placeholder="Telefone" name="fone" minlength="10" [(ngModel)]="adicionarTelefone.fone">
+                <input autocomplete="off" type="text" mask="(00) 00000-0000" placeholder="Telefone" name="fone" minlength="10"  #fone='ngModel' [(ngModel)]="adicionarTelefone.fone">
+                <div class="invalid-feedback" [ngClass]="{'active': fone.invalid}">
+                      Telefone inválido
+                    </div>
+                <div class="invalid-feedback" [ngClass]="{'active':  fone.dirty && adicionarTelefone.tipo !== '' && adicionarTelefone.fone.length === 0}">
+                    Tipo e telefone são obrigátorios para salvar um novo telefone
+                    </div>
               </div>
 
-              <div class="eight wide field">
+              <div class="seven wide field" [ngClass]="{'error':  email.invalid && email.dirty }">
                 <label>E-mail</label>
-                <input type="email" placeholder="E-mail" name="email" [(ngModel)]="adicionarTelefone.email" pattern="^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+                <input type="email" placeholder="E-mail" name="email" #email='ngModel' [(ngModel)]="adicionarTelefone.email" pattern="^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+                <div class="invalid-feedback" [ngClass]="{'active':  email.invalid && email.dirty }">
+                      E-mail inválido
+                    </div>
               </div>
 
-              <div class="two wide field">
+              <div class="three wide field" >
                   <button type="submit" class="ui button btnAdd" [disabled]="fAddTel.invalid">
-                      Adicionar
+                      Adicionar telefone
                     </button>
               </div>
 
@@ -147,12 +158,12 @@
           </form>
           </div>
         </div>
-
         <div class="sixteen wide column">
           <table class="ui selectable striped table">
             <thead>
               <tr>
                 <th class="ui center aligned collapsing" >Fone</th>
+                <th class="ui center aligned collapsing" >Tipo do telefone</th>
                 <th class="ui center aligned collapsing" >E-mail</th>
                 <th>Ações</th>
 
@@ -161,6 +172,7 @@
             <tbody>
               <tr *ngFor="let contatoRetorno of contatosRetorno">
                 <td [innerHTML]="contatoRetorno?.fone | telefone"></td>
+                <td [innerHTML]="contatoRetorno?.tipo | tipoTel"></td>
                 <td [innerHTML]="contatoRetorno?.email"></td>
                 <td class="ui center aligned collapsing">
                     <a class="mini ui icon button circular" suiPopup popupHeader="Editar telefone/e-mail" popupInverted="true" (click)="editarTelefonesCadastrados(contatoRetorno)">
@@ -215,26 +227,35 @@
       <form class="ui form" #fPutTelefone="ngForm" (ngSubmit)="AlterarTelefone(fPutTelefone)">
         <div class="fields">
 
-          <div class="four wide field">
+          <div class="four wide field"[ngClass]="{'error': alterTelefone.fone.length !== 0 && !fone.invalid && tipo.value === ''}">
             <div class="field">
               <label>Tipo Telefone</label>
-              <select class="ui fluid dropdown" name="tipo" [ngModel]="alterTelefone.tipo">
+              <select class="ui fluid dropdown" name="tipo" #tipo='ngModel' [(ngModel)]="alterTelefone.tipo">
                 <option value="">Selecione o tipo telefone</option>
                 <option value="M">Móvel</option>
                 <option value="C">Casa</option>
                 <option value="T">Tabalho</option>
-              </select>
+               </select>
+               <div class="invalid-feedback" [ngClass]="{'active': alterTelefone.fone.length !== 0 && !fone.invalid && tipo.value === ''}">
+                      Tipo e telefone são obrigátorios para salvar um novo telefone
+                    </div>
             </div>
           </div>
 
-          <div class="three wide field">
+          <div class="three wide field" [ngClass]="{'error': fone.dirty && alterTelefone.tipo !== '' &&alterTelefone.fone.length  === 0}">
             <label>Telefone</label>
-            <input type="text" mask="(00) 00000-0000" placeholder="Telefone" name="fone" minlength="10" [ngModel]="alterTelefone.fone">
+            <input type="text" mask="(00) 00000-0000" placeholder="Telefone" name="fone" #fone='ngModel' minlength="10" [(ngModel)]="alterTelefone.fone">
+           <div class="invalid-feedback" [ngClass]="{'active': fone.invalid}">
+                      Telefone inválido
+                    </div>
+                <div class="invalid-feedback" [ngClass]="{'active':  fone.dirty && alterTelefone.tipo !== '' &&alterTelefone.fone.length  === 0}">
+                    Tipo e telefone são obrigátorios para salvar um novo telefone
+                    </div>
           </div>
 
           <div class="nine wide field">
             <label>E-mail</label>
-            <input type="email" placeholder="E-mail" name="email" [ngModel]="alterTelefone.email" pattern="^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+            <input type="email" placeholder="E-mail" name="email"  [ngModel]="alterTelefone.email" pattern="^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
           </div>
 
         </div>

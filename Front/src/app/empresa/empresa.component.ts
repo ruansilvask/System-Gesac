@@ -1,4 +1,4 @@
-import { ApiServicesMsg } from './../api-services/api-services-msg';
+import { ApiServicesMsg } from '../api-services/api-services-msg';
 import { Component, OnInit } from '@angular/core';
 
 import { SuiModalService } from 'ng2-semantic-ui';
@@ -6,7 +6,7 @@ import { EmpresaService } from './empresa.service';
 
 import Swal from 'sweetalert2';
 
-import { ApiServicesPagination } from './../api-services/api-services-pagination';
+import { ApiServicesPagination } from '../api-services/api-services-pagination';
 
 @Component({
   selector: 'app-empresa',

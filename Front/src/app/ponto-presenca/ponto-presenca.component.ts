@@ -5,13 +5,13 @@ import { NgForm } from '@angular/forms';
 
 import { PontoPresencaService } from './ponto-presenca.service';
 import { empty } from 'rxjs/observable/empty';
-import { SuiLocalizationService } from '../../../node_modules/ng2-semantic-ui';
+import { SuiLocalizationService } from 'ng2-semantic-ui';
 import pt from 'ng2-semantic-ui/locales/pt';
 
 import { ApiServiceEstadoMunicipio } from '../api-services/api-services-estado-municipio';
-import { ApiServicesData } from './../api-services/api-services-data';
-import { ApiServicesMsg } from './../api-services/api-services-msg';
-import { ApiServicesPagination } from './../api-services/api-services-pagination';
+import { ApiServicesData } from '../api-services/api-services-data';
+import { ApiServicesMsg } from '../api-services/api-services-msg';
+import { ApiServicesPagination } from '../api-services/api-services-pagination';
 
 @Component({
   selector: 'app-ponto-presenca',
@@ -262,6 +262,9 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
     this.getEstados();
   }
 
+
+
+
   openModal(multipla) {
     this.statusDiferentes = false;
     this.pontoPresencaStatus.filter(function (el) { return el !== empty; }).join('');
@@ -327,6 +330,20 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
     //     });
     //   }
   }
+
+/*
+ * Função para verificar a data
+ */
+VerificarData(data_oficio) {
+ const dataAtual = this.apiServicesData.formatData(new Date());
+ data_oficio  = this.apiServicesData.formatData(data_oficio);
+ if (data_oficio !== null && data_oficio > dataAtual) {
+  console.log(dataAtual);
+  console.log(data_oficio);
+   alert('Data Oficio seleciona: ' + data_oficio + ' é maior que Data Altual: ' + dataAtual);
+ }
+}
+
 
   ActiveInputAnalise(mSolicitacoes) {
     if ( mSolicitacoes === '6' || mSolicitacoes === '7' || mSolicitacoes === '8' || mSolicitacoes === '9') {

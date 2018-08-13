@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, EventEmitter } from '@angular/core';
 
 import { Response } from '@angular/http';
-import { GESAC_API } from './../app.api';
+import { GESAC_API } from '../app.api';
 import { Contato } from './contato.model';
 
 @Injectable()

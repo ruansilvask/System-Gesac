@@ -1,9 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '../../../node_modules/@angular/forms';
-import { SuiModule, SuiCheckboxModule, SuiRatingModule } from '../../../node_modules/ng2-semantic-ui';
-import { NgxMaskModule } from '../../../node_modules/ngx-mask';
-import { CurrencyMaskModule } from '../../../node_modules/ng2-currency-mask';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { SuiModule, SuiCheckboxModule, SuiRatingModule } from 'ng2-semantic-ui';
+import { NgxMaskModule } from 'ngx-mask';
+import { CurrencyMaskModule } from 'ng2-currency-mask';
 
 import { FilterCnpjPipe } from './filter-cnpj.pipe';
 import { FilterTelefonePipe } from './filter-telefone.pipe';

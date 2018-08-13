@@ -1,5 +1,5 @@
-import { ApiServicesMsg } from './../api-services/api-services-msg';
-import { ApiServicesPagination } from './../api-services/api-services-pagination';
+import { ApiServicesMsg } from '../api-services/api-services-msg';
+import { ApiServicesPagination } from '../api-services/api-services-pagination';
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 
 import { Observable } from 'rxjs/Observable';
@@ -35,6 +35,7 @@ export class ContatoComponent implements OnInit {
   codContatoCadastrado: number;
 
   contatoInfo = {
+    nome: '',
     cargo: '',
     obs: ''
   };
@@ -296,7 +297,9 @@ export class ContatoComponent implements OnInit {
                   .getInfContato(this.contatosCadastrados[i].cod_contato)
                   .subscribe(
                     (res: any) => {
+                      console.log(res);
                       this.contatoInfo = {
+                        nome: res.nome,
                         cargo: res.cargo,
                         obs: res.obs
                       };
@@ -329,7 +332,7 @@ export class ContatoComponent implements OnInit {
           reverseButtons: true
         }).then(result => {
           if (result.value) {
-            this.contatoInfo = { cargo: '', obs: '' };
+            this.contatoInfo = {nome: contato.nomePessoa, cargo: '', obs: '' };
             this.desabilitarCampos = true;
             this.dadosPessoa = {
               cod_pessoa: contato.cod_pessoa,
@@ -345,6 +348,7 @@ export class ContatoComponent implements OnInit {
   }
 
   enviarNome(nome) {
+    console.log(nome);
     Swal({
       title: 'Você tem certeza?',
       text: `Você tem certeza que deseja cadastrar ${nome}?`,
@@ -357,6 +361,7 @@ export class ContatoComponent implements OnInit {
       if (result.value) {
         this.contatoService.postContatoPessoa(nome).subscribe(
           cod_pessoa => {
+            this.contatoInfo.nome = nome;
             this.dadosPessoa = { cod_pessoa, nome };
             this.desabilitarCampos = true;
             this.aparecerInfContato = true;
@@ -383,7 +388,11 @@ export class ContatoComponent implements OnInit {
     this.codContatoCadastrado = null;
     this.dadosPessoa = [];
     this.contatosRetorno = [];
-    delete this.contatoInfo;
+    this.contatoInfo = {
+      nome: '',
+      cargo: '',
+      obs: ''
+    };
     this.adicionarTelefone = {
       tipo: '',
       fone: '',
@@ -421,6 +430,7 @@ export class ContatoComponent implements OnInit {
         reverseButtons: true
       }).then(result => {
         if (result.value) {
+          this.contatoInfo.nome = form.value.nome;
           this.funcaoContato('post', this.local, form.value);
         } else if (result.dismiss === Swal.DismissReason.cancel) {
           this.apiServicesMsg.setMsg('error', 'Ação cancelada.', 3000);
@@ -556,7 +566,7 @@ export class ContatoComponent implements OnInit {
   */
   editarContatoCadastrado(contato) {
     this.codContatoCadastrado = contato.cod_contato;
-    this.contatoInfo = { cargo: contato.cargo, obs: contato.obs };
+    this.contatoInfo = { nome: contato.nome, cargo: contato.cargo, obs: contato.obs };
     this.dadosPessoa = { cod_pessoa: contato.cod_pessoa, nome: contato.nome };
     this.editPessoasCadastradas = true;
     this.desabilitarCampos = true;
