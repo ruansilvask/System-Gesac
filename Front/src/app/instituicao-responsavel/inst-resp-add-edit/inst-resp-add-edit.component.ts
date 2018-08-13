@@ -3,15 +3,15 @@ import { Location } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 import { NgForm } from '@angular/forms';
 
-import { InstRespService } from './../instituicao-responsavel.service';
+import { InstRespService } from '../instituicao-responsavel.service';
 import { ContatoService } from '../../contato/contato.service';
 import pt from 'ng2-semantic-ui/locales/pt';
 import Swal from 'sweetalert2';
 import { SuiLocalizationService } from 'ng2-semantic-ui';
 import { ApiServiceCnpj } from '../../api-services/api-services-cnpj';
 import { ApiServiceEstadoMunicipio } from '../../api-services/api-services-estado-municipio';
-import { ApiServicesData } from './../../api-services/api-services-data';
-import { ApiServicesMsg } from './../../api-services/api-services-msg';
+import { ApiServicesData } from '../../api-services/api-services-data';
+import { ApiServicesMsg } from '../../api-services/api-services-msg';
 
 declare var $: any;
 

@@ -65,7 +65,9 @@
 
         <div content *ngFor="let endereco of enderecos">
 
-          <div class="ui raised segment" [ngStyle]="{'backgroundColor': endereco.data_final ? 'gray' : 'white' }">
+
+          <div class="ui raised segment" [ngStyle]="{'backgroundColor': endereco?.data_final ? '#eeeeee' : 'white' }">
+
             <div class="ui grid">
 
               <div class="fourteen wide column">
@@ -350,9 +352,9 @@
               <div class="four wide column centered row">
                 <label>Responsável assinou?</label>
                 <div class="field">
-                  <sui-radio-button [value]="1" [(ngModel)]="analiseDetalhe.assinatura_resp" name="assinatura_resp">Sim</sui-radio-button>
+                  <sui-radio-button [value]="1" [(ngModel)]="analiseDetalhe.assinatura_resp" (ngModelChange)="onClick(analiseDetalhe.assinatura_resp)" name="assinatura_resp">Sim</sui-radio-button>
 
-                  <sui-radio-button [value]="0" [(ngModel)]="analiseDetalhe.assinatura_resp" name="assinatura_resp">Não</sui-radio-button>
+                  <sui-radio-button [value]="0" [(ngModel)]="analiseDetalhe.assinatura_resp" (ngModelChange)="onClick(analiseDetalhe.assinatura_resp)" name="assinatura_resp">Não</sui-radio-button>
 
                 </div>
               </div>

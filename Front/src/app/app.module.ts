@@ -9,7 +9,7 @@ registerLocaleData(localePt, 'pt-BR');
 import './util/rxjs-extensions';
 
 import { SuiModule, SuiCheckboxModule, SuiRatingModule } from 'ng2-semantic-ui';
-import { JwtInterceptor, AuthenticationService } from './services/index';
+import { JwtInterceptor, AuthenticationService } from './services';
 
 import { AuthGuard } from './guards/auth.guard.service';
 import { ContratoService } from './contrato/contrato.service';

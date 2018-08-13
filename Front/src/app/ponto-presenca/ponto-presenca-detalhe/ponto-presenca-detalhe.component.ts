@@ -1,4 +1,4 @@
-import { ApiServicesData } from './../../api-services/api-services-data';
+import { ApiServicesData } from '../../api-services/api-services-data';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
@@ -8,7 +8,7 @@ import { PontoPresencaService } from '../ponto-presenca.service';
 import { NgForm } from '@angular/forms';
 import { ContatoService } from '../../contato/contato.service';
 
-import { ApiServicesMsg } from './../../api-services/api-services-msg';
+import { ApiServicesMsg } from '../../api-services/api-services-msg';
 
 import Swal from 'sweetalert2';
 
@@ -24,6 +24,7 @@ export class PontoPresencaDetalheComponent implements OnInit {
   pontoHistorico: any;
   solicitacao: any;
   FecharCollapseAnalise: boolean;
+  obrigatorio = false;
 
   abrirNodal = false;
   condicao: string;
@@ -84,7 +85,7 @@ export class PontoPresencaDetalheComponent implements OnInit {
 
   options = [
     { name: 'Todos', acao: '' },
-    { name: 'Analise', acao: 'analise' },
+    { name: 'Análise', acao: 'análise' },
     { name: 'Interação', acao: 'interação' },
     { name: 'Solicitação', acao: 'solicitação' }
   ];
@@ -265,7 +266,7 @@ export class PontoPresencaDetalheComponent implements OnInit {
       .getPontoHistorico(this.params.id)
       .subscribe(res => {
         this.pontoHistorico = res;
-
+  
         // delete  this.pontoHistorico[0].data;
         // delete  this.pontoHistorico[0].cod_analise;
         // delete  this.pontoHistorico[0].tipo_solicitacao;
@@ -427,5 +428,9 @@ export class PontoPresencaDetalheComponent implements OnInit {
   }
 
 
+  onClick(value) {
+    console.log(value);
+    this.obrigatorio = !this.obrigatorio;
+  }
 
 }

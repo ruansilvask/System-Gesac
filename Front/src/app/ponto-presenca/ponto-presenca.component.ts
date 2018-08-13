@@ -5,13 +5,13 @@ import { NgForm } from '@angular/forms';
 
 import { PontoPresencaService } from './ponto-presenca.service';
 import { empty } from 'rxjs/observable/empty';
-import { SuiLocalizationService } from '../../../node_modules/ng2-semantic-ui';
+import { SuiLocalizationService } from 'ng2-semantic-ui';
 import pt from 'ng2-semantic-ui/locales/pt';
 
 import { ApiServiceEstadoMunicipio } from '../api-services/api-services-estado-municipio';
-import { ApiServicesData } from './../api-services/api-services-data';
-import { ApiServicesMsg } from './../api-services/api-services-msg';
-import { ApiServicesPagination } from './../api-services/api-services-pagination';
+import { ApiServicesData } from '../api-services/api-services-data';
+import { ApiServicesMsg } from '../api-services/api-services-msg';
+import { ApiServicesPagination } from '../api-services/api-services-pagination';
 
 @Component({
   selector: 'app-ponto-presenca',
@@ -104,8 +104,7 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
     private apiServiceEstadoMunicipio: ApiServiceEstadoMunicipio
   ) {
     localizationService.load('pt', pt);
-    localizationService.setLanguage('pt');
-  }
+    localizationService.setLanguage('pt'); }
 
   goBack() {
     this.location.back();
@@ -134,7 +133,7 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
   getStatusPP() {
     this.pontoPresencaService.getStatusPP().subscribe(dados => {
       this.optionsPontoPre = dados;
-      this.optionsPontoPre.unshift({ cod_status: '', descricao: '' });
+      this.optionsPontoPre.unshift({cod_status: '', descricao: '' });
     });
   }
 
@@ -243,212 +242,226 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
     }
   }
 
-  verificarData() {
-    // var data = new Date("February 9, 2012, 12:15");
-    // var dataCurrente = new Date();
-    // if (data < dataCurrente) {
-    //     alert("menor");
-  // }
-}
-
-/*
-* Métodos feichar o modal
-*/
-closeModal() {
-  this.abrirNodal = false;
-  this.selcGesac = false;
-  this.contador = null;
-}
-
-/*
-* Métodos abrir o modal
-*/
-modalGesacOpen() {
-  this.selcGesac = true;
-  this.getTipologia();
-  this.getEstados();
-}
-
-openModal(multipla) {
-  this.statusDiferentes = false;
-  this.pontoPresencaStatus.filter(function (el) { return el !== empty; }).join('');
-  for (let i = 0; i < this.pontoPresencaStatus.length; i++) {
-    if (this.pontoPresencaStatus[i] !== undefined) {
-      if (this.pontoPresencaStatus[0] !== this.pontoPresencaStatus[i]) {
-        this.apiServicesMsg.setMsg('warning', 'Não é possivel executar esta ação, status diferentes.', 5000);
-        this.statusDiferentes = true;
-        break;
-      }
-    }
-  }
-  if (this.statusDiferentes === false) {
-    this.pontoPresencaService.getStatusSolicitacoes(this.pontoPresencaStatus[0]).subscribe(dados => {
-      this.multiplasSolicitacoes = dados;
-      this.ActiveMsgReturnSolicitation();
-    });
-    if (multipla === 'msolicitacoes') {
-      this.condicao = 'Múltiplas Solicitações';
-      this.getEmpresas();
-    }
-  }
-}
 
 
-ActiveMsgReturnSolicitation() {
-  if (this.multiplasSolicitacoes.length === 0) {
-    this.apiServicesMsg.setMsg('warning', 'Não é possivel executar esta ação, pois não há solicitações possíveis para este Status!', 5000);
+  /*
+ * Métodos feichar o modal
+ */
+  closeModal() {
     this.abrirNodal = false;
-  } else {
-    this.abrirNodal = true;
-  }
-}
-
-enviarMS(fmsolicitacoes: NgForm) {
-  fmsolicitacoes.value.data_oficio = this.apiServicesData.formatData(fmsolicitacoes.value.data_oficio);
-  if (!this.analiseShow) {
-    delete fmsolicitacoes.value.cnpj_empresa;
-    this.solicitacaoSubmit = true;
-  } else if (this.analiseShow && fmsolicitacoes.value.cnpj_empresa) {
-    this.solicitacaoSubmit = true;
-  } else {
-    this.solicitacaoSubmit = false;
-    this.erroEmpresa = true;
+    this.selcGesac = false;
+    this.contador = null;
   }
 
-  if (this.solicitacaoSubmit) {
-    fmsolicitacoes.value.cod_gesac = this.pontpresenCod_gesac;
-    this.abrirNodal = false;
-    this.analiseShow = false;
-    this.pontoPresencaService.postMSolicitacoes(fmsolicitacoes.value).subscribe(resp => {
-      this.resp = resp;
-      this.mSolicitacoes = {
-        tipo_solicitacao: '',
-        num_doc_sei: null,
-        num_oficio: null,
-        data_oficio: null,
-        cnpj_empresa: ''
-      };
-      fmsolicitacoes.reset();
-      this.loadPontoPre();
-    });
+  /*
+  * Métodos abrir o modal
+  */
+  modalGesacOpen() {
+    this.selcGesac = true;
+    this.getTipologia();
+    this.getEstados();
   }
-}
 
-ActiveInputAnalise(mSolicitacoes) {
-  if (mSolicitacoes === '6' || mSolicitacoes === '7' || mSolicitacoes === '8' || mSolicitacoes === '9') {
-    this.analiseShow = true;
-  } else if (mSolicitacoes === '25' || mSolicitacoes === '26' || mSolicitacoes === '27') {
-    this.pendenciaShow = true;
-  } else {
-    this.analiseShow = false;
-    this.pendenciaShow = false;
-  }
-}
 
-selecoesGesacs(campo, fmselecionarGesac: NgForm) {
-  if (campo) {
-    this.listaGesac = campo.split('\n');
-    this.listaGesac.sort((a, b) => {
-      return a - b;
-    });
-    this.listaGesac = this.listaGesac.filter(function (item, pos, self) {
-      return self.indexOf(item) === pos;
-    });
-    fmselecionarGesac.reset();
-  }
-  this.toggleAll(false);
-  // this.contador = 0;
-  // let i = 0;
-  // let k = 0;
-  // let j = 0;
-  // for (k; k < this.listaGesac.length; k++) {
-  //   if (this.listaGesac[k] !== '') {
-  //     for (i; i < this.allArrays.length; i++) {
-  //       if (j === 50) { j = 0; }
-  //       for (j; j < this.allArrays[i].length; j++) {
-  //         if (Number(this.listaGesac[k]) === this.allArrays[i][j].cod_gesac) {
-  //           this.allArrays[i][j].check = true;
-  //           this.pontpresenCod_gesac.push(this.allArrays[i][j].cod_gesac);
-  //           this.pontoPresencaStatus.push(this.allArrays[i][j].cod_status);
-  //           this.numMarcados++;
-  //           this.contador++;
-  //           k++;
-  //         }
-  //       }
-  //     }
-  //   }
-  // }
-  this.filterGsac(this.listaGesac, this.selecionados);
-  if (this.allArrays) {
-    this.botoesMSA = true;
-  }
-  this.selcGesac = false;
-  this.selecionados = [];
-  this.listaGesac = [];
-}
 
-filterGsac(arrayGsac, arraySelecionados) {
-  let ponto = this.pontosPresenca;
-  if (arrayGsac.length > 0) {
-    ponto = ponto.filter(pontoPres => {
-      if (arrayGsac.some(gsac => gsac === pontoPres.cod_gesac.toString())) {
-        this.pontpresenCod_gesac.push(pontoPres.cod_gesac);
-        this.pontoPresencaStatus.push(pontoPres.cod_status);
-        this.numMarcados++;
-        pontoPres.check = true;
-        return true;
-      } else {
-        return false;
-      }
-    });
-  }
-  if (arraySelecionados.length > 0) {
-    ponto = ponto.filter(pontoPres => {
-      if (arraySelecionados.some(selec => pontoPres.tipologia && pontoPres.tipologia.includes(selec.nome))) {
-        this.pontpresenCod_gesac.push(pontoPres.cod_gesac);
-        this.pontoPresencaStatus.push(pontoPres.cod_status);
-        this.numMarcados++;
-        pontoPres.check = true;
-        return true;
-      } else {
-        if (this.pontpresenCod_gesac) {
-          this.pontpresenCod_gesac.splice(this.pontpresenCod_gesac.indexOf(pontoPres.cod_gesac), 1);
-          this.pontoPresencaStatus.splice(this.pontoPresencaStatus.indexOf(pontoPres.cod_status), 1);
-          this.numMarcados--;
-          pontoPres.check = false;
+
+  openModal(multipla) {
+    this.statusDiferentes = false;
+    this.pontoPresencaStatus.filter(function (el) { return el !== empty; }).join('');
+    for (let i = 0; i < this.pontoPresencaStatus.length; i++) {
+      if (this.pontoPresencaStatus[i] !== undefined) {
+        if (this.pontoPresencaStatus[0] !== this.pontoPresencaStatus[i]) {
+          this.apiServicesMsg.setMsg('warning', 'Não é possivel executar esta ação, status diferentes.', 5000);
+          this.statusDiferentes = true;
+          break;
         }
-        return false;
       }
-    });
+    }
+    if (this.statusDiferentes === false) {
+      this.pontoPresencaService.getStatusSolicitacoes(this.pontoPresencaStatus[0]).subscribe(dados => {
+        this.multiplasSolicitacoes = dados;
+        this.ActiveMsgReturnSolicitation();
+      });
+      if (multipla === 'msolicitacoes') {
+        this.condicao = 'Múltiplas Solicitações';
+        this.getEmpresas();
+      }
+    }
   }
-  this.pontpresenCod_gesac = this.pontpresenCod_gesac.filter((item, pos, self) => self.indexOf(item) === pos);
-  this.pontoPresencaStatus = this.pontoPresencaStatus.filter((item, pos, self) => self.indexOf(item) === pos);
-  this.numMarcados = this.pontpresenCod_gesac.length;
-  this.funcaoPaginacao(ponto);
+
+
+  ActiveMsgReturnSolicitation() {
+    if (this.multiplasSolicitacoes.length === 0) {
+      this.apiServicesMsg.setMsg('warning', 'Não é possivel executar esta ação, pois não há solicitações possíveis para este Status!', 5000);
+      this.abrirNodal = false;
+    } else {
+      this.abrirNodal = true;
+    }
+  }
+
+  enviarMS(fmsolicitacoes: NgForm) {
+    console.log(fmsolicitacoes.value);
+    // fmsolicitacoes.value.data_oficio = this.apiServicesData.formatData(fmsolicitacoes.value.data_oficio);
+    // if (!this.analiseShow) {
+    //   delete fmsolicitacoes.value.cnpj_empresa;
+    //   this.solicitacaoSubmit = true;
+    // } else if (this.analiseShow && fmsolicitacoes.value.cnpj_empresa) {
+    //   this.solicitacaoSubmit = true;
+    // } else {
+    //   this.solicitacaoSubmit = false;
+    //   this.erroEmpresa = true;
+    // }
+
+    // if (this.solicitacaoSubmit) {
+    //     fmsolicitacoes.value.cod_gesac = this.pontpresenCod_gesac;
+    //     this.abrirNodal = false;
+    //     this.analiseShow = false;
+    //     this.pontoPresencaService.postMSolicitacoes(fmsolicitacoes.value).subscribe(resp => {
+    //       this.resp = resp;
+    //       this.mSolicitacoes = {
+    //         tipo_solicitacao: '',
+    //         num_doc_sei: null,
+    //         num_oficio: null,
+    //         data_oficio: null,
+    //         cnpj_empresa: ''
+    //       };
+    //       fmsolicitacoes.reset();
+    //       this.loadPontoPre();
+    //     });
+    //   }
+  }
+
+/*
+ * Função para verificar a data
+ */
+VerificarData(data_oficio) {
+ const dataAtual = this.apiServicesData.formatData(new Date());
+ data_oficio  = this.apiServicesData.formatData(data_oficio);
+ if (data_oficio !== null && data_oficio > dataAtual) {
+  console.log(dataAtual);
+  console.log(data_oficio);
+   alert('Data Oficio seleciona: ' + data_oficio + ' é maior que Data Altual: ' + dataAtual);
+ }
 }
 
 
-filtroPonto(filtros): any {
-  if (!filtros.gesac && !filtros.uf && !filtros.municipio && !filtros.status && !filtros.ponto && !filtros.tipologia) {
-    this.funcaoPaginacao(this.pontosPresenca);
-  } else {
-    let valida;
-    const ponto = this.pontosPresenca.filter(pontoPres => {
-      valida = true;
-      if (filtros.gesac && !pontoPres.cod_gesac.toString().includes(filtros.gesac.toLowerCase())) { valida = false; }
-      if (filtros.uf && !pontoPres.uf.toLowerCase().includes(filtros.uf.toLowerCase())) { valida = false; }
-      if (filtros.municipio && !pontoPres.nome_municipio.toLowerCase().includes(filtros.municipio.toLowerCase())) { valida = false; }
-      if (filtros.status.descricao &&
-        pontoPres.descricao.toLowerCase() !== filtros.status.descricao.toLowerCase()) { valida = false; }
-      if (filtros.ponto && !pontoPres.nome.toLowerCase().includes(filtros.ponto.toLowerCase())) { valida = false; }
-      if ((filtros.tipologia && pontoPres.tipologia == null) ||
-        (filtros.tipologia && !pontoPres.tipologia.toLowerCase().includes(filtros.tipologia.toLowerCase()))) { valida = false; }
-      return valida;
-    });
+  ActiveInputAnalise(mSolicitacoes) {
+    if ( mSolicitacoes === '6' || mSolicitacoes === '7' || mSolicitacoes === '8' || mSolicitacoes === '9') {
+      this.analiseShow = true;
+    } else if (mSolicitacoes === '25' || mSolicitacoes === '26' || mSolicitacoes === '27') {
+      this.pendenciaShow = true;
+    } else {
+      this.analiseShow = false;
+      this.pendenciaShow = false;
+    }
+  }
+
+  selecoesGesacs(campo, fmselecionarGesac: NgForm) {
+    if (campo) {
+      this.listaGesac = campo.split('\n');
+      this.listaGesac.sort((a, b) => {
+        return a - b;
+      });
+      this.listaGesac = this.listaGesac.filter(function (item, pos, self) {
+        return self.indexOf(item) === pos;
+      });
+      fmselecionarGesac.reset();
+    }
+    this.toggleAll(false);
+    // this.contador = 0;
+    // let i = 0;
+    // let k = 0;
+    // let j = 0;
+    // for (k; k < this.listaGesac.length; k++) {
+    //   if (this.listaGesac[k] !== '') {
+    //     for (i; i < this.allArrays.length; i++) {
+    //       if (j === 50) { j = 0; }
+    //       for (j; j < this.allArrays[i].length; j++) {
+    //         if (Number(this.listaGesac[k]) === this.allArrays[i][j].cod_gesac) {
+    //           this.allArrays[i][j].check = true;
+    //           this.pontpresenCod_gesac.push(this.allArrays[i][j].cod_gesac);
+    //           this.pontoPresencaStatus.push(this.allArrays[i][j].cod_status);
+    //           this.numMarcados++;
+    //           this.contador++;
+    //           k++;
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
+    this.filterGsac(this.listaGesac, this.selecionados);
+    if (this.allArrays) {
+      this.botoesMSA = true;
+    }
+    this.selcGesac = false;
+    this.selecionados = [];
+    this.listaGesac = [];
+  }
+
+  filterGsac(arrayGsac, arraySelecionados) {
+    let ponto = this.pontosPresenca;
+    if (arrayGsac.length > 0) {
+      ponto = ponto.filter(pontoPres => {
+        if (arrayGsac.some(gsac => gsac === pontoPres.cod_gesac.toString())) {
+          this.pontpresenCod_gesac.push(pontoPres.cod_gesac);
+          this.pontoPresencaStatus.push(pontoPres.cod_status);
+          this.numMarcados++;
+          pontoPres.check = true;
+          return true;
+        } else {
+          return false;
+        }
+      });
+    }
+    if (arraySelecionados.length > 0) {
+      ponto = ponto.filter(pontoPres => {
+        if (arraySelecionados.some(selec => pontoPres.tipologia && pontoPres.tipologia.includes(selec.nome))) {
+          this.pontpresenCod_gesac.push(pontoPres.cod_gesac);
+          this.pontoPresencaStatus.push(pontoPres.cod_status);
+          this.numMarcados++;
+          pontoPres.check = true;
+          return true;
+        } else {
+          if (this.pontpresenCod_gesac) {
+            this.pontpresenCod_gesac.splice(this.pontpresenCod_gesac.indexOf(pontoPres.cod_gesac), 1);
+            this.pontoPresencaStatus.splice(this.pontoPresencaStatus.indexOf(pontoPres.cod_status), 1);
+            this.numMarcados--;
+            pontoPres.check = false;
+          }
+          return false;
+        }
+      });
+    }
+    this.pontpresenCod_gesac = this.pontpresenCod_gesac.filter((item, pos, self) => self.indexOf(item) === pos);
+    this.pontoPresencaStatus = this.pontoPresencaStatus.filter((item, pos, self) => self.indexOf(item) === pos);
+    this.numMarcados = this.pontpresenCod_gesac.length;
     this.funcaoPaginacao(ponto);
   }
-}
+
+
+  filtroPonto(filtros): any {
+    if (!filtros.gesac && !filtros.uf && !filtros.municipio && !filtros.status && !filtros.ponto && !filtros.tipologia) {
+      this.funcaoPaginacao(this.pontosPresenca);
+    } else {
+      let valida;
+      const ponto = this.pontosPresenca.filter(pontoPres => {
+        valida = true;
+        if (filtros.gesac && !pontoPres.cod_gesac.toString().includes(filtros.gesac.toLowerCase())) { valida = false; }
+        if (filtros.uf && !pontoPres.uf.toLowerCase().includes(filtros.uf.toLowerCase())) { valida = false; }
+        if (filtros.municipio && !pontoPres.nome_municipio.toLowerCase().includes(filtros.municipio.toLowerCase())) { valida = false; }
+        if (filtros.status.descricao &&
+          pontoPres.descricao.toLowerCase() !== filtros.status.descricao.toLowerCase()) { valida = false; }
+        if (filtros.ponto && !pontoPres.nome.toLowerCase().includes(filtros.ponto.toLowerCase())) { valida = false; }
+        if ((filtros.tipologia && pontoPres.tipologia == null) ||
+          (filtros.tipologia && !pontoPres.tipologia.toLowerCase().includes(filtros.tipologia.toLowerCase()))) { valida = false; }
+        return valida;
+      });
+      this.funcaoPaginacao(ponto);
+    }
+  }
 
 }
+
+
 
 

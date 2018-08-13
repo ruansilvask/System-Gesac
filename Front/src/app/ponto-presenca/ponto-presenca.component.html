@@ -143,6 +143,7 @@
                     <input placeholder="Selecione a data"
                     suiDatepicker
                     name="data_oficio"
+                    (pickerSelectedDateChange)="VerificarData(mSolicitacoes.data_oficio)"
                     [(ngModel)]="mSolicitacoes.data_oficio"
                     [pickerMode]="'date'"
                     [pickerFirstDayOfWeek]="0"

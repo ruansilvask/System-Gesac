@@ -5,8 +5,8 @@ import { Location } from '@angular/common';
 
 import { InstRespService } from './instituicao-responsavel.service';
 import Swal from 'sweetalert2';
-import { ApiServicesMsg } from './../api-services/api-services-msg';
-import { ApiServicesPagination } from './../api-services/api-services-pagination';
+import { ApiServicesMsg } from '../api-services/api-services-msg';
+import { ApiServicesPagination } from '../api-services/api-services-pagination';
 
 @Component({
   selector: 'app-instresp-resp',

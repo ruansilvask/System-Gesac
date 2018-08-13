@@ -1,9 +1,9 @@
-import { ApiServicesData } from './../../api-services/api-services-data';
+import { ApiServicesData } from '../../api-services/api-services-data';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { SuiModalService } from 'ng2-semantic-ui/dist/public';
+import { SuiModalService } from 'ng2-semantic-ui';
 
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
@@ -13,9 +13,11 @@ import { PontoPresenca } from '../ponto-presenca.model';
 import { PontoPresencaService } from '../ponto-presenca.service';
 import Swal from 'sweetalert2';
 
-import { ConfirmModal } from './../../modal/modal.component';
 
-import { ApiServicesMsg } from './../../api-services/api-services-msg';
+import { ConfirmModal } from '../../modal/modal.component';
+
+import { ApiServicesMsg } from '../../api-services/api-services-msg';
+
 import { ApiServiceEstadoMunicipio } from '../../api-services/api-services-estado-municipio';
 import { PontoPresencaEndereco } from './ponto_presenca-endereco.model';
 
@@ -50,17 +52,9 @@ export class PontoPresencaAddEditComponent implements OnInit {
   params: any;
   mostrarBotao: boolean;
   controleVericicacaoEnderecos = [];
-  enderecos: PontoPresencaEndereco = {
-    cod_endereco: null,
-    endereco: '',
-    numero: '',
-    bairro: '',
-    complemento: '',
-    cep: '',
-    area: '',
-    latitude: null,
-    longitude: null
-  };
+
+  enderecos: any;
+
 
   /*
 *   Variaveis do formulario do Ponto de Presenca
@@ -140,7 +134,10 @@ export class PontoPresencaAddEditComponent implements OnInit {
   * Método para trazer os municípios de acordo com a uf selecionada
   */
   selectEstado(uf) {
-    this.municipios = this.apiServiceEstadoMunicipio.getMunicipios(uf);
+    if(uf){
+      this.municipios = this.apiServiceEstadoMunicipio.getMunicipios(uf);
+    }
+    this.pontoPresenca.cod_ibge = ''
   }
 
   /*
@@ -156,18 +153,29 @@ export class PontoPresencaAddEditComponent implements OnInit {
  * Método para trazer os lotes de acordo com o contrtato selecionada
  */
   selectContrato(num_contrato) {
-    this.pontoPresencaService.getLotes(num_contrato).subscribe(lotes => {
-      this.lotes = lotes;
-    });
-  }
 
+    if(num_contrato) {
+      this.pontoPresencaService.getLotes(num_contrato).subscribe(lotes => {
+        this.lotes = lotes;
+      });
+    }
+    this.pontoPresenca.cod_lote = '';
+    this.pontoPresenca.cod_velocidade = '';
+
+  }
+  
   /*
- * Método para trazer os velocidade de acordo com o lote selecionada
- */
-  selectlote(num_lote) {
-    this.pontoPresencaService.getVelocidade(num_lote).subscribe(velocidades => {
-      this.velocidades = velocidades;
-    });
+
+  * Método para trazer os velocidade de acordo com o lote selecionada
+  */
+ selectlote(num_lote) {
+   if(num_lote) {
+     this.pontoPresencaService.getVelocidade(num_lote).subscribe(velocidades => {
+       this.velocidades = velocidades;
+      });
+    }
+    this.pontoPresenca.cod_velocidade = '';
+
   }
 
   /*
@@ -214,38 +222,50 @@ export class PontoPresencaAddEditComponent implements OnInit {
     *Método para trazer o Ponto de Presença pelo id do bd
     */
   getPontoPrensencaId(dados) {
-    this.pontoPresencaService
+
+    if(dados) {
+      this.pontoPresencaService
+
       .getPontoPresencaPorId(dados)
       // tslint:disable-next-line:no-shadowed-variable
       .subscribe(dados => {
         this.pontoPresenca = dados[0];
       });
+
+    }
 }
 
 /*
 * Métodos para salvar/editar o Ponto de Presenca no banco, caso seja passado um id na rota ocorrerá um put, caso contrario será um post
 */
 salvarPontoPresenca(form) {
-  if (this.params.id) {
-    form.value.cod_gesac = this.codGesac;
-    this.pontoPresencaService
-      .putPontoPresenca(this.pontoPresenca.cod_pid, form.value)
-      .subscribe(dados => {
-        this.resp = dados;
-        this.contatoService.getContatos(this.params.id, 'ponto');
-        this.secondActive = true;
-        this.mostrarBtn();
-      });
+
+  if (form.status !== 'INVALID'){
+    if (this.params.id) {
+      form.value.cod_gesac = this.codGesac;
+      console.log(form.value);
+      this.pontoPresencaService
+        .putPontoPresenca(this.pontoPresenca.cod_pid, form.value)
+        .subscribe(dados => {
+          this.resp = dados;
+          this.contatoService.getContatos(this.params.id, 'ponto');
+          this.secondActive = true;
+          this.mostrarBtn();
+        });
+    } else {
+      this.pontoPresencaService
+        .postPontoPresenca(this.pontoPresenca)
+        .subscribe(dados => {
+          this.codGesac = dados;
+          this.getPontoPrensencaId(dados);
+          this.contatoService.getContatos(this.codGesac, 'ponto');
+          this.secondActive = true;
+          this.mostrarBtn();
+        });
+    }
   } else {
-    this.pontoPresencaService
-      .postPontoPresenca(this.pontoPresenca)
-      .subscribe(dados => {
-        this.codGesac = dados;
-        this.getPontoPrensencaId(dados);
-        this.contatoService.getContatos(this.codGesac, 'ponto');
-        this.secondActive = true;
-        this.mostrarBtn();
-      });
+    this.apiServicesMsg.setMsg('error' , 'Um ou mais campos estão inválidos', 5000 );
+
   }
 }
 
@@ -309,6 +329,8 @@ adicionarnewEnd() {
 salvarEndereco(form) {
 
   // mostrar botão 'adicionar endereco' (quando clicado limpar os campos do endereco e setar variavel da clausula if)
+
+   if (form.status !== 'INVALID'){
   this.controleVericicacaoEnderecos.length !== 0
     ? (form.value.cod_endereco = this.enderecos.cod_endereco + 1)
     : (form.value.cod_endereco = 1);
@@ -323,9 +345,10 @@ salvarEndereco(form) {
     this.mostrarBotao = true;
   });
 
-
+ } else {
+    this.apiServicesMsg.setMsg('error' , 'Um ou mais campos estão inválidos', 5000 );
+  }
 }
-
 
 /*
 * Método para retornar para a aba de adicionar/editar endereco
@@ -436,7 +459,6 @@ backPP() {
 */
 ngOnInit(): void {
   this.route.params.subscribe(res => (this.params = res));
-
 
   setTimeout(() => {
   this.ufs = this.apiServiceEstadoMunicipio.getEstados();

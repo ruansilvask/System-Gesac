@@ -1,5 +1,5 @@
-import { ApiServicesMsg } from './../api-services/api-services-msg';
-import { ApiServicesPagination } from './../api-services/api-services-pagination';
+import { ApiServicesMsg } from '../api-services/api-services-msg';
+import { ApiServicesPagination } from '../api-services/api-services-pagination';
 import { Component, OnInit } from '@angular/core';
 
 import { TipologiaService } from './tipologia.service';

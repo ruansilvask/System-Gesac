@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 
-import { UsuarioService } from './../usuario.service';
+import { UsuarioService } from '../usuario.service';
 import { SuiModalService } from 'ng2-semantic-ui';
 import Swal from 'sweetalert2';
 import { AuthenticationService } from '../../services';
-import { ApiServicesMsg } from './../../api-services/api-services-msg';
+import { ApiServicesMsg } from '../../api-services/api-services-msg';
 
 @Component({
   selector: 'app-usuario-adicionar-editar',

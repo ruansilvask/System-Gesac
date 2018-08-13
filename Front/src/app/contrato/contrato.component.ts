@@ -1,4 +1,4 @@
-import { ApiServicesPagination } from './../api-services/api-services-pagination';
+import { ApiServicesPagination } from '../api-services/api-services-pagination';
 import { Component, OnInit } from '@angular/core';
 import { Location } from '@angular/common';
 
