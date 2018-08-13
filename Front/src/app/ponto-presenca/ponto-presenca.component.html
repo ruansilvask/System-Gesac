@@ -246,7 +246,7 @@
             {{ option.descricao || 'Todos' }}
           </ng-template>
           <sui-select class="selection" [(ngModel)]="filtros.status" [valueField]="" [options]="optionsPontoPre" labelField="descricao" [isSearchable]='true'
-            [optionTemplate]="optionTemplate" [isSearchable]="false" placeholder='Selecione a status' (ngModelChange)="filtroPonto (filtros)"
+            [optionTemplate]="optionTemplate" [isSearchable]="false" placeholder='Selecione a status' (ngModelChange)="filtroPonto (filtros, optionsPontoPre)"
             #templated>
             <sui-select-option *ngFor="let o of templated.filteredOptions" [value]="o"></sui-select-option>
           </sui-select>
@@ -284,7 +284,7 @@
         <td>{{ponto.nome}}</td>
         <td>{{ponto.tipologia}}</td>
         <td class="ui center aligned collapsing">
-          <a class="mini ui icon button circular" [routerLink]="['/pontPre', ponto.cod_gesac, 'detalhe']" suiPopup popupHeader="Visualizar"
+          <a class="mini ui icon button circular" [routerLink]="['/pontPre', ponto.cod_gesac, 'detalhe']" suiPopup popupHeader="Detalhe"
             popupInverted="true">
             <i class="search icon"></i>
           </a>

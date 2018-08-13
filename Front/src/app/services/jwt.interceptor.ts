@@ -31,7 +31,7 @@ export class JwtInterceptor implements HttpInterceptor {
                 if (err.status === 401 || err.status === 403) {
                   this.authenticationService.logout();
                   Swal('Erro',
-                  'Ocorreu um erro de autenticação, tente logar novamente.' +
+                  'Ocorreu um erro de autenticação, favor fazer login novamente.' +
                   ' Se o erro persistir favor entrar em contato com a COSIS - 2027-6040.',
                   'error');
                 }

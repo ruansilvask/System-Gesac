@@ -12,10 +12,12 @@
         </div>
 
         <!--incio da aba Ponto de presença-->
+
          <div class="ui bottom attached segment" suiTabContent="1">
           <form class="ui form error" #fAddPontoPresenca="ngForm" (ngSubmit)="salvarPontoPresenca(fAddPontoPresenca)">
-            <h4 class="ui dividing header">Shipping Information</h4>
+        
              <div class="field">
+
               <div class="two fields">
 
                 <div class="ten wide field"  [ngClass]="{'error': nome.invalid && fAddPontoPresenca.submitted || nome.invalid && nome.dirty}">
@@ -215,6 +217,7 @@
               <div class="ui grid ">
                 <div class="three wide column field"  [ngClass]="{'error': cep.invalid && fAddEndereco.submitted || cep.invalid && cep.dirty}">
                   <label for="cep">CEP</label>
+
                   <input id="cep" type="text" mask="00.000-000" class="validate" name="cep" #cep='ngModel' [(ngModel)]="enderecoPontPre.cep" required>
                   <div class="invalid-feedback" [ngClass]="{'active':  cep.invalid && fAddEndereco.submitted ||  cep.invalid && cep.dirty}">
                     CEP obrigatório!
@@ -224,6 +227,7 @@
                 <div class="three wide column field" [ngClass]="{'error': area.invalid && fAddEndereco.submitted ||  area.invalid && area.dirty}">
                   <label>Área</label>
                   <select class="ui fluid dropdown" name="area"  #area='ngModel' [(ngModel)]="enderecoPontPre.area" required>
+
                     <option value="" selected>Selecione a Área</option>
                     <option value="Rural" selected>Rural</option>
                     <option value="Urbano" selected>Urbano</option>
@@ -262,6 +266,7 @@
 
           <!--Inicio Endereço -->
            <div class="left floated left aligned sixteen wide column" *ngIf="controleVericicacaoEnderecos.length !== 0">
+
             <div class="ui raised segment">
               <a class="ui red ribbon label">Endereço Atual</a>
               <p></p>

@@ -13,10 +13,13 @@ import { PontoPresenca } from '../ponto-presenca.model';
 import { PontoPresencaService } from '../ponto-presenca.service';
 import Swal from 'sweetalert2';
 
+
 import { ConfirmModal } from '../../modal/modal.component';
 
 import { ApiServicesMsg } from '../../api-services/api-services-msg';
+
 import { ApiServiceEstadoMunicipio } from '../../api-services/api-services-estado-municipio';
+import { PontoPresencaEndereco } from './ponto_presenca-endereco.model';
 
 @Component({
   selector: 'app-ponto-presenca-add-edit',
@@ -49,7 +52,9 @@ export class PontoPresencaAddEditComponent implements OnInit {
   params: any;
   mostrarBotao: boolean;
   controleVericicacaoEnderecos = [];
+
   enderecos: any;
+
 
   /*
 *   Variaveis do formulario do Ponto de Presenca
@@ -148,6 +153,7 @@ export class PontoPresencaAddEditComponent implements OnInit {
  * Método para trazer os lotes de acordo com o contrtato selecionada
  */
   selectContrato(num_contrato) {
+
     if(num_contrato) {
       this.pontoPresencaService.getLotes(num_contrato).subscribe(lotes => {
         this.lotes = lotes;
@@ -155,9 +161,11 @@ export class PontoPresencaAddEditComponent implements OnInit {
     }
     this.pontoPresenca.cod_lote = '';
     this.pontoPresenca.cod_velocidade = '';
+
   }
   
   /*
+
   * Método para trazer os velocidade de acordo com o lote selecionada
   */
  selectlote(num_lote) {
@@ -167,6 +175,7 @@ export class PontoPresencaAddEditComponent implements OnInit {
       });
     }
     this.pontoPresenca.cod_velocidade = '';
+
   }
 
   /*
@@ -213,13 +222,16 @@ export class PontoPresencaAddEditComponent implements OnInit {
     *Método para trazer o Ponto de Presença pelo id do bd
     */
   getPontoPrensencaId(dados) {
+
     if(dados) {
       this.pontoPresencaService
+
       .getPontoPresencaPorId(dados)
       // tslint:disable-next-line:no-shadowed-variable
       .subscribe(dados => {
         this.pontoPresenca = dados[0];
       });
+
     }
 }
 
@@ -227,6 +239,7 @@ export class PontoPresencaAddEditComponent implements OnInit {
 * Métodos para salvar/editar o Ponto de Presenca no banco, caso seja passado um id na rota ocorrerá um put, caso contrario será um post
 */
 salvarPontoPresenca(form) {
+
   if (form.status !== 'INVALID'){
     if (this.params.id) {
       form.value.cod_gesac = this.codGesac;
@@ -252,6 +265,7 @@ salvarPontoPresenca(form) {
     }
   } else {
     this.apiServicesMsg.setMsg('error' , 'Um ou mais campos estão inválidos', 5000 );
+
   }
 }
 
@@ -315,6 +329,7 @@ adicionarnewEnd() {
 salvarEndereco(form) {
 
   // mostrar botão 'adicionar endereco' (quando clicado limpar os campos do endereco e setar variavel da clausula if)
+
    if (form.status !== 'INVALID'){
   this.controleVericicacaoEnderecos.length !== 0
     ? (form.value.cod_endereco = this.enderecos.cod_endereco + 1)
@@ -329,12 +344,11 @@ salvarEndereco(form) {
     this.cancelAddEndereco();
     this.mostrarBotao = true;
   });
+
  } else {
     this.apiServicesMsg.setMsg('error' , 'Um ou mais campos estão inválidos', 5000 );
   }
-
 }
-
 
 /*
 * Método para retornar para a aba de adicionar/editar endereco
@@ -445,7 +459,6 @@ backPP() {
 */
 ngOnInit(): void {
   this.route.params.subscribe(res => (this.params = res));
-
 
   setTimeout(() => {
   this.ufs = this.apiServiceEstadoMunicipio.getEstados();

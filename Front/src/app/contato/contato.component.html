@@ -140,7 +140,9 @@
                     </div>
               </div>
 
+
               <div class="seven wide field" [ngClass]="{'error':  email.invalid && email.dirty }">
+
                 <label>E-mail</label>
                 <input type="email" placeholder="E-mail" name="email" #email='ngModel' [(ngModel)]="adicionarTelefone.email" pattern="^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
                 <div class="invalid-feedback" [ngClass]="{'active':  email.invalid && email.dirty }">
@@ -148,7 +150,7 @@
                     </div>
               </div>
 
-              <div class="three wide field" >
+              <div class="three wide field">
                   <button type="submit" class="ui button btnAdd" [disabled]="fAddTel.invalid">
                       Adicionar telefone
                     </button>

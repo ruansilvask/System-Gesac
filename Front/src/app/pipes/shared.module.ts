@@ -11,6 +11,9 @@ import { FilterSeiPipe } from './filter-sei.pipe';
 import { FilterCepPipe } from './filter-cep.pipe';
 import { FilterTipoTelPipe } from './filter-tipoTel.pipe';
 import { FilterNumContratoPipe } from './filter-numContrato.pipe';
+import { FilterPagadoraPipe } from './filter-pagadora.pipe';
+import { FilterHistoricoAcoesPipe } from './filter-historico-acoes.pipe';
+import { FilterPontoPresencaContatoPipe } from './filter-ponto-presenca-contato.pipe';
 
 @NgModule({
   imports: [
@@ -29,7 +32,10 @@ import { FilterNumContratoPipe } from './filter-numContrato.pipe';
     FilterTipoTelPipe,
     FilterSeiPipe,
     FilterCepPipe,
-    FilterNumContratoPipe
+    FilterNumContratoPipe,
+    FilterPagadoraPipe,
+    FilterHistoricoAcoesPipe,
+    FilterPontoPresencaContatoPipe
    ],
   exports: [
     CommonModule,
@@ -45,7 +51,10 @@ import { FilterNumContratoPipe } from './filter-numContrato.pipe';
     FilterTipoTelPipe,
     FilterSeiPipe,
     FilterCepPipe,
-    FilterNumContratoPipe
+    FilterNumContratoPipe,
+    FilterPagadoraPipe,
+    FilterHistoricoAcoesPipe,
+    FilterPontoPresencaContatoPipe
    ]
 })
 export class SharedModule { }
