@@ -11,6 +11,10 @@ import { FilterSeiPipe } from './filter-sei.pipe';
 import { FilterCepPipe } from './filter-cep.pipe';
 import { FilterTipoTelPipe } from './filter-tipoTel.pipe';
 import { FilterNumContratoPipe } from './filter-numContrato.pipe';
+import { FilterPagadoraPipe } from './filter-pagadora.pipe';
+import { FilterHistoricoAcoesPipe } from './filter-historico-acoes.pipe';
+import { FilterPontoPresencaContatoPipe } from './filter-ponto-presenca-contato.pipe';
+import { FilterRepresentantePipe } from './filter-representantes.pipe';
 
 @NgModule({
   imports: [
@@ -21,16 +25,20 @@ import { FilterNumContratoPipe } from './filter-numContrato.pipe';
     SuiCheckboxModule,
     SuiRatingModule,
     NgxMaskModule.forRoot(),
-    CurrencyMaskModule,
-   ],
+    CurrencyMaskModule
+  ],
   declarations: [
     FilterCnpjPipe,
     FilterTelefonePipe,
     FilterTipoTelPipe,
     FilterSeiPipe,
     FilterCepPipe,
-    FilterNumContratoPipe
-   ],
+    FilterNumContratoPipe,
+    FilterPagadoraPipe,
+    FilterHistoricoAcoesPipe,
+    FilterPontoPresencaContatoPipe,
+    FilterRepresentantePipe
+  ],
   exports: [
     CommonModule,
     SuiModule,
@@ -45,7 +53,11 @@ import { FilterNumContratoPipe } from './filter-numContrato.pipe';
     FilterTipoTelPipe,
     FilterSeiPipe,
     FilterCepPipe,
-    FilterNumContratoPipe
-   ]
+    FilterNumContratoPipe,
+    FilterPagadoraPipe,
+    FilterHistoricoAcoesPipe,
+    FilterPontoPresencaContatoPipe,
+    FilterRepresentantePipe
+  ]
 })
-export class SharedModule { }
+export class SharedModule {}

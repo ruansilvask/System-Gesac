@@ -25,10 +25,11 @@ export class InstRespComponent implements OnInit {
   pagadoraFilter: any;
 
   optionsPontoPre: any = [
-    { descricao: 'Sim', value: 1 },
-    { descricao: 'Não', value: 0 },
-    { descricao: 'Todos', value: 3 }
-  ];
+    {descricao : 'Sim', value : 1},
+    {descricao : 'Não', value : 0},
+    {descricao : 'Todos', value : 3}
+];
+
 
   allArrays: any;
   numeroPagina = 50;
@@ -130,26 +131,21 @@ export class InstRespComponent implements OnInit {
         ) {
           valida = false;
         }
-        if (
-          filtros.nome &&
-          !resp.nome.toLowerCase().includes(filtros.nome.toLowerCase())
+        if (filtros.nome && !resp.nome.toLowerCase().includes(filtros.nome.toLowerCase())
         ) {
           valida = false;
         }
-        if (
-          filtros.sigla &&
-          !resp.sigla.toLowerCase().includes(filtros.sigla.toLowerCase())
+        if (filtros.sigla && !resp.sigla.toLowerCase().includes(filtros.sigla.toLowerCase())
         ) {
           valida = false;
         }
-        if (
-          filtros.pagadora &&
-          !this.pagadoraFilter
+        if (filtros.pagadora && !this.pagadoraFilter
             .toLowerCase()
             .includes(filtros.pagadora.descricao.toLowerCase())
         ) {
           valida = false;
         }
+
         return valida;
       });
       this.funcaoPaginacao(instResps);

@@ -57,13 +57,4 @@ export class ApiServiceEstadoMunicipio {
 
 
 
-  // getMunicipios(uf: any) {
-  // this.muniUfs = [];
-  // for (let i = 0; i < this.municipios.length; i++) {
-  //   if (uf === this.municipios[i].uf) {
-  //     this.muniUfs.push(this.municipios[i]);
-  //   }
-  // }
-  // return this.muniUfs;
-  // }
 }

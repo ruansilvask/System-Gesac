@@ -242,7 +242,7 @@ export class ContatoComponent implements OnInit {
     if (this.telefoneValido(this.telefone)) {
       Swal({
         title: 'Você tem certeza?',
-        text: `Você tem certeza que deseja adicionar este contato?`,
+        text: `Você tem certeza que deseja adicionar estas informações a este contato?`,
         type: 'question',
         showCancelButton: true,
         confirmButtonText: 'Sim, adicionar!',
@@ -275,6 +275,7 @@ export class ContatoComponent implements OnInit {
   }
 
   infoContato(contato: any) {
+    console.log(contato.nomePessoa)
     if (this.desabilitarCampos === false) {
       if (this.existeContato(contato.cod_pessoa)) {
         Swal({
@@ -332,7 +333,7 @@ export class ContatoComponent implements OnInit {
           reverseButtons: true
         }).then(result => {
           if (result.value) {
-            this.contatoInfo = {nome: contato.nomePessoa, cargo: '', obs: '' };
+            this.contatoInfo = { nome: contato.nomePessoa, cargo: '', obs: '' };
             this.desabilitarCampos = true;
             this.dadosPessoa = {
               cod_pessoa: contato.cod_pessoa,
@@ -365,6 +366,7 @@ export class ContatoComponent implements OnInit {
             this.dadosPessoa = { cod_pessoa, nome };
             this.desabilitarCampos = true;
             this.aparecerInfContato = true;
+            this.contatoInfo = { nome: nome, cargo: '', obs: '' };
             this.apiServicesMsg.setMsg(
               'success',
               'Pessoa cadastrada com sucesso.',
@@ -417,6 +419,7 @@ export class ContatoComponent implements OnInit {
   }
 
   salvarContato(form) {
+    delete form.value.nome;
     if (!this.existeContato(this.dadosPessoa.cod_pessoa)) {
       Swal({
         title: 'Você tem certeza?',
@@ -439,9 +442,7 @@ export class ContatoComponent implements OnInit {
     } else {
       Swal({
         title: 'Você tem certeza?',
-        text: `Você tem certeza que deseja editar os dados de ${
-          this.dadosPessoa.nome
-        }?`,
+        text: `Você tem certeza que deseja vincular ${this.dadosPessoa.nome} a este ponto?`,
         type: 'question',
         showCancelButton: true,
         confirmButtonText: 'Sim, editar!',

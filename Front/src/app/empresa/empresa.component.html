@@ -55,13 +55,13 @@
           <td [innerHTML]="empresa.nome_municipio"></td>
           <td [innerHTML]="empresa.uf"></td>
           <td class="ui center aligned collapsing">
-          <a class="mini ui icon button circular" suiPopup popupHeader="Visualizar" [routerLink]="[empresa.cnpj_empresa, 'detalhe']" popupInverted="true" disabled>
+          <a class="mini ui icon button circular" suiPopup popupHeader="Detalhe" [routerLink]="[empresa.cnpj_empresa, 'detalhe']" popupInverted="true" disabled>
                   <i class="search icon"></i>
                 </a>
             <a class="mini ui icon  button circular" [routerLink]="[empresa.cnpj_empresa]" suiPopup popupHeader="Editar" popupInverted="true">
               <i class="pencil alternate icon"></i>
             </a>
-            <a class="mini ui icon  button circular" suiPopup popupHeader="Remover" popupInverted="true" (click)="deletarEmpresa(empresa)">
+            <a class="mini ui icon  button circular" suiPopup popupHeader="Excluir" popupInverted="true" (click)="deletarEmpresa(empresa)">
               <i class="trash alternate icon"></i>
             </a>
           </td>

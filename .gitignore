@@ -41,7 +41,10 @@ jspm_packages/
 assets/
 conexao/
 services/
+<<<<<<< HEAD
 teste/
+=======
+>>>>>>> d2bfd007268591375019a808d1b51055997a9a42
 
 # Arquivos para ignorar
 app.api.ts

@@ -293,7 +293,8 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
 
   ActiveMsgReturnSolicitation() {
     if (this.multiplasSolicitacoes.length === 0) {
-      this.apiServicesMsg.setMsg('warning', 'Não é possivel executar esta ação, pois não há solicitações possíveis para este Status!', 5000);
+      this.apiServicesMsg.setMsg('warning', 'Não é possivel executar esta ação, ' +
+      'pois não há solicitações possíveis para este Status!', 5000);
       this.abrirNodal = false;
     } else {
       this.abrirNodal = true;
@@ -461,5 +462,7 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
   }
 
 }
+
+
 
 

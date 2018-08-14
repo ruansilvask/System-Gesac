@@ -367,10 +367,12 @@
               <div class="column field" [ngClass]="{'error':  !!analiseSubmit?._directives[21]?.control?.invalid}">
                 <label>Telefone 1</label>
                 <input [(ngModel)]="analiseDetalhe.telefone1" mask="(00) 00000-0000" minlength="10" name="telefone1" placeholder="Telefone"
-                  type="text">
+                  type="text" [required]="analiseDetalhe.assinatura_resp === 1">
                 <div class="invalid-feedback" [ngClass]="{'active':  !!analiseSubmit?._directives[21]?.control?.invalid}">
-                  Telefone Inválido!
+                  Telefone Obrigatório e Inválido!
                 </div>
+
+
               </div>
 
 

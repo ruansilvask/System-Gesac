@@ -7,8 +7,6 @@ import { InstRespService } from './instituicao-responsavel.service';
 import { InstRespRoutingModule } from './instituicao.responsavel.routing.module';
 import { InstituicaoResponsavelDetalheComponent } from './instituicao-responsavel-detalhe/instituicao-responsavel-detalhe.component';
 import { ContatoModule } from '../contato/contato.module';
-import { FilterRepresentantePipe } from './filter-representantes.pipe';
-import { FilterPagadoraPipe } from '../pipes/filter-pagadora.pipe';
 
 @NgModule({
     imports: [
@@ -19,9 +17,8 @@ import { FilterPagadoraPipe } from '../pipes/filter-pagadora.pipe';
     declarations: [
         InstRespComponent,
         InstRespAddEditComponent,
-        InstituicaoResponsavelDetalheComponent,
-        FilterRepresentantePipe,
-        FilterPagadoraPipe
+        InstituicaoResponsavelDetalheComponent
+
     ],
     exports: [
         InstRespComponent
@@ -30,8 +27,7 @@ import { FilterPagadoraPipe } from '../pipes/filter-pagadora.pipe';
         InstRespComponent
     ],
     providers: [
-        InstRespService,
-        FilterRepresentantePipe
+        InstRespService
         ]
 })
 

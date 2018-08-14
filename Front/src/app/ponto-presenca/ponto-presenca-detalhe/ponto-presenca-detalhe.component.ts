@@ -389,40 +389,43 @@ export class PontoPresencaDetalheComponent implements OnInit {
   }
 
   salvarAnalise(analise) {
-    analise.value.data_oficio = this.apiServicesData.formatData(
-      analise.value.data_oficio
-    );
-    analise.value.data_instalacao = this.apiServicesData.formatData(
-      analise.value.data_instalacao
-    );
+    console.log(analise._directives[21]);
+)
 
-    analise.value.cod_gesac = this.params.id;
-    analise.value.cnpj_empresa = this.analiseDetalhe.cnpj_empresa;
+    // analise.value.data_oficio = this.apiServicesData.formatData(
+    //   analise.value.data_oficio
+    // );
+    // analise.value.data_instalacao = this.apiServicesData.formatData(
+    //   analise.value.data_instalacao
+    // );
+
+    // analise.value.cod_gesac = this.params.id;
+    // analise.value.cnpj_empresa = this.analiseDetalhe.cnpj_empresa;
 
 
-    if (this.condicaoAnalise) {
+    // if (this.condicaoAnalise) {
 
-      if (this.justificativa) {
-        analise.value.tipo_solicitacao = this.btnsAnalise.tipo_solicitacao[1];
-        analise.value.justificativa = this.analiseDetalhe.justificativa;
-        analise.value.aceite = false;
+    //   if (this.justificativa) {
+    //     analise.value.tipo_solicitacao = this.btnsAnalise.tipo_solicitacao[1];
+    //     analise.value.justificativa = this.analiseDetalhe.justificativa;
+    //     analise.value.aceite = false;
 
-          if (!!analise.value.justificativa) {
+    //       if (!!analise.value.justificativa) {
 
-            this.putAnalise(analise, this.analiseDetalhe.cod_analise);
-           if ( this.errorJustificativa = true) {
-            this.errorJustificativa = false;
-           }
-          } else {
-            this.errorJustificativa = true;
-          }
-      } else {
-        analise.value.tipo_solicitacao = this.btnsAnalise.tipo_solicitacao[0];
-        analise.value.justificativa = null;
-        analise.value.aceite = true;
-        this.putAnalise(analise, this.analiseDetalhe.cod_analise);
-      }
-    }
+    //         this.putAnalise(analise, this.analiseDetalhe.cod_analise);
+    //        if ( this.errorJustificativa = true) {
+    //         this.errorJustificativa = false;
+    //        }
+    //       } else {
+    //         this.errorJustificativa = true;
+    //       }
+    //   } else {
+    //     analise.value.tipo_solicitacao = this.btnsAnalise.tipo_solicitacao[0];
+    //     analise.value.justificativa = null;
+    //     analise.value.aceite = true;
+    //     this.putAnalise(analise, this.analiseDetalhe.cod_analise);
+    //   }
+    // }
 
   }
 
