@@ -14,11 +14,15 @@ export class JwtInterceptor implements HttpInterceptor {
     intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
         const currentUser = this.authenticationService.getToken();
+        const currentUserCode = this.authenticationService.getUserCode();
+        const currentCode = this.authenticationService.getCode();
 
         if (currentUser) {
         request = request.clone({
             setHeaders: {
-            'x-access-token': currentUser
+            'x-access-token': currentUser,
+            'cod_usuario': currentUserCode,
+            'cod_usuario_cript': currentCode
           }
         });
       }
@@ -30,10 +34,10 @@ export class JwtInterceptor implements HttpInterceptor {
                if (err instanceof HttpErrorResponse) {
                 if (err.status === 401 || err.status === 403) {
                   this.authenticationService.logout();
-                  Swal('Erro',
-                  'Ocorreu um erro de autenticação, favor fazer login novamente.' +
-                  ' Se o erro persistir favor entrar em contato com a COSIS - 2027-6040.',
-                  'error');
+                  Swal('Aviso',
+                  'Seu login expirou.' +
+                  ' Favor fazer login novamente.',
+                  'warning');
                 }
                }
              });
