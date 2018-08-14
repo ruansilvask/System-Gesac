@@ -1,4 +1,5 @@
-var jwt = require('jsonwebtoken');
+var jwt = require('jsonwebtoken'),
+    passwordHash = require('password-hash');
 
 module.exports = function(app){
     let api = {};
@@ -16,7 +17,10 @@ module.exports = function(app){
                         if(resultado[0].senha === user.senha){
                             var token = jwt.sign({login: resultado[0].login}, app.get('secret'), { expiresIn: 43200 }); //28800s = 8H
                             res.set({'x-access-token': token});
-                            res.status(200).json({token, 'cod_usuario': resultado[0].cod_usuario, 'nome': resultado[0].nome});
+                            
+                            cod_usuario_cript = passwordHash.generate(resultado[0].cod_usuario.toString());
+
+                            res.status(200).json({token, 'cod_usuario': resultado[0].cod_usuario, 'nome': resultado[0].nome, cod_usuario_cript});
 
                         } else { res.status(401).send('Senha incorreta'); }
 
@@ -34,7 +38,9 @@ module.exports = function(app){
 
     //Verifica o Token de acesso do Usuário.
     api.verificaToken = (req, res, next) => {
-        var token = req.headers['x-access-token'];
+        let token = req.headers['x-access-token'];
+        let cod_usuario = req.headers['cod_usuario']
+        let cod_usuario_cript = req.headers['cod_usuario_cript'];
         
         if(req.headers['access-control-request-headers'])
         return next();
@@ -44,11 +50,15 @@ module.exports = function(app){
                 if(erro){
                     return res.sendStatus(401);
                 }else{
-                    req.usuario = decoded;
-                    next();
+                    if(passwordHash.verify(cod_usuario, cod_usuario_cript)){
+                        req.usuario = decoded;
+                        next();
+                    }else{
+                        return res.sendStatus(401);
+                    }
                 }
             });
-        }else{
+        } else {
             return res.sendStatus(401);
         }
         
