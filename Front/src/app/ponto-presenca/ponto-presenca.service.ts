@@ -88,13 +88,6 @@ export class PontoPresencaService {
       .map(res => res);
   }
 
-  /*
-  * Protocolo HTTP do ponto de presenca para trazer do banco pelo id, para a tela de add/edit do pp
-  */
-  getEnderecoPorIdVisu(id) {
-    return this.http.get<PontoPresencaEndereco>(`${GESAC_API}pontoEnderecoAtual/${id}`)
-    .map(res => res);
-  }
 
   /*
   * Protocolo HTTP do Endereco para salvar no banco

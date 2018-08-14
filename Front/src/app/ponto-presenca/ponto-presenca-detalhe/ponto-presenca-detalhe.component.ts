@@ -390,7 +390,7 @@ export class PontoPresencaDetalheComponent implements OnInit {
 
   salvarAnalise(analise) {
     console.log(analise._directives[21]);
-)
+
 
     // analise.value.data_oficio = this.apiServicesData.formatData(
     //   analise.value.data_oficio
