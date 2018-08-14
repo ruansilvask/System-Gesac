@@ -4,12 +4,26 @@ module.exports = function(app){
     //Salva um novo Contato.
     api.salvaContato = (req, res) => {
         const knex = app.conexao.conexaoBDKnex();
-        const contato = req.body; 
+        const { cnpj_empresa, cod_instituicao, cod_gesac, cargo, obs, cod_pessoa, nome } = req.body; 
+        let contato;
+
+        if(cnpj_empresa){
+            contato = { cnpj_empresa, cod_pessoa, cargo, obs };
+        } else if(cod_instituicao){
+            contato =  { cod_instituicao, cod_pessoa, cargo, obs };
+        } else if(cod_gesac){
+            contato =  { cod_gesac, cod_pessoa, cargo, obs };
+        }
         
         knex('contato').insert(contato)
             .then(resultado => {
-                knex.destroy();
-                res.status(200).end();
+                const pessoa = { nome };
+                
+                knex('pessoa').where('cod_pessoa', cod_pessoa).update(pessoa)
+                    .then(result => {
+                        knex.destroy();
+                        res.status(200).end();
+                    })
             })
             .catch(erro => {
                 console.log(erro);
@@ -100,12 +114,19 @@ module.exports = function(app){
     api.editaContato = (req, res) => {
         const knex = app.conexao.conexaoBDKnex();
         const { cod_contato } = req.params;
-        const contato = req.body;
+        const { cargo, obs, cod_pessoa, nome } = req.body;
+
+        const contato = { cargo, obs};
 
         knex('contato').where('cod_contato', cod_contato).update(contato)
             .then(resultado => {
-                knex.destroy();
-                res.status(200).end();
+                const pessoa = { nome };
+
+                knex('pessoa').where('cod_pessoa', cod_pessoa).update(pessoa)
+                    .then(result => {
+                        knex.destroy();
+                        res.status(200).end();
+                    })
             })
             .catch(erro => {
                 console.log(erro);
