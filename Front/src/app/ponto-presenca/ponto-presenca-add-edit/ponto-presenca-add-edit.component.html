@@ -15,7 +15,7 @@
 
          <div class="ui bottom attached segment" suiTabContent="1">
           <form class="ui form error" #fAddPontoPresenca="ngForm" (ngSubmit)="salvarPontoPresenca(fAddPontoPresenca)">
-        
+
              <div class="field">
 
               <div class="two fields">
@@ -265,7 +265,7 @@
           </div>
 
           <!--Inicio Endereço -->
-           <div class="left floated left aligned sixteen wide column" *ngIf="controleVericicacaoEnderecos.length !== 0">
+           <!-- <div class="left floated left aligned sixteen wide column" *ngIf="controleVericicacaoEnderecos.length !== 0">
 
             <div class="ui raised segment">
               <a class="ui red ribbon label">Endereço Atual</a>
@@ -302,7 +302,52 @@
                   <h4 class="ui header">Data Final:</h4>{{enderecos?.data_final | date:'dd/MM/y'}}</div>
               </div>
             </div>
+          </div> -->
+
+          <!-- Inicio endereços antigos -->
+
+          <div content *ngFor="let enderecoAntigo of enderecosAntigos">
+            <a *ngIf="!enderecoAntigo?.data_final" class="ui red ribbon label">Endereço Atual</a>
+
+            <div class="ui raised segment"  [ngStyle]="{'backgroundColor': !!enderecoAntigo?.data_final ? '#eeeeee' : 'white' }">
+
+              <div class="ui grid">
+
+                <div class="fourteen wide column">
+                  <h4 class="ui header">Endereço:</h4>{{enderecoAntigo?.endereco}} </div>
+
+                <div class="two wide column">
+                  <h4 class="ui header">Nº:</h4>{{enderecoAntigo?.numero}} </div>
+              </div>
+
+              <div class="ui grid">
+                <div class="four wide column">
+                  <h4 class="ui header">Bairro:</h4>{{enderecoAntigo?.bairro}}</div>
+
+                <div class="twelve wide column">
+                  <h4 class="ui header">Complemento:</h4> {{enderecoAntigo?.complemento}}</div>
+              </div>
+
+              <div class="ui grid">
+                <div class="two wide column">
+                  <h4 class="ui header">Cep</h4> {{enderecoAntigo?.cep | cep}}</div>
+                <div class="two wide column">
+                  <h4 class="ui header">Área:</h4> {{enderecoAntigo?.area}}</div>
+                <div class="four wide column">
+                  <h4 class="ui header">Latitude: </h4>{{enderecoAntigo?.latitude}}</div>
+                <div class="four wide column">
+                  <h4 class="ui header">Longitude:</h4> {{enderecoAntigo?.longitude}}</div>
+                <div class="two wide column">
+                  <h4 class="ui header">Data Inicial:</h4>{{enderecoAntigo?.data_inicio | date: 'dd/MM/yyyy'}}</div>
+                <div class="two wide column">
+                  <h4 class="ui header">Data Final:</h4> {{enderecoAntigo?.data_final | date: 'dd/MM/yyyy'}}</div>
+              </div>
+            </div>
+            <br>
           </div>
+
+          <!-- Fim endereços antigos -->
+
           <br>
           <div class="ui stackable two column grid">
             <div class="column">
