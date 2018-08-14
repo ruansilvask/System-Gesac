@@ -243,7 +243,6 @@ salvarPontoPresenca(form) {
   if (form.status !== 'INVALID'){
     if (this.params.id) {
       form.value.cod_gesac = this.codGesac;
-      console.log(form.value);
       this.pontoPresencaService
         .putPontoPresenca(this.pontoPresenca.cod_pid, form.value)
         .subscribe(dados => {
@@ -290,8 +289,6 @@ voltarPontoPresenca() {
 }
 
 irTipologia() {
-  console.log(this.controleVericicacaoEnderecos.length);
-
   if (this.controleVericicacaoEnderecos.length !== 0) {
     this.thirdActive = true;
   } else {

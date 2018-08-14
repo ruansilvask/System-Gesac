@@ -86,7 +86,7 @@
               <sui-radio-button name="radio" value="nao" [(ngModel)]="radio" (ngModelChange)="radioConsorcio(radio)" required [isDisabled]="desabilitarRadio">Não</sui-radio-button>
             </div>
             <div class="eight wide field" [hidden]="!consorcio" [ngClass]="{'error': consorcio && cnpj_empresa_pai.invalid && cnpj_empresa_pai.dirty}">
-              <label>Selecione a empresa reponsavel pelo contrato:</label>
+              <label>Selecione a empresa responsável pelo contrato:</label>
               <select class="ui fluid dropdown" name="cnpj_empresa_pai" #cnpj_empresa_pai="ngModel" [(ngModel)]="empresaForm.cnpj_empresa_pai"
                 required>
                 <option value="">Selecione a empresa</option>

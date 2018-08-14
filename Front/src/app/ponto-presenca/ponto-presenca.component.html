@@ -114,16 +114,19 @@
 
           <form class="ui form error" #fmsolicitacoes="ngForm" (ngSubmit)="enviarMS(fmsolicitacoes)">
 
-            <div class="ui stackable two column grid">
-              <div class="column">
+            <div class="two fields">
+              <div class="field" [ngClass]="{'error': tipo_solicitacao.invalid && tipo_solicitacao.dirty}">
                 <label>Selecionar Solicitação</label>
-                <select class="ui fluid search dropdown" name="tipo_solicitacao" [(ngModel)]="mSolicitacoes.tipo_solicitacao" (change)="ActiveInputAnalise(mSolicitacoes.tipo_solicitacao)">
+                <select class="ui fluid search dropdown" name="tipo_solicitacao" #tipo_solicitacao="ngModel" [(ngModel)]="mSolicitacoes.tipo_solicitacao" (change)="ActiveInputAnalise(mSolicitacoes.tipo_solicitacao)" required>
                   <option value="">Selecione</option>
                   <option *ngFor="let multiplaSolicitacao of multiplasSolicitacoes" value="{{multiplaSolicitacao.tipo_solicitacao}}">{{multiplaSolicitacao.descricao}}</option>
                 </select>
+                <div class="invalid-feedback" [ngClass]="{'active': tipo_solicitacao.invalid && tipo_solicitacao.dirty}">
+                  Solicitação é obrigatória.
+                </div>
               </div>
 
-              <div class="column">
+              <div class="field">
                 <label>Documento do SEI</label>
                 <input type="text" name="num_doc_sei" maxlength="7" [(ngModel)]="mSolicitacoes.num_doc_sei">
               </div>
@@ -143,7 +146,6 @@
                     <input placeholder="Selecione a data"
                     suiDatepicker
                     name="data_oficio"
-                    (pickerSelectedDateChange)="VerificarData(mSolicitacoes.data_oficio)"
                     [(ngModel)]="mSolicitacoes.data_oficio"
                     [pickerMode]="'date'"
                     [pickerFirstDayOfWeek]="0"
@@ -158,21 +160,16 @@
 
             </div>
 
-            <div class="ui stackable one column grid" *ngIf="analiseShow">
-              <div class="column">
+            <div class="field" [ngClass]="{'error': cnpj_empresa.invalid}" *ngIf="analiseShow">
                 <label>Nome da Empresa</label>
-
-                <select [ngClass]="{'error': erroEmpresa }" class="ui dropdown" name="cnpj_empresa" [(ngModel)]="mSolicitacoes.cnpj_empresa" #empresaModel=ngModel [required]="true" >
+                <select class="ui dropdown" name="cnpj_empresa" #cnpj_empresa="ngModel" [(ngModel)]="mSolicitacoes.cnpj_empresa" #empresaModel=ngModel required>
                   <option value="">Selecione Instituição</option>
                   <option *ngFor="let empresa of empresas" value="{{empresa.cnpj_empresa}}">{{empresa.empresa}}</option>
                 </select>
-                <div class="invalid-feedback" [ngClass]="{'active':   erroEmpresa}">
-                    Empresa obrigatoria!
-                  </div>
-
+                <div class="invalid-feedback" [ngClass]="{'active': cnpj_empresa.invalid}">
+                  Empresa obrigatoria!
+                </div>
               </div>
-
-            </div>
 
             <!-- Motivo da pendência: Tem q esperar o thiago e o weverton mandarem os dados certos do banco
             pra terminar de mexer em motivo de pendência. -->
@@ -180,7 +177,7 @@
             <div class="ui stackable one column grid" *ngIf="pendenciaShow">
               <div class="column">
                 <label>Motivo da Pendência</label>
-                <textarea [ngClass]="{'error': motivo.invalid && motivo.dirty }" #motivo="ngModel" [(ngModel)]="mSolicitacoes.motivo" name="pendencia" maxlength="1000" placeholder="Motivo da Pendência" 
+                <textarea [ngClass]="{'error': motivo.invalid && motivo.dirty }" #motivo="ngModel" [(ngModel)]="mSolicitacoes.motivo" name="pendencia" maxlength="1000" placeholder="Motivo da Pendência"
                 style="margin-top: 0px; margin-bottom: 0px; height: 112px;" required></textarea>
                 <div class="invalid-feedback" [ngClass]="{'active': motivo.invalid && motivo.dirty}">
                   Motivo da Pendência é um campo obrigatório!
@@ -192,7 +189,7 @@
               <div class="tow column row">
                 <div class="right floated column">
                   <button class="ui red right floated button" (click)="closeModal(false)">Cancel</button>
-                  <button class="ui green right floated button" type="submit" autofocus> Aplicar</button>
+                  <button class="ui green right floated button" type="submit" [disabled]="fmsolicitacoes.invalid" autofocus> Aplicar</button>
                 </div>
               </div>
 

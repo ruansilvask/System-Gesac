@@ -367,10 +367,12 @@
               <div class="column field" [ngClass]="{'error':  !!analiseSubmit?._directives[21]?.control?.invalid}">
                 <label>Telefone 1</label>
                 <input [(ngModel)]="analiseDetalhe.telefone1" mask="(00) 00000-0000" minlength="10" name="telefone1" placeholder="Telefone"
-                  type="text">
+                  type="text" [required]="analiseDetalhe.assinatura_resp === 1">
                 <div class="invalid-feedback" [ngClass]="{'active':  !!analiseSubmit?._directives[21]?.control?.invalid}">
-                  Telefone Inválido!
+                  Telefone Obrigatório e Inválido!
                 </div>
+
+
               </div>
 
 
@@ -401,7 +403,6 @@
                   <label>Latitude</label>
                   <input  [(ngModel)]="analiseDetalhe.latitude" name="latitude" placeholder="Latitude" type="text">
                 </div>
-
                 <div class="column">
                   <label>Longitude</label>
                   <input  [(ngModel)]="analiseDetalhe.longitude" name="longitude" placeholder="Longitude" type="text">
@@ -858,7 +859,6 @@
     </div>
     <!-- FIM da Ação de solicitaão -->
     <!--<p *ngSwitchDefault>
-
       </p>-->
   </div>
 
@@ -866,6 +866,3 @@
     <button class="ui red button" (click)="closeModal(false)">Fechar</button>
   </div>
 </sui-modal>
-
-
-
