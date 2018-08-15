@@ -1,24 +1,23 @@
-import { ApiServicesData } from '../../api-services/api-services-data';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 
-import { SuiModalService } from 'ng2-semantic-ui';
-
 import { Observable } from 'rxjs/Observable';
 import { Subject } from 'rxjs/Subject';
 
+import { AuthenticationService } from '../../services';
 import { ContatoService } from '../../contato/contato.service';
 import { PontoPresenca } from '../ponto-presenca.model';
 import { PontoPresencaService } from '../ponto-presenca.service';
-import Swal from 'sweetalert2';
-
 import { ConfirmModal } from '../../modal/modal.component';
-
 import { ApiServicesMsg } from '../../api-services/api-services-msg';
-
+import { ApiServicesData } from '../../api-services/api-services-data';
 import { ApiServiceEstadoMunicipio } from '../../api-services/api-services-estado-municipio';
 import { PontoPresencaEndereco } from './ponto_presenca-endereco.model';
+
+import { SuiModalService } from 'ng2-semantic-ui';
+import Swal from 'sweetalert2';
+
 
 @Component({
   selector: 'app-ponto-presenca-add-edit',
@@ -29,16 +28,17 @@ export class PontoPresencaAddEditComponent implements OnInit {
   /*
   *   Variaveis do de manipulacão das informacões de tipologia
   */
-  tipologia: any;
-  resp: any;
-  removido: any;
-  tipologiaremovida: any;
-  tipologias: any;
-  tipologiasGuardadas: any;
+ tipologia: any;
+ resp: any;
+ removido: any;
+ tipologiaremovida: any;
+ tipologias: any;
+ tipologiasGuardadas: any;
 
-  /*
-   * Variáveis globais
-   */
+ /*
+ * Variáveis globais
+ */
+  admin = false;
   codGesac: any;
   codEndereco: any;
   ufs: any;
@@ -50,7 +50,6 @@ export class PontoPresencaAddEditComponent implements OnInit {
   instituicoesRespPag: any[] = [];
   params: any;
   mostrarBotao: boolean;
-  controleVericicacaoEnderecos = [];
 
   enderecos: any;
 
@@ -227,6 +226,11 @@ export class PontoPresencaAddEditComponent implements OnInit {
       .getEnderecoDetalhe(this.params.id)
       .subscribe(dados => {
         this.enderecosAntigos = dados;
+        if (this.enderecosAntigos.length === 0) {
+          this.mostrarBotao = true;
+        } else {
+          this.mostrarBotao = false;
+        }
       });
     }
   }
@@ -244,7 +248,7 @@ export class PontoPresencaAddEditComponent implements OnInit {
             this.resp = dados;
             this.contatoService.getContatos(this.params.id, 'ponto');
             this.secondActive = true;
-            this.mostrarBtn();
+            this.mostrarBotao = false;
           });
       } else {
         this.pontoPresencaService
@@ -254,7 +258,7 @@ export class PontoPresencaAddEditComponent implements OnInit {
             this.getPontoPrensencaId(dados);
             this.contatoService.getContatos(this.codGesac, 'ponto');
             this.secondActive = true;
-            this.mostrarBtn();
+            this.mostrarBotao = false;
           });
       }
     } else {
@@ -266,10 +270,21 @@ export class PontoPresencaAddEditComponent implements OnInit {
     }
   }
 
-  mostrarBtn() {
-    this.controleVericicacaoEnderecos.length !== 0
-      ? (this.mostrarBotao = true)
-      : (this.mostrarBotao = false);
+
+
+  removerEnderecos(enderecoAntigo, index) {
+    this.pontoPresencaService.deleteEnderecoPonto(enderecoAntigo.cod_endereco, this.params.id)
+      .subscribe(
+        res => {
+          this.enderecosAntigos.splice(index, 1);
+          this.apiServicesMsg.setMsg(
+            'success',
+            'Endereco removido com sucesso.',
+            3000
+          );
+        },
+        erro => Swal('Erro', `${erro.error}`, 'error')
+      );
   }
 
   /*
@@ -288,7 +303,7 @@ export class PontoPresencaAddEditComponent implements OnInit {
   }
 
   irTipologia() {
-    if (this.controleVericicacaoEnderecos.length !== 0) {
+    if (this.enderecosAntigos.length !== 0) {
       this.thirdActive = true;
     } else {
       this.modalService.open(
@@ -302,13 +317,28 @@ export class PontoPresencaAddEditComponent implements OnInit {
   }
 
   cancelAddEndereco() {
-    this.mostrarBotao = true;
+    this.mostrarBotao = !this.mostrarBotao;
   }
 
   adicionarnewEnd() {
-    this.mostrarBotao = false;
-    if (!!this.enderecos) {
-      this.enderecoPontPre = this.enderecos;
+    this.mostrarBotao =  !this.mostrarBotao;
+    if (this.enderecosAntigos.lenght !== 0) {
+      for (let i = 0; i < this.enderecosAntigos.length; i++) {
+        if (!this.enderecosAntigos[i].data_final) {
+
+          this.enderecoPontPre = {
+            cod_endereco: this.enderecosAntigos[i].cod_endereco,
+            endereco: this.enderecosAntigos[i].endereco,
+            numero: this.enderecosAntigos[i].numero,
+            bairro: this.enderecosAntigos[i].bairro,
+            complemento: this.enderecosAntigos[i].complemento,
+            cep: this.enderecosAntigos[i].cep,
+            area: this.enderecosAntigos[i].area,
+            latitude: null,
+            longitude: null
+          };
+        }
+      }
     } else {
       this.enderecoPontPre = {
         cod_endereco: '',
@@ -328,10 +358,9 @@ export class PontoPresencaAddEditComponent implements OnInit {
 */
   salvarEndereco(form) {
     // mostrar botão 'adicionar endereco' (quando clicado limpar os campos do endereco e setar variavel da clausula if)
-
     if (form.status !== 'INVALID') {
-      this.controleVericicacaoEnderecos.length !== 0
-        ? (form.value.cod_endereco = this.enderecos.cod_endereco + 1)
+      this.enderecosAntigos.length !== 0
+        ? (form.value.cod_endereco = this.enderecoPontPre.cod_endereco + 1)
         : (form.value.cod_endereco = 1);
 
       form.value.cod_gesac = this.codGesac;
@@ -341,7 +370,12 @@ export class PontoPresencaAddEditComponent implements OnInit {
       this.pontoPresencaService.postEndereco(form.value).subscribe(dados => {
         this.cancelAddEndereco();
         this.getEnderecosAntigos();
-        this.mostrarBotao = true;
+        this.mostrarBotao = !this.mostrarBotao;
+        this.apiServicesMsg.setMsg(
+          'success',
+          'Endereço cadastrado com sucesso.',
+          3000
+        );
       });
     } else {
       this.apiServicesMsg.setMsg(
@@ -358,10 +392,10 @@ export class PontoPresencaAddEditComponent implements OnInit {
   voltarEndereco() {
     if (this.codGesac) {
       this.router.navigate(['pontPre', this.codGesac]);
-      this.mostrarBotao = true;
+      this.mostrarBotao = false;
     } else if (this.params.id) {
       this.router.navigate(['pontPre', this.params.id]);
-      this.mostrarBotao = true;
+      this.mostrarBotao = false;
     } else {
       this.router.navigate(['pontPre/novo']);
     }
@@ -459,6 +493,9 @@ export class PontoPresencaAddEditComponent implements OnInit {
 * Métodos que serão executados quando o componente é iniciado
 */
   ngOnInit(): void {
+    if ( localStorage.getItem('currentUserCode') === '1' ) {
+      this.admin = true;
+    }
     this.route.params.subscribe(res => (this.params = res));
     this.getEnderecosAntigos();
 
