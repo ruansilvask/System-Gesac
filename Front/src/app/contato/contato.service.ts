@@ -114,6 +114,12 @@ export class ContatoService {
       .map(res => res);
   }
 
+  deletarPessoa(codPessoa) {
+    return this.http
+      .delete(`${GESAC_API}pessoa/${codPessoa}`)
+      .map(res => res);
+  }
+
   putTelefoneCadastrado(codTelefone, codPessoa, form) {
     return this.http
     .put(`${GESAC_API}telefone/${codTelefone}/${codPessoa}`, form)
