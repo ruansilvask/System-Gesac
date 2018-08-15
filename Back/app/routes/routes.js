@@ -32,9 +32,9 @@ module.exports = function(app){
 
     app.route('/gesac/pontoEndereco/:cod_gesac')
         .get(pontoPresenca.listaPontoEndereco);
-    
-    app.route('/gesac/pontoEnderecoAtual/:cod_gesac')
-        .get(pontoPresenca.listaPontoEnderecoAtual);
+
+    app.route('/gesac/pontoEndereco/:cod_endereco/:cod_gesac')
+        .delete(pontoPresenca.apagaEndereco);
         
     //Tipologia
     app.route('/gesac/pontoTipologia/:cod_gesac')
@@ -93,7 +93,7 @@ module.exports = function(app){
     app.route('/gesac/contato')
         .post(contato.salvaContato);
 
-    app.route('/gesac/contato/:nomePessoa')
+    app.route('/gesac/contato/:contato')
         .get(contato.listaContato);
 
     app.route('/gesac/contatoInfo/:cod_pessoa')
@@ -124,6 +124,9 @@ module.exports = function(app){
 
     app.route('/gesac/pessoa')
         .post(contato.salvaPessoa);
+    
+    app.route('/gesac/pessoa/:cod_pessoa')
+        .delete(contato.apagaPessoa);
 
 
 //*************** Rotas em instituicaoResponsavel ***************//
