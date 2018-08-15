@@ -33,6 +33,7 @@ export class ContatoComponent implements OnInit {
   trocarTelefone = false;
   editPessoasCadastradas = false;
   codContatoCadastrado: number;
+  nomePessoa: string;
 
   contatoInfo = {
     nome: '',
@@ -63,7 +64,7 @@ export class ContatoComponent implements OnInit {
   allArrays: any;
   todosContatos: any;
   totalItens = 0;
-  itensPagina = 20;
+  itensPagina = 10;
   pagina = 1;
 
   constructor(
@@ -78,6 +79,10 @@ export class ContatoComponent implements OnInit {
   */
   page(pagina) {
     this.contatos = this.allArrays[pagina - 1];
+  }
+
+  isAdmin() {
+    return (localStorage.getItem('currentUserCode') === '1') ? true : false;
   }
 
   funcaoPaginacao(array) {
@@ -579,12 +584,40 @@ export class ContatoComponent implements OnInit {
     });
   }
 
+  /*
+  * Metodo exclui a pessoa caso ela não possua telefones cadastrados ou
+  * esteja vinculada a ponto de presença, inst responsavel ou empresa
+  */
+  deletePessoa(contato) {
+    Swal({
+      title: 'Você tem certeza?',
+      text: `Você tem certeza que deseja excluir ${contato.nomePessoa}?`,
+      type: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sim, excluir!',
+      cancelButtonText: 'Não, manter',
+      reverseButtons: true
+    }).then(result => {
+      if (result.value) {
+        this.contatoService.deletarPessoa(contato.cod_pessoa)
+        .subscribe(
+          res => {
+            this.buscaPessoa(this.nomePessoa);
+            this.apiServicesMsg.setMsg('success', 'Pessoa excluída com sucesso.', 3000);
+        },
+          erro => Swal('Erro', `${erro.error}`, 'error')
+        );
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        this.apiServicesMsg.setMsg('error', 'Ação cancelada.', 3000);
+      }
+    });
+  }
+
   // Tabela dos contatos cadastrados no banco
 
   ngOnInit() {
     this.termosDaBusca
       .debounceTime(500) // aguarde por 500ms para emitir novos eventos
-      .distinctUntilChanged() // ignore se o próximo termo de busca for igual ao anterior
       .switchMap(
         term =>
           term
