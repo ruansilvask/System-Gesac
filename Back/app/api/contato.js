@@ -32,13 +32,13 @@ module.exports = function(app){
             });
     };
     
-    //Lista os Contatos com base em uma String (nome) digitada.
+    //Lista os Contatos com base em uma String (nome ou telefone) digitada.
     api.listaContato = (req, res) => {
         const connection = app.conexao.conexaoBD();
         const contatoDAO = new app.infra.ContatoDAO(connection);
-        const { nomePessoa } = req.params;
+        const { contato } = req.params;
 
-        contatoDAO.listarContato(nomePessoa, (erro, resultado) => {
+        contatoDAO.listarContato(contato, (erro, resultado) => {
             erro ? (console.log(erro), res.status(500).send(app.api.erroPadrao())) : res.status(200).json(resultado);
         });
 
@@ -228,6 +228,27 @@ module.exports = function(app){
                 res.status(500).send(app.api.erroPadrao());
             });
     };
+
+    //Apaga uma Pessoa.
+    api.apagaPessoa = (req, res) => {
+        const knex = app.conexao.conexaoBDKnex();
+        const { cod_pessoa } = req.params;
+
+        knex('pessoa').where('cod_pessoa', cod_pessoa).delete()
+            .then(resultado => {
+                knex.destroy();
+                res.status(200).end();
+            })
+            .catch(erro => {
+                console.log(erro);
+                knex.destroy();
+                if(erro.errno == 1451){
+                    res.status(500).send('Esta pessoa não pode ser apagada pois existem outras informações associadas a ela.');
+                } else {
+                    res.status(500).send(app.api.erroPadrao());
+                }
+            });
+    }
         
     return api;
 };

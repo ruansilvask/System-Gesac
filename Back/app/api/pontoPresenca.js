@@ -162,25 +162,25 @@ module.exports = function(app){
    };
 
    //Apaga um Endereco.
-//    api.apagaEndereco = (req, res) => {
-//     const knex = app.conexao.conexaoBDKnex();
-//     const { cod_endereco, cod_pid } = req.params;
+   api.apagaEndereco = (req, res) => {
+        const knex = app.conexao.conexaoBDKnex();
+        const { cod_endereco, cod_gesac } = req.params;
 
-//     knex('endereco').where('cod_endereco', cod_endereco).andWhere('cod_pid', cod_pid).delete()
-//         .then(resultado => {
-//             knex.destroy();
-//             res.status(200).end();
-//         })
-//         .catch(erro => {
-//             console.log(erro);
-//             knex.destroy();
-//             if(erro.errno == 1451){
-//                 res.status(500).send('Este endereco não pode ser apagado pois existem outras informações associadas a ele.');
-//             } else {
-//                 res.status(500).send(app.api.erroPadrao());
-//             }
-//         });
-// }   
+        knex.select('cod_pid').from('gesac').where('cod_gesac', cod_gesac)
+            .then(resultado => {
+                return knex('endereco').where('cod_endereco', cod_endereco).andWhere('cod_pid', resultado[0].cod_pid).delete()
+                    .then(resultado => {
+                        knex.destroy();
+                        res.status(200).end();
+                    })
+            })
+            .catch(erro => {
+                console.log(erro);
+                knex.destroy();
+                res.status(500).send(app.api.erroPadrao());
+            });
+            
+    }   
 
 
 //---------------Callbacks de Tipologia---------------//
