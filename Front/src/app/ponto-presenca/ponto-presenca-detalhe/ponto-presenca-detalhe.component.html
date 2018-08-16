@@ -497,6 +497,13 @@
           </div>
         </div>
         <div class="ui segment" content>
+          
+            <div class="three wide column">
+                <button class="ui labeled icon button" name="mselecoes" (click)="modalAddEditPPOpen()"  [routerLink]="['/pontPre', pontospresencas?.cod_gesac, 'detalhe', pontospresencas?.cod_gesac]" #mselecoes suiPopup popupHeader="Add/Edit"
+                  popupInverted="true">
+                  <i class="check circle icon"></i>Add/Edit Ponto de Presença</button>
+              </div>
+
           <form class="ui form" #formInteracao='ngForm' (ngSubmit)="submitInteracao(formInteracao)">
 
             <div class="ui grid">
@@ -538,6 +545,31 @@
           </div>
 
         </div>
+
+
+        
+    <!--Inicio do Modal Modal de add/edit Ponto de Presença -->
+    <sui-modal *ngIf="selcPP" [isClosable]="false" [transition]="'scale'" [transitionDuration]="500" #modal>
+      <div class="header">
+
+        <div class="ui grid">
+          <div class="fifteen wide column">
+            Filtro Avançado
+          </div>
+          <div class="one wide column">
+            <i class="close red link icon" (click)="closeModal()"></i>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="content">
+          <router-outlet></router-outlet>
+
+      </div>
+
+    </sui-modal>
+    <!--Fim do Modal de add/edit Ponto de Presença -->
 
       </sui-accordion-panel>
       <!---------------------- Fim Collapse de Interação     ------------------------------------>
