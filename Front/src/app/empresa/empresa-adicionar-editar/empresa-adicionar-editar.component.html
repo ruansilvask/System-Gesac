@@ -3,8 +3,8 @@
   <sui-tabset>
     <!-- Tabs Menu -->
     <div class="ui top attached tabular menu">
-      <a class="item" suiTabHeader="1" [(isActive)]="empresas">Empresa</a>
-      <a class="item" suiTabHeader="2" [(isActive)]="contatos">Contato</a>
+      <a class="item" [ngClass]="{'desativado': !params.id }" suiTabHeader="1" [(isActive)]="empresas">Empresa</a>
+      <a class="item" [ngClass]="{'desativado': !params.id }" suiTabHeader="2" [(isActive)]="contatos">Contato</a>
     </div>
     <!-- Fim Tabs Menu -->
 

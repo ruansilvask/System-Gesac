@@ -438,8 +438,7 @@ export class PontoPresencaDetalheComponent implements OnInit {
   }
 
 
-  onClick(value) {
-    console.log(value);
+  onClick(value, submit) {
     this.obrigatorio = !this.obrigatorio;
   }
 

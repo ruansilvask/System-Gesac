@@ -50,9 +50,9 @@ div.container.form{
     margin-top: 2%;
 }
 
-div.tabular.menu a.item{
+div.tabular.menu a.item.desativado{
+  cursor: none;
   pointer-events: none;
-  cursor: default;
 }
 
 a.ui.button,
