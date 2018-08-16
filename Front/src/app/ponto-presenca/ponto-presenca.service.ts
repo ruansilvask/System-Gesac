@@ -8,7 +8,6 @@ import { GESAC_API } from '../app.api';
 import { PontoPresenca } from './ponto-presenca.model';
 import { Contrato } from '../contrato/contrato.model';
 import { InstituicaoResp } from '../instituicao-responsavel/instituicao-responsavel.model';
-import { PontoPresencaEndereco } from './ponto-presenca-add-edit/ponto_presenca-endereco.model';
 
 @Injectable()
 export class PontoPresencaService {
@@ -53,7 +52,7 @@ export class PontoPresencaService {
   */
   getDetalhePontoPresenca(cod_gesac) {
     return this.http
-      .get<PontoPresenca[]>(`${GESAC_API}detPontoPresenca/${cod_gesac}`)
+      .get(`${GESAC_API}detPontoPresenca/${cod_gesac}`)
       .map(res => res);
   }
 

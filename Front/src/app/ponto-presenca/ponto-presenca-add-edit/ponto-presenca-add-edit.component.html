@@ -1,4 +1,5 @@
 <div class="ui container">
+
   <div class="ui  segment">
     <a class="ui ribbon label">
       <h4>{{pontoPresenca.cod_gesac}}, {{pontoPresenca.nome}}</h4>
@@ -145,14 +146,15 @@
 
 
             <div class="ui stackable two column grid">
-              <div class="column">
-                <button class="ui left labeled icon google plus button" type="button" (click)="backPP()">
-                  <i class="angle double left icon"></i>Cancelar</button>
-              </div>
-              <div class="column">
-                <button class="ui right labeled icon button right floated btn-color" type="submit">
-                  <i class="angle double right icon"></i> Próximo
-                </button>
+                <div class="column" >
+                  <button *ngIf="fecharmodal" class="ui left labeled icon google plus button" type="button"(click)="backPP()">
+                    <i class="angle double left icon"></i>Cancelar</button>
+                </div>
+                <div class="column">
+                    <button class="ui right labeled icon button right floated btn-color" type="submit">
+                        <i class="angle double right icon"></i> Próximo
+                      </button>
+                </div>
               </div>
             </div>
 

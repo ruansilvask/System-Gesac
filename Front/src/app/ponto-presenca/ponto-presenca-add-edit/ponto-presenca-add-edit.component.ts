@@ -13,7 +13,7 @@ import { ConfirmModal } from '../../modal/modal.component';
 import { ApiServicesMsg } from '../../api-services/api-services-msg';
 import { ApiServicesData } from '../../api-services/api-services-data';
 import { ApiServiceEstadoMunicipio } from '../../api-services/api-services-estado-municipio';
-import { PontoPresencaEndereco } from './ponto_presenca-endereco.model';
+import { Location } from '@angular/common';
 
 import { SuiModalService } from 'ng2-semantic-ui';
 import Swal from 'sweetalert2';
@@ -25,6 +25,8 @@ import Swal from 'sweetalert2';
   styleUrls: ['./ponto-presenca-add-edit.component.scss']
 })
 export class PontoPresencaAddEditComponent implements OnInit {
+  fecharmodal = true;
+  parametroIdentificador: any;
   /*
   *   Variaveis do de manipulacão das informacões de tipologia
   */
@@ -125,7 +127,8 @@ export class PontoPresencaAddEditComponent implements OnInit {
     private modalService: SuiModalService,
     private contatoService: ContatoService,
     private route: ActivatedRoute,
-    private apiServicesData: ApiServicesData
+    private apiServicesData: ApiServicesData,
+    private location: Location
   ) {
     this.firstActive = true;
     // this.thirdActive = true;
@@ -221,8 +224,9 @@ export class PontoPresencaAddEditComponent implements OnInit {
     *Método para trazer os endereços antigos
     */
   getEnderecosAntigos() {
-    if (this.params.id) {
+    if (this.parametroIdentificador) {
       this.pontoPresencaService
+
       .getEnderecoDetalhe(this.params.id)
       .subscribe(dados => {
         this.enderecosAntigos = dados;
@@ -240,13 +244,13 @@ export class PontoPresencaAddEditComponent implements OnInit {
 */
   salvarPontoPresenca(form) {
     if (form.status !== 'INVALID') {
-      if (this.params.id) {
+      if (this.parametroIdentificador) {
         form.value.cod_gesac = this.codGesac;
         this.pontoPresencaService
           .putPontoPresenca(this.pontoPresenca.cod_pid, form.value)
           .subscribe(dados => {
             this.resp = dados;
-            this.contatoService.getContatos(this.params.id, 'ponto');
+            this.contatoService.getContatos(this.parametroIdentificador, 'ponto');
             this.secondActive = true;
             this.mostrarBotao = false;
           });
@@ -291,14 +295,18 @@ export class PontoPresencaAddEditComponent implements OnInit {
 * Método para retornar para a aba de adicionar/editar Ponto de Presenca
 */
   voltarPontoPresenca() {
-    this.firstActive = true;
     if (this.params.id) {
       this.router.navigate(['pontPre', this.params.id]);
+      this.firstActive = true;
+    } else if (this.params.detalheappeditPP) {
+      this.firstActive = true;
     } else if (this.codGesac) {
       this.router.navigate(['pontPre', this.codGesac]);
       this.ngOnInit();
+      this.firstActive = true;
     } else {
       this.router.navigate(['pontPre/novo']);
+      this.firstActive = true;
     }
   }
 
@@ -390,13 +398,15 @@ export class PontoPresencaAddEditComponent implements OnInit {
 * Método para retornar para a aba de adicionar/editar endereco
 */
   voltarEndereco() {
-    if (this.codGesac) {
-      this.router.navigate(['pontPre', this.codGesac]);
-      this.mostrarBotao = false;
-    } else if (this.params.id) {
+     if (this.params.id) {
       this.router.navigate(['pontPre', this.params.id]);
-      this.mostrarBotao = false;
-    } else {
+      this.mostrarBotao = true;
+    } else if (this.params.detalheappeditPP) {
+      this.mostrarBotao = true;
+    } else  if (this.codGesac) {
+      this.router.navigate(['pontPre', this.codGesac]);
+      this.mostrarBotao = true;
+    }  else {
       this.router.navigate(['pontPre/novo']);
     }
   }
@@ -409,7 +419,7 @@ export class PontoPresencaAddEditComponent implements OnInit {
 * Métodos para salvara tipologia no banco
 */
   salvarTiplogia(form) {
-    if (this.params.id) {
+    if (this.parametroIdentificador) {
       this.tipologia = {
         cod_tipologia: this.tipologiaPontoPresenca.cod_tipologia,
         cod_pid: this.pontoPresenca.cod_pid
@@ -455,7 +465,7 @@ export class PontoPresencaAddEditComponent implements OnInit {
       title: 'Você tem certeza?',
       html: `Tem certeza que deseja remover a tiplogia <i>${
         tipologia.nome
-      }</i>?`,
+        }</i>?`,
       type: 'question',
       showCancelButton: true,
       confirmButtonText: 'Sim, remover!',
@@ -486,7 +496,7 @@ export class PontoPresencaAddEditComponent implements OnInit {
   }
 
   backPP() {
-    this.router.navigate(['/pontPre']);
+      this.router.navigate(['/pontPre']);
   }
 
   /*
@@ -497,7 +507,7 @@ export class PontoPresencaAddEditComponent implements OnInit {
       this.admin = true;
     }
     this.route.params.subscribe(res => (this.params = res));
-    this.getEnderecosAntigos();
+
 
     setTimeout(() => {
       this.ufs = this.apiServiceEstadoMunicipio.getEstados();
@@ -512,9 +522,16 @@ export class PontoPresencaAddEditComponent implements OnInit {
   * Condicão para que caso exista parâmetro na rota será carregado os dados da empresa cadastrada
   */
       if (this.params.id) {
-        this.codGesac = this.params.id;
+        this.parametroIdentificador = this.params.id;
+      } else if (this.params.detalheappeditPP) {
+        this.fecharmodal = false;
+        this.parametroIdentificador = this.params.detalheappeditPP;
+      }
+
+      if (this.parametroIdentificador) {
+        this.codGesac = this.parametroIdentificador;
         this.pontoPresencaService
-          .getPontoPresencaPorId(this.params.id)
+          .getPontoPresencaPorId(this.parametroIdentificador)
           .subscribe(dados => {
             this.municipios = this.apiServiceEstadoMunicipio.getMunicipios(
               dados[0].uf
@@ -526,7 +543,8 @@ export class PontoPresencaAddEditComponent implements OnInit {
               this.tipologiaIdPontoPr();
             }, 200);
           });
-      }
+          this.getEnderecosAntigos();
+        }
     }, 200);
   }
 }

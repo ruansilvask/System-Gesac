@@ -19,6 +19,7 @@ import Swal from 'sweetalert2';
 })
 
 export class PontoPresencaDetalheComponent implements OnInit {
+  public selcPP: boolean;
   codGesac: any;
   empresas: Object;
   pontoHistorico: any;
@@ -304,6 +305,7 @@ export class PontoPresencaDetalheComponent implements OnInit {
  */
   closeModal() {
     this.abrirNodal = false;
+    this.selcPP = false;
   }
 
 
@@ -318,8 +320,14 @@ export class PontoPresencaDetalheComponent implements OnInit {
     } else {
       this.FecharCollapseAnalise = false;
     }
-
   }
+
+   /*
+  * Métodos abrir o modal de add/edit ponto de presença
+  */
+ modalAddEditPPOpen() {
+  this.selcPP = true;
+}
 
   /*
  * Métodos para abrir o modal e selecionar o template de interação ou analise ou solicitação
