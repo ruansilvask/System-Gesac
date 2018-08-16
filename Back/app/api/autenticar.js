@@ -18,8 +18,9 @@ module.exports = function(app){
                             var token = jwt.sign({login: resultado[0].login}, app.get('secret'), { expiresIn: 43200 }); //28800s = 8H
                             res.set({'x-access-token': token});
                             
-                            cod_usuario_cript = passwordHash.generate(resultado[0].cod_usuario.toString());
+                            cod_usuario_cript = passwordHash.generate(resultado[0].cod_usuario.toString(), {saltLength: 200});
 
+                            console.log("O usuário " + resultado[0].nome + "logou");
                             res.status(200).json({token, 'cod_usuario': resultado[0].cod_usuario, 'nome': resultado[0].nome, cod_usuario_cript});
 
                         } else { res.status(401).send('Senha incorreta'); }
