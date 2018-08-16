@@ -8,11 +8,11 @@
     <sui-tabset>
       <div class="ui top attached tabular menu" style="text-align:center ">
         <!-- [(isActive)]="active[i]" -->
-        <a class="item" suiTabHeader="1" [(isActive)]="instResp">Instituição
+        <a class="item"  [ngClass]="{'desativado': !params.id }" suiTabHeader="1" [(isActive)]="instResp">Instituição
           <br>Responsável</a>
 
-        <a class="item" suiTabHeader="2" [(isActive)]="contatos">Contatos</a>
-        <a class="item" suiTabHeader="3" [(isActive)]="respLegal">Representante
+        <a class="item"  [ngClass]="{'desativado': !params.id }" suiTabHeader="2" [(isActive)]="contatos">Contatos</a>
+        <a class="item"  [ngClass]="{'desativado': !params.id }" suiTabHeader="3" [(isActive)]="respLegal">Representante
           <br>Legal</a>
 
       </div>
