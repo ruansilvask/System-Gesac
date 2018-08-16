@@ -16,8 +16,8 @@
                 <tr>
                   <th>Identificador</th>
                   <th>Name</th>
-                  <th>Empresa/Instituição/PID</th>
-                  <th class="right aligned">Selecionar</th>
+                  <th>Telefones</th>
+                  <th class="centered aligned">Selecionar</th>
                 </tr>
               </thead>
               <tbody>
@@ -27,15 +27,25 @@
                 <tr *ngFor="let contato of contatos; index as i">
                   <td [innerHTML]="contato.cod_pessoa"></td>
                   <td [innerHTML]="contato.nomePessoa"></td>
-                  <td [innerHTML]="contato.entidade"></td>
-                  <td class="right aligned">
-                    <div class="field">
-                        <input type="radio" name="radiogroup"
-                        [value]="contato"
-                        (click)="infoContato(contato)"
-                        [disabled]="desabilitarCampos">
-                    </div>
-                  </td>
+                  <td [innerHTML]="contato.telefones || 'Não possui'"></td>
+                  <td>
+                    <div class="ui stackable two column grid">
+                        <div class="column">
+                          <a *ngIf="isAdmin()" class="mini ui icon button circular" suiPopup popupHeader="Remover" popupInverted="true" (click)="deletePessoa(contato)">
+                              <i class="trash alternate icon"></i>
+                          </a>
+                        </div>
+                        <div class="column">
+                          <input
+                          class="radioButton"
+                          type="radio"
+                          name="radiogroup"
+                          [value]="contato"
+                          (click)="infoContato(contato)"
+                          [disabled]="desabilitarCampos">
+                        </div>
+                      </div>
+                    </td>
                 </tr>
               </tbody>
               <tfoot *ngIf="contatos">
@@ -63,7 +73,7 @@
             <div class="twelve wide column">
                 <div class="field">
                   <label>Nome da Pessoa</label>
-                  <input type="text" name="nome" ngModel (ngModelChange)="buscaPessoa($event)" placeholder="Digite o nome da Pessoa"
+                  <input type="text" name="nome" [(ngModel)]="nomePessoa" (ngModelChange)="buscaPessoa($event)" placeholder="Digite o nome da Pessoa"
                     [disabled]="desabilitarCampos" autocomplete="off" required>
                 </div>
             </div>

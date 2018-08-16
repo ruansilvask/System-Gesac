@@ -92,6 +92,7 @@ export class PontoPresencaService {
   * Protocolo HTTP do Endereco para salvar no banco
   */
   postEndereco(form) {
+    console.log(form);
     return this.http
       .post<PontoPresenca>(`${GESAC_API}pontoEndereco`, form)
       .map(res => res);
@@ -104,6 +105,16 @@ export class PontoPresencaService {
     return this.http
       .put(`${GESAC_API}pontoEndereco/${id}/${codEnd}`, form)
       .map(res => res);
+  }
+
+  /*
+* Protocolo HTTP do Endereco para remover endereço no banco
+*/
+
+  deleteEnderecoPonto(cod_endereco, gesac) {
+    return this.http
+    .delete(`${GESAC_API}pontoEndereco/${cod_endereco}/${gesac}`)
+    .map(res => res);
   }
 
   /*
@@ -284,10 +295,16 @@ export class PontoPresencaService {
       .map(res => res);
   }
 
+/*
+    * Protocolo HTTP retornar os historico da analise
+    */
 
   getHistoricoAnalise(cod_analise) {
     return this.http
       .get(`${GESAC_API}pontoAnalise/${cod_analise}`)
       .map(res => res);
   }
+
+
+
 }
