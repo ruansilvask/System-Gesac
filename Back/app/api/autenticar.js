@@ -20,7 +20,7 @@ module.exports = function(app){
                             
                             cod_usuario_cript = passwordHash.generate(resultado[0].cod_usuario.toString(), {saltLength: 200});
 
-                            console.log("O usuário " + resultado[0].nome + "logou");
+                            console.log(`O usuário ${resultado[0].nome} acabou de logar.`);
                             res.status(200).json({token, 'cod_usuario': resultado[0].cod_usuario, 'nome': resultado[0].nome, cod_usuario_cript});
 
                         } else { res.status(401).send('Senha incorreta'); }
@@ -36,6 +36,23 @@ module.exports = function(app){
                 res.status(500).send(app.api.erroPadrao());
             });
     };
+
+    //Exibe o nome do usuário que deslogou.
+    api.desloga = (req, res) => {
+        const knex = app.conexao.conexaoBDKnex();
+        const cod_usuario = req.body.cod_usuario;
+
+        knex.select('nome').from('usuario').where('cod_usuario', cod_usuario)
+            .then(resultado => {
+                console.log(`O usuário ${resultado[0].nome} acabou de deslogar.`);
+                res.status(200).end();
+            })
+            .catch(erro => {
+                console.log(erro);
+                knex.destroy();
+                res.status(500).send(app.api.erroPadrao());
+            });
+    }
 
     //Verifica o Token de acesso do Usuário.
     api.verificaToken = (req, res, next) => {
