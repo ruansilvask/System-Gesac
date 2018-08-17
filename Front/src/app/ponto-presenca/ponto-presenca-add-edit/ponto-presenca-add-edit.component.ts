@@ -277,7 +277,7 @@ export class PontoPresencaAddEditComponent implements OnInit {
 
 
   removerEnderecos(enderecoAntigo, index) {
-    this.pontoPresencaService.deleteEnderecoPonto(enderecoAntigo.cod_endereco, this.params.id)
+    this.pontoPresencaService.deleteEnderecoPonto(enderecoAntigo.cod_endereco, this.parametroIdentificador)
       .subscribe(
         res => {
           this.enderecosAntigos.splice(index, 1);

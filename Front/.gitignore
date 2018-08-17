@@ -8,12 +8,13 @@
 
 # dependencies
 /node_modules
-assets
+assets/
 conexao/
 services/
 
 # Arquivos para ignorar
 app.api.ts
+styles.scss
 
 # IDEs and editors
 /.idea
