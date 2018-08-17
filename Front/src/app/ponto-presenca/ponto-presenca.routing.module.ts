@@ -8,7 +8,11 @@ import { PontoPresencaDetalheComponent } from './ponto-presenca-detalhe/ponto-pr
 const PontoPresencaRoutes = [
     { path: '', component: PontoPresencaComponent },
     { path: 'novo', component: PontoPresencaAddEditComponent },
-    { path: ':id/detalhe', component: PontoPresencaDetalheComponent },
+    {
+        path: ':id/detalhe', component: PontoPresencaDetalheComponent,
+        children: [
+            { path: ':detalheappeditPP', component: PontoPresencaAddEditComponent }]
+    },
     { path: ':id', component: PontoPresencaAddEditComponent }
 
 ];

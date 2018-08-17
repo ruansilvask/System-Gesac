@@ -19,6 +19,7 @@ import Swal from 'sweetalert2';
 })
 
 export class PontoPresencaDetalheComponent implements OnInit {
+  public selcPP: boolean;
   codGesac: any;
   empresas: Object;
   pontoHistorico: any;
@@ -266,7 +267,6 @@ export class PontoPresencaDetalheComponent implements OnInit {
       .getPontoHistorico(this.params.id)
       .subscribe(res => {
         this.pontoHistorico = res;
-  
         // delete  this.pontoHistorico[0].data;
         // delete  this.pontoHistorico[0].cod_analise;
         // delete  this.pontoHistorico[0].tipo_solicitacao;
@@ -305,6 +305,7 @@ export class PontoPresencaDetalheComponent implements OnInit {
  */
   closeModal() {
     this.abrirNodal = false;
+    this.selcPP = false;
   }
 
 
@@ -319,8 +320,14 @@ export class PontoPresencaDetalheComponent implements OnInit {
     } else {
       this.FecharCollapseAnalise = false;
     }
-
   }
+
+   /*
+  * Métodos abrir o modal de add/edit ponto de presença
+  */
+ modalAddEditPPOpen() {
+  this.selcPP = true;
+}
 
   /*
  * Métodos para abrir o modal e selecionar o template de interação ou analise ou solicitação
@@ -390,46 +397,48 @@ export class PontoPresencaDetalheComponent implements OnInit {
   }
 
   salvarAnalise(analise) {
-    analise.value.data_oficio = this.apiServicesData.formatData(
-      analise.value.data_oficio
-    );
-    analise.value.data_instalacao = this.apiServicesData.formatData(
-      analise.value.data_instalacao
-    );
-
-    analise.value.cod_gesac = this.params.id;
-    analise.value.cnpj_empresa = this.analiseDetalhe.cnpj_empresa;
+    console.log(analise._directives[21]);
 
 
-    if (this.condicaoAnalise) {
+    // analise.value.data_oficio = this.apiServicesData.formatData(
+    //   analise.value.data_oficio
+    // );
+    // analise.value.data_instalacao = this.apiServicesData.formatData(
+    //   analise.value.data_instalacao
+    // );
 
-      if (this.justificativa) {
-        analise.value.tipo_solicitacao = this.btnsAnalise.tipo_solicitacao[1];
-        analise.value.justificativa = this.analiseDetalhe.justificativa;
-        analise.value.aceite = false;
+    // analise.value.cod_gesac = this.params.id;
+    // analise.value.cnpj_empresa = this.analiseDetalhe.cnpj_empresa;
 
-          if (!!analise.value.justificativa) {
 
-            this.putAnalise(analise, this.analiseDetalhe.cod_analise);
-           if ( this.errorJustificativa = true) {
-            this.errorJustificativa = false;
-           }
-          } else {
-            this.errorJustificativa = true;
-          }
-      } else {
-        analise.value.tipo_solicitacao = this.btnsAnalise.tipo_solicitacao[0];
-        analise.value.justificativa = null;
-        analise.value.aceite = true;
-        this.putAnalise(analise, this.analiseDetalhe.cod_analise);
-      }
-    }
+    // if (this.condicaoAnalise) {
+
+    //   if (this.justificativa) {
+    //     analise.value.tipo_solicitacao = this.btnsAnalise.tipo_solicitacao[1];
+    //     analise.value.justificativa = this.analiseDetalhe.justificativa;
+    //     analise.value.aceite = false;
+
+    //       if (!!analise.value.justificativa) {
+
+    //         this.putAnalise(analise, this.analiseDetalhe.cod_analise);
+    //        if ( this.errorJustificativa = true) {
+    //         this.errorJustificativa = false;
+    //        }
+    //       } else {
+    //         this.errorJustificativa = true;
+    //       }
+    //   } else {
+    //     analise.value.tipo_solicitacao = this.btnsAnalise.tipo_solicitacao[0];
+    //     analise.value.justificativa = null;
+    //     analise.value.aceite = true;
+    //     this.putAnalise(analise, this.analiseDetalhe.cod_analise);
+    //   }
+    // }
 
   }
 
 
-  onClick(value) {
-    console.log(value);
+  onClick(value, submit) {
     this.obrigatorio = !this.obrigatorio;
   }
 

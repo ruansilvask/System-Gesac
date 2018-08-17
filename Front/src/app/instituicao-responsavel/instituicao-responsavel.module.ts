@@ -7,7 +7,6 @@ import { InstRespService } from './instituicao-responsavel.service';
 import { InstRespRoutingModule } from './instituicao.responsavel.routing.module';
 import { InstituicaoResponsavelDetalheComponent } from './instituicao-responsavel-detalhe/instituicao-responsavel-detalhe.component';
 import { ContatoModule } from '../contato/contato.module';
-import { FilterRepresentantePipe } from './filter-representantes.pipe';
 
 @NgModule({
     imports: [
@@ -18,8 +17,8 @@ import { FilterRepresentantePipe } from './filter-representantes.pipe';
     declarations: [
         InstRespComponent,
         InstRespAddEditComponent,
-        InstituicaoResponsavelDetalheComponent,
-        FilterRepresentantePipe
+        InstituicaoResponsavelDetalheComponent
+
     ],
     exports: [
         InstRespComponent
@@ -28,8 +27,7 @@ import { FilterRepresentantePipe } from './filter-representantes.pipe';
         InstRespComponent
     ],
     providers: [
-        InstRespService,
-        FilterRepresentantePipe
+        InstRespService
         ]
 })
 

@@ -89,11 +89,13 @@ module.exports = function(app){
     api.salvaPontoEndereco = (req, res) => {
         const knex = app.conexao.conexaoBDKnex();
         const endereco = req.body;
-        const { cod_endereco , cod_gesac } = req.body;
+
+        const { cod_endereco, cod_gesac } = req.body;
 
         knex.select('cod_pid').from('gesac').where('cod_gesac', cod_gesac)
             .then(resultado => {
                 const cod_pid = resultado[0].cod_pid;
+                
                 endereco.cod_pid = cod_pid;
                 delete endereco.cod_gesac;
 
@@ -110,7 +112,6 @@ module.exports = function(app){
                         // });
                 } else {
                     let data_final = req.body.data_inicio;
-                    console.log(data_final, cod_endereco, cod_pid);
                     
                     knex('endereco').insert(endereco)
                         .then(resultado => {
@@ -126,14 +127,12 @@ module.exports = function(app){
                         //     res.status(500).send(app.api.erroPadrao());
                         // });
                 }
-
             })
             .catch(erro => {
                 console.log(erro);
                 knex.destroy();
                 res.status(500).send(app.api.erroPadrao());
             });
-
     };
     
     //Lista as informações de todos os Endereço de um Ponto de Presença.
@@ -162,6 +161,27 @@ module.exports = function(app){
         connection.end();
    };
 
+   //Apaga um Endereco.
+   api.apagaEndereco = (req, res) => {
+        const knex = app.conexao.conexaoBDKnex();
+        const { cod_endereco, cod_gesac } = req.params;
+
+        knex.select('cod_pid').from('gesac').where('cod_gesac', cod_gesac)
+            .then(resultado => {
+                return knex('endereco').where('cod_endereco', cod_endereco).andWhere('cod_pid', resultado[0].cod_pid).delete()
+                    .then(resultado => {
+                        knex.destroy();
+                        res.status(200).end();
+                    })
+            })
+            .catch(erro => {
+                console.log(erro);
+                knex.destroy();
+                res.status(500).send(app.api.erroPadrao());
+            });
+            
+    }   
+
 
 //---------------Callbacks de Tipologia---------------//
     //Lista as Tipologias de um Pontos de Presença.
@@ -181,7 +201,6 @@ module.exports = function(app){
     api.salvaPontoTipologia = (req, res) => {
         const knex = app.conexao.conexaoBDKnex();
         const pontoTipologia = req.body;
-        console.log(pontoTipologia);
         
         knex('pid_tipologia').insert(pontoTipologia)
             .then(resultado => {

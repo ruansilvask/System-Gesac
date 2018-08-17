@@ -33,6 +33,7 @@ export class ContatoComponent implements OnInit {
   trocarTelefone = false;
   editPessoasCadastradas = false;
   codContatoCadastrado: number;
+  nomePessoa: string;
 
   contatoInfo = {
     nome: '',
@@ -63,7 +64,7 @@ export class ContatoComponent implements OnInit {
   allArrays: any;
   todosContatos: any;
   totalItens = 0;
-  itensPagina = 20;
+  itensPagina = 10;
   pagina = 1;
 
   constructor(
@@ -78,6 +79,10 @@ export class ContatoComponent implements OnInit {
   */
   page(pagina) {
     this.contatos = this.allArrays[pagina - 1];
+  }
+
+  isAdmin() {
+    return (localStorage.getItem('currentUserCode') === '1') ? true : false;
   }
 
   funcaoPaginacao(array) {
@@ -101,12 +106,7 @@ export class ContatoComponent implements OnInit {
   }
 
   postContatoEmpresa(form) {
-    this.formulario = {
-      cod_pessoa: this.dadosPessoa.cod_pessoa,
-      cnpj_empresa: this.codContato,
-      cargo: form.cargo,
-      obs: form.obs
-    };
+    this.formulario = this.formatPost(this.local, this.dadosPessoa, this.codContato, form);
     this.postContatos(this.formulario);
   }
 
@@ -119,12 +119,7 @@ export class ContatoComponent implements OnInit {
   }
 
   postContatoPonto(form) {
-    this.formulario = {
-      cod_pessoa: this.dadosPessoa.cod_pessoa,
-      cod_gesac: this.codContato,
-      cargo: form.cargo,
-      obs: form.obs
-    };
+    this.formulario = this.formatPost(this.local, this.dadosPessoa, this.codContato, form);
     this.postContatos(this.formulario);
   }
 
@@ -137,13 +132,40 @@ export class ContatoComponent implements OnInit {
   }
 
   postContatoInstituicao(form) {
-    this.formulario = {
-      cod_pessoa: this.dadosPessoa.cod_pessoa,
-      cod_instituicao: this.codContato,
-      cargo: form.cargo,
-      obs: form.obs
-    };
+    this.formulario = this.formatPost(this.local, this.dadosPessoa, this.codContato, form);
     this.postContatos(this.formulario);
+  }
+
+  formatPost(type, codPessoa, codContato, form) {
+    switch (type) {
+      case 'instituicao':
+      return {
+        cod_pessoa: codPessoa.cod_pessoa,
+        cod_instituicao: codContato,
+        nome: form.nome,
+        cargo: form.cargo,
+        obs: form.obs
+      };
+      break;
+      case 'ponto' :
+      return {
+        cod_pessoa: codPessoa.cod_pessoa,
+        cod_gesac: codContato,
+        nome: form.nome,
+        cargo: form.cargo,
+        obs: form.obs
+      };
+      break;
+      case 'empresa' :
+      return {
+        cod_pessoa: codPessoa.cod_pessoa,
+        cnpj_empresa: codContato,
+        nome: form.nome,
+        cargo: form.cargo,
+        obs: form.obs
+      };
+      break;
+    }
   }
 
   // post de contatos
@@ -275,110 +297,61 @@ export class ContatoComponent implements OnInit {
   }
 
   infoContato(contato: any) {
-    console.log(contato.nomePessoa)
     if (this.desabilitarCampos === false) {
       if (this.existeContato(contato.cod_pessoa)) {
-        Swal({
-          title: 'Você tem certeza?',
-          text: `Você tem certeza que deseja editar o contato ${
-            contato.nomePessoa
-          }?`,
-          type: 'question',
-          showCancelButton: true,
-          confirmButtonText: 'Sim, editar!',
-          cancelButtonText: 'Não, cancelar',
-          reverseButtons: true
-        }).then(result => {
-          if (result.value) {
-            for (let i = 0; i < this.contatosCadastrados.length; i++) {
-              if (
-                contato.cod_pessoa === this.contatosCadastrados[i].cod_pessoa
-              ) {
-                this.contatoService
-                  .getInfContato(this.contatosCadastrados[i].cod_contato)
-                  .subscribe(
-                    (res: any) => {
-                      console.log(res);
-                      this.contatoInfo = {
-                        nome: res.nome,
-                        cargo: res.cargo,
-                        obs: res.obs
-                      };
-                    },
-                    erro => Swal('Erro', `${erro.error}`, 'error')
-                  );
-                break;
-              }
-            }
-            this.desabilitarCampos = true;
-            this.dadosPessoa = {
-              cod_pessoa: contato.cod_pessoa,
-              nome: contato.nomePessoa
-            };
-            this.getContatos(contato.cod_pessoa);
-          } else if (result.dismiss === Swal.DismissReason.cancel) {
-            this.apiServicesMsg.setMsg('error', 'Ação cancelada.', 3000);
+        for (let i = 0; i < this.contatosCadastrados.length; i++) {
+          if (
+            contato.cod_pessoa === this.contatosCadastrados[i].cod_pessoa
+          ) {
+            this.contatoService
+              .getInfContato(this.contatosCadastrados[i].cod_contato)
+              .subscribe(
+                (res: any) => {
+                  this.contatoInfo = {
+                    nome: res.nome,
+                    cargo: res.cargo,
+                    obs: res.obs
+                  };
+                },
+                erro => Swal('Erro', `${erro.error}`, 'error')
+              );
+            break;
           }
-        });
+        }
+        this.desabilitarCampos = true;
+        this.dadosPessoa = {
+          cod_pessoa: contato.cod_pessoa,
+          nome: contato.nomePessoa
+        };
+        this.getContatos(contato.cod_pessoa);
       } else {
-        Swal({
-          title: 'Você tem certeza?',
-          text: `Você tem certeza que deseja adicionar o contato ${
-            contato.nomePessoa
-          }?`,
-          type: 'question',
-          showCancelButton: true,
-          confirmButtonText: 'Sim, adicionar!',
-          cancelButtonText: 'Não, cancelar',
-          reverseButtons: true
-        }).then(result => {
-          if (result.value) {
-            this.contatoInfo = { nome: contato.nomePessoa, cargo: '', obs: '' };
-            this.desabilitarCampos = true;
-            this.dadosPessoa = {
-              cod_pessoa: contato.cod_pessoa,
-              nome: contato.nomePessoa
-            };
-            this.getContatos(contato.cod_pessoa);
-          } else if (result.dismiss === Swal.DismissReason.cancel) {
-            this.apiServicesMsg.setMsg('error', 'Ação cancelada.', 3000);
-          }
-        });
-      }
+        this.contatoInfo = { nome: contato.nomePessoa, cargo: '', obs: '' };
+        this.desabilitarCampos = true;
+        this.dadosPessoa = {
+          cod_pessoa: contato.cod_pessoa,
+          nome: contato.nomePessoa
+        };
+        this.getContatos(contato.cod_pessoa);
     }
   }
+}
 
   enviarNome(nome) {
-    console.log(nome);
-    Swal({
-      title: 'Você tem certeza?',
-      text: `Você tem certeza que deseja cadastrar ${nome}?`,
-      type: 'question',
-      showCancelButton: true,
-      confirmButtonText: 'Sim, cadastrar!',
-      cancelButtonText: 'Não, cancelar',
-      reverseButtons: true
-    }).then(result => {
-      if (result.value) {
-        this.contatoService.postContatoPessoa(nome).subscribe(
-          cod_pessoa => {
-            this.contatoInfo.nome = nome;
-            this.dadosPessoa = { cod_pessoa, nome };
-            this.desabilitarCampos = true;
-            this.aparecerInfContato = true;
-            this.contatoInfo = { nome: nome, cargo: '', obs: '' };
-            this.apiServicesMsg.setMsg(
-              'success',
-              'Pessoa cadastrada com sucesso.',
-              3000
-            );
-          },
-          erro => Swal('Erro', `${erro.error}`, 'error')
+    this.contatoService.postContatoPessoa(nome).subscribe(
+      cod_pessoa => {
+        this.contatoInfo.nome = nome;
+        this.dadosPessoa = { cod_pessoa, nome };
+        this.desabilitarCampos = true;
+        this.aparecerInfContato = true;
+        this.contatoInfo = { nome: nome, cargo: '', obs: '' };
+        this.apiServicesMsg.setMsg(
+          'success',
+          'Pessoa cadastrada com sucesso.',
+          3000
         );
-      } else if (result.dismiss === Swal.DismissReason.cancel) {
-        this.apiServicesMsg.setMsg('error', 'Ação cancelada.', 3000);
-      }
-    });
+      },
+      erro => Swal('Erro', `${erro.error}`, 'error')
+    );
   }
 
   // Informacaoes do contato
@@ -419,7 +392,7 @@ export class ContatoComponent implements OnInit {
   }
 
   salvarContato(form) {
-    delete form.value.nome;
+    console.log(form.value);
     if (!this.existeContato(this.dadosPessoa.cod_pessoa)) {
       Swal({
         title: 'Você tem certeza?',
@@ -450,6 +423,7 @@ export class ContatoComponent implements OnInit {
         reverseButtons: true
       }).then(result => {
         if (result.value) {
+          form.value.cod_pessoa = this.dadosPessoa.cod_pessoa;
           this.contatoService
             .putContatoCadastrado(this.codContatoCadastrado, form.value)
             .subscribe(
@@ -610,12 +584,40 @@ export class ContatoComponent implements OnInit {
     });
   }
 
+  /*
+  * Metodo exclui a pessoa caso ela não possua telefones cadastrados ou
+  * esteja vinculada a ponto de presença, inst responsavel ou empresa
+  */
+  deletePessoa(contato) {
+    Swal({
+      title: 'Você tem certeza?',
+      text: `Você tem certeza que deseja excluir ${contato.nomePessoa}?`,
+      type: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sim, excluir!',
+      cancelButtonText: 'Não, manter',
+      reverseButtons: true
+    }).then(result => {
+      if (result.value) {
+        this.contatoService.deletarPessoa(contato.cod_pessoa)
+        .subscribe(
+          res => {
+            this.buscaPessoa(this.nomePessoa);
+            this.apiServicesMsg.setMsg('success', 'Pessoa excluída com sucesso.', 3000);
+        },
+          erro => Swal('Erro', `${erro.error}`, 'error')
+        );
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        this.apiServicesMsg.setMsg('error', 'Ação cancelada.', 3000);
+      }
+    });
+  }
+
   // Tabela dos contatos cadastrados no banco
 
   ngOnInit() {
     this.termosDaBusca
       .debounceTime(500) // aguarde por 500ms para emitir novos eventos
-      .distinctUntilChanged() // ignore se o próximo termo de busca for igual ao anterior
       .switchMap(
         term =>
           term

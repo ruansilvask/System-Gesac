@@ -84,7 +84,7 @@ PontoPresencaDAO.prototype.ListarInteracaoId = function(data, cod_gesac, callbac
 //---------------Querys de Histórico---------------//
 //Lista os dados do Histórico do Pontos de Presença
 PontoPresencaDAO.prototype.listarHistoricoPontoPresenca = function(cod_gesac, callback){
-	this._connection.query(`SELECT * FROM ((SELECT "solicitação" AS acao, solicitacao.data_sistema AS data, solicitacao.tipo_solicitacao, NULL AS cod_analise FROM solicitacao WHERE solicitacao.cod_gesac = ${cod_gesac}) UNION ALL (SELECT "interação", interacao.data, NULL, NULL FROM interacao WHERE interacao.cod_gesac = ${cod_gesac}) UNION ALL (SELECT "analise", analise.data_analise, NULL, analise.cod_analise FROM analise WHERE analise.cod_gesac = ${cod_gesac})) AS tab ORDER BY tab.data DESC`, callback);
+	this._connection.query(`SELECT * FROM ((SELECT "solicitação" AS acao, solicitacao.data_sistema AS data, solicitacao.tipo_solicitacao, NULL AS cod_analise FROM solicitacao WHERE solicitacao.cod_gesac = ${cod_gesac}) UNION ALL (SELECT "interação", interacao.data, NULL, NULL FROM interacao WHERE interacao.cod_gesac = ${cod_gesac}) UNION ALL (SELECT "análise", analise.data_analise, NULL, analise.cod_analise FROM analise WHERE analise.cod_gesac = ${cod_gesac})) AS tab ORDER BY tab.data DESC`, callback);
 }
 
 

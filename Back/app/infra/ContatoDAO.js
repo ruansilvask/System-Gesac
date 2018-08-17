@@ -2,9 +2,9 @@ function ContatoDAO(connection){
 	this._connection = connection;
 }
 
-//Lista os Contatos com base em uma String (nome) digitada.
-ContatoDAO.prototype.listarContato = function(nomePessoa, callback){
-	this._connection.query(`SELECT pessoa.cod_pessoa, pessoa.nome AS "nomePessoa", CONCAT(IFNULL(empresa.empresa, ''), IFNULL(instituicao_resp.nome, ''), IFNULL(pid.nome, '')) AS entidade FROM pessoa LEFT JOIN contato ON pessoa.cod_pessoa = contato.cod_pessoa LEFT JOIN empresa ON contato.cnpj_empresa = empresa.cnpj_empresa LEFT JOIN instituicao_resp ON contato.cod_instituicao = instituicao_resp.cod_instituicao LEFT JOIN gesac ON contato.cod_gesac = gesac.cod_gesac LEFT JOIN pid ON gesac.cod_pid = pid.cod_pid WHERE pessoa.nome LIKE '%${nomePessoa}%'`, callback);
+//Lista os Contatos com base em uma String (nome ou telefone) digitada.
+ContatoDAO.prototype.listarContato = function(contato, callback){
+	this._connection.query(`SELECT pessoa.cod_pessoa, pessoa.nome AS nomePessoa, GROUP_CONCAT(telefone.fone SEPARATOR ' / ') AS telefones FROM pessoa LEFT JOIN telefone ON pessoa.cod_pessoa = telefone.cod_pessoa WHERE pessoa.nome LIKE '%${contato}%' OR telefone.fone LIKE '%${contato}%' GROUP BY cod_pessoa`, callback);
 }
 
 //Lista as informações de uma Pessoa e seus Telefones.

@@ -20,6 +20,7 @@ export class AuthenticationService {
             .map(res => {
               if (res.token) {
                 localStorage.setItem('currentUser', res.token);
+                localStorage.setItem('currentCode', res.cod_usuario_cript);
                 localStorage.setItem('currentUserCode', res.cod_usuario);
               }
               this.emitirUsuario.emit(res);
@@ -28,6 +29,14 @@ export class AuthenticationService {
 
 getToken() {
   return localStorage.getItem('currentUser');
+}
+
+getCode() {
+  return localStorage.getItem('currentCode');
+}
+
+getUserCode() {
+  return localStorage.getItem('currentUserCode');
 }
 
 verificaUser(): string {
@@ -43,6 +52,7 @@ getUser() {
 
 logout() {
   localStorage.removeItem('currentUser');
+  localStorage.removeItem('currentCode');
   localStorage.removeItem('currentUserCode');
   this.router.navigate(['login']);
 }

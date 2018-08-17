@@ -1,28 +1,31 @@
 <div class="ui container">
+
   <div class="ui  segment">
- <a class="ui ribbon label"><h4>{{pontoPresenca.cod_gesac}}, {{pontoPresenca.nome}}</h4></a>
-              <p></p>
+    <a class="ui ribbon label">
+      <h4>{{pontoPresenca.cod_gesac}}, {{pontoPresenca.nome}}</h4>
+    </a>
+    <p></p>
     <div class="row ">
       <sui-tabset>
         <div class="ui top attached tabular menu">
-          <a class="item" suiTabHeader="1" [(isActive)]="firstActive">Ponto de Presença</a>
-          <a class="item" suiTabHeader="2" [(isActive)]="secondActive">Endereço</a>
-          <a class="item" suiTabHeader="3" [(isActive)]="thirdActive">Tipologia</a>
-          <a class="item" suiTabHeader="4" [(isActive)]="fourthActive">Contatos</a>
+          <a class="item" [ngClass]="{'desativado': !params.id }" suiTabHeader="1" [(isActive)]="firstActive">Ponto de Presença</a>
+          <a class="item" [ngClass]="{'desativado': !params.id }" suiTabHeader="2" [(isActive)]="secondActive">Endereço</a>
+          <a class="item" [ngClass]="{'desativado': !params.id }" suiTabHeader="3" [(isActive)]="thirdActive">Tipologia</a>
+          <a class="item" [ngClass]="{'desativado': !params.id }" suiTabHeader="4" [(isActive)]="fourthActive">Contatos</a>
         </div>
 
         <!--incio da aba Ponto de presença-->
 
-         <div class="ui bottom attached segment" suiTabContent="1">
+        <div class="ui bottom attached segment" suiTabContent="1">
           <form class="ui form error" #fAddPontoPresenca="ngForm" (ngSubmit)="salvarPontoPresenca(fAddPontoPresenca)">
-        
-             <div class="field">
+
+            <div class="field">
 
               <div class="two fields">
 
-                <div class="ten wide field"  [ngClass]="{'error': nome.invalid && fAddPontoPresenca.submitted || nome.invalid && nome.dirty}">
+                <div class="ten wide field" [ngClass]="{'error': nome.invalid && fAddPontoPresenca.submitted || nome.invalid && nome.dirty}">
                   <label>Estabelecimento</label>
-                  <input type="text" name="nome" placeholder="Estabelecimento" #nome='ngModel' [(ngModel)]="pontoPresenca.nome" required >
+                  <input type="text" name="nome" placeholder="Estabelecimento" #nome='ngModel' [(ngModel)]="pontoPresenca.nome" required>
 
                   <div class="invalid-feedback" [ngClass]="{'active':  nome.invalid && fAddPontoPresenca.submitted || nome.invalid && nome.dirty}">
                     Estabelecimento obrigatório!
@@ -46,10 +49,10 @@
             <div class="field">
               <div class="four fields">
 
-                <div class="eight wide field"  [ngClass]="{'error': contrato.invalid && fAddPontoPresenca.submitted || contrato.invalid && contrato.dirty}">
+                <div class="eight wide field" [ngClass]="{'error': contrato.invalid && fAddPontoPresenca.submitted || contrato.invalid && contrato.dirty}">
                   <label>Contrato</label>
-                  <select class="ui fluid dropdown" name="contrato"  #contrato='ngModel' [(ngModel)]="pontoPresenca.num_contrato" (change)="selectContrato(pontoPresenca.num_contrato)"
-                    required >
+                  <select class="ui fluid dropdown" name="contrato" #contrato='ngModel' [(ngModel)]="pontoPresenca.num_contrato" (change)="selectContrato(pontoPresenca.num_contrato)"
+                    required>
                     <option value="">Selecione Contrato</option>
                     <option *ngFor="let contrato of contratos" value="{{contrato.num_contrato}}">{{contrato.nome_empresa}}</option>
                   </select>
@@ -66,7 +69,7 @@
                     <option value="">Selecione lote</option>
                     <option *ngFor="let lote of lotes" value="{{lote.cod_lote}}">{{lote.lote}}</option>
                   </select>
-                    <div class="invalid-feedback" [ngClass]="{'active':  lote.invalid && fAddPontoPresenca.submitted || lote.invalid && lote.dirty}">
+                  <div class="invalid-feedback" [ngClass]="{'active':  lote.invalid && fAddPontoPresenca.submitted || lote.invalid && lote.dirty}">
                     Lote obrigatório!
                   </div>
 
@@ -78,8 +81,8 @@
                     <option value="">Selecione velocidade</option>
                     <option *ngFor="let velocidade of velocidades" value="{{velocidade.cod_velocidade}}">{{velocidade.descricao}}</option>
                   </select>
-                    <div class="invalid-feedback" [ngClass]="{'active':  velocidade.invalid && fAddPontoPresenca.submitted || velocidade.invalid && velocidade.dirty}">
-                      Velocidade obrigatório!
+                  <div class="invalid-feedback" [ngClass]="{'active':  velocidade.invalid && fAddPontoPresenca.submitted || velocidade.invalid && velocidade.dirty}">
+                    Velocidade obrigatório!
                   </div>
 
                 </div>
@@ -91,9 +94,10 @@
               <div class="two fields">
 
 
-                <div class="field"  [ngClass]="{'error': uf.invalid && fAddPontoPresenca.submitted || uf.invalid && uf.dirty} ">
+                <div class="field" [ngClass]="{'error': uf.invalid && fAddPontoPresenca.submitted || uf.invalid && uf.dirty} ">
                   <label>Estado</label>
-                  <select class="ui dropdown" #uf='ngModel' [(ngModel)]="pontoPresenca.uf" name="uf" (change)="selectEstado(pontoPresenca.uf)" required >
+                  <select class="ui dropdown" #uf='ngModel' [(ngModel)]="pontoPresenca.uf" name="uf" (change)="selectEstado(pontoPresenca.uf)"
+                    required>
                     <option value="">Selecione Estado</option>
                     <option *ngFor="let uf of ufs" value="{{uf.uf}}">{{uf.uf}}</option>
                   </select>
@@ -102,9 +106,9 @@
                   </div>
                 </div>
 
-                <div class="field"  [ngClass]="{'error': municipio.invalid && fAddPontoPresenca.submitted || municipio.invalid && municipio.dirty}">
+                <div class="field" [ngClass]="{'error': municipio.invalid && fAddPontoPresenca.submitted || municipio.invalid && municipio.dirty}">
                   <label>Município</label>
-                  <select class="ui dropdown" name="cod_ibge" #municipio='ngModel' [(ngModel)]="pontoPresenca.cod_ibge" required >
+                  <select class="ui dropdown" name="cod_ibge" #municipio='ngModel' [(ngModel)]="pontoPresenca.cod_ibge" required>
                     <option value="">Selecione Município</option>
                     <option *ngFor="let municipio of municipios" value="{{municipio.cod_ibge}}">{{municipio.nome_municipio}}</option>
                   </select>
@@ -114,9 +118,10 @@
 
                 </div>
 
-                <div class="field"  [ngClass]="{'error': instituicaoResp.invalid && fAddPontoPresenca.submitted ||  instituicaoResp.invalid && instituicaoResp.dirty}">
+                <div class="field" [ngClass]="{'error': instituicaoResp.invalid && fAddPontoPresenca.submitted ||  instituicaoResp.invalid && instituicaoResp.dirty}">
                   <label>Instituição Responsavel</label>
-                  <select class="ui dropdown" name="cod_instituicao_resp" #instituicaoResp='ngModel' [(ngModel)]="pontoPresenca.cod_instituicao_resp" required >
+                  <select class="ui dropdown" name="cod_instituicao_resp" #instituicaoResp='ngModel' [(ngModel)]="pontoPresenca.cod_instituicao_resp"
+                    required>
                     <option value="">Selecione Instituição</option>
                     <option *ngFor="let instituicaoResp of instituicoesResp" value="{{instituicaoResp.cod_instituicao}}">{{instituicaoResp.sigla}}</option>
                   </select>
@@ -125,9 +130,10 @@
                   </div>
 
                 </div>
-                <div class="field"  [ngClass]="{'error': instituicaoPag.invalid && fAddPontoPresenca.submitted || instituicaoPag.invalid && instituicaoPag.dirty}">
+                <div class="field" [ngClass]="{'error': instituicaoPag.invalid && fAddPontoPresenca.submitted || instituicaoPag.invalid && instituicaoPag.dirty}">
                   <label>Instituição Pagadora</label>
-                  <select class="ui dropdown" name="cod_instituicao_pag" #instituicaoPag='ngModel' [(ngModel)]="pontoPresenca.cod_instituicao_pag" required >
+                  <select class="ui dropdown" name="cod_instituicao_pag" #instituicaoPag='ngModel' [(ngModel)]="pontoPresenca.cod_instituicao_pag"
+                    required>
                     <option value="">Selecione Instituição</option>
                     <option *ngFor="let instituicaoPag of instituicoesRespPag" value="{{instituicaoPag.cod_instituicao}}">{{instituicaoPag.sigla}}</option>
                   </select>
@@ -140,19 +146,18 @@
 
 
             <div class="ui stackable two column grid">
-                <div class="column">
-                  <button class="ui left labeled icon google plus button" type="button"(click)="backPP()">
-                    <i class="angle double left icon"></i>Cancelar</button>
-                </div>
-                <div class="column">
-                    <button class="ui right labeled icon button right floated btn-color" type="submit">
-                        <i class="angle double right icon"></i> Próximo
-                      </button>
-                </div>
+              <div class="column">
+                <button *ngIf="fecharmodal" class="ui left labeled icon google plus button" type="button" (click)="backPP()">
+                  <i class="angle double left icon"></i>Cancelar</button>
               </div>
+              <div class="column">
+                <button class="ui right labeled icon button right floated btn-color" type="submit">
+                  <i class="angle double right icon"></i> Próximo
+                </button>
+              </div>
+            </div>
 
           </form>
-
         </div>
         <!--fim da aba Ponto de presença-->
 
@@ -161,7 +166,7 @@
 
         <!--incio da aba Endereço-->
         <div class="ui bottom attached segment" suiTabContent="2">
-          <div class="ui grid" *ngIf="mostrarBotao">
+          <div class="ui grid" *ngIf="mostrarBotao === false">
 
             <div class="sixteen wide column"></div>
             <div class="sixteen wide column"></div>
@@ -170,12 +175,13 @@
 
             <div class="six wide column">
               <div class="ui buttons">
-                  <button class="ui right labeled icon facebook button" (click)="adicionarnewEnd(fAddEndereco)">
-                      <i class="right plus circle icon"></i>
-                      Atualizar Endereço
-                    </button>
-               </div>
+                <button class="ui right labeled icon facebook button" (click)="adicionarnewEnd()">
+                  <i class="right plus circle icon"></i>
+                  Atualizar Endereço
+                </button>
+              </div>
             </div>
+
 
             <div class="five wide column"></div>
 
@@ -183,14 +189,15 @@
             <div class="sixteen wide column"></div>
 
           </div>
-          <div class="ui segment" *ngIf="!mostrarBotao">
+          <div class="ui segment" *ngIf="mostrarBotao === true">
             <form class="ui form error" #fAddEndereco="ngForm" (ngSubmit)="salvarEndereco(fAddEndereco)">
               <div class="field">
                 <div class="fields">
 
                   <div class="fourteen wide field" [ngClass]="{'error':  endereco.invalid && fAddEndereco.submitted ||  endereco.invalid && endereco.dirty}">
                     <label for="endereco">Endereço</label>
-                    <input id="endereco" type="text" class="validate" name="endereco" #endereco="ngModel" [(ngModel)]="enderecoPontPre.endereco" required>
+                    <input id="endereco" type="text" class="validate" name="endereco" #endereco="ngModel" [(ngModel)]="enderecoPontPre.endereco"
+                      required>
                     <div class="invalid-feedback" [ngClass]="{'active':  endereco.invalid && fAddEndereco.submitted ||  endereco.invalid && endereco.dirty}">
                       Endereço obrigatório!
                     </div>
@@ -198,27 +205,28 @@
 
                   <div class="two wide field">
                     <label for="numero">Nº</label>
-                    <input id="numero" type="tel" class="validate" name="numero" [(ngModel)]="enderecoPontPre.numero" >
+                    <input id="numero" type="tel" class="validate" name="numero" [(ngModel)]="enderecoPontPre.numero">
                   </div>
 
                   <div class="four wide field">
                     <label for="bairro">Bairro</label>
-                    <input id="bairro" type="text" class="validate" name="bairro" [(ngModel)]="enderecoPontPre.bairro" >
+                    <input id="bairro" type="text" class="validate" name="bairro" [(ngModel)]="enderecoPontPre.bairro">
                   </div>
 
                   <div class="twelve wide field">
                     <label for="complemento">Complemento</label>
-                    <input id="complemento" type="text" class="validate" name="complemento" [(ngModel)]="enderecoPontPre.complemento" >
+                    <input id="complemento" type="text" class="validate" name="complemento" [(ngModel)]="enderecoPontPre.complemento">
                   </div>
                 </div>
 
               </div>
 
               <div class="ui grid ">
-                <div class="three wide column field"  [ngClass]="{'error': cep.invalid && fAddEndereco.submitted || cep.invalid && cep.dirty}">
+                <div class="three wide column field" [ngClass]="{'error': cep.invalid && fAddEndereco.submitted || cep.invalid && cep.dirty}">
                   <label for="cep">CEP</label>
 
-                  <input id="cep" type="text" mask="00.000-000" class="validate" name="cep" #cep='ngModel' [(ngModel)]="enderecoPontPre.cep" required>
+                  <input id="cep" type="text" mask="00.000-000" class="validate" name="cep" #cep='ngModel' [(ngModel)]="enderecoPontPre.cep"
+                    required>
                   <div class="invalid-feedback" [ngClass]="{'active':  cep.invalid && fAddEndereco.submitted ||  cep.invalid && cep.dirty}">
                     CEP obrigatório!
                   </div>
@@ -226,7 +234,7 @@
 
                 <div class="three wide column field" [ngClass]="{'error': area.invalid && fAddEndereco.submitted ||  area.invalid && area.dirty}">
                   <label>Área</label>
-                  <select class="ui fluid dropdown" name="area"  #area='ngModel' [(ngModel)]="enderecoPontPre.area" required>
+                  <select class="ui fluid dropdown" name="area" #area='ngModel' [(ngModel)]="enderecoPontPre.area" required>
 
                     <option value="" selected>Selecione a Área</option>
                     <option value="Rural" selected>Rural</option>
@@ -250,10 +258,10 @@
               </div>
               <div class="ui stackable two column grid">
                 <div class="column">
-                  <button class="ui red button" type="button" (click)="cancelAddEndereco()" [disabled]="enderecos?.length <= 0">Cancelar</button>
+                  <button class="ui red button" type="button" (click)="cancelAddEndereco()" [disabled]="enderecosAntigos?.length <= 0">Cancelar</button>
                 </div>
                 <div class="column">
-                  <button class="ui button right floated" type="submit" >Salvar</button>
+                  <button class="ui button right floated" type="submit">Salvar</button>
                 </div>
               </div>
             </form>
@@ -265,44 +273,98 @@
           </div>
 
           <!--Inicio Endereço -->
-           <div class="left floated left aligned sixteen wide column" *ngIf="controleVericicacaoEnderecos.length !== 0">
+          <!-- <div class="left floated left aligned sixteen wide column" *ngIf="controleVericicacaoEnderecos.length !== 0">
 
-            <div class="ui raised segment">
-              <a class="ui red ribbon label">Endereço Atual</a>
-              <p></p>
-              <div class="ui grid">
-                <div class="fourteen wide column">
-                  <h4 class="ui header">Endereço:</h4>{{enderecos?.endereco}}</div>
+              <div class="ui raised segment">
+                <a class="ui red ribbon label">Endereço Atual</a>
+                <p></p>
+                <div class="ui grid">
+                  <div class="fourteen wide column">
+                    <h4 class="ui header">Endereço:</h4>{{enderecos?.endereco}}</div>
 
-                <div class="two wide column">
-                  <h4 class="ui header">Nº:</h4>{{enderecos?.numero}}</div>
+                  <div class="two wide column">
+                    <h4 class="ui header">Nº:</h4>{{enderecos?.numero}}</div>
+                </div>
+
+
+                <div class="ui grid">
+                  <div class="four wide column">
+                    <h4 class="ui header">Bairro:</h4> {{enderecos?.bairro}}</div>
+
+                  <div class="twelve wide column">
+                    <h4 class="ui header">Complemento:</h4> {{enderecos?.complemento}}</div>
+                </div>
+
+                <div class="ui grid">
+                  <div class="two wide column">
+                    <h4 class="ui header">Cep</h4>{{enderecos?.cep | cep}}</div>
+                  <div class="two wide column">
+                    <h4 class="ui header">Área:</h4>{{enderecos?.area}}</div>
+                  <div class="four wide column">
+                    <h4 class="ui header">Latitude: </h4>{{enderecos?.latitude}}</div>
+                  <div class="four wide column">
+                    <h4 class="ui header">Longitude:</h4>{{enderecos?.longitude}}</div>
+                  <div class="two wide column">
+                    <h4 class="ui header">Data Inicial:</h4>{{enderecos?.data_inicio | date:'dd/MM/y'}}</div>
+                  <div class="two wide column">
+                    <h4 class="ui header">Data Final:</h4>{{enderecos?.data_final | date:'dd/MM/y'}}</div>
+                </div>
+              </div>
+            </div> -->
+
+          <!-- Inicio endereços antigos -->
+
+          <div content *ngFor="let enderecoAntigo of enderecosAntigos; let i = index">
+            <a *ngIf="!enderecoAntigo?.data_final" class="ui red ribbon label">Endereço Atual</a>
+
+            <div class="ui raised segment" [ngStyle]="{'backgroundColor': enderecoAntigo?.data_final ? '#eeeeee' : 'white' }">
+
+              <div *ngIf="!!admin">
+                <div *ngIf="enderecoAntigo?.data_final" class="ui grid">
+                  <div class="sixteen wide column">
+                    <button class="ui right floated right labeled icon google plus button" type="button" (click)="removerEnderecos(enderecoAntigo, i)">
+                      <i class="close icon"></i>Remover</button>
+                  </div>
+                </div>
               </div>
 
+              <div class="ui grid">
+
+                <div class="fourteen wide column">
+                  <h4 class="ui header">Endereço:</h4>{{enderecoAntigo?.endereco}} </div>
+
+                <div class="two wide column">
+                  <h4 class="ui header">Nº:</h4>{{enderecoAntigo?.numero}} </div>
+              </div>
 
               <div class="ui grid">
                 <div class="four wide column">
-                  <h4 class="ui header">Bairro:</h4> {{enderecos?.bairro}}</div>
+                  <h4 class="ui header">Bairro:</h4>{{enderecoAntigo?.bairro}}</div>
 
                 <div class="twelve wide column">
-                  <h4 class="ui header">Complemento:</h4> {{enderecos?.complemento}}</div>
+                  <h4 class="ui header">Complemento:</h4> {{enderecoAntigo?.complemento}}</div>
               </div>
 
               <div class="ui grid">
                 <div class="two wide column">
-                  <h4 class="ui header">Cep</h4>{{enderecos?.cep | cep}}</div>
+                  <h4 class="ui header">Cep</h4> {{enderecoAntigo?.cep | cep}}</div>
                 <div class="two wide column">
-                  <h4 class="ui header">Área:</h4>{{enderecos?.area}}</div>
+                  <h4 class="ui header">Área:</h4> {{enderecoAntigo?.area}}</div>
                 <div class="four wide column">
-                  <h4 class="ui header">Latitude: </h4>{{enderecos?.latitude}}</div>
+                  <h4 class="ui header">Latitude: </h4>{{enderecoAntigo?.latitude}}</div>
                 <div class="four wide column">
-                  <h4 class="ui header">Longitude:</h4>{{enderecos?.longitude}}</div>
+                  <h4 class="ui header">Longitude:</h4> {{enderecoAntigo?.longitude}}</div>
                 <div class="two wide column">
-                  <h4 class="ui header">Data Inicial:</h4>{{enderecos?.data_inicio | date:'dd/MM/y'}}</div>
+                  <h4 class="ui header">Data Inicial:</h4>{{enderecoAntigo?.data_inicio | date: 'dd/MM/yyyy'}}</div>
                 <div class="two wide column">
-                  <h4 class="ui header">Data Final:</h4>{{enderecos?.data_final | date:'dd/MM/y'}}</div>
+                  <h4 class="ui header">Data Final:</h4> {{enderecoAntigo?.data_final | date: 'dd/MM/yyyy'}}</div>
               </div>
             </div>
+            <br>
           </div>
+
+          <!-- Fim endereços antigos -->
+
           <br>
           <div class="ui stackable two column grid">
             <div class="column">
@@ -315,7 +377,7 @@
             </div>
           </div>
           <!--Fim Endereço -->
-       </div>
+        </div>
         <!--fim da aba Endereço-->
 
 
@@ -347,7 +409,7 @@
 
             <div class="column" *ngFor="let tipologia of tipologiasGuardadas" suiPopup popupText="Remover Tipologia" popupInverted [popupPlacement]="'top left'">
               <a class="fluid ui labeled icon button btn-tipologia" (click)="removerTipologia(tipologia)">
-                  <i class="close icon"></i>
+                <i class="close icon"></i>
                 {{tipologia.nome}}
               </a>
             </div>
@@ -370,7 +432,7 @@
         <!--fim da aba Tipologia-->
 
         <!--incio da aba Contato-->
-         <div class="ui bottom attached segment" suiTabContent="4">
+        <div class="ui bottom attached segment" suiTabContent="4">
           <app-contato></app-contato>
           <div class="ui stackable one column grid">
             <div class="column">
@@ -380,20 +442,20 @@
 
 
           <div class="ui stackable two column grid">
-              <div class="column">
-                  <button class="ui left floated labeled icon button" (click)="thirdActive = true">
-                      <i class="angle double left icon"></i> Voltar</button>
-              </div>
-              <div class="column">
-                  <button class="ui right labeled icon button right floated positive" type="submit"  (click)="backPP()">
-                      <i class="angle double right icon"></i> Concluir
-                    </button>
-              </div>
+            <div class="column">
+              <button class="ui left floated labeled icon button" (click)="thirdActive = true">
+                <i class="angle double left icon"></i> Voltar</button>
             </div>
+            <div class="column">
+              <button class="ui right labeled icon button right floated positive" type="submit" (click)="backPP()">
+                <i class="angle double right icon"></i> Concluir
+              </button>
+            </div>
+          </div>
         </div>
 
 
-     </sui-tabset>
+      </sui-tabset>
 
     </div>
   </div>

@@ -8,7 +8,6 @@ import { GESAC_API } from '../app.api';
 import { PontoPresenca } from './ponto-presenca.model';
 import { Contrato } from '../contrato/contrato.model';
 import { InstituicaoResp } from '../instituicao-responsavel/instituicao-responsavel.model';
-import { PontoPresencaEndereco } from './ponto-presenca-add-edit/ponto_presenca-endereco.model';
 
 @Injectable()
 export class PontoPresencaService {
@@ -53,7 +52,7 @@ export class PontoPresencaService {
   */
   getDetalhePontoPresenca(cod_gesac) {
     return this.http
-      .get<PontoPresenca[]>(`${GESAC_API}detPontoPresenca/${cod_gesac}`)
+      .get(`${GESAC_API}detPontoPresenca/${cod_gesac}`)
       .map(res => res);
   }
 
@@ -88,18 +87,12 @@ export class PontoPresencaService {
       .map(res => res);
   }
 
-  /*
-  * Protocolo HTTP do ponto de presenca para trazer do banco pelo id, para a tela de add/edit do pp
-  */
-  getEnderecoPorIdVisu(id) {
-    return this.http.get<PontoPresencaEndereco>(`${GESAC_API}pontoEnderecoAtual/${id}`)
-    .map(res => res);
-  }
 
   /*
   * Protocolo HTTP do Endereco para salvar no banco
   */
   postEndereco(form) {
+    console.log(form);
     return this.http
       .post<PontoPresenca>(`${GESAC_API}pontoEndereco`, form)
       .map(res => res);
@@ -112,6 +105,16 @@ export class PontoPresencaService {
     return this.http
       .put(`${GESAC_API}pontoEndereco/${id}/${codEnd}`, form)
       .map(res => res);
+  }
+
+  /*
+* Protocolo HTTP do Endereco para remover endereço no banco
+*/
+
+  deleteEnderecoPonto(cod_endereco, gesac) {
+    return this.http
+    .delete(`${GESAC_API}pontoEndereco/${cod_endereco}/${gesac}`)
+    .map(res => res);
   }
 
   /*
@@ -292,10 +295,16 @@ export class PontoPresencaService {
       .map(res => res);
   }
 
+/*
+    * Protocolo HTTP retornar os historico da analise
+    */
 
   getHistoricoAnalise(cod_analise) {
     return this.http
       .get(`${GESAC_API}pontoAnalise/${cod_analise}`)
       .map(res => res);
   }
+
+
+
 }

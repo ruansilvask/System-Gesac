@@ -13,6 +13,7 @@ import { PontoPresencaDetalheComponent } from './ponto-presenca-detalhe/ponto-pr
 import { PontoPresencaComponent } from './ponto-presenca.component';
 import { PontoPresencaService } from './ponto-presenca.service';
 import { ContatoModule } from '../contato/contato.module';
+import { RouterModule } from '@angular/router';
 
 @NgModule({
     imports: [
@@ -33,8 +34,8 @@ import { ContatoModule } from '../contato/contato.module';
         PontoPresencaService,
         HttpModule
     ],
-  entryComponents : [
-  ]
+    entryComponents: [
+    ]
 })
 
 export class PontoPresencaModule { }
