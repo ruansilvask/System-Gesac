@@ -227,7 +227,7 @@ export class PontoPresencaAddEditComponent implements OnInit {
     if (this.parametroIdentificador) {
       this.pontoPresencaService
 
-      .getEnderecoDetalhe(this.params.id)
+      .getEnderecoDetalhe(this.parametroIdentificador)
       .subscribe(dados => {
         this.enderecosAntigos = dados;
         if (this.enderecosAntigos.length === 0) {
