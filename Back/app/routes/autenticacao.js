@@ -5,4 +5,7 @@ module.exports = function(app){
         .post(autenticar.autentica);
 
     app.use('/gesac/*', autenticar.verificaToken);
+
+    app.route('/gesac/deslogar')
+        .post(autenticar.desloga);
 }
