@@ -25,9 +25,9 @@ export class InstRespComponent implements OnInit {
   pagadoraFilter: any;
 
   optionsPontoPre: any = [
+    {descricao : 'Todos', value : 3},
     {descricao : 'Sim', value : 1},
-    {descricao : 'Não', value : 0},
-    {descricao : 'Todos', value : 3}
+    {descricao : 'Não', value : 0}
 ];
 
 
