@@ -78,8 +78,9 @@ export class ContatoService {
   }
 
   buscaPessoa(term: string) {
+    const termo = term.replace(/\//g, '%2F');
     return this.http
-      .get<Contato[]>(`${GESAC_API}contato/${term}`)
+      .get<Contato[]>(`${GESAC_API}contato/${termo}`)
       .map(res => res);
   }
 
