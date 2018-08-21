@@ -224,18 +224,22 @@ export class PontoPresencaAddEditComponent implements OnInit {
     *Método para trazer os endereços antigos
     */
   getEnderecosAntigos() {
+
     if (this.parametroIdentificador) {
       this.pontoPresencaService
 
       .getEnderecoDetalhe(this.parametroIdentificador)
       .subscribe(dados => {
         this.enderecosAntigos = dados;
+        console.log(this.enderecosAntigos.length);
         if (this.enderecosAntigos.length === 0) {
           this.mostrarBotao = true;
         } else {
           this.mostrarBotao = false;
         }
       });
+    } else {
+      this.mostrarBotao = true;
     }
   }
 
@@ -252,7 +256,7 @@ export class PontoPresencaAddEditComponent implements OnInit {
             this.resp = dados;
             this.contatoService.getContatos(this.parametroIdentificador, 'ponto');
             this.secondActive = true;
-            this.mostrarBotao = false;
+            this.getEnderecosAntigos();
           });
       } else {
         this.pontoPresencaService
@@ -262,7 +266,7 @@ export class PontoPresencaAddEditComponent implements OnInit {
             this.getPontoPrensencaId(dados);
             this.contatoService.getContatos(this.codGesac, 'ponto');
             this.secondActive = true;
-            this.mostrarBotao = false;
+            this.mostrarBotao = true;
           });
       }
     } else {
