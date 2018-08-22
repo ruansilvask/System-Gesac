@@ -293,8 +293,13 @@
                 <div class="field">
                   <div class="ui left icon input">
                     <i class="calendar icon"></i>
-                    <input [(ngModel)]="analiseDetalhe.data_oficio" name="data_oficio" suiDatepicker [pickerMode]="'date'" [pickerFirstDayOfWeek]="0"
-                      [pickerUseNativeOnMobile]="false">
+                    <input [(ngModel)]="analiseDetalhe.data_oficio"
+                    name="data_oficio"
+                    suiDatepicker
+                    [pickerMode]="'date'"
+                    [pickerFirstDayOfWeek]="0"
+                    [pickerUseNativeOnMobile]="false">
+                      <i class="close link icon iconRight" (click)="analiseDetalhe.data_oficio = undefined"></i>
                   </div>
                 </div>
               </div>
@@ -305,8 +310,14 @@
                 <div class="field">
                   <div class="ui left icon input">
                     <i class="calendar icon"></i>
-                    <input [(ngModel)]="analiseDetalhe.data_instalacao" name="data_instalacao" suiDatepicker [pickerMode]="'date'" [pickerFirstDayOfWeek]="0"
-                      [pickerUseNativeOnMobile]="false">
+                    <input
+                    [(ngModel)]="analiseDetalhe.data_instalacao"
+                    name="data_instalacao"
+                    suiDatepicker
+                    [pickerMode]="'date'"
+                    [pickerFirstDayOfWeek]="0"
+                    [pickerUseNativeOnMobile]="false">
+                    <i class="close link icon iconRight" (click)="analiseDetalhe.data_instalacao= undefined"></i>
                   </div>
                 </div>
               </div>

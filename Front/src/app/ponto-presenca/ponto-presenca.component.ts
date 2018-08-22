@@ -475,7 +475,6 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
       this.funcaoPaginacao(ponto);
     }
   }
-
 }
 
 // (filtros.tipologia && !(pontoPres.tipologia.toLowerCase() === filtros.tipologia.toLowerCase()))) { valida = false; }
