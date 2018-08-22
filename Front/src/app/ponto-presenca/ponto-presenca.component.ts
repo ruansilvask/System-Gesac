@@ -463,6 +463,6 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
 
 }
 
-
+// (filtros.tipologia && !(pontoPres.tipologia.toLowerCase() === filtros.tipologia.toLowerCase()))) { valida = false; }
 
 
