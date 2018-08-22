@@ -307,12 +307,11 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
   verificarData(data_oficio) {
     const dataAtual = this.apiServicesData.formatData(new Date());
     data_oficio  = this.apiServicesData.formatData(data_oficio);
-    return (data_oficio !== null && data_oficio <= dataAtual);
+    return data_oficio <= dataAtual;
   }
 
   enviarMS(fmsolicitacoes: NgForm) {
     if (this.verificarData(fmsolicitacoes.value.data_oficio)) {
-      console.log(fmsolicitacoes.value);
       fmsolicitacoes.value.data_oficio = this.apiServicesData.formatData(fmsolicitacoes.value.data_oficio);
       if (!this.analiseShow) {
         delete fmsolicitacoes.value.cnpj_empresa;

@@ -369,7 +369,7 @@
                 <input [(ngModel)]="analiseDetalhe.telefone1" mask="(00) 00000-0000" minlength="10" name="telefone1" placeholder="Telefone"
                   type="text" [required]="analiseDetalhe.assinatura_resp === 1">
                 <div class="invalid-feedback" [ngClass]="{'active':  !!analiseSubmit?._directives[21]?.control?.invalid}">
-                  Telefone Obrigatório e Inválido!
+                  Telefone Inválido!
                 </div>
               </div>
 
@@ -406,6 +406,7 @@
                   <input  [(ngModel)]="analiseDetalhe.longitude" name="longitude" placeholder="Longitude" type="text">
                 </div>
               </div> -->
+
             <h3 class=" invalid-feedback active">
               Latitude e longitude desativados temporariamente.
             </h3>
