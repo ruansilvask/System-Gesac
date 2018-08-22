@@ -437,6 +437,8 @@ export class PontoPresencaDetalheComponent implements OnInit {
 
   }
 
-
+veja(valor){
+  console.log(valor)
+}
 
 }
