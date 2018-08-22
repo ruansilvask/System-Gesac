@@ -409,11 +409,9 @@
                 <label>Responsável assinou?</label>
                 <div class="field">
 
-                  <sui-radio-button [value]="1" [(ngModel)]="analiseDetalhe.assinatura_resp" (ngModelChange)="onClick(analiseDetalhe.assinatura_resp)"
-                    name="assinatura_resp">Sim</sui-radio-button>
+                  <sui-radio-button [value]="1" [(ngModel)]="analiseDetalhe.assinatura_resp"  name="assinatura_resp">Sim</sui-radio-button>
 
-                  <sui-radio-button [value]="0" [(ngModel)]="analiseDetalhe.assinatura_resp" (ngModelChange)="onClick(analiseDetalhe.assinatura_resp)"
-                    name="assinatura_resp">Não</sui-radio-button>
+                    <sui-radio-button [value]="0" [(ngModel)]="analiseDetalhe.assinatura_resp"  name="assinatura_resp">Não</sui-radio-button>
 
 
                 </div>
@@ -429,7 +427,7 @@
                 <input [(ngModel)]="analiseDetalhe.telefone1" mask="(00) 00000-0000" minlength="10" name="telefone1" placeholder="Telefone"
                   type="text" [required]="analiseDetalhe.assinatura_resp === 1">
                 <div class="invalid-feedback" [ngClass]="{'active':  !!analiseSubmit?._directives[21]?.control?.invalid}">
-                  Telefone Obrigatório e Inválido!
+                  Telefone Inválido!
                 </div>
               </div>
 
@@ -617,9 +615,6 @@
         </div>
 
 
-    <!--Inicio do Modal Modal de add/edit Ponto de Presença -->
-    <sui-modal *ngIf="selcPP" [isClosable]="false" [transition]="'scale'" [isInverted]="true" [size]="'normal'" [transitionDuration]="500" #modal>
-      <div class="header">
 
 
         <!--Inicio do Modal Modal de add/edit Ponto de Presença -->

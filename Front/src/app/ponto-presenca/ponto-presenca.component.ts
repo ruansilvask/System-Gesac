@@ -307,7 +307,10 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
   verificarData(data_oficio) {
     const dataAtual = this.apiServicesData.formatData(new Date());
     data_oficio  = this.apiServicesData.formatData(data_oficio);
-    return (data_oficio !== null && data_oficio <= dataAtual);
+    if (!data_oficio) {
+      return true;
+    }
+    return data_oficio <= dataAtual;
   }
 
   enviarMS(fmsolicitacoes: NgForm) {
