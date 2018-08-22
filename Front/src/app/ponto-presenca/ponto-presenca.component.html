@@ -22,6 +22,12 @@
         <i class="right plus circle icon"></i>Realizar Solicitação</button>
     </div>
 
+    <div class="three wide column">
+        <button class="ui labeled icon button" (click)="openModal(msolicitacoes.name)" [disabled]="!botoesMSA" name="msolicitacoes"
+          #msolicitacoes data-position="left" suiPopup popupHeader="Obs Ação Múltiplos Pontos" popupInverted="true">
+          <i class="right plus circle icon"></i>Realizar Obs Ação</button>
+      </div>
+
     <!--Inicio do Modal seleção de varios GESAC -->
     <sui-modal *ngIf="selcGesac" [isClosable]="false" [transition]="'scale'" [transitionDuration]="500" #modal>
       <div class="header">
@@ -204,7 +210,7 @@
     </sui-modal>
 
     <!--Fim Modal do formulario  de ações de multipos pontos -->
-    <div class="seven wide column">
+    <div class="four wide column">
       <div class="ui compact right floated segment"><p><strong>{{totalItens}} {{(totalItens !== 1) ? 'itens' : 'item'}}</strong></p></div>
     </div>
   </div>
