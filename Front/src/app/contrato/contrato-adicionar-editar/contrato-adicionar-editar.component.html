@@ -60,7 +60,7 @@
                   <input placeholder="Selecione a data"
                   suiDatepicker
                   name="data_inicio"
-                  [ngModel]="bContratos.data_inicio"
+                  [(ngModel)]="bContratos.data_inicio"
                   [pickerMode]="'date'"
                   [pickerFirstDayOfWeek]="0"
                   [pickerUseNativeOnMobile]="false"
@@ -68,7 +68,7 @@
                   #data_inicio="ngModel"
                   required
                   readonly>
-                  <!-- <i class="close link icon iconRight" (click)=""></i> -->
+                  <i class="close link icon iconRight" (click)="limparDataInicio()"></i>
                 </div>
               </div>
               <div class="invalid-feedback" [ngClass]="{'active': data_inicio.invalid && data_inicio.value != undefined}">
@@ -83,7 +83,7 @@
                   <input placeholder="Selecione a data"
                   suiDatepicker
                   name="data_fim"
-                  [ngModel]="bContratos.data_fim"
+                  [(ngModel)]="bContratos.data_fim"
                   [pickerMode]="'date'"
                   [pickerFirstDayOfWeek]="0"
                   [pickerUseNativeOnMobile]="false"
@@ -91,6 +91,7 @@
                   #data_fim="ngModel"
                   required
                   readonly>
+                  <i class="close link icon iconRight" (click)="limparDataFim()"></i>
                 </div>
               </div>
               <div class="invalid-feedback" [ngClass]="{'active': data_fim.invalid && data_fim.value != undefined}">

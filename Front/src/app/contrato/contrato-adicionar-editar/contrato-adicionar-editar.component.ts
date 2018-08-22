@@ -418,6 +418,15 @@ export class ContratoAdicionarEditarComponent implements OnInit {
     this.lotesCadastrados = this.todosLotesCadastrados[pagina - 1];
   }
 
+
+  limparDataInicio() {
+    this.bContratos.data_inicio = undefined;
+  }
+
+  limparDataFim() {
+    this.bContratos.data_fim = undefined;
+  }
+
   /*
   * Métodos que serão executados quando o componente é iniciado
   */
