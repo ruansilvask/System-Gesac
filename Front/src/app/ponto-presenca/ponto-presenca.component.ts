@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { NgForm } from '@angular/forms';
 
@@ -50,6 +50,7 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
   */
   selcGesac = false;
   abrirNodal = false;
+  obsAcaoModal = false;
   condicao: string;
   marcados = false;
   marcadosInput = false;
@@ -102,7 +103,8 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
     private pontoPresencaService: PontoPresencaService,
     private apiServicesPagination: ApiServicesPagination,
     private apiServicesData: ApiServicesData,
-    private apiServiceEstadoMunicipio: ApiServiceEstadoMunicipio
+    private apiServiceEstadoMunicipio: ApiServiceEstadoMunicipio,
+    private router: Router
   ) {
     localizationService.load('pt', pt);
     localizationService.setLanguage('pt'); }
@@ -254,6 +256,11 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
     this.contador = null;
   }
 
+  closeObsAcao() {
+    this.router.navigate(['/pontPre']);
+    this.obsAcaoModal = false;
+  }
+
   /*
   * Métodos abrir o modal
   */
@@ -261,6 +268,11 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
     this.selcGesac = true;
     this.getTipologia();
     this.getEstados();
+  }
+
+  openModalObsAcao() {
+    this.router.navigate(['/pontPre', 'obsAcaoModal']);
+    this.obsAcaoModal = true;
   }
 
 
