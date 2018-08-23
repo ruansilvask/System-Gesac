@@ -22,6 +22,7 @@ export class PontoPresencaDetalheComponent implements OnInit {
 
 
 obsAcoes: Object;
+
 ObeservacaoPontoPresenca = {
   descricao: '',
   cod_obs: ''
@@ -76,9 +77,9 @@ public selcPP: boolean;
     telefone1: null,
     telefone2: null,
     email: null,
+    cod_obs: '',
     // latitude: null,
     // longitude: null,
-    cod_obs: '',
     justificativa: null
   };
 
@@ -128,7 +129,6 @@ public selcPP: boolean;
     this.getAnaliseByID();
     this.getEmpresas();
     this.getPontoHistorico();
-    console.log(this.analiseDetalhe);
     
   }
 
@@ -138,7 +138,6 @@ public selcPP: boolean;
     .getDetalhePontoPresenca(this.params.id)
     .subscribe(dados => {
       this.codGesac = dados[0].cod_gesac;
-      // this.params.id = dados[0].cod_pid;
       this.pontospresencas = dados[0];
       });
   }
@@ -171,15 +170,12 @@ public selcPP: boolean;
         this.contatos = dados;
       });
   }
+
   /*
   * Métodos para trazer a contato pelo id do ponto de presença do pid
   */
  getObsAcao() {
-    this.pontoPresencaService
-      .getObsAcao()
-      .subscribe(dados => {
-        this.obsAcoes = dados;
-      });
+    this.pontoPresencaService.getObsAcao().subscribe(dados => { this.obsAcoes = dados;  });
   }
 
   /*
