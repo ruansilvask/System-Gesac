@@ -213,9 +213,9 @@
 
                 <div class="thirteen wide column">
                   <label>Observações de Ações</label>
-                  <select class="ui dropdown" name="Obeservacao" [(ngModel)]="ObeservacaoPontoPresenca" required #Obeservacao>
-                    <option value="">Selecione Observação de Ação</option>
-                    <option *ngFor="let Obeservacao of Obeservacoes" value="{{Obeservacao}}">{{Obeservacao.descricao}}</option>
+                  <select class="ui dropdown" name="Obeservacao" [(ngModel)]="ObeservacaoPontoPresenca.cod_obs" required #Obeservacao> 
+                    <option value="">Selecione Observação de Ação</option> 
+                    <option *ngFor="let Obeservacao of obsAcoes" value="{{Obeservacao.cod_obs}}">{{Obeservacao.descricao}}</option> 
                   </select>
                 </div>
                 <div class="two wide column">
@@ -493,10 +493,10 @@
 
             <div class="ui stackable four column grid">
                 <div class="column">
-                <label>Observações de Ações</label>
-                <select class="ui dropdown" name="Obeservacao" [(ngModel)]="analiseDetalhe" required #Obeservacao>
-                  <option value="">Selecione Observação de Ação</option>
-                  <option *ngFor="let Obeservacao of Obeservacoes" value="{{Obeservacao}}">{{Obeservacao.descricao}}</option>
+                <label>Observações de Ações</label> 
+                <select class="ui dropdown" name="Obeservacao" [(ngModel)]="analiseDetalhe.cod_obs" required #Obeservacao> 
+                  <option value="">Selecione Observação de Ação</option> 
+                  <option *ngFor="let Obeservacao of obsAcoes" value="{{Obeservacao.cod_obs}}">{{Obeservacao.descricao}}</option> 
                 </select>
               </div>
               </div>

@@ -19,7 +19,16 @@ import Swal from 'sweetalert2';
 })
 
 export class PontoPresencaDetalheComponent implements OnInit {
-  public selcPP: boolean;
+
+
+obsAcoes: Object;
+
+ObeservacaoPontoPresenca = {
+  descricao: '',
+  cod_obs: ''
+};
+
+public selcPP: boolean;
   codGesac: any;
   empresas: Object;
   pontoHistorico: any;
@@ -68,9 +77,9 @@ export class PontoPresencaDetalheComponent implements OnInit {
     telefone1: null,
     telefone2: null,
     email: null,
+    cod_obs: '',
     // latitude: null,
     // longitude: null,
-    obs: null,
     justificativa: null
   };
 
@@ -109,6 +118,7 @@ export class PontoPresencaDetalheComponent implements OnInit {
       this.params = params.id;
     });
     this.getPontoPrensenca();
+    this.getObsAcao();
     this.getContatosInteracao();
     setTimeout(() => {
       this.analiseCollapse();
@@ -119,6 +129,7 @@ export class PontoPresencaDetalheComponent implements OnInit {
     this.getAnaliseByID();
     this.getEmpresas();
     this.getPontoHistorico();
+    
   }
 
   getPontoPrensenca() {
@@ -127,7 +138,6 @@ export class PontoPresencaDetalheComponent implements OnInit {
     .getDetalhePontoPresenca(this.params.id)
     .subscribe(dados => {
       this.codGesac = dados[0].cod_gesac;
-      // this.params.id = dados[0].cod_pid;
       this.pontospresencas = dados[0];
       });
   }
@@ -159,6 +169,13 @@ export class PontoPresencaDetalheComponent implements OnInit {
       .subscribe(dados => {
         this.contatos = dados;
       });
+  }
+
+  /*
+  * Métodos para trazer a contato pelo id do ponto de presença do pid
+  */
+ getObsAcao() {
+    this.pontoPresencaService.getObsAcao().subscribe(dados => { this.obsAcoes = dados;  });
   }
 
   /*
