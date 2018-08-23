@@ -7,7 +7,7 @@ const connectMYSQL = () => {
 			host: 'localhost',
 			user: 'root',
 			password: '',
-			database: 'gesac_db'
+			database: 'gesac_db' 
 	});
 };
 
