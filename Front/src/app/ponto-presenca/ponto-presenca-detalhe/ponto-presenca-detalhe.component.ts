@@ -19,7 +19,15 @@ import Swal from 'sweetalert2';
 })
 
 export class PontoPresencaDetalheComponent implements OnInit {
-  public selcPP: boolean;
+
+
+obsAcoes: Object;
+ObeservacaoPontoPresenca = {
+  descricao: '',
+  cod_obs: ''
+};
+
+public selcPP: boolean;
   codGesac: any;
   empresas: Object;
   pontoHistorico: any;
@@ -70,7 +78,7 @@ export class PontoPresencaDetalheComponent implements OnInit {
     email: null,
     // latitude: null,
     // longitude: null,
-    obs: null,
+    cod_obs: '',
     justificativa: null
   };
 
@@ -109,6 +117,7 @@ export class PontoPresencaDetalheComponent implements OnInit {
       this.params = params.id;
     });
     this.getPontoPrensenca();
+    this.getObsAcao();
     this.getContatosInteracao();
     setTimeout(() => {
       this.analiseCollapse();
@@ -119,6 +128,8 @@ export class PontoPresencaDetalheComponent implements OnInit {
     this.getAnaliseByID();
     this.getEmpresas();
     this.getPontoHistorico();
+    console.log(this.analiseDetalhe);
+    
   }
 
   getPontoPrensenca() {
@@ -158,6 +169,16 @@ export class PontoPresencaDetalheComponent implements OnInit {
       .getContatosPonto(this.params.id)
       .subscribe(dados => {
         this.contatos = dados;
+      });
+  }
+  /*
+  * Métodos para trazer a contato pelo id do ponto de presença do pid
+  */
+ getObsAcao() {
+    this.pontoPresencaService
+      .getObsAcao()
+      .subscribe(dados => {
+        this.obsAcoes = dados;
       });
   }
 
@@ -438,8 +459,5 @@ export class PontoPresencaDetalheComponent implements OnInit {
   }
 
 
-  onClick(value, submit) {
-    this.obrigatorio = !this.obrigatorio;
-  }
 
 }

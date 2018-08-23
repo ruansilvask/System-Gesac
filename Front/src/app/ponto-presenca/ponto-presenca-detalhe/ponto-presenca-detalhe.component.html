@@ -213,9 +213,9 @@
 
                 <div class="thirteen wide column">
                   <label>Observações de Ações</label>
-                  <select class="ui dropdown" name="Obeservacao" [(ngModel)]="ObeservacaoPontoPresenca" required #Obeservacao>
+                  <select class="ui dropdown" name="Obeservacao" [(ngModel)]="ObeservacaoPontoPresenca.cod_obs" required #Obeservacao>
                     <option value="">Selecione Observação de Ação</option>
-                    <option *ngFor="let Obeservacao of Obeservacoes" value="{{Obeservacao}}">{{Obeservacao.descricao}}</option>
+                    <option *ngFor="let Obeservacao of obsAcoes" value="{{Obeservacao.cod_obs}}">{{Obeservacao.descricao}}</option>
                   </select>
                 </div>
                 <div class="two wide column">
@@ -293,8 +293,13 @@
                 <div class="field">
                   <div class="ui left icon input">
                     <i class="calendar icon"></i>
-                    <input [(ngModel)]="analiseDetalhe.data_oficio" name="data_oficio" suiDatepicker [pickerMode]="'date'" [pickerFirstDayOfWeek]="0"
-                      [pickerUseNativeOnMobile]="false">
+                    <input [(ngModel)]="analiseDetalhe.data_oficio"
+                    name="data_oficio"
+                    suiDatepicker
+                    [pickerMode]="'date'"
+                    [pickerFirstDayOfWeek]="0"
+                    [pickerUseNativeOnMobile]="false">
+                      <i class="close link icon iconRight" (click)="analiseDetalhe.data_oficio = undefined"></i>
                   </div>
                 </div>
               </div>
@@ -305,8 +310,14 @@
                 <div class="field">
                   <div class="ui left icon input">
                     <i class="calendar icon"></i>
-                    <input [(ngModel)]="analiseDetalhe.data_instalacao" name="data_instalacao" suiDatepicker [pickerMode]="'date'" [pickerFirstDayOfWeek]="0"
-                      [pickerUseNativeOnMobile]="false">
+                    <input
+                    [(ngModel)]="analiseDetalhe.data_instalacao"
+                    name="data_instalacao"
+                    suiDatepicker
+                    [pickerMode]="'date'"
+                    [pickerFirstDayOfWeek]="0"
+                    [pickerUseNativeOnMobile]="false">
+                    <i class="close link icon iconRight" (click)="analiseDetalhe.data_instalacao= undefined"></i>
                   </div>
                 </div>
               </div>
@@ -408,11 +419,11 @@
               <div class="four wide column centered row">
                 <label>Responsável assinou?</label>
                 <div class="field">
-                  <sui-radio-button [value]="1" [(ngModel)]="analiseDetalhe.assinatura_resp" (ngModelChange)="onClick(analiseDetalhe.assinatura_resp)"
-                    name="assinatura_resp">Sim</sui-radio-button>
 
-                  <sui-radio-button [value]="0" [(ngModel)]="analiseDetalhe.assinatura_resp" (ngModelChange)="onClick(analiseDetalhe.assinatura_resp)"
-                    name="assinatura_resp">Não</sui-radio-button>
+                  <sui-radio-button [value]="1" [(ngModel)]="analiseDetalhe.assinatura_resp"  name="assinatura_resp">Sim</sui-radio-button>
+
+                    <sui-radio-button [value]="0" [(ngModel)]="analiseDetalhe.assinatura_resp"  name="assinatura_resp">Não</sui-radio-button>
+
 
                 </div>
               </div>
@@ -427,10 +438,8 @@
                 <input [(ngModel)]="analiseDetalhe.telefone1" mask="(00) 00000-0000" minlength="10" name="telefone1" placeholder="Telefone"
                   type="text" [required]="analiseDetalhe.assinatura_resp === 1">
                 <div class="invalid-feedback" [ngClass]="{'active':  !!analiseSubmit?._directives[21]?.control?.invalid}">
-                  Telefone Obrigatório e Inválido!
+                  Telefone Inválido!
                 </div>
-
-
               </div>
 
 
@@ -485,9 +494,9 @@
             <div class="ui stackable four column grid">
                 <div class="column">
                 <label>Observações de Ações</label>
-                <select class="ui dropdown" name="Obeservacao" [(ngModel)]="analiseDetalhe" required #Obeservacao>
+                <select class="ui dropdown" name="Obeservacao" [(ngModel)]="analiseDetalhe.cod_obs" required #Obeservacao>
                   <option value="">Selecione Observação de Ação</option>
-                  <option *ngFor="let Obeservacao of Obeservacoes" value="{{Obeservacao}}">{{Obeservacao.descricao}}</option>
+                  <option *ngFor="let Obeservacao of obsAcoes" value="{{Obeservacao.cod_obs}}">{{Obeservacao.descricao}}</option>
                 </select>
               </div>
               </div>
@@ -566,11 +575,13 @@
         </div>
         <div class="ui segment" content>
 
+
           <div class="three wide column">
             <button class="ui labeled icon button" name="mselecoes" (click)="modalAddEditPPOpen()" [routerLink]="['/pontPre', pontospresencas?.cod_gesac, 'detalhe', pontospresencas?.cod_gesac]"
               #mselecoes suiPopup popupHeader="Add/Edit" popupInverted="true">
               <i class="check circle icon"></i>Editar Ponto de Presença</button>
           </div>
+
 
           <form class="ui form" #formInteracao='ngForm' (ngSubmit)="submitInteracao(formInteracao)">
 
@@ -613,8 +624,6 @@
           </div>
 
         </div>
-
-
 
         <!--Inicio do Modal Modal de add/edit Ponto de Presença -->
         <sui-modal *ngIf="selcPP" [isClosable]="false" [transition]="'scale'" [isInverted]="true" [size]="'normal'" [transitionDuration]="500"
@@ -697,7 +706,6 @@
 
     </sui-accordion>
   </div>
-</div>
 
 <!---------------------- Modais de analise, interação e solicitação   ------------------------------------>
 
