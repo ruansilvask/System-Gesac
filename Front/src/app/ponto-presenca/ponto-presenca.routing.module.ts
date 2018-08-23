@@ -4,17 +4,21 @@ import { RouterModule } from '@angular/router';
 import { PontoPresencaComponent } from './ponto-presenca.component';
 import { PontoPresencaAddEditComponent } from './ponto-presenca-add-edit/ponto-presenca-add-edit.component';
 import { PontoPresencaDetalheComponent } from './ponto-presenca-detalhe/ponto-presenca-detalhe.component';
+import { ObsAcaoComponent } from './obs-acao/obs-acao.component';
 
 const PontoPresencaRoutes = [
-    { path: '', component: PontoPresencaComponent },
+    { path: '', component: PontoPresencaComponent,
+      children: [
+        { path: 'obsAcaoModal', component: ObsAcaoComponent }
+      ]
+    },
     { path: 'novo', component: PontoPresencaAddEditComponent },
-    {
-        path: ':id/detalhe', component: PontoPresencaDetalheComponent,
-        children: [
-            { path: ':detalheappeditPP', component: PontoPresencaAddEditComponent }]
+    {path: ':id/detalhe', component: PontoPresencaDetalheComponent,
+      children: [
+          { path: ':detalheappeditPP', component: PontoPresencaAddEditComponent }
+      ]
     },
     { path: ':id', component: PontoPresencaAddEditComponent }
-
 ];
 @NgModule({
     imports: [RouterModule.forChild(PontoPresencaRoutes)],

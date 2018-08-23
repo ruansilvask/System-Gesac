@@ -78,6 +78,12 @@ export class ContatoService {
   }
 
   buscaPessoa(term: string) {
+    term = term.replace(/\//g, '%2F');
+    term = term.replace(/\?/g, '%3F');
+    term = term.replace(/\#/g, '%23');
+    term = term.replace(/\%/g, '%25');
+    term = term.replace(/\'/g, ' ');
+    term = term.replace(/\ /g, '%20');
     return this.http
       .get<Contato[]>(`${GESAC_API}contato/${term}`)
       .map(res => res);
