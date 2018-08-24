@@ -8,7 +8,7 @@ var connectKnex = function(){
         connection: {
             host : 'localhost',
             user : 'root',
-            password : '',
+            password : 'root',
             database : 'gesac_db'
         }
     });
