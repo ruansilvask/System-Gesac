@@ -34,13 +34,10 @@ export class LoginComponent implements OnInit {
   fazerLogin() {
     this.authenticationService.login(this.usuario.nome, this.usuario.senha)
       .subscribe(
-      data => {
-        this.router.navigate([this.returnUrl]);
-      },
-      erro => {
-        Swal('Erro', `${erro.error}`, 'error'),
-        this.usuario.senha = '';
-      }
+        data => {
+          this.router.navigate([this.returnUrl]);
+        },
+        erro => Swal('Erro', `${erro.error}`, 'error')
       );
   }
 
