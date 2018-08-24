@@ -11,10 +11,10 @@
 assets/
 conexao/
 services/
-styles.scss
 
 # Arquivos para ignorar
 app.api.ts
+styles.scss
 
 # IDEs and editors
 /.idea

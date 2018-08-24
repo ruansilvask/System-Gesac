@@ -42,7 +42,6 @@ assets/
 app/conexao
 services/
 
-
 # Arquivos para ignorar
 app.api.ts
 

@@ -14,7 +14,7 @@ import { PontoPresencaComponent } from './ponto-presenca.component';
 import { PontoPresencaService } from './ponto-presenca.service';
 import { ContatoModule } from '../contato/contato.module';
 import { RouterModule } from '@angular/router';
-import { ObsAcaoComponent } from './obs-acao/obs-acao.component';
+import { ObsAcaoComponent } from './ponto-presenca-obs-acao/ponto-presenca-obs-acao.component';
 
 @NgModule({
     imports: [
