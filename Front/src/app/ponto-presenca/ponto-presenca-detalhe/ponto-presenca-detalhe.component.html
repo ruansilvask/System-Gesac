@@ -490,11 +490,11 @@
                 <input placeholder="Longitude" type="text">
               </div>
             </div>
-
-            <div class="ui stackable four column grid">
+            
+            <div class="ui stackable one column grid">
                 <div class="column">
                 <label>Observações de Ações</label> 
-                <select class="ui dropdown" name="Obeservacao" [(ngModel)]="analiseDetalhe.cod_obs" required #Obeservacao> 
+                <select class="ui dropdown" name="Obeservacao" [(ngModel)]="analiseDetalhe.cod_obs" (change)="TESTE(analiseDetalhe.cod_obs)" required #Obeservacao> 
                   <option value="">Selecione Observação de Ação</option> 
                   <option *ngFor="let Obeservacao of obsAcoes" value="{{Obeservacao.cod_obs}}">{{Obeservacao.descricao}}</option> 
                 </select>
@@ -726,7 +726,7 @@
 
   <div class="content" [ngSwitch]="condicao">
 
-    <div *ngSwitchCase="'analise'">
+    <div *ngSwitchCase="'análise'">
 
       <form class="ui form">
         <div class="ui stackable four column grid">
@@ -892,6 +892,13 @@
             <input [readonly]="true" [value]="historicoAnalises.num_doc_sei" placeholder="Longitude" type="text">
           </div>
         </div>
+
+        <div class="ui stackable one column grid">
+        <div class="column">
+          <label>Observação da Ação:</label>
+          <input [readonly]="true" [value]="historicoAnalises.descricao" placeholder="ObsAcao" type="text">
+        </div>
+      </div>
 
         <div class="ui stackable one column grid">
           <div class="column">

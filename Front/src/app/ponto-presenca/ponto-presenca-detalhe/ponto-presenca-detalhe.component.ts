@@ -129,8 +129,8 @@ public selcPP: boolean;
     this.getAnaliseByID();
     this.getEmpresas();
     this.getPontoHistorico();
-    
   }
+
 
   getPontoPrensenca() {
     this.route.params.subscribe(res => (this.params = res));
@@ -175,7 +175,8 @@ public selcPP: boolean;
   * Métodos para trazer a contato pelo id do ponto de presença do pid
   */
  getObsAcao() {
-    this.pontoPresencaService.getObsAcao().subscribe(dados => { this.obsAcoes = dados;  });
+    this.pontoPresencaService.getObsAcao().subscribe(dados => { this.obsAcoes = dados;
+     });
   }
 
   /*
@@ -253,6 +254,7 @@ public selcPP: boolean;
       .subscribe(res => {
         this.historicoAnalises = res[0];
         this.abrirNodal = true;
+        console.log(this.historicoAnalises);
       });
   }
 
@@ -284,6 +286,7 @@ public selcPP: boolean;
       .getPontoHistorico(this.params.id)
       .subscribe(res => {
         this.pontoHistorico = res;
+        
         // delete  this.pontoHistorico[0].data;
         // delete  this.pontoHistorico[0].cod_analise;
         // delete  this.pontoHistorico[0].tipo_solicitacao;
@@ -353,7 +356,7 @@ public selcPP: boolean;
     this.condicao = acao;
     if (detalhe.acao === 'interação') {
       this.getHistoricoInteracao(detalhe.data, this.params.id);
-    } else if (detalhe.acao === 'analise') {
+    } else if (detalhe.acao === 'análise') {
       this.getHistoricoAnalise(detalhe);
     } else {
       this.getHistoricoSolicitacao(
@@ -414,43 +417,40 @@ public selcPP: boolean;
   }
 
   salvarAnalise(analise) {
-    console.log(analise._directives[21]);
+    analise.value.data_oficio = this.apiServicesData.formatData(
+      analise.value.data_oficio
+    );
+    analise.value.data_instalacao = this.apiServicesData.formatData(
+      analise.value.data_instalacao
+    );
+
+    analise.value.cod_gesac = this.params.id;
+    analise.value.cnpj_empresa = this.analiseDetalhe.cnpj_empresa;
 
 
-    // analise.value.data_oficio = this.apiServicesData.formatData(
-    //   analise.value.data_oficio
-    // );
-    // analise.value.data_instalacao = this.apiServicesData.formatData(
-    //   analise.value.data_instalacao
-    // );
+    if (this.condicaoAnalise) {
 
-    // analise.value.cod_gesac = this.params.id;
-    // analise.value.cnpj_empresa = this.analiseDetalhe.cnpj_empresa;
+      if (this.justificativa) {
+        analise.value.tipo_solicitacao = this.btnsAnalise.tipo_solicitacao[1];
+        analise.value.justificativa = this.analiseDetalhe.justificativa;
+        analise.value.aceite = false;
 
+          if (!!analise.value.justificativa) {
 
-    // if (this.condicaoAnalise) {
-
-    //   if (this.justificativa) {
-    //     analise.value.tipo_solicitacao = this.btnsAnalise.tipo_solicitacao[1];
-    //     analise.value.justificativa = this.analiseDetalhe.justificativa;
-    //     analise.value.aceite = false;
-
-    //       if (!!analise.value.justificativa) {
-
-    //         this.putAnalise(analise, this.analiseDetalhe.cod_analise);
-    //        if ( this.errorJustificativa = true) {
-    //         this.errorJustificativa = false;
-    //        }
-    //       } else {
-    //         this.errorJustificativa = true;
-    //       }
-    //   } else {
-    //     analise.value.tipo_solicitacao = this.btnsAnalise.tipo_solicitacao[0];
-    //     analise.value.justificativa = null;
-    //     analise.value.aceite = true;
-    //     this.putAnalise(analise, this.analiseDetalhe.cod_analise);
-    //   }
-    // }
+            this.putAnalise(analise, this.analiseDetalhe.cod_analise);
+           if ( this.errorJustificativa = true) {
+            this.errorJustificativa = false;
+           }
+          } else {
+            this.errorJustificativa = true;
+          }
+      } else {
+        analise.value.tipo_solicitacao = this.btnsAnalise.tipo_solicitacao[0];
+        analise.value.justificativa = null;
+        analise.value.aceite = true;
+        this.putAnalise(analise, this.analiseDetalhe.cod_analise);
+      }
+    }
 
   }
 
