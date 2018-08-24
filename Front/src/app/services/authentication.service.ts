@@ -1,5 +1,6 @@
 ﻿import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { GESAC_API } from '../app.api';
 import 'rxjs/add/operator/map';
 import { Router } from '@angular/router';
 import { UsuarioService } from '../usuario/usuario.service';
@@ -51,6 +52,18 @@ getUser() {
 }
 
 logout() {
+  if (localStorage.getItem('currentUserCode')) {
+    this.http.post(`${GESAC_API}deslogar`, {cod_usuario: localStorage.getItem('currentUserCode')})
+    .subscribe(
+      res => this.cleanLocalStorage(),
+      erro => this.cleanLocalStorage()
+    );
+  } else {
+    this.cleanLocalStorage();
+  }
+}
+
+cleanLocalStorage() {
   localStorage.removeItem('currentUser');
   localStorage.removeItem('currentCode');
   localStorage.removeItem('currentUserCode');

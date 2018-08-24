@@ -17,10 +17,17 @@
     </div>
 
     <div class="three wide column">
+        <button class="ui labeled icon button" (click)="openModalObsAcao()" name="obsAcao"
+          #msolicitacoes data-position="left" suiPopup popupHeader="Obs Ação Múltiplos Pontos" popupInverted="true">
+          <i class="right plus circle icon"></i>Realizar Obs Ação</button>
+      </div>
+
+    <div class="three wide column">
       <button class="ui labeled icon button" (click)="openModal(msolicitacoes.name)" [disabled]="!botoesMSA" name="msolicitacoes"
         #msolicitacoes data-position="left" suiPopup popupHeader="Ação Múltiplos Pontos" popupInverted="true">
         <i class="right plus circle icon"></i>Realizar Solicitação</button>
     </div>
+
 
     <!--Inicio do Modal seleção de varios GESAC -->
     <sui-modal *ngIf="selcGesac" [isClosable]="false" [transition]="'scale'" [transitionDuration]="500" #modal>
@@ -81,7 +88,7 @@
           <div class="ui grid">
             <div class="tow column row">
               <div class="right floated column">
-                <button class="ui red right floated button" (click)="closeModal(false)">Cancel</button>
+                <button class="ui red right floated button" (click)="closeModal()">Cancel</button>
                 <button class="ui green right floated button" type="submit" autofocus> Aplicar</button>
               </div>
             </div>
@@ -99,7 +106,6 @@
 
         <div class="ui grid">
           <div class="fifteen wide column">
-            {{condicao}}
           </div>
           <div class="one wide column">
             <i class="close red link icon" (click)="closeModal(false)"></i>
@@ -153,6 +159,7 @@
                     autocomplete="off"
                     #data_inicio="ngModel"
                     readonly>
+                    <i class="close link icon iconRight" (click)="mSolicitacoes.data_oficio = undefined"></i>
                   </div>
                 </div>
                 <!-- <input type="date" name="data_oficio" [(ngModel)]="mSolicitacoes.data_oficio"> -->
@@ -202,9 +209,30 @@
 
       </div>
     </sui-modal>
-
     <!--Fim Modal do formulario  de ações de multipos pontos -->
-    <div class="seven wide column">
+
+
+     <!--Inicio Observação para ação -->
+     <sui-modal *ngIf="obsAcaoModal" [isClosable]="false" [transition]="'scale'" [transitionDuration]="500" #modal>
+      <div class="header">
+          <div class="ui grid">
+              <div class="fifteen wide column">
+                Observação para Ação
+              </div>
+              <div class="one wide column">
+                <i class="close red link icon" (click)="closeObsAcao()"></i>
+              </div>
+            </div>
+
+      </div>
+
+      <div class="content">
+          <router-outlet></router-outlet>
+      </div>
+    </sui-modal>
+    <!--Fim Modal do formulario  de Observação para ação -->
+
+    <div class="four wide column">
       <div class="ui compact right floated segment"><p><strong>{{totalItens}} {{(totalItens !== 1) ? 'itens' : 'item'}}</strong></p></div>
     </div>
   </div>

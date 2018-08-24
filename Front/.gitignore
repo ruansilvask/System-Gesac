@@ -11,6 +11,7 @@
 assets/
 conexao/
 services/
+styles.scss
 
 # Arquivos para ignorar
 app.api.ts
