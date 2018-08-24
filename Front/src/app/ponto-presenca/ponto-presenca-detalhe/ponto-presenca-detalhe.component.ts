@@ -19,7 +19,16 @@ import Swal from 'sweetalert2';
 })
 
 export class PontoPresencaDetalheComponent implements OnInit {
-  public selcPP: boolean;
+
+
+obsAcoes: Object;
+
+ObeservacaoPontoPresenca = {
+  descricao: '',
+  cod_obs: ''
+};
+
+public selcPP: boolean;
   codGesac: any;
   empresas: Object;
   pontoHistorico: any;
@@ -68,9 +77,9 @@ export class PontoPresencaDetalheComponent implements OnInit {
     telefone1: null,
     telefone2: null,
     email: null,
+    cod_obs: '',
     // latitude: null,
     // longitude: null,
-    obs: null,
     justificativa: null
   };
 
@@ -109,6 +118,7 @@ export class PontoPresencaDetalheComponent implements OnInit {
       this.params = params.id;
     });
     this.getPontoPrensenca();
+    this.getObsAcao();
     this.getContatosInteracao();
     setTimeout(() => {
       this.analiseCollapse();
@@ -121,13 +131,13 @@ export class PontoPresencaDetalheComponent implements OnInit {
     this.getPontoHistorico();
   }
 
+
   getPontoPrensenca() {
     this.route.params.subscribe(res => (this.params = res));
     this.pontoPresencaService
     .getDetalhePontoPresenca(this.params.id)
     .subscribe(dados => {
       this.codGesac = dados[0].cod_gesac;
-      // this.params.id = dados[0].cod_pid;
       this.pontospresencas = dados[0];
       });
   }
@@ -159,6 +169,14 @@ export class PontoPresencaDetalheComponent implements OnInit {
       .subscribe(dados => {
         this.contatos = dados;
       });
+  }
+
+  /*
+  * Métodos para trazer a contato pelo id do ponto de presença do pid
+  */
+ getObsAcao() {
+    this.pontoPresencaService.getObsAcao().subscribe(dados => { this.obsAcoes = dados;
+     });
   }
 
   /*
@@ -236,6 +254,7 @@ export class PontoPresencaDetalheComponent implements OnInit {
       .subscribe(res => {
         this.historicoAnalises = res[0];
         this.abrirNodal = true;
+        console.log(this.historicoAnalises);
       });
   }
 
@@ -267,6 +286,7 @@ export class PontoPresencaDetalheComponent implements OnInit {
       .getPontoHistorico(this.params.id)
       .subscribe(res => {
         this.pontoHistorico = res;
+        
         // delete  this.pontoHistorico[0].data;
         // delete  this.pontoHistorico[0].cod_analise;
         // delete  this.pontoHistorico[0].tipo_solicitacao;
@@ -336,7 +356,7 @@ export class PontoPresencaDetalheComponent implements OnInit {
     this.condicao = acao;
     if (detalhe.acao === 'interação') {
       this.getHistoricoInteracao(detalhe.data, this.params.id);
-    } else if (detalhe.acao === 'analise') {
+    } else if (detalhe.acao === 'análise') {
       this.getHistoricoAnalise(detalhe);
     } else {
       this.getHistoricoSolicitacao(
@@ -397,49 +417,43 @@ export class PontoPresencaDetalheComponent implements OnInit {
   }
 
   salvarAnalise(analise) {
-    console.log(analise._directives[21]);
+    analise.value.data_oficio = this.apiServicesData.formatData(
+      analise.value.data_oficio
+    );
+    analise.value.data_instalacao = this.apiServicesData.formatData(
+      analise.value.data_instalacao
+    );
+
+    analise.value.cod_gesac = this.params.id;
+    analise.value.cnpj_empresa = this.analiseDetalhe.cnpj_empresa;
 
 
-    // analise.value.data_oficio = this.apiServicesData.formatData(
-    //   analise.value.data_oficio
-    // );
-    // analise.value.data_instalacao = this.apiServicesData.formatData(
-    //   analise.value.data_instalacao
-    // );
+    if (this.condicaoAnalise) {
 
-    // analise.value.cod_gesac = this.params.id;
-    // analise.value.cnpj_empresa = this.analiseDetalhe.cnpj_empresa;
+      if (this.justificativa) {
+        analise.value.tipo_solicitacao = this.btnsAnalise.tipo_solicitacao[1];
+        analise.value.justificativa = this.analiseDetalhe.justificativa;
+        analise.value.aceite = false;
 
+          if (!!analise.value.justificativa) {
 
-    // if (this.condicaoAnalise) {
-
-    //   if (this.justificativa) {
-    //     analise.value.tipo_solicitacao = this.btnsAnalise.tipo_solicitacao[1];
-    //     analise.value.justificativa = this.analiseDetalhe.justificativa;
-    //     analise.value.aceite = false;
-
-    //       if (!!analise.value.justificativa) {
-
-    //         this.putAnalise(analise, this.analiseDetalhe.cod_analise);
-    //        if ( this.errorJustificativa = true) {
-    //         this.errorJustificativa = false;
-    //        }
-    //       } else {
-    //         this.errorJustificativa = true;
-    //       }
-    //   } else {
-    //     analise.value.tipo_solicitacao = this.btnsAnalise.tipo_solicitacao[0];
-    //     analise.value.justificativa = null;
-    //     analise.value.aceite = true;
-    //     this.putAnalise(analise, this.analiseDetalhe.cod_analise);
-    //   }
-    // }
+            this.putAnalise(analise, this.analiseDetalhe.cod_analise);
+           if ( this.errorJustificativa = true) {
+            this.errorJustificativa = false;
+           }
+          } else {
+            this.errorJustificativa = true;
+          }
+      } else {
+        analise.value.tipo_solicitacao = this.btnsAnalise.tipo_solicitacao[0];
+        analise.value.justificativa = null;
+        analise.value.aceite = true;
+        this.putAnalise(analise, this.analiseDetalhe.cod_analise);
+      }
+    }
 
   }
 
 
-  onClick(value, submit) {
-    this.obrigatorio = !this.obrigatorio;
-  }
 
 }

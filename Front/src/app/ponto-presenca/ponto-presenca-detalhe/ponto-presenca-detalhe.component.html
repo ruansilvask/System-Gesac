@@ -195,6 +195,62 @@
       <!---------------------- Fim Collapse de Contato     ------------------------------------>
 
 
+      <!---------------------- Inicio Collapse de Observação     ------------------------------------>
+
+      <sui-accordion-panel>
+
+        <div title class="ui big label">
+          <i class="dropdown icon"></i>
+          <span class="titleDel">Observações de Ações</span>
+        </div>
+
+        <!--incio da aba Tipologia-->
+        <div content>
+          <div class="ui raised segment">
+            <form class="ui form error" #fAddObeservacao="ngForm" (ngSubmit)="salvarObeservacao(fAddObeservacao)">
+
+              <div class="ui grid">
+
+                <div class="thirteen wide column">
+                  <label>Observações de Ações</label>
+                  <select class="ui dropdown" name="Obeservacao" [(ngModel)]="ObeservacaoPontoPresenca.cod_obs" required #Obeservacao> 
+                    <option value="">Selecione Observação de Ação</option> 
+                    <option *ngFor="let Obeservacao of obsAcoes" value="{{Obeservacao.cod_obs}}">{{Obeservacao.descricao}}</option> 
+                  </select>
+                </div>
+                <div class="two wide column">
+                  <div class="one wide column" suiPopup popupText="Adicionar Obeservacao" popupInverted [popupPlacement]="'top left'">
+                    <button class="ui circular black icon button btnAdd" type="submit">
+                      <i class="plus icon"></i>
+                    </button>
+                  </div>
+                </div>
+                <div class="sixteen wide column">
+                  </div>
+              </div>
+
+            </form>
+
+            <div class="ui stackable four column grid">
+
+              <div class="column" *ngFor="let Obeservacao of ObeservacoesGuardadas" suiPopup popupText="Remover Obeservacao" popupInverted
+                [popupPlacement]="'top left'">
+                <a class="fluid ui labeled icon button btn-Obeservacao" (click)="removerObeservacao(Obeservacao)">
+                  <i class="close icon"></i>
+                  {{Obeservacao?.descricao}}
+                </a>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+
+      </sui-accordion-panel>
+
+      <!---------------------- Fim Collapse de Observação     ------------------------------------>
+
+
       <!---------------------- Inicio Collapse de Analisar     ------------------------------------>
       <sui-accordion-panel [isOpen]="FecharCollapseAnalise" [isDisabled]="!abrirAnalisar">
 
@@ -237,8 +293,13 @@
                 <div class="field">
                   <div class="ui left icon input">
                     <i class="calendar icon"></i>
-                    <input [(ngModel)]="analiseDetalhe.data_oficio" name="data_oficio" suiDatepicker [pickerMode]="'date'" [pickerFirstDayOfWeek]="0"
-                      [pickerUseNativeOnMobile]="false">
+                    <input [(ngModel)]="analiseDetalhe.data_oficio"
+                    name="data_oficio"
+                    suiDatepicker
+                    [pickerMode]="'date'"
+                    [pickerFirstDayOfWeek]="0"
+                    [pickerUseNativeOnMobile]="false">
+                      <i class="close link icon iconRight" (click)="analiseDetalhe.data_oficio = undefined"></i>
                   </div>
                 </div>
               </div>
@@ -249,8 +310,14 @@
                 <div class="field">
                   <div class="ui left icon input">
                     <i class="calendar icon"></i>
-                    <input [(ngModel)]="analiseDetalhe.data_instalacao" name="data_instalacao" suiDatepicker [pickerMode]="'date'" [pickerFirstDayOfWeek]="0"
-                      [pickerUseNativeOnMobile]="false">
+                    <input
+                    [(ngModel)]="analiseDetalhe.data_instalacao"
+                    name="data_instalacao"
+                    suiDatepicker
+                    [pickerMode]="'date'"
+                    [pickerFirstDayOfWeek]="0"
+                    [pickerUseNativeOnMobile]="false">
+                    <i class="close link icon iconRight" (click)="analiseDetalhe.data_instalacao= undefined"></i>
                   </div>
                 </div>
               </div>
@@ -352,9 +419,11 @@
               <div class="four wide column centered row">
                 <label>Responsável assinou?</label>
                 <div class="field">
-                  <sui-radio-button [value]="1" [(ngModel)]="analiseDetalhe.assinatura_resp" (ngModelChange)="onClick(analiseDetalhe.assinatura_resp)" name="assinatura_resp">Sim</sui-radio-button>
 
-                  <sui-radio-button [value]="0" [(ngModel)]="analiseDetalhe.assinatura_resp" (ngModelChange)="onClick(analiseDetalhe.assinatura_resp)" name="assinatura_resp">Não</sui-radio-button>
+                  <sui-radio-button [value]="1" [(ngModel)]="analiseDetalhe.assinatura_resp"  name="assinatura_resp">Sim</sui-radio-button>
+
+                    <sui-radio-button [value]="0" [(ngModel)]="analiseDetalhe.assinatura_resp"  name="assinatura_resp">Não</sui-radio-button>
+
 
                 </div>
               </div>
@@ -369,10 +438,8 @@
                 <input [(ngModel)]="analiseDetalhe.telefone1" mask="(00) 00000-0000" minlength="10" name="telefone1" placeholder="Telefone"
                   type="text" [required]="analiseDetalhe.assinatura_resp === 1">
                 <div class="invalid-feedback" [ngClass]="{'active':  !!analiseSubmit?._directives[21]?.control?.invalid}">
-                  Telefone Obrigatório e Inválido!
+                  Telefone Inválido!
                 </div>
-
-
               </div>
 
 
@@ -423,7 +490,16 @@
                 <input placeholder="Longitude" type="text">
               </div>
             </div>
-
+            
+            <div class="ui stackable one column grid">
+                <div class="column">
+                <label>Observações de Ações</label> 
+                <select class="ui dropdown" name="Obeservacao" [(ngModel)]="analiseDetalhe.cod_obs" (change)="TESTE(analiseDetalhe.cod_obs)" required #Obeservacao> 
+                  <option value="">Selecione Observação de Ação</option> 
+                  <option *ngFor="let Obeservacao of obsAcoes" value="{{Obeservacao.cod_obs}}">{{Obeservacao.descricao}}</option> 
+                </select>
+              </div>
+              </div>
 
 
             <div class="ui stackable one column grid">
@@ -431,7 +507,7 @@
               <div class="column">
                 <label>Obeservação</label>
                 <textarea [(ngModel)]="analiseDetalhe.obs" name="obs" maxlength="1000" placeholder="Observação" style="margin-top: 0px; margin-bottom: 0px; height: 112px;">
-                  </textarea>
+                </textarea>
               </div>
 
             </div>
@@ -443,39 +519,40 @@
               </div>
 
               <div class="four wide column">
-                <button [disabled]="analiseSubmit.invalid" class="ui red button" (click)="justificativa = true;" >{{ this.btnsAnalise.descricao[1] }}</button>
+                <button [disabled]="analiseSubmit.invalid" class="ui red button" (click)="justificativa = true;">{{ this.btnsAnalise.descricao[1] }}</button>
               </div>
 
 
             </div>
 
-        <!-- Modal da justificativa da analise caso a analise negado -->
+            <!-- Modal da justificativa da analise caso a analise negado -->
 
-        <sui-modal *ngIf="justificativa === true" [isClosable]="false" [transition]="'scale'" [transitionDuration]="500" #modal>
-            <div class="header">Justificativa</div>
-            <div class="content">
+            <sui-modal *ngIf="justificativa === true" [isClosable]="false" [transition]="'scale'" [transitionDuration]="500" #modal>
+              <div class="header">Justificativa</div>
+              <div class="content">
 
-              <form class="ui form error">
+                <form class="ui form error">
 
-                <div class="ui stackable one column grid">
+                  <div class="ui stackable one column grid">
 
-                  <div  class="column" [ngClass]="{'error': errorJustificativa}">
-                    <label>Você tem certeza que deseja Rejeitar essa analise ?</label>
-                    <textarea  [(ngModel)]="analiseDetalhe.justificativa"  name="justificativa" style="margin-top: 0px; margin-bottom: 0px; height: 112px;" placeholder="Escreva sua justificativa aqui..." [required]="true"></textarea>
-                    <div class="invalid-feedback" [ngClass]="{'active': errorJustificativa }">
+                    <div class="column" [ngClass]="{'error': errorJustificativa}">
+                      <label>Você tem certeza que deseja Rejeitar essa analise ?</label>
+                      <textarea [(ngModel)]="analiseDetalhe.justificativa" name="justificativa" style="margin-top: 0px; margin-bottom: 0px; height: 112px;"
+                        placeholder="Escreva sua justificativa aqui..." [required]="true"></textarea>
+                      <div class="invalid-feedback" [ngClass]="{'active': errorJustificativa }">
                         Justificativa obrigatória!
                       </div>
+                    </div>
+
                   </div>
 
-                </div>
-
-              </form>
-            </div>
-            <div class="actions">
-              <button class="ui red button" (click)="justificativa = false">Cancel</button>
-              <button class="ui green button" (click)="salvarAnalise(analiseSubmit)" autofocus>OK</button>
-            </div>
-          </sui-modal>
+                </form>
+              </div>
+              <div class="actions">
+                <button class="ui red button" (click)="justificativa = false">Cancel</button>
+                <button class="ui green button" (click)="salvarAnalise(analiseSubmit)" autofocus>OK</button>
+              </div>
+            </sui-modal>
 
 
           </form>
@@ -497,12 +574,14 @@
           </div>
         </div>
         <div class="ui segment" content>
-          
-            <div class="three wide column">
-                <button class="ui labeled icon button" name="mselecoes" (click)="modalAddEditPPOpen()"  [routerLink]="['/pontPre', pontospresencas?.cod_gesac, 'detalhe', pontospresencas?.cod_gesac]" #mselecoes suiPopup popupHeader="Add/Edit"
-                  popupInverted="true">
-                  <i class="check circle icon"></i>Editar Ponto de Presença</button>
-              </div>
+
+
+          <div class="three wide column">
+            <button class="ui labeled icon button" name="mselecoes" (click)="modalAddEditPPOpen()" [routerLink]="['/pontPre', pontospresencas?.cod_gesac, 'detalhe', pontospresencas?.cod_gesac]"
+              #mselecoes suiPopup popupHeader="Add/Edit" popupInverted="true">
+              <i class="check circle icon"></i>Editar Ponto de Presença</button>
+          </div>
+
 
           <form class="ui form" #formInteracao='ngForm' (ngSubmit)="submitInteracao(formInteracao)">
 
@@ -546,29 +625,28 @@
 
         </div>
 
+        <!--Inicio do Modal Modal de add/edit Ponto de Presença -->
+        <sui-modal *ngIf="selcPP" [isClosable]="false" [transition]="'scale'" [isInverted]="true" [size]="'normal'" [transitionDuration]="500"
+          #modal>
+          <div class="header">
 
-        
-    <!--Inicio do Modal Modal de add/edit Ponto de Presença -->
-    <sui-modal *ngIf="selcPP" [isClosable]="false" [transition]="'scale'" [isInverted]="true" [size]="'normal'" [transitionDuration]="500" #modal>
-      <div class="header">
+            <div class="ui grid">
+              <div class="fifteen wide column">
+              </div>
+              <div class="one wide column">
+                <i class="close red link icon" (click)="closeModal()"></i>
+              </div>
+            </div>
 
-        <div class="ui grid">
-          <div class="fifteen wide column">
           </div>
-          <div class="one wide column">
-            <i class="close red link icon" (click)="closeModal()"></i>
+
+          <div class="content">
+            <router-outlet></router-outlet>
+
           </div>
-        </div>
 
-      </div>
-
-      <div class="content">
-          <router-outlet></router-outlet>
-
-      </div>
-
-    </sui-modal>
-    <!--Fim do Modal de add/edit Ponto de Presença -->
+        </sui-modal>
+        <!--Fim do Modal de add/edit Ponto de Presença -->
 
       </sui-accordion-panel>
       <!---------------------- Fim Collapse de Interação     ------------------------------------>
@@ -628,7 +706,6 @@
 
     </sui-accordion>
   </div>
-</div>
 
 <!---------------------- Modais de analise, interação e solicitação   ------------------------------------>
 
@@ -649,7 +726,7 @@
 
   <div class="content" [ngSwitch]="condicao">
 
-    <div *ngSwitchCase="'analise'">
+    <div *ngSwitchCase="'análise'">
 
       <form class="ui form">
         <div class="ui stackable four column grid">
@@ -817,10 +894,17 @@
         </div>
 
         <div class="ui stackable one column grid">
+        <div class="column">
+          <label>Observação da Ação:</label>
+          <input [readonly]="true" [value]="historicoAnalises.descricao" placeholder="ObsAcao" type="text">
+        </div>
+      </div>
+
+        <div class="ui stackable one column grid">
           <div class="column">
             <label>Obeservação</label>
             <textarea [readonly]="true" [value]="historicoAnalises.obs" placeholder="Observação" style="margin-top: 0px; margin-bottom: 0px; height: 112px;">
-              </textarea>
+            </textarea>
           </div>
         </div>
 

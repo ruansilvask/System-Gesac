@@ -39,9 +39,10 @@ build/Release
 node_modules/
 jspm_packages/
 assets/
-conexao/
+app/conexao
 services/
 Front/
+
 
 # Arquivos para ignorar
 app.api.ts
