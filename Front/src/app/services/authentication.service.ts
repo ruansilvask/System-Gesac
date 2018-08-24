@@ -17,7 +17,7 @@ export class AuthenticationService {
     ) { }
 
     login(login: string, senha: string) {
-        return this.http.post<any>(`http://172.25.117.164:310/autentica`, { login: login, senha: senha })
+        return this.http.post<any>(`http://172.25.117.3:310/autentica`, { login: login, senha: senha })
             .map(res => {
               if (res.token) {
                 localStorage.setItem('currentUser', res.token);

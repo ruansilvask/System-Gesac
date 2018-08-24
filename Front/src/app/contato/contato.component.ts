@@ -137,35 +137,60 @@ export class ContatoComponent implements OnInit {
   }
 
   formatPost(type, codPessoa, codContato, form) {
-    switch (type) {
-      case 'instituicao':
-      return {
+    if (type === 'instituicao'){
+    return {
         cod_pessoa: codPessoa.cod_pessoa,
         cod_instituicao: codContato,
         nome: form.nome,
         cargo: form.cargo,
         obs: form.obs
       };
-      break;
-      case 'ponto' :
-      return {
+   } else if (type === 'ponto'){
+    return {
         cod_pessoa: codPessoa.cod_pessoa,
         cod_gesac: codContato,
         nome: form.nome,
         cargo: form.cargo,
         obs: form.obs
       };
-      break;
-      case 'empresa' :
-      return {
+   } else if (type === 'empresa'){
+    return {
         cod_pessoa: codPessoa.cod_pessoa,
         cnpj_empresa: codContato,
         nome: form.nome,
         cargo: form.cargo,
         obs: form.obs
       };
-      break;
-    }
+   }
+    // switch (type) {
+    //   case 'instituicao':
+    //   return {
+    //     cod_pessoa: codPessoa.cod_pessoa,
+    //     cod_instituicao: codContato,
+    //     nome: form.nome,
+    //     cargo: form.cargo,
+    //     obs: form.obs
+    //   };
+    //   break;
+    //   case 'ponto' :
+    //   return {
+    //     cod_pessoa: codPessoa.cod_pessoa,
+    //     cod_gesac: codContato,
+    //     nome: form.nome,
+    //     cargo: form.cargo,
+    //     obs: form.obs
+    //   };
+    //   break;
+    //   case 'empresa' :
+    //   return {
+    //     cod_pessoa: codPessoa.cod_pessoa,
+    //     cnpj_empresa: codContato,
+    //     nome: form.nome,
+    //     cargo: form.cargo,
+    //     obs: form.obs
+    //   };
+    //   break;
+    // }
   }
 
   // post de contatos

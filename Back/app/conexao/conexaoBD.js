@@ -6,6 +6,7 @@ const connectMYSQL = () => {
 	return mysql.createConnection({
 			host: 'localhost',
 			user: 'root',
+
 			password: '',
 			database: 'gesac_db' 
 	});
