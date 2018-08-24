@@ -41,8 +41,6 @@ jspm_packages/
 assets/
 app/conexao
 services/
-Front/
-
 
 # Arquivos para ignorar
 app.api.ts

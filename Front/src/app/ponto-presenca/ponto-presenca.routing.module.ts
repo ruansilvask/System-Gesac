@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 import { PontoPresencaComponent } from './ponto-presenca.component';
 import { PontoPresencaAddEditComponent } from './ponto-presenca-add-edit/ponto-presenca-add-edit.component';
 import { PontoPresencaDetalheComponent } from './ponto-presenca-detalhe/ponto-presenca-detalhe.component';
-import { ObsAcaoComponent } from './obs-acao/obs-acao.component';
+import { ObsAcaoComponent } from './ponto-presenca-obs-acao/ponto-presenca-obs-acao.component';
 
 const PontoPresencaRoutes = [
     { path: '', component: PontoPresencaComponent,
