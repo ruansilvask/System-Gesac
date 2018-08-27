@@ -10,6 +10,8 @@ export class ObsAcaoComponent implements OnInit {
 
   filter = true;
   obs = false;
+  obsAcao: any = [];
+  observacao = '';
 
   constructor(
     private pontoPresencaService: PontoPresencaService
@@ -18,7 +20,7 @@ export class ObsAcaoComponent implements OnInit {
   getObsAcao() {
     this.pontoPresencaService.getObsAcao()
     .subscribe(
-      res => console.log(res)
+      res => this.obsAcao = res
     );
   }
 

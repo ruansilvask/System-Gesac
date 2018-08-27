@@ -1,15 +1,31 @@
 <div class="ui segment" *ngIf="filter">
   <form class="ui form">
     <div class="fields">
-      <div class="ten wide field">
+      <div class="four wide field">
+          <p>Selecione o tipo de filtro:</p>
+        <div class="ui buttons">
+            <button class="ui button active">Contém</button>
+            <div class="or" data-text="ou"></div>
+            <button class="ui button active">tem</button>
+          </div>
+      </div>
+      <div class="nine wide field">
           <p>Selecione uma observação para ação:</p>
-          <sui-select class="selection" #select>
-              <sui-select-option *ngFor="let option of select.filteredOptions"
-                                 [value]="option">
+          <sui-select class="selection"
+          name="descricao"
+          [(ngModel)]="observacao"
+          [options]="obsAcao"
+          labelField="obsAcao.descricao"
+          valueField="obsAcao.cod_obs"
+          #select>
+              <sui-select-option
+                *ngFor="let o of select.filteredOptions"
+                [value]="o">
               </sui-select-option>
           </sui-select>
+
       </div>
-      <div class="six wide field">
+      <div class="three wide field">
           <button class="ui button btnAdd" type="submit" autofocus (click)="obs = true; filter = false;"> Aplicar Filtro</button>
       </div>
     </div>
@@ -17,5 +33,5 @@
 </div>
 
 <div class="ui segment" *ngIf="obs">
-    <p>OBS</p>
+    <p>{{observacao}}</p>
   </div>
