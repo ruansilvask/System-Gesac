@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { PontoPresencaService } from '../ponto-presenca.service';
 
 @Component({
   selector: 'app-obs-acao',
@@ -10,9 +11,18 @@ export class ObsAcaoComponent implements OnInit {
   filter = true;
   obs = false;
 
-  constructor() { }
+  constructor(
+    private pontoPresencaService: PontoPresencaService
+  ) { }
 
-  ngOnInit() {
+  getObsAcao() {
+    this.pontoPresencaService.getObsAcao()
+    .subscribe(
+      res => console.log(res)
+    );
   }
 
+  ngOnInit() {
+    this.getObsAcao();
+  }
 }
