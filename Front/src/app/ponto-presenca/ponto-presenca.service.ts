@@ -307,6 +307,9 @@ export class PontoPresencaService {
 
 
 
+  /*
+    * OBSERVAÇÔES AÇÕES
+    */
 
    /*
     * Protocolo HTTP para inserir uma nova analise
@@ -316,10 +319,14 @@ export class PontoPresencaService {
     return this.http.get(`${GESAC_API}obsAcao`).map(res => res);
   }
 
-  /*
-    * OBSERVAÇÔES AÇÕES
+
+   /*
+    * Protocolo HTTP para inserir uma nova analise
     */
 
+   salvarObsAcao(form) {
+    return this.http.post(`${GESAC_API}obsAcao`, form).map(res => res);
+  }
 
      /*
     * Protocolo HTTP para inserir uma nova analise
@@ -337,7 +344,7 @@ export class PontoPresencaService {
 
   removerObsAcao(cod_gesac, cod_obsAcao) {
     return this.http
-      .get(`${GESAC_API}obsAcao/${cod_gesac}/${cod_obsAcao}`)
+      .delete(`${GESAC_API}obsAcao/${cod_gesac}/${cod_obsAcao}`)
       .map(res => res);
   }
 

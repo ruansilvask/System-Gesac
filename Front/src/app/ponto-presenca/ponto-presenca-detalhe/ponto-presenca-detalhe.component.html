@@ -213,7 +213,7 @@
 
                 <div class="thirteen wide column">
                   <label>Observações de Ações</label>
-                  <select class="ui dropdown" name="Obeservacao" [(ngModel)]="ObeservacaoPontoPresenca.cod_obs" required #Obeservacao> 
+                  <select class="ui dropdown" name="cod_obs" [(ngModel)]="ObeservacaoPontoPresenca.cod_obs" required #Obeservacao> 
                     <option value="">Selecione Observação de Ação</option> 
                     <option *ngFor="let Obeservacao of obsAcoes" value="{{Obeservacao.cod_obs}}">{{Obeservacao.descricao}}</option> 
                   </select>
@@ -233,9 +233,9 @@
 
             <div class="ui stackable four column grid">
 
-              <div class="column" *ngFor="let Obeservacao of ObeservacoesGuardadas" suiPopup popupText="Remover Obeservacao" popupInverted
+              <div class="column" *ngFor="let Obeservacao of obsAcoesCad" suiPopup popupText="Remover Obeservacao" popupInverted
                 [popupPlacement]="'top left'">
-                <a class="fluid ui labeled icon button btn-Obeservacao" (click)="removerObeservacao(Obeservacao)">
+                <a class="fluid ui labeled icon button btn-Obeservacao" (click)="removerObsAcao(Obeservacao)">
                   <i class="close icon"></i>
                   {{Obeservacao?.descricao}}
                 </a>
