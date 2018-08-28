@@ -1,37 +1,71 @@
-<div class="ui segment" *ngIf="filter">
+<div class="ui segment">
   <form class="ui form">
     <div class="fields">
       <div class="four wide field">
-          <p>Selecione o tipo de filtro:</p>
+        <p>Selecione o tipo de filtro:</p>
         <div class="ui buttons">
-            <button class="ui button active">Contém</button>
-            <div class="or" data-text="ou"></div>
-            <button class="ui button active">tem</button>
-          </div>
+          <button class="ui button active" (click)="searchType('C')">Contém</button>
+          <div class="or" data-text="ou"></div>
+          <button class="ui button active" (click)="searchType('A')">Apenas</button>
+        </div>
       </div>
       <div class="nine wide field">
-          <p>Selecione uma observação para ação:</p>
-          <sui-select class="selection"
-          name="descricao"
-          [(ngModel)]="observacao"
-          [options]="obsAcao"
-          labelField="obsAcao.descricao"
-          valueField="obsAcao.cod_obs"
-          #select>
-              <sui-select-option
-                *ngFor="let o of select.filteredOptions"
-                [value]="o">
-              </sui-select-option>
-          </sui-select>
+        <p>Selecione uma observação para ação:</p>
+        <sui-select class="selection" name="descricao" [(ngModel)]="observacao" [options]="obsAcao" labelField="obsAcao.descricao"
+          valueField="obsAcao.cod_obs" #select>
+          <sui-select-option *ngFor="let o of select.filteredOptions" [value]="o">
+          </sui-select-option>
+        </sui-select>
 
       </div>
       <div class="three wide field">
-          <button class="ui button btnAdd" type="submit" autofocus (click)="obs = true; filter = false;"> Aplicar Filtro</button>
+        <button class="ui button btnAdd" type="submit" autofocus (click)="searchObsAction(observacao)"> Aplicar Filtro</button>
       </div>
     </div>
   </form>
 </div>
 
-<div class="ui segment" *ngIf="obs">
-    <p>{{observacao}}</p>
+<div class="ui segment" *ngIf="returnObsAction.length !== 0">
+  <h5 class="ui top attached header">
+      Codigos do GESAC: Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste
+    </h5>
+  <div class="ui raised attached segment">
+    <form class="ui form error" #fAddObeservacao="ngForm" (ngSubmit)="salvarObeservacao(fAddObeservacao)">
+
+      <div class="ui grid">
+
+        <div class="thirteen wide column">
+          <label>Observações de Ações</label>
+          <select class="ui dropdown" name="Obeservacao" [(ngModel)]="ObeservacaoPontoPresenca.cod_obs" required
+            #Obeservacao>
+            <option value="">Selecione Observação de Ação</option>
+            <option *ngFor="let Obeservacao of obsAcoes" value="{{Obeservacao.cod_obs}}">{{Obeservacao.descricao}}</option>
+          </select>
+        </div>
+        <div class="two wide column">
+          <div class="one wide column" suiPopup popupText="Adicionar Obeservacao" popupInverted [popupPlacement]="'top left'">
+            <button class="ui circular black icon button btnAdd" type="submit">
+              <i class="plus icon"></i>
+            </button>
+          </div>
+        </div>
+        <div class="sixteen wide column">
+        </div>
+      </div>
+
+    </form>
+
+    <div class="ui stackable four column grid">
+
+      <div class="column" *ngFor="let Obeservacao of ObeservacoesGuardadas" suiPopup popupText="Remover Obeservacao"
+        popupInverted [popupPlacement]="'top left'">
+        <a class="fluid ui labeled icon button btn-Obeservacao" (click)="removerObeservacao(Obeservacao)">
+          <i class="close icon"></i>
+          {{Obeservacao?.descricao}}
+        </a>
+      </div>
+
+    </div>
+
   </div>
+</div>
