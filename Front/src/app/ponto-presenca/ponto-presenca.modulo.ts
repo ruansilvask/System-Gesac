@@ -24,8 +24,8 @@ import { ObsAcaoComponent } from './ponto-presenca-obs-acao/ponto-presenca-obs-a
         HttpModule
     ],
     declarations: [
-        PontoPresencaAddEditComponent,
         PontoPresencaComponent,
+        PontoPresencaAddEditComponent,
         PontoPresencaDetalheComponent,
         ObsAcaoComponent
     ],
