@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { PontoPresencaService } from '../ponto-presenca.service';
 
 @Component({
@@ -8,8 +8,7 @@ import { PontoPresencaService } from '../ponto-presenca.service';
 })
 export class ObsAcaoComponent implements OnInit {
 
-  filter = true;
-  obs = false;
+  @Input() obsSelecionadas: any;
   obsAcao: any = [];
   observacao = '';
   resultSearchType = [];
@@ -44,7 +43,7 @@ export class ObsAcaoComponent implements OnInit {
 
   ngOnInit() {
     this.getObsAcao();
-
+    console.log(this.obsAcao);
   }
 
 }

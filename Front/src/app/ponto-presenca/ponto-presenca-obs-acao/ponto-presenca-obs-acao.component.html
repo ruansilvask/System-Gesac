@@ -27,7 +27,7 @@
 
 <div class="ui segment" *ngIf="returnObsAction.length !== 0">
   <h5 class="ui top attached header">
-      Codigos do GESAC: Teste Teste Teste Teste Teste Teste Teste Teste Teste Teste
+      Codigos do GESAC: <ng-template ngFor let-obs [ngForOf]='obsSelecionadas'> {{obs?.cod_gesac + '; ' }} </ng-template>
     </h5>
   <div class="ui raised attached segment">
     <form class="ui form error" #fAddObeservacao="ngForm" (ngSubmit)="salvarObeservacao(fAddObeservacao)">
@@ -57,13 +57,13 @@
 
     <div class="ui stackable four column grid">
 
-      <div class="column" *ngFor="let Obeservacao of ObeservacoesGuardadas" suiPopup popupText="Remover Obeservacao"
+      <!-- <div class="column" *ngFor="let Obeservacao of ObeservacoesGuardadas" suiPopup popupText="Remover Obeservacao"
         popupInverted [popupPlacement]="'top left'">
         <a class="fluid ui labeled icon button btn-Obeservacao" (click)="removerObeservacao(Obeservacao)">
           <i class="close icon"></i>
           {{Obeservacao?.descricao}}
         </a>
-      </div>
+      </div> -->
 
     </div>
 
