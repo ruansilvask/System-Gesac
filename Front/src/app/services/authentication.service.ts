@@ -1,6 +1,6 @@
 ﻿import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { GESAC_API } from '../app.api';
+import { API } from '../app.api';
 import 'rxjs/add/operator/map';
 import { Router } from '@angular/router';
 import { UsuarioService } from '../usuario/usuario.service';
@@ -17,7 +17,7 @@ export class AuthenticationService {
     ) { }
 
     login(login: string, senha: string) {
-        return this.http.post<any>(`http://172.25.117.78:310/autentica`, { login: login, senha: senha })
+        return this.http.post<any>(`${API.AUTH_API}autentica`, { login: login, senha: senha })
             .map(res => {
               if (res.token) {
                 localStorage.setItem('currentUser', res.token);
@@ -53,7 +53,7 @@ getUser() {
 
 logout() {
   if (localStorage.getItem('currentUserCode')) {
-    this.http.post(`${GESAC_API}deslogar`, {cod_usuario: localStorage.getItem('currentUserCode')})
+    this.http.post(`${API.GESAC_API}deslogar`, {cod_usuario: localStorage.getItem('currentUserCode')})
     .subscribe(
       res => this.cleanLocalStorage(),
       erro => this.cleanLocalStorage()

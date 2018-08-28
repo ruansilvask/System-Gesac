@@ -5,7 +5,7 @@ import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 
-import { GESAC_API } from '../app.api';
+import { API } from '../app.api';
 
 
 
@@ -18,7 +18,7 @@ export class ApiServiceExcel {
 
  getExcel(): Observable<any> {
     return this.http
-      .get(`${GESAC_API}geraExcel`, {
+      .get(`${API.GESAC_API}geraExcel`, {
         responseType: 'blob',
         headers: new HttpHeaders().append('Content-Type', 'applicantion/json')
       })
