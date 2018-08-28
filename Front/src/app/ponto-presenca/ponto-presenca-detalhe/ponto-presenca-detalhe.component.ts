@@ -20,10 +20,13 @@ import Swal from 'sweetalert2';
 
 export class PontoPresencaDetalheComponent implements OnInit {
 
+  bloquearNome: any;
+  tipo_interacoes: any;
 
   removido: Object;
   obsAcoesCad: any;
   obsAcoes: Object;
+
 
   ObeservacaoPontoPresenca = {
     descricao: '',
@@ -46,7 +49,10 @@ export class PontoPresencaDetalheComponent implements OnInit {
   tipologias: any;
   contatos: any;
   interacao: any;
+  data_interacao = undefined;
+  tipo_int: any;
   pessoasInterecao: any;
+  tipo_interacao: any;
 
   errorJustificativa = false;
   justificativa = false;
@@ -132,6 +138,7 @@ export class PontoPresencaDetalheComponent implements OnInit {
     this.getAnaliseByID();
     this.getEmpresas();
     this.getPontoHistorico();
+    this.getInteração();
   }
 
 
@@ -301,6 +308,7 @@ export class PontoPresencaDetalheComponent implements OnInit {
       .getPontoHistorico(this.params.id)
       .subscribe(res => {
         this.pontoHistorico = res;
+
         // delete  this.pontoHistorico[0].data;
         // delete  this.pontoHistorico[0].cod_analise;
         // delete  this.pontoHistorico[0].tipo_solicitacao;
@@ -325,9 +333,18 @@ export class PontoPresencaDetalheComponent implements OnInit {
       });
   }
 
+
   /*
- * Métodos para listar todo o historico de interacao, analise e solicitação
- */
+  * Métodos para bloquear o nome da interação
+*/
+
+nomeInteracao(objInt) {
+    this.bloquearNome = objInt.tratamento;
+}
+
+  /*
+  * Métodos para listar todo o historico de interacao, analise e solicitação
+*/
   getEmpresas() {
     this.pontoPresencaService.getEmpresas().subscribe(dados => {
       this.empresas = dados;
@@ -384,6 +401,10 @@ export class PontoPresencaDetalheComponent implements OnInit {
 
   // Função para cadastrar a interação
   submitInteracao(formInteracao: NgForm) {
+
+    formInteracao.value.tipo_interacao = formInteracao.value.tipo_interacao.tipo_interacao;
+    formInteracao.value.data_interacao = this.apiServicesData.formatData(formInteracao.value.data_interacao);
+
     formInteracao.value.cod_gesac = this.params.id;
     this.pontoPresencaService.postInteracao(formInteracao.value).subscribe(
       res => {
@@ -396,8 +417,16 @@ export class PontoPresencaDetalheComponent implements OnInit {
       },
       erro => Swal('Erro', `${erro.error}`, 'error')
     );
-    formInteracao.reset();
-    // })
+  }
+
+  getInteração() {
+  this.pontoPresencaService.getTipoInteracao().subscribe(
+    res => {
+      console.log(res);
+      this.tipo_interacoes = res;
+    }
+  );
+
   }
 
   // Função para pegar a analise

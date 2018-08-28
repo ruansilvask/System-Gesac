@@ -256,6 +256,15 @@ export class PontoPresencaService {
   }
 
   /*
+    * Protocolo HTTP para capturar tipo de interacao
+    */
+
+   getTipoInteracao() {
+    return this.http
+      .get(`${GESAC_API}pontoInteracao`)
+      .map(res => res);
+  }
+  /*
     * Protocolo HTTP do detalhe da Solicitacao
     */
 

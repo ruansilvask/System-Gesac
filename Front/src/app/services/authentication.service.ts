@@ -17,6 +17,7 @@ export class AuthenticationService {
     ) { }
 
     login(login: string, senha: string) {
+
         return this.http.post<any>(`${API.AUTH_API}autentica`, { login: login, senha: senha })
             .map(res => {
               if (res.token) {
