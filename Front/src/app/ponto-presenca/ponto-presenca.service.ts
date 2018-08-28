@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 
 import 'rxjs/add/operator/map';
 
-import { GESAC_API } from '../app.api';
+import { API } from '../app.api';
 import { PontoPresenca } from './ponto-presenca.model';
 import { Contrato } from '../contrato/contrato.model';
 import { InstituicaoResp } from '../instituicao-responsavel/instituicao-responsavel.model';
@@ -26,7 +26,7 @@ export class PontoPresencaService {
   */
   getPontoPresenca() {
     return this.http
-      .get<PontoPresenca>(`${GESAC_API}pontoPresenca`)
+      .get<PontoPresenca>(`${API.GESAC_API}pontoPresenca`)
       .map(res => res);
   }
 
@@ -35,7 +35,7 @@ export class PontoPresencaService {
   */
   getPontoPresencaPorId(id: number) {
     return this.http
-      .get<PontoPresenca>(`${GESAC_API}visuPontoPresenca/${id}`)
+      .get<PontoPresenca>(`${API.GESAC_API}visuPontoPresenca/${id}`)
       .map(res => res);
   }
   /*
@@ -43,7 +43,7 @@ export class PontoPresencaService {
    */
   getPontoHistorico(cod_gesac) {
     return this.http
-      .get(`${GESAC_API}pontoHistorico/${cod_gesac}`)
+      .get(`${API.GESAC_API}pontoHistorico/${cod_gesac}`)
       .map(res => res);
   }
 
@@ -52,7 +52,7 @@ export class PontoPresencaService {
   */
   getDetalhePontoPresenca(cod_gesac) {
     return this.http
-      .get(`${GESAC_API}detPontoPresenca/${cod_gesac}`)
+      .get(`${API.GESAC_API}detPontoPresenca/${cod_gesac}`)
       .map(res => res);
   }
 
@@ -61,7 +61,7 @@ export class PontoPresencaService {
   */
   postPontoPresenca(form) {
     return this.http
-      .post<PontoPresenca>(`${GESAC_API}pontoPresenca`, form)
+      .post<PontoPresenca>(`${API.GESAC_API}pontoPresenca`, form)
       .map(res => res);
   }
 
@@ -70,7 +70,7 @@ export class PontoPresencaService {
 */
   putPontoPresenca(id, form) {
     return this.http.put<PontoPresenca>(
-      `${GESAC_API}pontoPresenca/${id}`, form
+      `${API.GESAC_API}pontoPresenca/${id}`, form
     );
   }
 
@@ -83,7 +83,7 @@ export class PontoPresencaService {
   */
   getEnderecoDetalhe(idGesac) {
     return this.http
-      .get(`${GESAC_API}pontoEndereco/${idGesac}`)
+      .get(`${API.GESAC_API}pontoEndereco/${idGesac}`)
       .map(res => res);
   }
 
@@ -94,7 +94,7 @@ export class PontoPresencaService {
   postEndereco(form) {
     console.log(form);
     return this.http
-      .post<PontoPresenca>(`${GESAC_API}pontoEndereco`, form)
+      .post<PontoPresenca>(`${API.GESAC_API}pontoEndereco`, form)
       .map(res => res);
   }
 
@@ -103,7 +103,7 @@ export class PontoPresencaService {
 */
   putEndereco(id, codEnd, form) {
     return this.http
-      .put(`${GESAC_API}pontoEndereco/${id}/${codEnd}`, form)
+      .put(`${API.GESAC_API}pontoEndereco/${id}/${codEnd}`, form)
       .map(res => res);
   }
 
@@ -113,7 +113,7 @@ export class PontoPresencaService {
 
   deleteEnderecoPonto(cod_endereco, gesac) {
     return this.http
-    .delete(`${GESAC_API}pontoEndereco/${cod_endereco}/${gesac}`)
+    .delete(`${API.GESAC_API}pontoEndereco/${cod_endereco}/${gesac}`)
     .map(res => res);
   }
 
@@ -121,14 +121,14 @@ export class PontoPresencaService {
   * Protocolo HTTP do Contrato para trazer do banco
   */
   getContratos() {
-    return this.http.get<Contrato[]>(`${GESAC_API}contrato`).map(res => res);
+    return this.http.get<Contrato[]>(`${API.GESAC_API}contrato`).map(res => res);
   }
 
   /*
   * Protocolo HTTP de Empresa para trazer do banco
   */
   getEmpresas() {
-    return this.http.get(`${GESAC_API}empresa`).map(res => res);
+    return this.http.get(`${API.GESAC_API}empresa`).map(res => res);
   }
 
   /*
@@ -136,7 +136,7 @@ export class PontoPresencaService {
   */
   getLotes(numContrato) {
     return this.http
-      .get(`${GESAC_API}loteContrato/${numContrato}`)
+      .get(`${API.GESAC_API}loteContrato/${numContrato}`)
       .map(res => res);
   }
 
@@ -145,7 +145,7 @@ export class PontoPresencaService {
   */
   getVelocidade(codLote) {
     return this.http
-      .get(`${GESAC_API}velocidade/${codLote}`)
+      .get(`${API.GESAC_API}velocidade/${codLote}`)
       .map((res: Response) => res);
   }
 
@@ -154,7 +154,7 @@ export class PontoPresencaService {
   */
   getInstResps() {
     return this.http
-      .get<InstituicaoResp[]>(`${GESAC_API}instituicaoResponsavel`)
+      .get<InstituicaoResp[]>(`${API.GESAC_API}instituicaoResponsavel`)
       .map(res => res);
   }
 
@@ -164,7 +164,7 @@ export class PontoPresencaService {
   */
  getStatusPP() {
   return this.http
-  .get(`${GESAC_API}listStatusPP`)
+  .get(`${API.GESAC_API}listStatusPP`)
   .map(res => res);
 }
 
@@ -178,14 +178,14 @@ export class PontoPresencaService {
   * Protocolo HTTP do Tipologia para trazer do banco
   */
   getTipologia() {
-    return this.http.get(`${GESAC_API}tipologia`).map(res => res);
+    return this.http.get(`${API.GESAC_API}tipologia`).map(res => res);
   }
 
   /*
   * Protocolo HTTP do Tipologia para salvar no banco
   */
   postTipologia(form) {
-    return this.http.post(`${GESAC_API}pontoTipologia`, form).map(res => res);
+    return this.http.post(`${API.GESAC_API}pontoTipologia`, form).map(res => res);
   }
 
   /*
@@ -193,7 +193,7 @@ export class PontoPresencaService {
   */
   getTipologiaPP(id) {
     return this.http
-      .get(`${GESAC_API}pontoTipologia/${id}`)
+      .get(`${API.GESAC_API}pontoTipologia/${id}`)
       .map(res => res);
   }
 
@@ -202,7 +202,7 @@ export class PontoPresencaService {
   */
   removeTipologiaId(id, cod_tipologia) {
     return this.http
-      .delete(`${GESAC_API}pontoTipologia/${id}/${cod_tipologia}`)
+      .delete(`${API.GESAC_API}pontoTipologia/${id}/${cod_tipologia}`)
       .map((res: Response) => res);
   }
 
@@ -210,20 +210,20 @@ export class PontoPresencaService {
   * Protocolo HTTP do Msolicitacões para salvar no banco
   */
   postMSolicitacoes(form) {
-    return this.http.post(`${GESAC_API}pontoSolicitacao`, form).map(res => res);
+    return this.http.post(`${API.GESAC_API}pontoSolicitacao`, form).map(res => res);
   }
   /*
   * Protocolo HTTP do Msolicitacões para salvar no banco
   */
   getMSolicitacoes() {
-    return this.http.get(`${GESAC_API}pontoSolicitacao`).map(res => res);
+    return this.http.get(`${API.GESAC_API}pontoSolicitacao`).map(res => res);
   }
   /*
  * Protocolo HTTP do Contatos do Ponto para trazer do banco
  */
   getContatosPonto(cod_gesac) {
     return this.http
-      .get(`${GESAC_API}visuPontoContato/${cod_gesac}`)
+      .get(`${API.GESAC_API}visuPontoContato/${cod_gesac}`)
       .map(res => res);
   }
 
@@ -232,7 +232,7 @@ export class PontoPresencaService {
   */
   getStatusSolicitacoes(cod_status) {
     return this.http
-      .get(`${GESAC_API}pontoSolicitacaoStatus/${cod_status}`)
+      .get(`${API.GESAC_API}pontoSolicitacaoStatus/${cod_status}`)
       .map(res => res);
   }
 
@@ -241,7 +241,7 @@ export class PontoPresencaService {
   */
   postInteracao(formInterecao) {
     return this.http
-      .post(`${GESAC_API}pontoInteracao`, formInterecao)
+      .post(`${API.GESAC_API}pontoInteracao`, formInterecao)
       .map(res => res);
   }
 
@@ -251,7 +251,7 @@ export class PontoPresencaService {
 
    getHistoricoInteracao(cod_interacao, cod_gesac) {
     return this.http
-      .get(`${GESAC_API}pontoInteracao/${cod_interacao}/${cod_gesac}`)
+      .get(`${API.GESAC_API}pontoInteracao/${cod_interacao}/${cod_gesac}`)
       .map(res => res);
   }
 
@@ -262,7 +262,7 @@ export class PontoPresencaService {
    getHistoricoSolicitacao(data, cod_gesac, tipo_solicitacao) {
     return this.http
       .get(
-        `${GESAC_API}pontoSolicitacao/${data}/${tipo_solicitacao}/${cod_gesac}`
+        `${API.GESAC_API}pontoSolicitacao/${data}/${tipo_solicitacao}/${cod_gesac}`
       )
       .map(res => res);
   }
@@ -273,7 +273,7 @@ export class PontoPresencaService {
 
   getAnaliseID(cod_gesac) {
     return this.http
-      .get(`${GESAC_API}visuPontoAnalise/${cod_gesac}`)
+      .get(`${API.GESAC_API}visuPontoAnalise/${cod_gesac}`)
       .map(res => res);
   }
 
@@ -282,7 +282,7 @@ export class PontoPresencaService {
     */
 
   postAnalise(form) {
-    return this.http.post(`${GESAC_API}pontoAnalise`, form).map(res => res);
+    return this.http.post(`${API.GESAC_API}pontoAnalise`, form).map(res => res);
   }
 
   /*
@@ -291,7 +291,7 @@ export class PontoPresencaService {
 
   putAnalise(form, codAnalise) {
     return this.http
-      .put(`${GESAC_API}pontoAnalise/${codAnalise}`, form)
+      .put(`${API.GESAC_API}pontoAnalise/${codAnalise}`, form)
       .map(res => res);
   }
 
@@ -301,7 +301,7 @@ export class PontoPresencaService {
 
   getHistoricoAnalise(cod_analise) {
     return this.http
-      .get(`${GESAC_API}pontoAnalise/${cod_analise}`)
+      .get(`${API.GESAC_API}pontoAnalise/${cod_analise}`)
       .map(res => res);
   }
 
@@ -316,7 +316,7 @@ export class PontoPresencaService {
     */
 
    getObsAcao() {
-    return this.http.get(`${GESAC_API}obsAcao`).map(res => res);
+    return this.http.get(`${API.GESAC_API}obsAcao`).map(res => res);
   }
 
 
@@ -325,7 +325,7 @@ export class PontoPresencaService {
     */
 
    salvarObsAcao(form) {
-    return this.http.post(`${GESAC_API}obsAcao`, form).map(res => res);
+    return this.http.post(`${API.GESAC_API}obsAcao`, form).map(res => res);
   }
 
      /*
@@ -334,7 +334,7 @@ export class PontoPresencaService {
 
    getObsAcaoporId(cod_gesac) {
     return this.http
-      .get(`${GESAC_API}obsAcao/${cod_gesac}`)
+      .get(`${API.GESAC_API}obsAcao/${cod_gesac}`)
       .map(res => res);
   }
 
@@ -344,7 +344,7 @@ export class PontoPresencaService {
 
   removerObsAcao(cod_gesac, cod_obsAcao) {
     return this.http
-      .delete(`${GESAC_API}obsAcao/${cod_gesac}/${cod_obsAcao}`)
+      .delete(`${API.GESAC_API}obsAcao/${cod_gesac}/${cod_obsAcao}`)
       .map(res => res);
   }
 

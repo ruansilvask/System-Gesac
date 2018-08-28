@@ -4,7 +4,7 @@ import { Injectable } from '@angular/core';
 import 'rxjs/add/operator/map';
 import { Observable } from 'rxjs/Observable';
 
-import { GESAC_API } from '../app.api';
+import { API } from '../app.api';
 
 import { AuthenticationService } from '../services/authentication.service';
 
@@ -32,7 +32,7 @@ export class ApiServiceEstadoMunicipio {
 
   getUfs() {
     this.http
-      .get(`${GESAC_API}uf`)
+      .get(`${API.GESAC_API}uf`)
       .subscribe(ufs => (this.ufs = ufs));
   }
 
@@ -43,7 +43,7 @@ export class ApiServiceEstadoMunicipio {
   getMunicipios(uf) {
     this.muniUfs = [];
     this.http
-      .get(`${GESAC_API}municipio/${uf}`)
+      .get(`${API.GESAC_API}municipio/${uf}`)
       .subscribe(municipios => {
         this.municipios = municipios;
         for (let i = 0; i < this.municipios.length; i++) {
