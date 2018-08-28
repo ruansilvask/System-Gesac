@@ -22,14 +22,18 @@ export class PontoPresencaDetalheComponent implements OnInit {
 
   bloquearNome: any;
   tipo_interacoes: any;
-obsAcoes: Object;
 
-ObeservacaoPontoPresenca = {
-  descricao: '',
-  cod_obs: ''
-};
+  removido: Object;
+  obsAcoesCad: any;
+  obsAcoes: Object;
 
-public selcPP: boolean;
+
+  ObeservacaoPontoPresenca = {
+    descricao: '',
+    cod_obs: ''
+  };
+
+  public selcPP: boolean;
   codGesac: any;
   empresas: Object;
   pontoHistorico: any;
@@ -124,6 +128,7 @@ public selcPP: boolean;
     this.getPontoPrensenca();
     this.getObsAcao();
     this.getContatosInteracao();
+    this.getObsAcaoporId();
     setTimeout(() => {
       this.analiseCollapse();
       this.getContatosPonto();
@@ -140,10 +145,10 @@ public selcPP: boolean;
   getPontoPrensenca() {
     this.route.params.subscribe(res => (this.params = res));
     this.pontoPresencaService
-    .getDetalhePontoPresenca(this.params.id)
-    .subscribe(dados => {
-      this.codGesac = dados[0].cod_gesac;
-      this.pontospresencas = dados[0];
+      .getDetalhePontoPresenca(this.params.id)
+      .subscribe(dados => {
+        this.codGesac = dados[0].cod_gesac;
+        this.pontospresencas = dados[0];
       });
   }
 
@@ -177,12 +182,24 @@ public selcPP: boolean;
   }
 
   /*
-  * Métodos para trazer a contato pelo id do ponto de presença do pid
+  * Métodos para trazer a obs de ação do banco
   */
- getObsAcao() {
-    this.pontoPresencaService.getObsAcao().subscribe(dados => { this.obsAcoes = dados;
-     });
+  getObsAcao() {
+    this.pontoPresencaService.getObsAcao().subscribe(dados => {
+      this.obsAcoes = dados;
+    });
   }
+
+
+  /*
+* Métodos para trazer a obs de ação pelo id do ponto de presença
+*/
+  getObsAcaoporId() {
+    this.pontoPresencaService.getObsAcaoporId(this.params.id).subscribe(dados => {
+      this.obsAcoesCad = dados;
+    });
+  }
+
 
   /*
   * Métodos para trazer a descrição da interação
@@ -348,7 +365,7 @@ nomeInteracao(objInt) {
  */
   analiseCollapse() {
     // tslint:disable-next-line:max-line-length
-    if (this.pontospresencas.cod_status === 5 || this.pontospresencas.cod_status === 6 || this.pontospresencas.cod_status === 7 || this.pontospresencas.cod_status === 8 ) {
+    if (this.pontospresencas.cod_status === 5 || this.pontospresencas.cod_status === 6 || this.pontospresencas.cod_status === 7 || this.pontospresencas.cod_status === 8) {
       this.abrirAnalisar = true;
       this.FecharCollapseAnalise = true;
     } else {
@@ -356,12 +373,12 @@ nomeInteracao(objInt) {
     }
   }
 
-   /*
-  * Métodos abrir o modal de add/edit ponto de presença
-  */
- modalAddEditPPOpen() {
-  this.selcPP = true;
-}
+  /*
+ * Métodos abrir o modal de add/edit ponto de presença
+ */
+  modalAddEditPPOpen() {
+    this.selcPP = true;
+  }
 
   /*
  * Métodos para abrir o modal e selecionar o template de interação ou analise ou solicitação
@@ -461,15 +478,15 @@ nomeInteracao(objInt) {
         analise.value.justificativa = this.analiseDetalhe.justificativa;
         analise.value.aceite = false;
 
-          if (!!analise.value.justificativa) {
+        if (!!analise.value.justificativa) {
 
-            this.putAnalise(analise, this.analiseDetalhe.cod_analise);
-           if ( this.errorJustificativa = true) {
+          this.putAnalise(analise, this.analiseDetalhe.cod_analise);
+          if (this.errorJustificativa = true) {
             this.errorJustificativa = false;
-           }
-          } else {
-            this.errorJustificativa = true;
           }
+        } else {
+          this.errorJustificativa = true;
+        }
       } else {
         analise.value.tipo_solicitacao = this.btnsAnalise.tipo_solicitacao[0];
         analise.value.justificativa = null;
@@ -480,6 +497,60 @@ nomeInteracao(objInt) {
 
   }
 
+
+  /*
+ * Métodos para salvar a Obs Ações da tela e do banco
+ */
+  salvarObeservacao(fAddObeservacao) {
+    fAddObeservacao.value.cod_obs !== ''
+      ? (fAddObeservacao.value.cod_gesac = this.params.id,
+        console.log(fAddObeservacao.value),
+        this.pontoPresencaService.salvarObsAcao(fAddObeservacao.value).subscribe(
+          dados => {
+            this.getObsAcaoporId();
+          }
+        ))
+      : (console.log('Vazio'));
+  }
+
+  /*
+* Métodos para remover a Obs Ações da tela e do banco
+*/
+  removerObsAcao(obs) {
+    console.log(obs);
+    Swal({
+      title: 'Você tem certeza?',
+      html: `Tem certeza que deseja remover a Obeservação de Ação <i>${
+        obs.descricao
+        }</i>?`,
+      type: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sim, remover!',
+      cancelButtonText: 'Não, mater',
+      reverseButtons: true
+    }).then(result => {
+      if (result.value) {
+        if (this.codGesac) {
+          this.pontoPresencaService
+            .removerObsAcao(this.params.id, obs.cod_obs)
+            .subscribe(
+              res => {
+                this.removido = res;
+                this.getObsAcaoporId();
+                this.apiServicesMsg.setMsg(
+                  'success',
+                  'Tipologia removida com sucesso.',
+                  3000
+                );
+              },
+              erro => Swal('Erro', `${erro.error}`, 'error')
+            );
+        }
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        this.apiServicesMsg.setMsg('error', 'Ação cancelada.', 3000);
+      }
+    });
+  }
 
 
 }

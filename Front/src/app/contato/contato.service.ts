@@ -3,7 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable, EventEmitter } from '@angular/core';
 
 import { Response } from '@angular/http';
-import { GESAC_API } from '../app.api';
+import { API } from '../app.api';
 import { Contato } from './contato.model';
 
 @Injectable()
@@ -31,7 +31,7 @@ export class ContatoService {
 
   getContatosEmpresa(cnpjEmpresa) {
     return this.http
-    .get<Contato[]>(`${GESAC_API}contatoEmpresa/${cnpjEmpresa}`)
+    .get<Contato[]>(`${API.GESAC_API}contatoEmpresa/${cnpjEmpresa}`)
     .map(res => res);
   }
 
@@ -43,7 +43,7 @@ export class ContatoService {
 
   getContatosInstituicao(codInstituicao) {
     return this.http
-    .get<Contato[]>(`${GESAC_API}contatoInstituicao/${codInstituicao}`)
+    .get<Contato[]>(`${API.GESAC_API}contatoInstituicao/${codInstituicao}`)
     .map(res => res);
   }
 
@@ -55,7 +55,7 @@ export class ContatoService {
 
   postContato(form) {
     return this.http
-    .post<Contato>(`${GESAC_API}contato`, form)
+    .post<Contato>(`${API.GESAC_API}contato`, form)
     .map(res => res);
   }
 
@@ -66,14 +66,14 @@ export class ContatoService {
 
   postTelefone(form) {
     return this.http
-    .post(`${GESAC_API}telefone`, form)
+    .post(`${API.GESAC_API}telefone`, form)
     .map(res => res);
   }
 
 
   getContatosPonto(codGesac) {
     return this.http
-    .get<Contato[]>(`${GESAC_API}contatoPonto/${codGesac}`)
+    .get<Contato[]>(`${API.GESAC_API}contatoPonto/${codGesac}`)
     .map(res => res);
   }
 
@@ -85,56 +85,56 @@ export class ContatoService {
     term = term.replace(/\'/g, ' ');
     term = term.replace(/\ /g, '%20');
     return this.http
-      .get<Contato[]>(`${GESAC_API}contato/${term}`)
+      .get<Contato[]>(`${API.GESAC_API}contato/${term}`)
       .map(res => res);
   }
 
   getContatoById(id: number) {
     return this.http
-      .get<Contato>(`${GESAC_API}contatoInfo/${id}`)
+      .get<Contato>(`${API.GESAC_API}contatoInfo/${id}`)
       .map(res => res);
   }
 
   getInfContato(codContato) {
     return this.http
-      .get(`${GESAC_API}contatoDados/${codContato}`)
+      .get(`${API.GESAC_API}contatoDados/${codContato}`)
       .map(res => res);
   }
 
   postContatoPessoa(nome) {
     return this.http
-      .post(`${GESAC_API}pessoa`, {nome})
+      .post(`${API.GESAC_API}pessoa`, {nome})
       .map((res: Response) => res)
       .map(res => res);
   }
 
   deletarContatoCadastrado(codContato) {
     return this.http
-      .delete(`${GESAC_API}contato/${codContato}`)
+      .delete(`${API.GESAC_API}contato/${codContato}`)
       .map(res => res);
   }
 
   deletarTelefoneCadastrado(codTelefone, codPessoa) {
     return this.http
-      .delete(`${GESAC_API}telefone/${codTelefone}/${codPessoa}`)
+      .delete(`${API.GESAC_API}telefone/${codTelefone}/${codPessoa}`)
       .map(res => res);
   }
 
   deletarPessoa(codPessoa) {
     return this.http
-      .delete(`${GESAC_API}pessoa/${codPessoa}`)
+      .delete(`${API.GESAC_API}pessoa/${codPessoa}`)
       .map(res => res);
   }
 
   putTelefoneCadastrado(codTelefone, codPessoa, form) {
     return this.http
-    .put(`${GESAC_API}telefone/${codTelefone}/${codPessoa}`, form)
+    .put(`${API.GESAC_API}telefone/${codTelefone}/${codPessoa}`, form)
       .map(res => res);
   }
 
   putContatoCadastrado(codContato, form) {
     return this.http
-    .put(`${GESAC_API}contato/${codContato}`, form)
+    .put(`${API.GESAC_API}contato/${codContato}`, form)
       .map(res => res);
   }
 }
