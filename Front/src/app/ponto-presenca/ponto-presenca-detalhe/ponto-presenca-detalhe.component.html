@@ -213,9 +213,9 @@
 
                 <div class="thirteen wide column">
                   <label>Observações de Ações</label>
-                  <select class="ui dropdown" name="Obeservacao" [(ngModel)]="ObeservacaoPontoPresenca.cod_obs" required #Obeservacao> 
-                    <option value="">Selecione Observação de Ação</option> 
-                    <option *ngFor="let Obeservacao of obsAcoes" value="{{Obeservacao.cod_obs}}">{{Obeservacao.descricao}}</option> 
+                  <select class="ui dropdown" name="Obeservacao" [(ngModel)]="ObeservacaoPontoPresenca.cod_obs" required #Obeservacao>
+                    <option value="">Selecione Observação de Ação</option>
+                    <option *ngFor="let Obeservacao of obsAcoes" value="{{Obeservacao.cod_obs}}">{{Obeservacao.descricao}}</option>
                   </select>
                 </div>
                 <div class="two wide column">
@@ -226,7 +226,7 @@
                   </div>
                 </div>
                 <div class="sixteen wide column">
-                  </div>
+                </div>
               </div>
 
             </form>
@@ -293,13 +293,9 @@
                 <div class="field">
                   <div class="ui left icon input">
                     <i class="calendar icon"></i>
-                    <input [(ngModel)]="analiseDetalhe.data_oficio"
-                    name="data_oficio"
-                    suiDatepicker
-                    [pickerMode]="'date'"
-                    [pickerFirstDayOfWeek]="0"
-                    [pickerUseNativeOnMobile]="false">
-                      <i class="close link icon iconRight" (click)="analiseDetalhe.data_oficio = undefined"></i>
+                    <input [(ngModel)]="analiseDetalhe.data_oficio" name="data_oficio" suiDatepicker [pickerMode]="'date'" [pickerFirstDayOfWeek]="0"
+                      [pickerUseNativeOnMobile]="false">
+                    <i class="close link icon iconRight" (click)="analiseDetalhe.data_oficio = undefined"></i>
                   </div>
                 </div>
               </div>
@@ -310,13 +306,8 @@
                 <div class="field">
                   <div class="ui left icon input">
                     <i class="calendar icon"></i>
-                    <input
-                    [(ngModel)]="analiseDetalhe.data_instalacao"
-                    name="data_instalacao"
-                    suiDatepicker
-                    [pickerMode]="'date'"
-                    [pickerFirstDayOfWeek]="0"
-                    [pickerUseNativeOnMobile]="false">
+                    <input [(ngModel)]="analiseDetalhe.data_instalacao" name="data_instalacao" suiDatepicker [pickerMode]="'date'" [pickerFirstDayOfWeek]="0"
+                      [pickerUseNativeOnMobile]="false">
                     <i class="close link icon iconRight" (click)="analiseDetalhe.data_instalacao= undefined"></i>
                   </div>
                 </div>
@@ -420,9 +411,9 @@
                 <label>Responsável assinou?</label>
                 <div class="field">
 
-                  <sui-radio-button [value]="1" [(ngModel)]="analiseDetalhe.assinatura_resp"  name="assinatura_resp">Sim</sui-radio-button>
+                  <sui-radio-button [value]="1" [(ngModel)]="analiseDetalhe.assinatura_resp" name="assinatura_resp">Sim</sui-radio-button>
 
-                    <sui-radio-button [value]="0" [(ngModel)]="analiseDetalhe.assinatura_resp"  name="assinatura_resp">Não</sui-radio-button>
+                  <sui-radio-button [value]="0" [(ngModel)]="analiseDetalhe.assinatura_resp" name="assinatura_resp">Não</sui-radio-button>
 
 
                 </div>
@@ -490,16 +481,17 @@
                 <input placeholder="Longitude" type="text">
               </div>
             </div>
-            
+
             <div class="ui stackable one column grid">
-                <div class="column">
-                <label>Observações de Ações</label> 
-                <select class="ui dropdown" name="Obeservacao" [(ngModel)]="analiseDetalhe.cod_obs" (change)="TESTE(analiseDetalhe.cod_obs)" required #Obeservacao> 
-                  <option value="">Selecione Observação de Ação</option> 
-                  <option *ngFor="let Obeservacao of obsAcoes" value="{{Obeservacao.cod_obs}}">{{Obeservacao.descricao}}</option> 
+              <div class="column">
+                <label>Observações de Ações</label>
+                <select class="ui dropdown" name="Obeservacao" [(ngModel)]="analiseDetalhe.cod_obs" (change)="TESTE(analiseDetalhe.cod_obs)"
+                  required #Obeservacao>
+                  <option value="">Selecione Observação de Ação</option>
+                  <option *ngFor="let Obeservacao of obsAcoes" value="{{Obeservacao.cod_obs}}">{{Obeservacao.descricao}}</option>
                 </select>
               </div>
-              </div>
+            </div>
 
 
             <div class="ui stackable one column grid">
@@ -581,29 +573,64 @@
               #mselecoes suiPopup popupHeader="Add/Edit" popupInverted="true">
               <i class="check circle icon"></i>Editar Ponto de Presença</button>
           </div>
+          <br>
 
 
           <form class="ui form" #formInteracao='ngForm' (ngSubmit)="submitInteracao(formInteracao)">
 
-            <div class="ui grid">
-              <div class="eight wide column">
-                <label for="Nome">Nome </label>
-                <select class="ui fluid dropdown" name="cod_pessoa" [(ngModel)]="formInteracao.value.cod_pessoa">
-                  <option value="">Selecione o pessoa</option>
-                  <option *ngFor="let pessoa of pessoasInterecao" value="{{pessoa.cod_pessoa}}">{{pessoa.nome}}</option>
-                </select>
-              </div>
-
-              <div class="eight wide column">
-                <label>Assunto</label>
-                <input name="assunto" #assunto='ngModel' ngModel placeholder="assunto" type="text" maxlength="100">
-              </div>
-
-              <div [ngClass]="{'error': relato.invalid && relato.dirty}" class="sixteen wide column field">
-                <label>Relato</label>
-                <textarea name="relato" #relato='ngModel' ngModel placeholder="relato" type="text" maxlength="1000" required></textarea>
-              </div>
+              <div class="field">
+                <div class="fields">
+                    <div class="six wide field">
+                        <label for="Nome">Tipo de interação </label>
+                        <select  class="ui fluid dropdown" name="tipo_interacao" ngModel (ngModelChange)="nomeInteracao($event)">
+                          <option value="">Selecione a interação</option>
+                          <option *ngFor="let tipo_int of tipo_interacoes" [ngValue]="tipo_int">{{tipo_int.descricao}}</option>
+                        </select>
+                      </div>
+                  </div>
             </div>
+
+            <div class="field">
+                <div class="fields">
+                    <div class="six wide field">
+                      <label>Assunto</label>
+                      <input name="assunto" #assunto='ngModel' ngModel placeholder="assunto" type="text" maxlength="100">
+                    </div>
+
+                    <div class="three wide field">
+                      <label>Data da interação</label>
+                      <div class="field">
+                          <div class="ui left icon input">
+                              <i class="calendar icon"></i>
+                              <input
+                              [(ngModel)]='data_interacao'
+                              name="data_interacao"
+                              suiDatepicker
+                              [pickerMode]="'date'"
+                              [pickerFirstDayOfWeek]="0"
+                              [pickerUseNativeOnMobile]="false"
+                              readonly >
+                              <i class="close link icon iconRight"
+                              (click)="data_interacao = undefined"></i>
+                            </div>
+                      </div>
+                    </div>
+                    <div  class="seven wide field">
+                      <label for="Nome">Nome </label>
+                      <select [disabled]="bloquearNome === 0" class="ui fluid dropdown" name="cod_pessoa" [(ngModel)]="formInteracao.value.cod_pessoa">
+                        <option >Selecione o pessoa</option>
+                        <option  *ngFor="let pessoa of pessoasInterecao" value="{{pessoa.cod_pessoa}}">{{pessoa.nome}}</option>
+                      </select>
+                    </div>
+                  </div>
+            </div>
+
+            <div class="field">
+                <div [ngClass]="{'error': relato.invalid && relato.dirty}" class=" field">
+                    <label>Relato</label>
+                    <textarea name="relato" #relato='ngModel' ngModel placeholder="relato" type="text" maxlength="1000" required></textarea>
+                  </div>
+          </div>
 
             <br>
             <button [disabled]="formInteracao.invalid === true" class="ui button" type="submit">Salvar interação</button>
@@ -707,277 +734,277 @@
     </sui-accordion>
   </div>
 
-<!---------------------- Modais de analise, interação e solicitação   ------------------------------------>
+  <!---------------------- Modais de analise, interação e solicitação   ------------------------------------>
 
 
-<sui-modal *ngIf="abrirNodal" [isClosable]="false" [transition]="'scale'" [transitionDuration]="500" #modal>
+  <sui-modal *ngIf="abrirNodal" [isClosable]="false" [transition]="'scale'" [transitionDuration]="500" #modal>
 
-  <div class="header">
-    <div class="ui grid">
-      <div class="fifteen wide column">
-        {{condicao}}
+    <div class="header">
+      <div class="ui grid">
+        <div class="fifteen wide column">
+          {{condicao}}
+        </div>
+        <div class="one wide column">
+          <i class="close red link icon" (click)="closeModal(false)"></i>
+        </div>
       </div>
-      <div class="one wide column">
-        <i class="close red link icon" (click)="closeModal(false)"></i>
-      </div>
+
     </div>
 
-  </div>
+    <div class="content" [ngSwitch]="condicao">
 
-  <div class="content" [ngSwitch]="condicao">
+      <div *ngSwitchCase="'análise'">
 
-    <div *ngSwitchCase="'análise'">
+        <form class="ui form">
+          <div class="ui stackable four column grid">
+            <div class="column">
+              <label>Número do doc. ofício </label>
+              <input [readonly]="true" [value]="historicoAnalises.num_oficio" placeholder="Número do ofício" type="text">
+            </div>
 
-      <form class="ui form">
-        <div class="ui stackable four column grid">
-          <div class="column">
-            <label>Número do doc. ofício </label>
-            <input [readonly]="true" [value]="historicoAnalises.num_oficio" placeholder="Número do ofício" type="text">
+            <div class="column">
+              <label>Número do doc. Sei</label>
+              <input [readonly]="true" [value]="historicoAnalises.num_doc_sei" placeholder="Número do ofício" type="text">
+            </div>
+
+            <div class="column">
+              <label>Data do Ofício </label>
+              <div class="field">
+                <div class="ui left icon input">
+                  <i class="calendar icon"></i>
+                  <input [readonly]="true" [value]="historicoAnalises.data_oficio | date : 'dd/MM/y'">
+                </div>
+              </div>
+            </div>
+
+            <div class="column">
+              <label>Data de Instalação</label>
+              <div class="field">
+                <div class="ui left icon input">
+                  <i class="calendar icon"></i>
+                  <input [readonly]="true" [value]="historicoAnalises.data_instalacao | date : 'dd/MM/y'">
+                </div>
+              </div>
+            </div>
+
           </div>
 
-          <div class="column">
-            <label>Número do doc. Sei</label>
-            <input [readonly]="true" [value]="historicoAnalises.num_doc_sei" placeholder="Número do ofício" type="text">
+
+
+          <div class="ui  grid">
+            <div class="seven wide column">
+              <label>Empresa </label>
+              <input [readonly]="true" [value]="historicoAnalises.empresa" placeholder="Empresa" type="text">
+            </div>
+
+            <div class="four wide column">
+              <label>Teste vazão</label>
+              <input [readonly]="true" [value]="historicoAnalises.teste_vazao" placeholder="Teste Vazão" type="text">
+            </div>
+            <div class="three wide column centered row">
+              <label>TIPP apresentado?</label>
+              <div class="field">
+                <sui-radio-button [isDisabled]="'true'" [value]="1" [ngModel]="historicoAnalises.tipp" name="tipp">Sim</sui-radio-button>
+
+                <sui-radio-button [isDisabled]="'true'" [value]="0" [ngModel]="historicoAnalises.tipp" name="tipp">Não</sui-radio-button>
+
+              </div>
+            </div>
+
           </div>
 
-          <div class="column">
-            <label>Data do Ofício </label>
-            <div class="field">
-              <div class="ui left icon input">
-                <i class="calendar icon"></i>
-                <input [readonly]="true" [value]="historicoAnalises.data_oficio | date : 'dd/MM/y'">
+
+
+          <div class="ui stackable five column grid">
+
+            <div class="column">
+              <label>Estabelecimento está correto?</label>
+              <div class="field">
+                <sui-radio-button [isDisabled]="'true'" [value]="1" [ngModel]="historicoAnalises.estabelecimento" name="estabelecimento">Sim</sui-radio-button>
+
+                <sui-radio-button [isDisabled]="'true'" [value]="0" [ngModel]="historicoAnalises.estabelecimento" name="estabelecimento">Não</sui-radio-button>
+
+              </div>
+            </div>
+
+            <div class="column">
+              <label>Endereço está correto?</label>
+              <div class="field">
+                <sui-radio-button [isDisabled]="'true'" [value]="1" [ngModel]="historicoAnalises.endereco" name="endereco">Sim</sui-radio-button>
+
+                <sui-radio-button [isDisabled]="'true'" [value]="0" [ngModel]="historicoAnalises.endereco" name="endereco">Não</sui-radio-button>
+
+              </div>
+            </div>
+
+            <div class="column">
+              <label>Assinatura responsável técnico?</label>
+              <div class="field">
+                <sui-radio-button [isDisabled]="'true'" [value]="1" [ngModel]="historicoAnalises.tecnico_resp" name="tecnico_resp">Sim</sui-radio-button>
+
+                <sui-radio-button [isDisabled]="'true'" [value]="0" [ngModel]="historicoAnalises.tecnico_resp" name="tecnico_resp">Não</sui-radio-button>
+
+              </div>
+            </div>
+
+            <div class="column">
+              <label>As fotos estão de acordo?</label>
+              <div class="field">
+                <sui-radio-button [isDisabled]="'true'" [value]="1" [ngModel]="historicoAnalises.fotos" name="fotos">Sim</sui-radio-button>
+
+                <sui-radio-button [isDisabled]="'true'" [value]="0" [ngModel]="historicoAnalises.fotos" name="fotos">Não</sui-radio-button>
+
+              </div>
+            </div>
+
+            <div class="column">
+              <label>Acessando Internet?</label>
+              <div class="field">
+                <sui-radio-button [isDisabled]="'true'" [value]="1" [ngModel]="historicoAnalises.internet" name="internet">Sim</sui-radio-button>
+
+                <sui-radio-button [isDisabled]="'true'" [value]="0" [ngModel]="historicoAnalises.internet" name="internet">Não</sui-radio-button>
+
+              </div>
+            </div>
+
+          </div>
+
+
+
+          <div class="ui grid">
+
+            <div class="eight wide column">
+              <label>Nome responsável ponto</label>
+              <input [readonly]="true" [value]="historicoAnalises.nome_resp" placeholder="Nome responsável assinatura" type="text">
+            </div>
+
+            <div class="four wide column centered row">
+              <label>Responsável assinou?</label>
+              <div class="field">
+                <sui-radio-button [isDisabled]="'true'" [value]="1" [ngModel]="historicoAnalises.assinatura_resp" name="assinatura_resp">Sim</sui-radio-button>
+
+                <sui-radio-button [isDisabled]="'true'" [value]="0" [ngModel]="historicoAnalises.assinatura_resp" name="assinatura_resp">Não</sui-radio-button>
+
               </div>
             </div>
           </div>
 
-          <div class="column">
-            <label>Data de Instalação</label>
-            <div class="field">
-              <div class="ui left icon input">
-                <i class="calendar icon"></i>
-                <input [readonly]="true" [value]="historicoAnalises.data_instalacao | date : 'dd/MM/y'">
-              </div>
+
+
+          <div class="ui stackable three column grid">
+
+            <div class="column">
+              <label>Telefone 1</label>
+              <input [readonly]="true" [value]="historicoAnalises.telefone1" type="text">
+            </div>
+
+            <div class="column">
+              <label>Telefone 2</label>
+              <input [readonly]="true" [value]="historicoAnalises.telefone2" type="text">
+            </div>
+
+            <div class="column">
+              <label>Email</label>
+              <input [readonly]="true" [value]="historicoAnalises.email" placeholder="E-mail" type="text">
             </div>
           </div>
 
-        </div>
-
-
-
-        <div class="ui  grid">
-          <div class="seven wide column">
-            <label>Empresa </label>
-            <input [readonly]="true" [value]="historicoAnalises.empresa" placeholder="Empresa" type="text">
-          </div>
-
-          <div class="four wide column">
-            <label>Teste vazão</label>
-            <input [readonly]="true" [value]="historicoAnalises.teste_vazao" placeholder="Teste Vazão" type="text">
-          </div>
-          <div class="three wide column centered row">
-            <label>TIPP apresentado?</label>
-            <div class="field">
-              <sui-radio-button [isDisabled]="'true'" [value]="1" [ngModel]="historicoAnalises.tipp" name="tipp">Sim</sui-radio-button>
-
-              <sui-radio-button [isDisabled]="'true'" [value]="0" [ngModel]="historicoAnalises.tipp" name="tipp">Não</sui-radio-button>
-
+          <div class="ui stackable four column grid">
+            <div class="column">
+              <label>Latitude</label>
+              <input [readonly]="true" [value]="historicoAnalises.num_doc_sei" placeholder="Latitude" type="text">
+            </div>
+            <div class="column">
+              <label>Longitude</label>
+              <input [readonly]="true" [value]="historicoAnalises.num_doc_sei" placeholder="Longitude" type="text">
             </div>
           </div>
 
-        </div>
-
-
-
-        <div class="ui stackable five column grid">
-
-          <div class="column">
-            <label>Estabelecimento está correto?</label>
-            <div class="field">
-              <sui-radio-button [isDisabled]="'true'" [value]="1" [ngModel]="historicoAnalises.estabelecimento" name="estabelecimento">Sim</sui-radio-button>
-
-              <sui-radio-button [isDisabled]="'true'" [value]="0" [ngModel]="historicoAnalises.estabelecimento" name="estabelecimento">Não</sui-radio-button>
-
+          <div class="ui stackable one column grid">
+            <div class="column">
+              <label>Observação da Ação:</label>
+              <input [readonly]="true" [value]="historicoAnalises.descricao" placeholder="ObsAcao" type="text">
             </div>
           </div>
 
-          <div class="column">
-            <label>Endereço está correto?</label>
-            <div class="field">
-              <sui-radio-button [isDisabled]="'true'" [value]="1" [ngModel]="historicoAnalises.endereco" name="endereco">Sim</sui-radio-button>
-
-              <sui-radio-button [isDisabled]="'true'" [value]="0" [ngModel]="historicoAnalises.endereco" name="endereco">Não</sui-radio-button>
-
-            </div>
-          </div>
-
-          <div class="column">
-            <label>Assinatura responsável técnico?</label>
-            <div class="field">
-              <sui-radio-button [isDisabled]="'true'" [value]="1" [ngModel]="historicoAnalises.tecnico_resp" name="tecnico_resp">Sim</sui-radio-button>
-
-              <sui-radio-button [isDisabled]="'true'" [value]="0" [ngModel]="historicoAnalises.tecnico_resp" name="tecnico_resp">Não</sui-radio-button>
-
-            </div>
-          </div>
-
-          <div class="column">
-            <label>As fotos estão de acordo?</label>
-            <div class="field">
-              <sui-radio-button [isDisabled]="'true'" [value]="1" [ngModel]="historicoAnalises.fotos" name="fotos">Sim</sui-radio-button>
-
-              <sui-radio-button [isDisabled]="'true'" [value]="0" [ngModel]="historicoAnalises.fotos" name="fotos">Não</sui-radio-button>
-
-            </div>
-          </div>
-
-          <div class="column">
-            <label>Acessando Internet?</label>
-            <div class="field">
-              <sui-radio-button [isDisabled]="'true'" [value]="1" [ngModel]="historicoAnalises.internet" name="internet">Sim</sui-radio-button>
-
-              <sui-radio-button [isDisabled]="'true'" [value]="0" [ngModel]="historicoAnalises.internet" name="internet">Não</sui-radio-button>
-
-            </div>
-          </div>
-
-        </div>
-
-
-
-        <div class="ui grid">
-
-          <div class="eight wide column">
-            <label>Nome responsável ponto</label>
-            <input [readonly]="true" [value]="historicoAnalises.nome_resp" placeholder="Nome responsável assinatura" type="text">
-          </div>
-
-          <div class="four wide column centered row">
-            <label>Responsável assinou?</label>
-            <div class="field">
-              <sui-radio-button [isDisabled]="'true'" [value]="1" [ngModel]="historicoAnalises.assinatura_resp" name="assinatura_resp">Sim</sui-radio-button>
-
-              <sui-radio-button [isDisabled]="'true'" [value]="0" [ngModel]="historicoAnalises.assinatura_resp" name="assinatura_resp">Não</sui-radio-button>
-
-            </div>
-          </div>
-        </div>
-
-
-
-        <div class="ui stackable three column grid">
-
-          <div class="column">
-            <label>Telefone 1</label>
-            <input [readonly]="true" [value]="historicoAnalises.telefone1" type="text">
-          </div>
-
-          <div class="column">
-            <label>Telefone 2</label>
-            <input [readonly]="true" [value]="historicoAnalises.telefone2" type="text">
-          </div>
-
-          <div class="column">
-            <label>Email</label>
-            <input [readonly]="true" [value]="historicoAnalises.email" placeholder="E-mail" type="text">
-          </div>
-        </div>
-
-        <div class="ui stackable four column grid">
-          <div class="column">
-            <label>Latitude</label>
-            <input [readonly]="true" [value]="historicoAnalises.num_doc_sei" placeholder="Latitude" type="text">
-          </div>
-          <div class="column">
-            <label>Longitude</label>
-            <input [readonly]="true" [value]="historicoAnalises.num_doc_sei" placeholder="Longitude" type="text">
-          </div>
-        </div>
-
-        <div class="ui stackable one column grid">
-        <div class="column">
-          <label>Observação da Ação:</label>
-          <input [readonly]="true" [value]="historicoAnalises.descricao" placeholder="ObsAcao" type="text">
-        </div>
-      </div>
-
-        <div class="ui stackable one column grid">
-          <div class="column">
-            <label>Obeservação</label>
-            <textarea [readonly]="true" [value]="historicoAnalises.obs" placeholder="Observação" style="margin-top: 0px; margin-bottom: 0px; height: 112px;">
+          <div class="ui stackable one column grid">
+            <div class="column">
+              <label>Obeservação</label>
+              <textarea [readonly]="true" [value]="historicoAnalises.obs" placeholder="Observação" style="margin-top: 0px; margin-bottom: 0px; height: 112px;">
             </textarea>
-          </div>
-        </div>
-
-      </form>
-    </div>
-
-    <!-- INICIO da Ação de interação -->
-    <div *ngSwitchCase="'interação'">
-      <div class="ui segment">
-        <form class="ui form">
-          <div class="two fields">
-            <div class=" field">
-              <label>Nome</label>
-              <input [readonly]="true" [ngModel]='interacao?.nome' name="nome" type="text">
-            </div>
-
-            <div class="field">
-              <label>Assunto</label>
-              <input [readonly]="true" [ngModel]='interacao?.assunto' name="assunto" type="text">
             </div>
           </div>
-          <div class="fields">
-            <div class="one field">
-              <label>Relato</label>
-              <div class="ui floating message">
-                <p>{{interacao?.relato}}</p>
+
+        </form>
+      </div>
+
+      <!-- INICIO da Ação de interação -->
+      <div *ngSwitchCase="'interação'">
+        <div class="ui segment">
+          <form class="ui form">
+            <div class="two fields">
+              <div class=" field">
+                <label>Nome</label>
+                <input [readonly]="true" [ngModel]='interacao?.nome' name="nome" type="text">
+              </div>
+
+              <div class="field">
+                <label>Assunto</label>
+                <input [readonly]="true" [ngModel]='interacao?.assunto' name="assunto" type="text">
               </div>
             </div>
-          </div>
-        </form>
+            <div class="fields">
+              <div class="one field">
+                <label>Relato</label>
+                <div class="ui floating message">
+                  <p>{{interacao?.relato}}</p>
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
-    <!-- FIM da Ação de interação -->
+      <!-- FIM da Ação de interação -->
 
 
-    <!-- INICIO da Ação de solicitaão -->
-    <div *ngSwitchCase="'solicitação'">
-      <div class="ui segment">
-        <form class="ui form">
-          <div class="fields">
-            <div class="eleven wide field">
-              <label>Solicitação Realizada</label>
-              <input [readonly]="true" [ngModel]='solicitacao?.descricao' name="descricao" type="text">
+      <!-- INICIO da Ação de solicitaão -->
+      <div *ngSwitchCase="'solicitação'">
+        <div class="ui segment">
+          <form class="ui form">
+            <div class="fields">
+              <div class="eleven wide field">
+                <label>Solicitação Realizada</label>
+                <input [readonly]="true" [ngModel]='solicitacao?.descricao' name="descricao" type="text">
+              </div>
+              <div class="five wide field">
+                <label>Data do Registro Solicitação</label>
+                <input [readonly]="true" [ngModel]='solicitacao?.data_sistema | date : "dd/MM/y HH:mm:ss"' name="data_sistema" type="text">
+              </div>
             </div>
-            <div class="five wide field">
-              <label>Data do Registro Solicitação</label>
-              <input [readonly]="true" [ngModel]='solicitacao?.data_sistema | date : "dd/MM/y HH:mm:ss"' name="data_sistema" type="text">
+            <div class="fields">
+              <div class="six wide field">
+                <label>Processo Documento do SEI</label>
+                <input [readonly]="true" [ngModel]='solicitacao?.num_doc_sei' name="num_doc_sei" type="text">
+              </div>
+              <div class="five wide field">
+                <label>N° do ofício</label>
+                <input [readonly]="true" [ngModel]='solicitacao?.num_oficio' name="num_oficio" type="text">
+              </div>
+              <div class="five wide field">
+                <label>Data do Ofício</label>
+                <input [readonly]="true" [ngModel]='solicitacao?.data_oficio | date : "dd/MM/y"' name="data_oficio" type="text">
+              </div>
             </div>
-          </div>
-          <div class="fields">
-            <div class="six wide field">
-              <label>Processo Documento do SEI</label>
-              <input [readonly]="true" [ngModel]='solicitacao?.num_doc_sei' name="num_doc_sei" type="text">
-            </div>
-            <div class="five wide field">
-              <label>N° do ofício</label>
-              <input [readonly]="true" [ngModel]='solicitacao?.num_oficio' name="num_oficio" type="text">
-            </div>
-            <div class="five wide field">
-              <label>Data do Ofício</label>
-              <input [readonly]="true" [ngModel]='solicitacao?.data_oficio | date : "dd/MM/y"' name="data_oficio" type="text">
-            </div>
-          </div>
 
-        </form>
+          </form>
+        </div>
       </div>
-    </div>
-    <!-- FIM da Ação de solicitaão -->
-    <!--<p *ngSwitchDefault>
+      <!-- FIM da Ação de solicitaão -->
+      <!--<p *ngSwitchDefault>
       </p>-->
-  </div>
+    </div>
 
-  <div class="actions">
-    <button class="ui red button" (click)="closeModal(false)">Fechar</button>
-  </div>
-</sui-modal>
+    <div class="actions">
+      <button class="ui red button" (click)="closeModal(false)">Fechar</button>
+    </div>
+  </sui-modal>
