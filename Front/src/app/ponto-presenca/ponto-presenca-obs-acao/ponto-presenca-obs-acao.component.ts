@@ -13,6 +13,7 @@ export class ObsAcaoComponent implements OnInit {
   observacao = '';
   resultSearchObsAction = [];
   returnObsAction = [ {num: 1}];
+  obeservacoesGuardadas: any;
 
   ObeservacaoPontoPresenca = {
     descricao: '',
@@ -25,22 +26,34 @@ export class ObsAcaoComponent implements OnInit {
 
   ngOnInit() {
     this.getObsAcao();
-    console.log(this.obsSelecionadas);
+  }
+
+  gerarObs() {
+    const obs = [];
+    this.obsSelecionadas.forEach(e => {
+      if(e.obs_acao) {e.obs_acao.forEach(a => obs.push(a))}
+    });
+    obs = obs.filter((item, pos, self) => self.indexOf(item) === pos);
+    this.obeservacoesGuardadas = this.obsAcao.filter(e => {
+      let valido = false;
+      obs.forEach(a => 
+        if(e.cod_obs.toString() === a.toString()) {valido = true; return false;}
+      )
+      return valido;
+    })
   }
 
   getObsAcao() {
     this.pontoPresencaService.getObsAcao()
       .subscribe(
-        res => this.obsAcao = res
-            );
+        res => {
+          this.obsAcao = res;
+          this.gerarObs();
+        }
+      );
   }
-
- 
 
   searchObsAction(obs) {
     this.resultSearchObsAction =  obs;
-    console.log(this.resultSearchObsAction);
   }
-
-
 }
