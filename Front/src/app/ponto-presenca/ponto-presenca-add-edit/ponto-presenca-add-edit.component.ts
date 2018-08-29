@@ -52,6 +52,7 @@ export class PontoPresencaAddEditComponent implements OnInit {
   instituicoesRespPag: any[] = [];
   params: any;
   mostrarBotao: boolean;
+  mostrarBtn = false;
 
   enderecos: any;
 
@@ -500,8 +501,13 @@ export class PontoPresencaAddEditComponent implements OnInit {
   }
 
   backPP() {
+    if (this.params.id) {
       this.router.navigate(['/pontPre']);
+    } else if (this.params.detalheappeditPP) {
+      this.router.navigate(['/pontPre', this.params.detalheappeditPP, 'detalhe']);
+    }
   }
+  // pontPre/40005/detalhe
 
   /*
 * Métodos que serão executados quando o componente é iniciado
@@ -525,9 +531,12 @@ export class PontoPresencaAddEditComponent implements OnInit {
       /*
   * Condicão para que caso exista parâmetro na rota será carregado os dados da empresa cadastrada
   */
+
       if (this.params.id) {
+        this.mostrarBtn = true;
         this.parametroIdentificador = this.params.id;
       } else if (this.params.detalheappeditPP) {
+        this.mostrarBtn = false;
         this.fecharmodal = false;
         this.parametroIdentificador = this.params.detalheappeditPP;
       }
