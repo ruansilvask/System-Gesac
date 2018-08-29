@@ -261,7 +261,7 @@ export class PontoPresencaService {
 
    getTipoInteracao() {
     return this.http
-      .get(`${GESAC_API}pontoInteracao`)
+      .get(`${API.GESAC_API}pontoInteracao`)
       .map(res => res);
   }
   /*
