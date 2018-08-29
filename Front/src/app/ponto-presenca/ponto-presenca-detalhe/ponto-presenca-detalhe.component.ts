@@ -414,6 +414,7 @@ nomeInteracao(objInt) {
             'Interação realizada com sucesso!',
             3000
           );
+          formInteracao.reset();
       },
       erro => Swal('Erro', `${erro.error}`, 'error')
     );
