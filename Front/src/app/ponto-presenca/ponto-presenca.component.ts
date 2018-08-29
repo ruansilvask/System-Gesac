@@ -199,7 +199,7 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
   posicaoItemArray(array, ponto) {
     let posicao = null;
     array.forEach((element, i) => {
-      (element.cod_gesac === ponto.cod_gesac) ? posicao = 1 : posicao = posicao;
+      (element.cod_gesac === ponto.cod_gesac) ? posicao = i : posicao = posicao;
     });
     return posicao;
   }

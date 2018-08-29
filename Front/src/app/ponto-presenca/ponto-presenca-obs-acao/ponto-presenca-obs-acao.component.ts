@@ -11,7 +11,6 @@ export class ObsAcaoComponent implements OnInit {
   @Input() obsSelecionadas: any;
   obsAcao: any = [];
   observacao = '';
-  resultSearchType = [];
   resultSearchObsAction = [];
   returnObsAction = [ {num: 1}];
 
@@ -24,6 +23,11 @@ export class ObsAcaoComponent implements OnInit {
     private pontoPresencaService: PontoPresencaService
   ) { }
 
+  ngOnInit() {
+    this.getObsAcao();
+    console.log(this.obsSelecionadas);
+  }
+
   getObsAcao() {
     this.pontoPresencaService.getObsAcao()
       .subscribe(
@@ -31,19 +35,12 @@ export class ObsAcaoComponent implements OnInit {
             );
   }
 
-  searchType(type) {
-    this.resultSearchType = type;
-    console.log(this.resultSearchType);
-  }
+ 
 
   searchObsAction(obs) {
-    this.resultSearchType = [this.resultSearchType, obs];
-    console.log(this.resultSearchType);
+    this.resultSearchObsAction =  obs;
+    console.log(this.resultSearchObsAction);
   }
 
-  ngOnInit() {
-    this.getObsAcao();
-    console.log(this.obsAcao);
-  }
 
 }
