@@ -2,7 +2,7 @@
   <form class="ui form">
     <div class="fields">
       <div class="thirteen wide field">
-        <p>Selecione uma observação para ação:</p>
+        <label>Selecione uma observação para ação:</label>
         <sui-select class="selection" name="descricao" [(ngModel)]="observacao" [options]="obsAcao" labelField="obsAcao.descricao"
           valueField="obsAcao.cod_obs" #select>
           <sui-select-option *ngFor="let o of select.filteredOptions" [value]="o">
@@ -19,29 +19,27 @@
 
 <div class="ui segment" *ngIf="returnObsAction.length !== 0">
   <h5 class="ui top attached header">
-      Codigos do GESAC: <ng-template ngFor let-obs [ngForOf]='obsSelecionadas'> {{obs?.cod_gesac + '; ' }} </ng-template>
+      Codigos do GESAC: <p><ng-template ngFor let-obs [ngForOf]='obsSelecionadas'> {{obs?.cod_gesac + '; ' }} </ng-template></p>
     </h5>
   <div class="ui raised attached segment">
     <form class="ui form error" #fAddObeservacao="ngForm" (ngSubmit)="salvarObeservacao(fAddObeservacao)">
 
-      <div class="ui grid">
+      <div class="fields">
 
-        <div class="thirteen wide column">
+        <div class="thirteen wide field">
           <label>Observações de Ações</label>
-          <select class="ui dropdown" name="Obeservacao" [(ngModel)]="ObeservacaoPontoPresenca.cod_obs" required
-            #Obeservacao>
-            <option value="">Selecione Observação de Ação</option>
-            <option *ngFor="let Obeservacao of obsAcao" value="{{Obeservacao.cod_obs}}">{{Obeservacao.descricao}}</option>
-          </select>
+          <sui-select class="selection" name="descricao" [(ngModel)]="observacao" [options]="obsAcao" labelField="obsAcao.descricao"
+          valueField="obsAcao.cod_obs" #select>
+          <sui-select-option *ngFor="let o of select.filteredOptions" [value]="o">
+          </sui-select-option>
+        </sui-select>
         </div>
-        <div class="two wide column">
+        <div class="three wide field">
           <div class="one wide column" suiPopup popupText="Adicionar Obeservacao" popupInverted [popupPlacement]="'top left'">
             <button class="ui circular black icon button btnAdd" type="submit">
               <i class="plus icon"></i>
             </button>
           </div>
-        </div>
-        <div class="sixteen wide column">
         </div>
       </div>
 
@@ -49,11 +47,11 @@
 
     <div class="ui stackable four column grid">
 
-      <div class="column" *ngFor="let Obeservacao of ObeservacoesGuardadas" suiPopup popupText="Remover Obeservacao"
+      <div class="column" *ngFor="let obeservacao of obeservacoesGuardadas" suiPopup popupText="Remover Obeservacao"
         popupInverted [popupPlacement]="'top left'">
-        <a class="fluid ui labeled icon button btn-Obeservacao" (click)="removerObeservacao(Obeservacao)">
+        <a class="fluid ui labeled icon button btn-Obeservacao" (click)="removerObeservacao(obeservacao)">
           <i class="close icon"></i>
-          {{Obeservacao?.descricao}}
+          {{obeservacao?.descricao}}
         </a>
       </div>
 
