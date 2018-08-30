@@ -487,7 +487,7 @@
             <div class="ui stackable one column grid">
               <div class="column">
                 <label>Observações de Ações</label>
-                <select class="ui dropdown" name="Obeservacao" [(ngModel)]="analiseDetalhe.cod_obs" (change)="TESTE(analiseDetalhe.cod_obs)"
+                <select class="ui dropdown" name="Obeservacao" [(ngModel)]="analiseDetalhe.cod_obs"
                   required #Obeservacao>
                   <option value="">Selecione Observação de Ação</option>
                   <option *ngFor="let Obeservacao of obsAcoes" value="{{Obeservacao.cod_obs}}">{{Obeservacao.descricao}}</option>

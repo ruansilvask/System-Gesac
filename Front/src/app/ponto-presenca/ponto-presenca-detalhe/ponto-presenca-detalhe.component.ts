@@ -88,7 +88,8 @@ export class PontoPresencaDetalheComponent implements OnInit {
     cod_obs: '',
     // latitude: null,
     // longitude: null,
-    justificativa: null
+    justificativa: null,
+    obs: ''
   };
 
   /*

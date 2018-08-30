@@ -271,7 +271,7 @@
             {{ option.descricao || 'Todos' }}
           </ng-template>
           <sui-select class="selection" [(ngModel)]="filtros.status" [valueField]="" [options]="optionsPontoPre" labelField="descricao" [isSearchable]='true'
-            [optionTemplate]="optionTemplate" placeholder='Selecione a status' (ngModelChange)="filtroPonto (filtros, optionsPontoPre)"
+            [optionTemplate]="optionTemplate" placeholder='Selecione a status' (ngModelChange)="filtroPonto (filtros)"
             #templated>
             <sui-select-option *ngFor="let o of templated.filteredOptions" [value]="o"></sui-select-option>
           </sui-select>

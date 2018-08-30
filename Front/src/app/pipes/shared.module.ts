@@ -13,8 +13,9 @@ import { FilterTipoTelPipe } from './filter-tipoTel.pipe';
 import { FilterNumContratoPipe } from './filter-numContrato.pipe';
 import { FilterPagadoraPipe } from './filter-pagadora.pipe';
 import { FilterHistoricoAcoesPipe } from './filter-historico-acoes.pipe';
-import { FilterPontoPresencaContatoPipe } from './filter-ponto-presenca-contato.pipe';
 import { FilterRepresentantePipe } from './filter-representantes.pipe';
+import { FilterContatoPipe } from './filter-contato.pipe';
+
 
 @NgModule({
   imports: [
@@ -36,7 +37,7 @@ import { FilterRepresentantePipe } from './filter-representantes.pipe';
     FilterNumContratoPipe,
     FilterPagadoraPipe,
     FilterHistoricoAcoesPipe,
-    FilterPontoPresencaContatoPipe,
+    FilterContatoPipe,
     FilterRepresentantePipe
   ],
   exports: [
@@ -56,7 +57,7 @@ import { FilterRepresentantePipe } from './filter-representantes.pipe';
     FilterNumContratoPipe,
     FilterPagadoraPipe,
     FilterHistoricoAcoesPipe,
-    FilterPontoPresencaContatoPipe,
+    FilterContatoPipe,
     FilterRepresentantePipe
   ]
 })

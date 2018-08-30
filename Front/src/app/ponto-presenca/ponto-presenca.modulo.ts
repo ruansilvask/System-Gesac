@@ -5,7 +5,6 @@ import '../util/rxjs-extensions';
 
 
 import { FilterHistoricoAcoesPipe } from '../pipes/filter-historico-acoes.pipe';
-import { FilterPontoPresencaContatoPipe } from '../pipes/filter-contato.pipe';
 
 import { PontoPresencaRoutingModule } from './ponto-presenca.routing.module';
 import { PontoPresencaAddEditComponent } from './ponto-presenca-add-edit/ponto-presenca-add-edit.component';

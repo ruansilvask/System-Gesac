@@ -103,7 +103,7 @@ export class InstRespComponent implements OnInit {
     this.instituicoesRespPag = this.allArrays[pagina - 1];
   }
 
-  filtroInstResp(filtros, pagadora): any {
+  filtroInstResp(filtros): any {
     if (!filtros.cnpj && !filtros.nome && !filtros.sigla && !filtros.pagadora) {
       this.funcaoPaginacao(this.instituicoesResp);
     } else {
