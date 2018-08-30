@@ -337,9 +337,9 @@ export class PontoPresencaDetalheComponent implements OnInit {
   * Métodos para bloquear o nome da interação
 */
 
-nomeInteracao(objInt) {
+  nomeInteracao(objInt) {
     this.bloquearNome = objInt.tratamento;
-}
+  }
 
   /*
   * Métodos para listar todo o historico de interacao, analise e solicitação
@@ -400,6 +400,7 @@ nomeInteracao(objInt) {
 
   // Função para cadastrar a interação
   submitInteracao(formInteracao: NgForm) {
+
     if (formInteracao.value.data_interacao <= new Date) {
 
       formInteracao.value.tipo_interacao = formInteracao.value.tipo_interacao.tipo_interacao;
@@ -513,7 +514,11 @@ nomeInteracao(objInt) {
             this.getObsAcaoporId();
           }
         ))
-      : (console.log('Vazio'));
+      : (this.apiServicesMsg.setMsg(
+        'error',
+        'Não é possivel adicionar Observação de Ação vazio!!!',
+        3000
+      ));
   }
 
   /*
