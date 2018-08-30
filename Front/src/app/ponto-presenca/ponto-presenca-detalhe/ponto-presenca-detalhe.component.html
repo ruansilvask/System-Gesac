@@ -214,9 +214,9 @@
                 <div class="thirteen wide column">
                   <label>Observações de Ações</label>
 
-                  <select class="ui dropdown" name="cod_obs" [(ngModel)]="ObeservacaoPontoPresenca.cod_obs" required #Obeservacao> 
-                    <option value="">Selecione Observação de Ação</option> 
-                    <option *ngFor="let Obeservacao of obsAcoes" value="{{Obeservacao.cod_obs}}">{{Obeservacao.descricao}}</option> 
+                  <select class="ui dropdown" name="cod_obs" [(ngModel)]="ObeservacaoPontoPresenca.cod_obs" required #Obeservacao>
+                    <option value="">Selecione Observação de Ação</option>
+                    <option *ngFor="let Obeservacao of obsAcoes" value="{{Obeservacao.cod_obs}}">{{Obeservacao.descricao}}</option>
 
                   </select>
                 </div>
@@ -655,7 +655,7 @@
         </div>
 
         <!--Inicio do Modal Modal de add/edit Ponto de Presença -->
-        <sui-modal *ngIf="selcPP" [isClosable]="false" [transition]="'scale'" [isInverted]="true" [size]="'normal'" [transitionDuration]="500"
+        <sui-modal  style="height: 40em;" *ngIf="selcPP" [isClosable]="false" [transition]="'scale'" [isInverted]="true" [size]="'large'" [transitionDuration]="500"
           #modal>
           <div class="header">
 
@@ -671,8 +671,7 @@
 
           <div class="content">
             <router-outlet></router-outlet>
-
-          </div>
+            </div>
 
         </sui-modal>
         <!--Fim do Modal de add/edit Ponto de Presença -->
@@ -944,8 +943,8 @@
       <div *ngSwitchCase="'interação'">
         <div class="ui segment">
           <form class="ui form">
-            <div class="two fields">
-              <div class=" field">
+            <div class="three fields">
+              <div class="field">
                 <label>Nome</label>
                 <input [readonly]="true" [ngModel]='interacao?.nome' name="nome" type="text">
               </div>
@@ -953,6 +952,16 @@
               <div class="field">
                 <label>Assunto</label>
                 <input [readonly]="true" [ngModel]='interacao?.assunto' name="assunto" type="text">
+              </div>
+
+              <div class="field">
+                <label>Data da interação</label>
+                <input [readonly]="true" [ngModel]='interacao?.data_interacao |  date : "dd/MM/yyyy"' name="data" type="text">
+              </div>
+
+              <div class="field">
+                <label>Tipo de Interação</label>
+                <input [readonly]="true" [ngModel]='interacao?.descricao' name="descricao" type="text">
               </div>
             </div>
             <div class="fields">

@@ -276,7 +276,6 @@ export class PontoPresencaDetalheComponent implements OnInit {
       .subscribe(res => {
         this.historicoAnalises = res[0];
         this.abrirNodal = true;
-        console.log(this.historicoAnalises);
       });
   }
 
@@ -401,29 +400,32 @@ nomeInteracao(objInt) {
 
   // Função para cadastrar a interação
   submitInteracao(formInteracao: NgForm) {
+    if (formInteracao.value.data_interacao <= new Date) {
 
-    formInteracao.value.tipo_interacao = formInteracao.value.tipo_interacao.tipo_interacao;
-    formInteracao.value.data_interacao = this.apiServicesData.formatData(formInteracao.value.data_interacao);
+      formInteracao.value.tipo_interacao = formInteracao.value.tipo_interacao.tipo_interacao;
+      formInteracao.value.data_interacao = this.apiServicesData.formatData(formInteracao.value.data_interacao);
+      formInteracao.value.cod_gesac = this.params.id;
 
-    formInteracao.value.cod_gesac = this.params.id;
-    this.pontoPresencaService.postInteracao(formInteracao.value).subscribe(
-      res => {
-        this.getPontoHistorico(),
-          this.apiServicesMsg.setMsg(
-            'success',
-            'Interação realizada com sucesso!',
-            3000
-          );
-          formInteracao.reset();
-      },
-      erro => Swal('Erro', `${erro.error}`, 'error')
-    );
+      this.pontoPresencaService.postInteracao(formInteracao.value).subscribe(
+        res => {
+          this.getPontoHistorico(),
+            this.apiServicesMsg.setMsg(
+              'success',
+              'Interação realizada com sucesso!',
+              3000
+            );
+            formInteracao.reset();
+        },
+        erro => Swal('Erro', `${erro.error}`, 'error')
+      );
+    } else {
+      Swal('Data Inválida', `A data da interação deve ser menor ou igual a data de hoje`, 'error');
+    }
   }
 
   getInteração() {
   this.pontoPresencaService.getTipoInteracao().subscribe(
     res => {
-      console.log(res);
       this.tipo_interacoes = res;
     }
   );
