@@ -17,7 +17,9 @@
     "knex": "^0.14.5",
     "mysql": "^2.15.0",
     "node-excel-export": "^1.4.4",
-    "nodemon": "^1.18.3",
     "password-hash": "^1.2.2"
+  },
+  "devDependencies": {
+    "nodemon": "^1.18.3"
   }
 }

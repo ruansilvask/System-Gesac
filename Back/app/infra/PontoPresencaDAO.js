@@ -5,7 +5,7 @@ function PontoPresencaDAO(connection){
 //---------------Querys de Pontos de Presença---------------//
 //Lista os Pontos de Presença.
 PontoPresencaDAO.prototype.listarPontoPresenca = function(callback){
-	this._connection.query('SELECT gesac.cod_gesac, pid.nome, municipio.uf, municipio.nome_municipio, status.descricao, status.cod_status, GROUP_CONCAT(tipologia.nome SEPARATOR "; ") AS "tipologia" FROM gesac INNER JOIN pid ON gesac.cod_pid = pid.cod_pid INNER JOIN status ON gesac.cod_status = status.cod_status left JOIN pid_tipologia ON pid.cod_pid = pid_tipologia.cod_pid left JOIN tipologia ON pid_tipologia.cod_tipologia = tipologia.cod_tipologia INNER JOIN municipio ON pid.cod_ibge = municipio.cod_ibge group by pid_tipologia.cod_pid, gesac.cod_gesac order by gesac.cod_gesac;', callback);
+	this._connection.query('SELECT gesac.cod_gesac, pid.nome, municipio.uf, municipio.nome_municipio, status.descricao, status.cod_status, GROUP_CONCAT(tipologia.nome SEPARATOR "; ") AS "tipologia", GROUP_CONCAT(gesac_obs_acao.cod_obs SEPARATOR "; ") AS "obs_acao" FROM gesac INNER JOIN pid ON gesac.cod_pid = pid.cod_pid INNER JOIN status ON gesac.cod_status = status.cod_status LEFT JOIN pid_tipologia ON pid.cod_pid = pid_tipologia.cod_pid LEFT JOIN tipologia ON pid_tipologia.cod_tipologia = tipologia.cod_tipologia INNER JOIN municipio ON pid.cod_ibge = municipio.cod_ibge LEFT JOIN gesac_obs_acao ON gesac.cod_gesac = gesac_obs_acao.cod_gesac GROUP BY pid_tipologia.cod_pid, gesac.cod_gesac ORDER BY gesac.cod_gesac;', callback);
 }
 
 //Lista as informações de Ponto para visualização em Pontos de Presença.
@@ -75,9 +75,14 @@ PontoPresencaDAO.prototype.listarAnaliseId = function(cod_analise, callback){
 
 
 //---------------Querys de Interação---------------//
+//Lista os Tipos de Interação.
+PontoPresencaDAO.prototype.ListarTipoInteracao = function(callback){
+	this._connection.query('SELECT * FROM tipo_interacao', callback);
+}
+
 //Lista as informações de um Interação com base nos Ids.
 PontoPresencaDAO.prototype.ListarInteracaoId = function(data, cod_gesac, callback){
-	this._connection.query(`SELECT interacao.*, pessoa.nome FROM interacao LEFT JOIN pessoa ON interacao.cod_pessoa = pessoa.cod_pessoa WHERE interacao.data = '${data}' AND interacao.cod_gesac = ${cod_gesac}`, callback);
+	this._connection.query(`SELECT interacao.*, pessoa.nome, tipo_interacao.descricao FROM interacao LEFT JOIN pessoa ON interacao.cod_pessoa = pessoa.cod_pessoa INNER JOIN tipo_interacao ON interacao.tipo_interacao = tipo_interacao.tipo_interacao WHERE interacao.data = '${data}' AND interacao.cod_gesac = ${cod_gesac}`, callback);
 }
 
 
@@ -91,7 +96,19 @@ PontoPresencaDAO.prototype.listarHistoricoPontoPresenca = function(cod_gesac, ca
 //---------------Querys de Status---------------//
  //Lista todos os Status de um Ponto de Presença.
  PontoPresencaDAO.prototype.listarTodosStatus = function(callback){
-	this._connection.query(`SELECT * FROM status`, callback);
+	this._connection.query('SELECT * FROM status', callback);
+}
+
+
+//---------------Querys de Observação de Ação---------------//
+//Lista todas as Observações de Ação.
+ PontoPresencaDAO.prototype.listarObsAcao = function(callback){
+	this._connection.query('SELECT * FROM obs_acao', callback);
+}
+
+//Lista as Observações de Ação de um Ponto de presença.
+PontoPresencaDAO.prototype.listarObsAcaoId = function(cod_gesac, callback){
+	this._connection.query(`SELECT obs_acao.* FROM obs_acao INNER JOIN gesac_obs_acao ON obs_acao.cod_obs = gesac_obs_acao.cod_obs INNER JOIN gesac ON gesac_obs_acao.cod_gesac = gesac.cod_gesac WHERE gesac.cod_gesac = ${cod_gesac}`, callback);
 }
 
 module.exports = () => {

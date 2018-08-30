@@ -310,7 +310,6 @@ module.exports = function(app){
         }
 
         if(cnpj_empresa){
-            console.log("Cadastra em analise");
             for(let i=0; i<cods_gesac.length; i++){
                 dados[i].cnpj_empresa = cnpj_empresa;
             }
@@ -327,7 +326,6 @@ module.exports = function(app){
                 });
 
         } else {
-            console.log("Cadastra em solicitacao");
             knex('solicitacao').insert(dados)
                 .then(resultado => {
                     knex.destroy();
@@ -402,6 +400,19 @@ module.exports = function(app){
 
 
 //---------------Callbacks de Interacao---------------//
+    //Lista os Tipos de Interação.
+    api.ListaTipoInteracao = (req, res) => {
+        const connection = app.conexao.conexaoBD();
+        const pontoPresencaDAO = new app.infra.PontoPresencaDAO(connection);
+
+        pontoPresencaDAO.ListarTipoInteracao((erro, resultado) => {
+            erro ? (console.log(erro), res.status(500).send(app.api.erroPadrao())) : res.status(200).json(resultado);
+        });
+
+        connection.end();
+    };
+
+    //Salva uma nova Interação
     api.salvaInteracao = (req, res) => {
         const knex = app.conexao.conexaoBDKnex();
         const interacao = req.body;
@@ -459,6 +470,85 @@ module.exports = function(app){
 
         connection.end();
     };
+
+
+//---------------Callbacks de Observação de Ação---------------//
+    //Lista todas as Observações de Ação.
+    api.listaObsAcao = (req, res) => {
+        const connection = app.conexao.conexaoBD();
+        const pontoPresencaDAO = new app.infra.PontoPresencaDAO(connection);
+
+        pontoPresencaDAO.listarObsAcao((erro, resultado) => {
+            erro ? (console.log(erro), res.status(500).send(app.api.erroPadrao())) : res.status(200).json(resultado);
+        });
+
+        connection.end();
+    };
+
+    //Salva uma Observação de Ação em um ou vários Pontos de Presença.
+    api.salvaObservacao = (req, res) => {
+        const knex = app.conexao.conexaoBDKnex();
+        const obs_acao = req.body;
+        let gesac_obs_acao = [];
+
+        if(Array.isArray(obs_acao.cod_gesac)){
+            for(let i=0; i<obs_acao.cod_gesac.length; i++){
+                gesac_obs_acao[i] = {cod_gesac: obs_acao.cod_gesac[i], cod_obs: obs_acao.cod_obs};
+            }
+        } else {
+            gesac_obs_acao[0] = {cod_gesac: obs_acao.cod_gesac, cod_obs: obs_acao.cod_obs};
+        }
+
+        knex('gesac_obs_acao').insert(gesac_obs_acao)
+            .then(resultado => {
+                knex.destroy();
+                res.status(200).end();
+            })
+            .catch(erro => {
+                console.log(erro);
+                knex.destroy();
+                res.status(500).send(app.api.erroPadrao());
+            });
+    };
+
+    //Lista as Observações de Ação de um Ponto de presença.
+    api.listaObsAcaoId = (req, res) => {
+        const connection = app.conexao.conexaoBD();
+        const pontoPresencaDAO = new app.infra.PontoPresencaDAO(connection);
+        const { cod_gesac } = req.params;
+
+        pontoPresencaDAO.listarObsAcaoId(cod_gesac, (erro, resultado) => {
+            erro ? (console.log(erro), res.status(500).send(app.api.erroPadrao())) : res.status(200).json(resultado);
+        });
+
+        connection.end();
+    };
+
+    //Apaga uma Observação de Ação de um Ponto de Presença.
+    api.apagaObsAcao = (req, res) => {
+        const knex = app.conexao.conexaoBDKnex();
+        const { cod_gesac, cod_obs } = req.body;
+        let gesac_obs_acao = [];
+
+        if(Array.isArray(cod_gesac)){
+            for(let i=0; i<cod_gesac.length; i++){
+                gesac_obs_acao[i] = [cod_gesac[i], cod_obs];
+            }
+        } else {
+            gesac_obs_acao[0] = [cod_gesac, cod_obs];
+        }
+
+        knex('gesac_obs_acao').whereIn(['cod_gesac', 'cod_obs'], gesac_obs_acao).delete()
+            .then(resultado => {
+                knex.destroy();
+                res.status(200).end();
+            })
+            .catch(erro => {
+                console.log(erro);
+                knex.destroy();
+                res.status(500).send(app.api.erroPadrao());
+            });
+    }
     
     return api;    
 }
