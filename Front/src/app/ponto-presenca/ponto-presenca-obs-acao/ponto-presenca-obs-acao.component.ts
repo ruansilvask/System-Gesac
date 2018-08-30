@@ -1,5 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { PontoPresencaService } from '../ponto-presenca.service';
+import { ApiServicesMsg } from './../../api-services/api-services-msg';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-obs-acao',
@@ -24,7 +26,8 @@ export class ObsAcaoComponent implements OnInit {
   };
 
   constructor(
-    private pontoPresencaService: PontoPresencaService
+    private pontoPresencaService: PontoPresencaService,
+    private apiServicesMsg: ApiServicesMsg
   ) { }
 
   ngOnInit() {
@@ -81,13 +84,14 @@ export class ObsAcaoComponent implements OnInit {
     for (let index = 0; index < obsSelecionadas.length; index++) {
       this.cod_gesac[index] = obsSelecionadas[index].cod_gesac;
     }
-
     this.listRemoveObsAction = {cod_gesac: this.cod_gesac, cod_obs: obsAction };
-    // obsAction.value.cod_gesac = this.cod_gesac;
-    // console.log( this.cod_gesac);
-    // console.log(obsAction);
-    console.log(this.listRemoveObsAction);
-
+    this.pontoPresencaService.removerObsAcao(this.listRemoveObsAction)
+    .subscribe(
+      res => {
+        this.apiServicesMsg.setMsg('success', 'Observação para ação excluída com sucesso.', 3000);
+      },
+      erro => console.error(erro)
+    );
   }
 
 
