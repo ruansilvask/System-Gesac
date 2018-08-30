@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Headers, Response } from '@angular/http';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import 'rxjs/add/operator/map';
 
@@ -351,9 +351,15 @@ export class PontoPresencaService {
     * Protocolo HTTP retornar os historico da analise
     */
 
-  removerObsAcao(cod_gesac, cod_obsAcao) {
+  removerObsAcao(form) {
+    const options = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      }),
+      body: form
+    };
     return this.http
-      .delete(`${API.GESAC_API}obsAcao/${cod_gesac}/${cod_obsAcao}`)
+      .delete(`${API.GESAC_API}obsAcao`, options)
       .map(res => res);
   }
 

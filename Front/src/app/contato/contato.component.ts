@@ -1,4 +1,3 @@
-import { ApiServicesMsg } from '../api-services/api-services-msg';
 import { ApiServicesPagination } from '../api-services/api-services-pagination';
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 
@@ -10,6 +9,7 @@ import { ConfirmModal } from '../modal/modal.component';
 import { ContatoService } from './contato.service';
 import { Contato } from './contato.model';
 import { NgForm } from '@angular/forms';
+import { ApiServicesMsg } from '../api-services/api-services-msg';
 import Swal from 'sweetalert2';
 
 @Component({
