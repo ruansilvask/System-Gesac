@@ -29,18 +29,24 @@ export class ObsAcaoComponent implements OnInit {
   }
 
   gerarObs() {
-    const obs = [];
+    let obs = [];
     this.obsSelecionadas.forEach(e => {
-      if(e.obs_acao) {e.obs_acao.forEach(a => obs.push(a))}
+      if (e.obs_acao) {
+        e.obs_acao.forEach(a => obs.push(a));
+      }
     });
     obs = obs.filter((item, pos, self) => self.indexOf(item) === pos);
     this.obeservacoesGuardadas = this.obsAcao.filter(e => {
       let valido = false;
-      obs.forEach(a => 
-        if(e.cod_obs.toString() === a.toString()) {valido = true; return false;}
-      )
+      obs.forEach(a => {
+        if (e.cod_obs.toString() === a.toString()) {
+          valido = true;
+          return false;
+        }
+      }
+      );
       return valido;
-    })
+    });
   }
 
   getObsAcao() {
