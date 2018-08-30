@@ -71,6 +71,7 @@ module.exports = function(app){
 
     //Interacao
     app.route('/gesac/pontoInteracao')
+        .get(pontoPresenca.ListaTipoInteracao)
         .post(pontoPresenca.salvaInteracao);
 
     app.route('/gesac/pontoInteracao/:data/:cod_gesac')
@@ -83,8 +84,17 @@ module.exports = function(app){
     //Status
     app.route('/gesac/listStatusPP')
         .get(pontoPresenca.listaTodosStatus);
+
+    //Observação de Ação
+    app.route('/gesac/obsAcao')
+        .get(pontoPresenca.listaObsAcao)
+        .post(pontoPresenca.salvaObservacao)
+        .delete(pontoPresenca.apagaObsAcao);
+
+    app.route('/gesac/obsAcao/:cod_gesac')
+        .get(pontoPresenca.listaObsAcaoId);
     
-//-----Detalhe-------------------------------------------------, Ruan que fez!
+//-----Detalhe-------------------------------------------------, F*deu, Ruan que fez!
     app.route('/gesac/detPontoPresenca/:cod_gesac')
         .get(pontoPresenca.detalhePontoPresenca);
 
