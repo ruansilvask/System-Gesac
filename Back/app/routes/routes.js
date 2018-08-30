@@ -94,7 +94,7 @@ module.exports = function(app){
     app.route('/gesac/obsAcao/:cod_gesac')
         .get(pontoPresenca.listaObsAcaoId);
     
-//-----Detalhe-------------------------------------------------, F*deu, Ruan que fez!
+//-----Detalhe-------------------------------------------------, Ruan que fez!
     app.route('/gesac/detPontoPresenca/:cod_gesac')
         .get(pontoPresenca.detalhePontoPresenca);
 
