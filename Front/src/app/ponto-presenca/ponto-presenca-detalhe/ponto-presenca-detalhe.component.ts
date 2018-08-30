@@ -338,9 +338,9 @@ export class PontoPresencaDetalheComponent implements OnInit {
   * Métodos para bloquear o nome da interação
 */
 
-nomeInteracao(objInt) {
+  nomeInteracao(objInt) {
     this.bloquearNome = objInt.tratamento;
-}
+  }
 
   /*
   * Métodos para listar todo o historico de interacao, analise e solicitação
@@ -414,19 +414,19 @@ nomeInteracao(objInt) {
             'Interação realizada com sucesso!',
             3000
           );
-          formInteracao.reset();
+        formInteracao.reset();
       },
       erro => Swal('Erro', `${erro.error}`, 'error')
     );
   }
 
   getInteração() {
-  this.pontoPresencaService.getTipoInteracao().subscribe(
-    res => {
-      console.log(res);
-      this.tipo_interacoes = res;
-    }
-  );
+    this.pontoPresencaService.getTipoInteracao().subscribe(
+      res => {
+        console.log(res);
+        this.tipo_interacoes = res;
+      }
+    );
 
   }
 
@@ -511,7 +511,11 @@ nomeInteracao(objInt) {
             this.getObsAcaoporId();
           }
         ))
-      : (console.log('Vazio'));
+      : (this.apiServicesMsg.setMsg(
+        'error',
+        'Não é possivel adicionar Observação de Ação vazio!!!',
+        3000
+      ));
   }
 
   /*
