@@ -20,6 +20,7 @@ import Swal from 'sweetalert2';
 
 export class PontoPresencaDetalheComponent implements OnInit {
 
+  admin: boolean;
   bloquearNome: any;
   tipo_interacoes: any;
 
@@ -86,10 +87,10 @@ export class PontoPresencaDetalheComponent implements OnInit {
     telefone2: null,
     email: null,
     cod_obs: '',
+    obs: '',
     // latitude: null,
     // longitude: null,
-    justificativa: null,
-    obs: ''
+    justificativa: null
   };
 
   /*
@@ -123,6 +124,9 @@ export class PontoPresencaDetalheComponent implements OnInit {
   ) { }
 
   ngOnInit() {
+    if ( localStorage.getItem('currentUserCode') === '1' ) {
+      this.admin = true;
+    }
     this.route.params.subscribe(params => {
       this.params = params.id;
     });
@@ -308,28 +312,6 @@ export class PontoPresencaDetalheComponent implements OnInit {
       .getPontoHistorico(this.params.id)
       .subscribe(res => {
         this.pontoHistorico = res;
-
-        // delete  this.pontoHistorico[0].data;
-        // delete  this.pontoHistorico[0].cod_analise;
-        // delete  this.pontoHistorico[0].tipo_solicitacao;
-        // this.pontoHistorico[0].name = this.pontoHistorico[0].acao;
-
-        // this.options[0] = this.pontoHistorico[0];
-        // let x = 0;
-
-        //   for (let i = 0; i < this.pontoHistorico.length; i++) {
-        //     if (this.options[x].acao !== this.pontoHistorico[i].acao) {
-        //       this.options[x + 1] = this.pontoHistorico[i];
-        //       this.options[x + 1].name = this.pontoHistorico[i].acao;
-
-
-        //       delete this.options[x + 1].data;
-        //       delete this.options[x + 1].cod_analise;
-        //       delete this.options[x + 1].tipo_solicitacao;
-        //       x ++;
-        //     }
-        //   }
-
       });
   }
 
@@ -522,44 +504,55 @@ export class PontoPresencaDetalheComponent implements OnInit {
       ));
   }
 
+
+
   /*
 * Métodos para remover a Obs Ações da tela e do banco
 */
   removerObsAcao(obs) {
-    console.log(obs);
-    // Swal({
-    //   title: 'Você tem certeza?',
-    //   html: `Tem certeza que deseja remover a Obeservação de Ação <i>${
-    //     obs.descricao
-    //     }</i>?`,
-    //   type: 'question',
-    //   showCancelButton: true,
-    //   confirmButtonText: 'Sim, remover!',
-    //   cancelButtonText: 'Não, mater',
-    //   reverseButtons: true
-    // }).then(result => {
-    //   if (result.value) {
-    //     if (this.codGesac) {
-    //       this.pontoPresencaService
-    //         .removerObsAcao(this.params.id, obs.cod_obs)
-    //         .subscribe(
-    //           res => {
-    //             this.removido = res;
-    //             this.getObsAcaoporId();
-    //             this.apiServicesMsg.setMsg(
-    //               'success',
-    //               'Tipologia removida com sucesso.',
-    //               3000
-    //             );
-    //           },
-    //           erro => Swal('Erro', `${erro.error}`, 'error')
-    //         );
-    //     }
-    //   } else if (result.dismiss === Swal.DismissReason.cancel) {
-    //     this.apiServicesMsg.setMsg('error', 'Ação cancelada.', 3000);
-    //   }
-    // });
+  if (this.admin) {
+    Swal({
+      title: 'Você tem certeza?',
+      html: `Tem certeza que deseja remover a Obeservação de Ação <i>${
+        obs.descricao
+        }</i>?`,
+      type: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sim, remover!',
+      cancelButtonText: 'Não, mater',
+      reverseButtons: true
+    }).then(result => {
+      if (result.value) {
+        if (this.codGesac) {
+          obs.cod_gesac = this.params.id;
+          delete obs.descricao;
+          console.log(obs);
+          this.pontoPresencaService
+            .removerObsAcao(obs)
+            .subscribe(
+              res => {
+                this.removido = res;
+                this.getObsAcaoporId();
+                this.apiServicesMsg.setMsg(
+                  'success',
+                  'Tipologia removida com sucesso.',
+                  3000
+                );
+              },
+              erro => Swal('Erro', `${erro.error}`, 'error')
+            );
+        }
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        this.apiServicesMsg.setMsg('error', 'Ação cancelada.', 3000);
+      }
+    });
+  } else {
+    Swal('Erro de acesso', `Este usuário não possui permissão para excluir!`, 'error');
   }
+}
 
+  // deleteObs(observacao) {
+  //   console.log(observacao);
+  // }
 
 }

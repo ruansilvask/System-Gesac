@@ -216,9 +216,9 @@
 
                   <select class="ui dropdown" name="cod_obs" [(ngModel)]="ObeservacaoPontoPresenca.cod_obs" required #Obeservacao>
                     <option value="">Selecione Observação de Ação</option>
-                    <option *ngFor="let Obeservacao of obsAcoes" value="{{Obeservacao.cod_obs}}">{{Obeservacao.descricao}}</option>
-
+                    <option *ngFor="let obeservacao of obsAcoes" value="{{obeservacao.cod_obs}}">{{obeservacao.descricao}}</option>
                   </select>
+
                 </div>
                 <div class="two wide column">
                   <div class="one wide column" suiPopup popupText="Adicionar Obeservacao" popupInverted [popupPlacement]="'top left'">
@@ -468,6 +468,7 @@
                   <input  [(ngModel)]="analiseDetalhe.longitude" name="longitude" placeholder="Longitude" type="text">
                 </div>
               </div> -->
+
             <h3 class=" invalid-feedback active">
               Latitude e longitude desativados temporariamente.
             </h3>
@@ -486,12 +487,62 @@
 
             <div class="ui stackable one column grid">
               <div class="column">
-                <label>Observações de Ações</label>
-                <select class="ui dropdown" name="Obeservacao" [(ngModel)]="analiseDetalhe.cod_obs"
-                  required #Obeservacao>
-                  <option value="">Selecione Observação de Ação</option>
-                  <option *ngFor="let Obeservacao of obsAcoes" value="{{Obeservacao.cod_obs}}">{{Obeservacao.descricao}}</option>
-                </select>
+
+                  <label>Observações de Ações</label>
+
+                  <!-- <select class="ui dropdown" name="Obeservacao" [(ngModel)]="analiseDetalhe.cod_obs" required #Obeservacao>
+                    <option value="">Selecione Observação de Ação</option>
+                    <option *ngFor="let obeservacao of obsAcoes" value="{{obeservacao.cod_obs}}">{{obeservacao.descricao}}</option>
+                  </select>
+
+
+                  <div  suiPopup popupText="Adicionar Obeservacao" popupInverted [popupPlacement]="'top left'">
+                    <button class="ui circular black icon button btnAdd" (click)="salvarObeservacaoAnalise()">
+                      <i class="plus icon"></i>
+                    </button>
+                  </div> -->
+                  <div content>
+                    <div class="ui raised">
+                      <form class="ui form error" #fAddObeservacao="ngForm" (ngSubmit)="salvarObeservacao(fAddObeservacao)">
+
+                        <div class="ui grid">
+
+                          <div class="thirteen wide column">
+
+                            <select class="ui dropdown" name="cod_obs" [(ngModel)]="ObeservacaoPontoPresenca.cod_obs" required #Obeservacao>
+                              <option value="">Selecione Observação de Ação</option>
+                              <option *ngFor="let obeservacao of obsAcoes" value="{{obeservacao.cod_obs}}">{{obeservacao.descricao}}</option>
+                            </select>
+
+                          </div>
+                          <div class="two wide column">
+                            <div class="one wide column" suiPopup popupText="Adicionar Obeservacao" popupInverted [popupPlacement]="'top left'">
+                              <button class="ui circular black icon button btnAdd" type="submit">
+                                <i class="plus icon"></i>
+                              </button>
+                            </div>
+                          </div>
+                          <div class="sixteen wide column">
+                          </div>
+                        </div>
+
+                      </form>
+
+                      <div class="ui stackable four column grid">
+
+                        <div class="column" *ngFor="let Obeservacao of obsAcoesCad" suiPopup popupText="Remover Obeservacao" popupInverted
+                          [popupPlacement]="'top left'">
+                          <a class="fluid ui labeled icon button btn-Obeservacao" (click)="removerObsAcao(Obeservacao)">
+                            <i class="close icon"></i>
+                            {{Obeservacao?.descricao}}
+                          </a>
+                        </div>
+
+                      </div>
+
+                    </div>
+                  </div>
+
               </div>
             </div>
 

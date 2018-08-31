@@ -78,7 +78,8 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
     num_doc_sei: null,
     num_oficio: null,
     data_oficio: null,
-    cnpj_empresa: ''
+    cnpj_empresa: '',
+    motivo: ''
   };
 
   optionsPontoPre: any;
@@ -364,7 +365,8 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
               num_doc_sei: null,
               num_oficio: null,
               data_oficio: null,
-              cnpj_empresa: ''
+              cnpj_empresa: '',
+              motivo: ''
             };
             fmsolicitacoes.reset();
             this.loadPontoPre();
