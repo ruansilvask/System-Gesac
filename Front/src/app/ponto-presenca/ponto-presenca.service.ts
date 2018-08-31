@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Headers, Response } from '@angular/http';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 import 'rxjs/add/operator/map';
 
@@ -317,16 +316,24 @@ export class PontoPresencaService {
 
 
   /*
-    * OBSERVAÇÔES AÇÕES
-    */
+  * OBSERVAÇÔES AÇÕES
+  */
 
-   /*
-    * Protocolo HTTP para inserir uma nova analise
-    */
-
+  /*
+  * Protocolo HTTP para inserir uma nova analise
+  */
    getObsAcao() {
     return this.http.get(`${API.GESAC_API}obsAcao`).map(res => res);
   }
+
+  /*
+  * Protocolo HTTP para inserir uma nova analise
+  */
+ getObsAcaoSelecionadas(arrayCodsGsacs) {
+  let params = new HttpParams();
+  params = params.append('cod_gesac', arrayCodsGsacs);
+  return this.http.get(`${API.GESAC_API}multObsAcao`, {params: params}).map(res => res);
+}
 
 
    /*
@@ -352,14 +359,11 @@ export class PontoPresencaService {
     */
 
   removerObsAcao(form) {
-    const options = {
-      headers: new HttpHeaders({
-        'Content-Type': 'application/json',
-      }),
-      body: form
-    };
+    let params = new HttpParams();
+    params = params.append('cod_gesac', form.cod_gesac);
+    params = params.append('cod_obs', form.cod_obs);
     return this.http
-      .delete(`${API.GESAC_API}obsAcao`, options)
+      .delete(`${API.GESAC_API}obsAcao`, {params: params})
       .map(res => res);
   }
 

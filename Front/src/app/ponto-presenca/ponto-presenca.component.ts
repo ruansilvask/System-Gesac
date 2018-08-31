@@ -35,7 +35,6 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
   */
   pontopresencaCod_gesac: any[] = [];
   pontoPresencaStatus = [];
-  pontoPresencaObs = [];
 
   selecionados = [];
   /*
@@ -211,8 +210,6 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
       if (this.numMarcados > 0) {
         this.pontopresencaCod_gesac.push(ponto.cod_gesac);
         this.pontoPresencaStatus.push(ponto.cod_status);
-        this.pontoPresencaObs.push({cod_gesac: ponto.cod_gesac,
-        obs_acao: (ponto.obs_acao) ? ponto.obs_acao.split('; ') : ponto.obs_acao});
       }
       this.todosMarcados(this.allArrays);
     } else {
@@ -220,12 +217,10 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
       if (this.numMarcados !== 0) {
         this.pontopresencaCod_gesac.splice(this.pontopresencaCod_gesac.indexOf(ponto.cod_gesac), 1);
         this.pontoPresencaStatus.splice(this.pontoPresencaStatus.indexOf(ponto.cod_status), 1);
-        this.pontoPresencaObs.splice(this.posicaoItemArray(this.pontoPresencaObs, ponto), 1);
         this.botoesMSA = true;
       } else {
         this.pontopresencaCod_gesac.splice(this.pontopresencaCod_gesac.indexOf(ponto.cod_gesac), 1);
         this.pontoPresencaStatus.splice(this.pontoPresencaStatus.indexOf(ponto.cod_status), 1);
-        this.pontoPresencaObs.splice(this.posicaoItemArray(this.pontoPresencaObs, ponto), 1);
         this.botoesMSA = false;
       }
       this.todosMarcados(this.allArrays);
@@ -239,8 +234,6 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
           this.allArrays[i][u].check = true;
           this.pontopresencaCod_gesac.push(this.allArrays[i][u].cod_gesac);
           this.pontoPresencaStatus.push(this.allArrays[i][u].cod_status);
-          this.pontoPresencaObs.push({cod_gesac: this.allArrays[i][u].cod_gesac,
-          obs_acao: (this.allArrays[i][u].obs_acao) ? this.allArrays[i][u].obs_acao.split('; ') : this.allArrays[i][u].obs_acao});
         }
       }
       this.marcadosInput = true;
@@ -256,11 +249,8 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
       this.botoesMSA = false;
       this.pontopresencaCod_gesac = [];
       this.pontoPresencaStatus = [];
-      this.pontoPresencaObs = [];
     }
   }
-
-
 
   /*
  * Métodos feichar o modal
@@ -435,8 +425,6 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
         if (arrayGsac.some(gsac => gsac === pontoPres.cod_gesac.toString())) {
           this.pontopresencaCod_gesac.push(pontoPres.cod_gesac);
           this.pontoPresencaStatus.push(pontoPres.cod_status);
-          this.pontoPresencaObs.push({cod_gesac: pontoPres.cod_gesac,
-          obs_acao: (pontoPres.obs_acao) ? pontoPres.obs_acao.split('; ') : pontoPres.obs_acao});
           this.numMarcados++;
           pontoPres.check = true;
           return true;
@@ -450,8 +438,6 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
         if (arraySelecionados.some(selec => pontoPres.tipologia && pontoPres.tipologia.includes(selec.nome))) {
           this.pontopresencaCod_gesac.push(pontoPres.cod_gesac);
           this.pontoPresencaStatus.push(pontoPres.cod_status);
-          this.pontoPresencaObs.push({cod_gesac: pontoPres.cod_gesac,
-          obs_acao: (pontoPres.obs_acao) ? pontoPres.obs_acao.split('; ') : pontoPres.obs_acao});
           this.numMarcados++;
           pontoPres.check = true;
           return true;
@@ -459,7 +445,6 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
           if (this.pontopresencaCod_gesac) {
             this.pontopresencaCod_gesac.splice(this.pontopresencaCod_gesac.indexOf(pontoPres.cod_gesac), 1);
             this.pontoPresencaStatus.splice(this.pontoPresencaStatus.indexOf(pontoPres.cod_status), 1);
-            this.pontoPresencaObs.splice(this.posicaoItemArray(this.pontoPresencaObs, pontoPres), 1);
             this.numMarcados--;
             pontoPres.check = false;
           }
