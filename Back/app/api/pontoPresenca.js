@@ -524,30 +524,50 @@ module.exports = function(app){
         connection.end();
     };
 
+    //Lista as Observações de Ação de vários Ponto de presença.
+    api.listaMultObsAcaoId = (req, res) => {
+        const connection = app.conexao.conexaoBD();
+        const pontoPresencaDAO = new app.infra.PontoPresencaDAO(connection);
+        const { cod_gesac } = req.query;
+
+        pontoPresencaDAO.listarMultObsAcaoId(cod_gesac, (erro, resultado) => {
+            erro ? (console.log(erro), res.status(500).send(app.api.erroPadrao())) : res.status(200).json(resultado);
+        });
+
+        connection.end();
+    };
+
     //Apaga uma Observação de Ação de um Ponto de Presença.
     api.apagaObsAcao = (req, res) => {
         const knex = app.conexao.conexaoBDKnex();
-        const { cod_gesac, cod_obs } = req.body;
+        const { cod_gesac, cod_obs } = req.query;
         let gesac_obs_acao = [];
 
-        if(Array.isArray(cod_gesac)){
-            for(let i=0; i<cod_gesac.length; i++){
-                gesac_obs_acao[i] = [cod_gesac[i], cod_obs];
-            }
-        } else {
-            gesac_obs_acao[0] = [cod_gesac, cod_obs];
-        }
+        if(cod_gesac){
+            const cods_gesac = cod_gesac.split(",");
 
-        knex('gesac_obs_acao').whereIn(['cod_gesac', 'cod_obs'], gesac_obs_acao).delete()
-            .then(resultado => {
-                knex.destroy();
-                res.status(200).end();
-            })
-            .catch(erro => {
-                console.log(erro);
-                knex.destroy();
-                res.status(500).send(app.api.erroPadrao());
-            });
+            if(Array.isArray(cods_gesac)){
+                for(let i=0; i<cods_gesac.length; i++){
+                    gesac_obs_acao[i] = [cods_gesac[i], cod_obs];
+                }
+            } else {
+                gesac_obs_acao[0] = [cod_gesac, cod_obs];
+            }
+
+            knex('gesac_obs_acao').whereIn(['cod_gesac', 'cod_obs'], gesac_obs_acao).delete()
+                .then(resultado => {
+                    knex.destroy();
+                    res.status(200).end();
+                })
+                .catch(erro => {
+                    console.log(erro);
+                    knex.destroy();
+                    res.status(500).send(app.api.erroPadrao());
+                });   
+
+        } else {
+            res.status(400).send(app.api.erroPadrao());
+        }
     }
     
     return api;    

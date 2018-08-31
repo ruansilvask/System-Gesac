@@ -91,6 +91,9 @@ module.exports = function(app){
         .post(pontoPresenca.salvaObservacao)
         .delete(pontoPresenca.apagaObsAcao);
 
+    app.route('/gesac/multObsAcao')
+        .get(pontoPresenca.listaMultObsAcaoId);
+
     app.route('/gesac/obsAcao/:cod_gesac')
         .get(pontoPresenca.listaObsAcaoId);
     

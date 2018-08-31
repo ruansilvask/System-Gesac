@@ -53,7 +53,7 @@ PontoPresencaDAO.prototype.listarSolicitacaoId = function(data_sistema, tipo_sol
 
  //Lista os tipos de Solicitações de um Status de um Ponto de Presença.
 PontoPresencaDAO.prototype.listarTipoSolicitacaoStatus = function(cod_status, callback){
-	this._connection.query(`SELECT * FROM permissao INNER JOIN tipo_solicitacao ON permissao.tipo_solicitacao = tipo_solicitacao.tipo_solicitacao WHERE permissao.cod_status = ${cod_status} and permissao.tipo_permissao = 1`, callback);
+	this._connection.query(`SELECT * FROM permissao INNER JOIN tipo_solicitacao ON permissao.tipo_solicitacao = tipo_solicitacao.tipo_solicitacao WHERE permissao.cod_status = ${cod_status} and permissao.tipo_permissao <> 2`, callback);
 }
 
  //Lista os tipos de Solicitações de um Status de um Ponto de Presença.
@@ -109,6 +109,11 @@ PontoPresencaDAO.prototype.listarHistoricoPontoPresenca = function(cod_gesac, ca
 //Lista as Observações de Ação de um Ponto de presença.
 PontoPresencaDAO.prototype.listarObsAcaoId = function(cod_gesac, callback){
 	this._connection.query(`SELECT obs_acao.* FROM obs_acao INNER JOIN gesac_obs_acao ON obs_acao.cod_obs = gesac_obs_acao.cod_obs INNER JOIN gesac ON gesac_obs_acao.cod_gesac = gesac.cod_gesac WHERE gesac.cod_gesac = ${cod_gesac}`, callback);
+}
+
+//Lista as Observações de Ação de vários Ponto de presença.
+PontoPresencaDAO.prototype.listarMultObsAcaoId = function(cod_gesac, callback){
+	this._connection.query(`SELECT gesac.cod_gesac, GROUP_CONCAT(obs_acao.cod_obs) AS 'cod_obs' FROM gesac LEFT JOIN gesac_obs_acao ON gesac.cod_gesac = gesac_obs_acao.cod_gesac LEFT JOIN obs_acao ON gesac_obs_acao.cod_obs = obs_acao.cod_obs WHERE gesac.cod_gesac IN (${cod_gesac}) GROUP BY cod_gesac`, callback);
 }
 
 module.exports = () => {
