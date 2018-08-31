@@ -3,7 +3,7 @@ import { Pipe, PipeTransform, AfterContentChecked } from '@angular/core';
 @Pipe({
   name: 'filterppContato'
 })
-export class FilterPontoPresencaContatoPipe implements PipeTransform {
+export class FilterContatoPipe implements PipeTransform {
   teste: any;
   PontpreContatoFilter = [];
   cont: any;

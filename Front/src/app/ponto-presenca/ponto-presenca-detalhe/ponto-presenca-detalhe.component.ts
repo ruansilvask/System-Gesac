@@ -527,38 +527,38 @@ export class PontoPresencaDetalheComponent implements OnInit {
 */
   removerObsAcao(obs) {
     console.log(obs);
-    Swal({
-      title: 'Você tem certeza?',
-      html: `Tem certeza que deseja remover a Obeservação de Ação <i>${
-        obs.descricao
-        }</i>?`,
-      type: 'question',
-      showCancelButton: true,
-      confirmButtonText: 'Sim, remover!',
-      cancelButtonText: 'Não, mater',
-      reverseButtons: true
-    }).then(result => {
-      if (result.value) {
-        if (this.codGesac) {
-          this.pontoPresencaService
-            .removerObsAcao(this.params.id, obs.cod_obs)
-            .subscribe(
-              res => {
-                this.removido = res;
-                this.getObsAcaoporId();
-                this.apiServicesMsg.setMsg(
-                  'success',
-                  'Tipologia removida com sucesso.',
-                  3000
-                );
-              },
-              erro => Swal('Erro', `${erro.error}`, 'error')
-            );
-        }
-      } else if (result.dismiss === Swal.DismissReason.cancel) {
-        this.apiServicesMsg.setMsg('error', 'Ação cancelada.', 3000);
-      }
-    });
+    // Swal({
+    //   title: 'Você tem certeza?',
+    //   html: `Tem certeza que deseja remover a Obeservação de Ação <i>${
+    //     obs.descricao
+    //     }</i>?`,
+    //   type: 'question',
+    //   showCancelButton: true,
+    //   confirmButtonText: 'Sim, remover!',
+    //   cancelButtonText: 'Não, mater',
+    //   reverseButtons: true
+    // }).then(result => {
+    //   if (result.value) {
+    //     if (this.codGesac) {
+    //       this.pontoPresencaService
+    //         .removerObsAcao(this.params.id, obs.cod_obs)
+    //         .subscribe(
+    //           res => {
+    //             this.removido = res;
+    //             this.getObsAcaoporId();
+    //             this.apiServicesMsg.setMsg(
+    //               'success',
+    //               'Tipologia removida com sucesso.',
+    //               3000
+    //             );
+    //           },
+    //           erro => Swal('Erro', `${erro.error}`, 'error')
+    //         );
+    //     }
+    //   } else if (result.dismiss === Swal.DismissReason.cancel) {
+    //     this.apiServicesMsg.setMsg('error', 'Ação cancelada.', 3000);
+    //   }
+    // });
   }
 
 
