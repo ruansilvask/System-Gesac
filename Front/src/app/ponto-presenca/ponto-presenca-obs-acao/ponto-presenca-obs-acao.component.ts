@@ -16,8 +16,9 @@ export class ObsAcaoComponent implements OnInit {
   filterObsAction = '';
   resultSearchObsAction = [];
   returnObsAction = [{ num: 1 }];
-  obeservacoesGuardadas: any;
+  gesacObs: any;
   cod_gesac = [];
+  removerCodsObs: any;
   listRemoveObsAction: any;
 
   ObeservacaoPontoPresenca = {
@@ -30,21 +31,10 @@ export class ObsAcaoComponent implements OnInit {
     private apiServicesMsg: ApiServicesMsg
   ) { }
 
-  ngOnInit() {
-    this.getObsAcao();
-  }
-
-  gerarObs() {
-    let obs = [];
-    this.obsSelecionadas.forEach(e => {
-      if (e.obs_acao) {
-        e.obs_acao.forEach(a => obs.push(a));
-      }
-    });
-    obs = obs.filter((item, pos, self) => self.indexOf(item) === pos);
-    this.obeservacoesGuardadas = this.obsAcao.filter(e => {
+  gerarObs(res) {
+    this.removerCodsObs = this.obsAcao.filter(e => {
       let valido = false;
-      obs.forEach(a => {
+      res.forEach(a => {
         if (e.cod_obs.toString() === a.toString()) {
           valido = true;
           return false;
@@ -55,13 +45,46 @@ export class ObsAcaoComponent implements OnInit {
     });
   }
 
+  getObsSelecionadas(obsSelecionadas) {
+    this.pontoPresencaService.getObsAcaoSelecionadas(obsSelecionadas)
+    .subscribe(
+      res => {
+        this.formatObs(res);
+      },
+      erro => console.error(erro)
+    );
+  }
+
+  formatObs(array) {
+      array.forEach(element => {
+        if (element.cod_obs) {
+          element.cod_obs = element.cod_obs.split(',');
+        }
+      });
+      this.gesacObs = array;
+      this.gerarPrimeiraObs();
+  }
+
+  gerarPrimeiraObs() {
+    let obs = [];
+    this.gesacObs.forEach(element => {
+      if (element.cod_obs) {
+        element.cod_obs.forEach(element2 => obs.push(element2))
+      }
+    } );
+    if (obs) {
+      obs = obs.filter((item, pos, self) => self.indexOf(item) === pos).sort();
+      this.gerarObs(obs);
+    }
+  }
+
   getObsAcao() {
     this.pontoPresencaService.getObsAcao()
       .subscribe(
         res => {
           this.obsAcao = res;
-          this.gerarObs();
-        }
+        },
+        erro => console.error(erro)
       );
   }
 
@@ -80,19 +103,21 @@ export class ObsAcaoComponent implements OnInit {
 
 
 
-  removerObeservacao(obsAction, obsSelecionadas) {
-    for (let index = 0; index < obsSelecionadas.length; index++) {
-      this.cod_gesac[index] = obsSelecionadas[index].cod_gesac;
-    }
-    this.listRemoveObsAction = {cod_gesac: this.cod_gesac, cod_obs: obsAction };
+  removerObeservacao(obsAction, cods_gesac) {
+    this.listRemoveObsAction = {cod_gesac: cods_gesac, cod_obs: obsAction };
     this.pontoPresencaService.removerObsAcao(this.listRemoveObsAction)
     .subscribe(
       res => {
         this.apiServicesMsg.setMsg('success', 'Observação para ação excluída com sucesso.', 3000);
+        this.getObsSelecionadas(this.obsSelecionadas);
       },
       erro => console.error(erro)
     );
   }
 
+  ngOnInit() {
+    this.getObsAcao();
+    this.getObsSelecionadas(this.obsSelecionadas);
+  }
 
 }
