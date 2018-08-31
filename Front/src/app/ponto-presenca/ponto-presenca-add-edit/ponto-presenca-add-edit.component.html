@@ -1,4 +1,4 @@
-<div class="ui" [ngClass]="{'container': params.id }">
+<div class="ui" [ngClass]="{'container': this.router.url === '/pontPre/novo' || this.params.id}">
 
   <div class="ui  segment">
     <a class="ui ribbon label">
