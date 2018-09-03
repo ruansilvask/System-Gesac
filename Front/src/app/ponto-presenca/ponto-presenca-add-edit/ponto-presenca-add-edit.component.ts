@@ -255,7 +255,7 @@ export class PontoPresencaAddEditComponent implements OnInit {
           .putPontoPresenca(this.pontoPresenca.cod_pid, form.value)
           .subscribe(dados => {
             this.resp = dados;
-            this.contatoService.getContatos(this.parametroIdentificador, 'ponto');
+            // this.contatoService.getContatos(this.parametroIdentificador, 'ponto');
             this.secondActive = true;
             this.getEnderecosAntigos();
           });
@@ -507,7 +507,6 @@ export class PontoPresencaAddEditComponent implements OnInit {
       this.router.navigate(['/pontPre', this.params.detalheappeditPP, 'detalhe']);
     }
   }
-  // pontPre/40005/detalhe
 
   /*
 * Métodos que serão executados quando o componente é iniciado
@@ -557,6 +556,8 @@ export class PontoPresencaAddEditComponent implements OnInit {
             }, 200);
           });
           this.getEnderecosAntigos();
+          this.contatoService.getContatos(this.parametroIdentificador, 'ponto');
+          console.log(this.parametroIdentificador);
         }
     }, 200);
   }

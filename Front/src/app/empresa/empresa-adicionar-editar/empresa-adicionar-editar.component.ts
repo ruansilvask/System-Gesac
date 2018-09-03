@@ -178,6 +178,12 @@ export class EmpresaAdicionarEditarComponent implements OnInit {
     }
   }
 
+  getTabContatos() {
+    if (this.params.id) {
+      this.contatoService.getContatos(this.params.id, 'empresa');
+    }
+  }
+
   /*
   * Métodos que serão executados quando o componente é iniciado
   */

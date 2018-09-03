@@ -104,7 +104,6 @@ export class InstRespAddEditComponent implements OnInit {
     if (this.params.id) {
       this.serviceInstiResp.getInstResp(this.params.id).subscribe(dados => {
         this.formInstituicaoResp = dados[0];
-
         setTimeout(() => {
           this.selectEstado(this.formInstituicaoResp.uf);
         }, 200);
@@ -116,34 +115,30 @@ export class InstRespAddEditComponent implements OnInit {
   // insituição responsavel submit do post e put.
   submitInstResp(form) {
     if (form.status !== 'INVALID') {
-
-    if (this.formInstituicaoResp.cod_ibge === '') {
-      this.formInstituicaoResp.cod_ibge = null;
-    }
-    if (this.idRepresentante()) {
-      delete this.formInstituicaoResp.nome_municipio;
-      delete this.formInstituicaoResp.uf;
-      this.serviceInstiResp
-        .putInstResp(this.params.id, this.formInstituicaoResp)
-        .subscribe(
-          res => {
-            this.apiServicesMsg.setMsg(
-              'success',
-              'Instituição Responsável atualizada com sucesso',
-              5000
-            );
-            this.contatos = true;
-            this.instituicaoRespResponse = this.params.id;
-          },
-          erro => Swal('Erro', `${erro.error}`, 'error')
-        );
-      this.contatoService.getContatos(this.params.id, 'instituicao');
-
-    } else {
-      delete this.formInstituicaoResp.uf;
-      this.serviceInstiResp
-        .postInstResp(this.formInstituicaoResp)
-        .subscribe(
+      if (this.formInstituicaoResp.cod_ibge === '') {
+        this.formInstituicaoResp.cod_ibge = null;
+      }
+      if (this.idRepresentante()) {
+        delete this.formInstituicaoResp.nome_municipio;
+        delete this.formInstituicaoResp.uf;
+        this.serviceInstiResp
+          .putInstResp(this.params.id, this.formInstituicaoResp)
+          .subscribe(
+            res => {
+              this.apiServicesMsg.setMsg(
+                'success',
+                'Instituição Responsável atualizada com sucesso',
+                5000
+              );
+              this.contatos = true;
+              this.instituicaoRespResponse = this.params.id;
+            },
+            erro => Swal('Erro', `${erro.error}`, 'error')
+          );
+        this.contatoService.getContatos(this.params.id, 'instituicao');
+      } else {
+        delete this.formInstituicaoResp.uf;
+        this.serviceInstiResp.postInstResp(this.formInstituicaoResp).subscribe(
           res => {
             this.apiServicesMsg.setMsg(
               'success',
@@ -156,21 +151,21 @@ export class InstRespAddEditComponent implements OnInit {
           },
           erro => Swal('Erro', `${erro.error}`, 'error')
         );
+      }
+    } else {
+      this.apiServicesMsg.setMsg(
+        'error',
+        'Nome e Campo são obrigatórios',
+        5000
+      );
     }
-  } else {
-    this.apiServicesMsg.setMsg(
-                'error',
-                'Nome e Campo são obrigatórios',
-                5000
-              );
-  }
   }
 
   // voltar para aba insituião responsavel e carregar os dados submetidos.
   voltarInstResp() {
-      this.router.navigate(['instResp/edit', this.idRepresentante()]);
-      this.serviceInstiResp.getInstResp(this.params.id);
-      this.instResp = true;
+    this.router.navigate(['instResp/edit', this.idRepresentante()]);
+    this.serviceInstiResp.getInstResp(this.params.id);
+    this.instResp = true;
   }
 
   /////////////////////////////////////////////////////////////////////////////////////
@@ -178,7 +173,6 @@ export class InstRespAddEditComponent implements OnInit {
 
   // adiciona e atualiza o representante responsavel
   submitRepLegal(formRepreLegal: NgForm) {
-
     // IF para verificar se caso não tenha selecionado nenum representante legal, será atualizado a ativo selecionado.
     if (
       this.repreLegalContatoSubmit !== undefined &&
@@ -361,13 +355,18 @@ export class InstRespAddEditComponent implements OnInit {
 
     this.serviceInstiResp
       .postRepLegalInstResp(this.repreLegalContatoSubmit)
-      .subscribe(res => {
-        this.apiServicesMsg.setMsg('success', `Representante legal adicionado com sucesso`, 5000 );
-      },
-      erro => {
-        Swal('Erro', `${erro.error}`, 'error');
-      }
-    );
+      .subscribe(
+        res => {
+          this.apiServicesMsg.setMsg(
+            'success',
+            `Representante legal adicionado com sucesso`,
+            5000
+          );
+        },
+        erro => {
+          Swal('Erro', `${erro.error}`, 'error');
+        }
+      );
   }
 
   getRepreLegalFun(id) {
@@ -474,7 +473,9 @@ export class InstRespAddEditComponent implements OnInit {
         if (formInstRep.value.cnpj_instituicao.length === 0) {
           this.btnInstResp = true;
         } else {
-          if (this.apiServiceCnpj.validarCNPJ(formInstRep.value.cnpj_instituicao)) {
+          if (
+            this.apiServiceCnpj.validarCNPJ(formInstRep.value.cnpj_instituicao)
+          ) {
             this.btnInstResp = true;
           } else {
             this.btnInstResp = false;
@@ -497,19 +498,11 @@ export class InstRespAddEditComponent implements OnInit {
     this.segmentDimmed = false;
   }
 
-  copiarGesac(gesac) {
-    // let gesacClipBoard = null
-    // for(var i = 0; i < gesac.length; i++) {
-    //   if(gesacClipBoard === null) {
-    //     gesacClipBoard = gesac[i].cod_gesac + '/n'
-    //   } else {
-    //     gesacClipBoard = gesacClipBoard + gesac[i].cod_gesac + '/n' ;
-    //   }
-    // }
-    // gesacClipBoard.select()
-    // try{
-    // return document.execCommand('copy');
-    // }
+  getTabContatos() {
+    this.contatoService.getContatos(this.params.id, 'instituicao');
+  }
+  getTabRepresentantes() {
+
   }
 
   selectEstado(uf) {
