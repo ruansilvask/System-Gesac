@@ -35,8 +35,8 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
   */
   pontopresencaCod_gesac: any[] = [];
   pontoPresencaStatus = [];
-
   selecionados = [];
+  selecaoModalObsAcao = [];
   /*
   * Variáveis
    */
@@ -277,6 +277,13 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
   }
 
   openModalObsAcao() {
+    if (this.pontopresencaCod_gesac.length > 0) {
+      this.selecaoModalObsAcao = this.pontopresencaCod_gesac;
+    } else {
+      this.pontosPresenca.forEach(element => {
+        this.selecaoModalObsAcao.push(element.cod_gesac);
+      });
+    }
     this.obsAcaoModal = true;
   }
 
