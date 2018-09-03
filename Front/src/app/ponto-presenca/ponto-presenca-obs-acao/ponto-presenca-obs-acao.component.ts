@@ -69,7 +69,7 @@ export class ObsAcaoComponent implements OnInit {
     let obs = [];
     this.gesacObs.forEach(element => {
       if (element.cod_obs) {
-        element.cod_obs.forEach(element2 => obs.push(element2))
+        element.cod_obs.forEach(element2 => obs.push(element2));
       }
     } );
     if (obs) {
@@ -93,12 +93,29 @@ export class ObsAcaoComponent implements OnInit {
   }
 
 
-  AddObsAction(fAddObeservacao, obsAcao) {
-    for (let index = 0; index < obsAcao.length; index++) {
-      this.cod_gesac[index] = obsAcao[index].cod_gesac;
-    }
-    fAddObeservacao.value.cod_gesac = this.cod_gesac;
-    console.log(fAddObeservacao.value);
+  AddObsAction(codObs) {
+    const form: any = {};
+    form.cod_gesac = [];
+    this.gesacObs.forEach(element => {
+      if (element.cod_obs) {
+        let temObs = false;
+        element.cod_obs.forEach(el => {
+          if (el.toString() === codObs.value.cod_obs.toString()) {
+            temObs = true;
+            return false;
+          }
+        });
+        if (!temObs) { form.cod_gesac.push(element.cod_gesac); }
+      } else {
+        form.cod_gesac.push(element.cod_gesac);
+      }
+    });
+    form.cod_obs = codObs.value.cod_obs;
+    this.pontoPresencaService.salvarObsAcao(form)
+    .subscribe(
+      res => this.getObsSelecionadas(this.obsSelecionadas),
+      erro => console.error(erro)
+    );
   }
 
 
