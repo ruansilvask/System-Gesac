@@ -3,15 +3,15 @@
     <div class="fields">
       <div class="thirteen wide field">
         <label>Selecione uma observação para ação:</label>
-        <sui-select class="selection" name="descricao" [(ngModel)]="filterObsAction" [options]="obsAcao" labelField="obsAcao.descricao"
-          valueField="obsAcao.cod_obs" #select>
-          <sui-select-option *ngFor="let o of select.filteredOptions" [value]="o">
+        <sui-select class="selection" name="cod_obs" [(ngModel)]="searchObs" [options]="obsAcao" labelField="obsAcao.descricao"
+          valueField="obsAcao.cod_obs" #searchObsAcao>
+          <sui-select-option *ngFor="let o of searchObsAcao.filteredOptions" [value]="o">
           </sui-select-option>
         </sui-select>
 
       </div>
       <div class="three wide field">
-        <button class="ui button btnAdd" type="submit" autofocus (click)="searchObsAction(observacao)"> Aplicar Filtro</button>
+        <button class="ui button btnAdd" type="submit" autofocus (click)="searchObsAction(searchObs)"> Aplicar Filtro</button>
       </div>
     </div>
   </form>
@@ -20,7 +20,7 @@
 <div class="ui segment" *ngIf="returnObsAction.length !== 0">
   <h5 class="ui top attached header">
     Codigos do GESAC: <p>
-      <ng-template ngFor let-obs [ngForOf]='gesacObs'> {{obs?.cod_gesac + '; '}} </ng-template>
+      <ng-template ngFor let-obs [ngForOf]='gesacObs'> {{obs?.cod_gesac + '; '}}</ng-template>
     </p>
   </h5>
   <div class="ui raised attached segment">
@@ -55,7 +55,7 @@
 
       <div class="column" *ngFor="let obs of removerCodsObs" suiPopup popupText="Remover observacao"
         popupInverted [popupPlacement]="'top left'">
-        <a class="fluid ui labeled icon button btn-observacao" (click)="removerobservacao(obs.cod_obs, obsSelecionadas)">
+        <a class="fluid ui labeled icon button btn-observacao" (click)="removerobservacao(obs.cod_obs, gesacObs)">
           <i class="close icon"></i>
           {{obs?.descricao}}
         </a>

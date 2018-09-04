@@ -15,6 +15,7 @@ export class ObsAcaoComponent implements OnInit {
   observacao = '';
   filterObsAction = '';
   resultSearchObsAction = [];
+  searchObs = '';
   returnObsAction = [{ num: 1 }];
   gesacObs: any;
   cod_gesac = [];
@@ -46,13 +47,18 @@ export class ObsAcaoComponent implements OnInit {
   }
 
   getObsSelecionadas(obsSelecionadas) {
-    this.pontoPresencaService.getObsAcaoSelecionadas(obsSelecionadas)
-    .subscribe(
-      res => {
-        this.formatObs(res);
-      },
-      erro => console.error(erro)
-    );
+    if (obsSelecionadas.length > 0) {
+      this.pontoPresencaService.getObsAcaoSelecionadas(obsSelecionadas)
+      .subscribe(
+        res => {
+          this.formatObs(res);
+        },
+        erro => console.error(erro)
+      );
+    } else {
+      this.gesacObs = [];
+      this.removerCodsObs = [];
+    }
   }
 
   formatObs(array) {
@@ -89,52 +95,115 @@ export class ObsAcaoComponent implements OnInit {
   }
 
   searchObsAction(obs) {
-    this.resultSearchObsAction = obs;
+    this.getObsSelecionadas(this.obsSelecionadas);
+    setTimeout(() => {
+      let array = [];
+    array = this.gesacObs.filter(element => {
+      let valido = false;
+      if (element.cod_obs) {
+        element.cod_obs.forEach(el => {
+          if (el.toString() === obs.toString()) {
+            valido = true;
+            return false;
+          }
+        });
+      }
+      return valido;
+    });
+    this.gesacObs = array;
+    this.getObsSelecionadas(this.pegarSomenteCodsGesac(this.gesacObs));
+    }, 500);
+  }
+
+  pegarSomenteCodsGesac(array) {
+    const newArray = [];
+    array.forEach(element => {
+      newArray.push(element.cod_gesac);
+    });
+    return newArray;
   }
 
 
   AddObsAction(codObs) {
-    const form: any = {};
-    form.cod_gesac = [];
-    this.gesacObs.forEach(element => {
-      if (element.cod_obs) {
-        let temObs = false;
-        element.cod_obs.forEach(el => {
-          if (el.toString() === codObs.value.cod_obs.toString()) {
-            temObs = true;
-            return false;
-          }
-        });
-        if (!temObs) { form.cod_gesac.push(element.cod_gesac); }
-      } else {
-        form.cod_gesac.push(element.cod_gesac);
+    if (codObs.value.cod_obs) {
+      const form: any = {};
+      form.cod_gesac = [];
+      this.gesacObs.forEach(element => {
+        if (element.cod_obs) {
+          let temObs = false;
+          element.cod_obs.forEach(el => {
+            if (el.toString() === codObs.value.cod_obs.toString()) {
+              temObs = true;
+              return false;
+            }
+          });
+          if (!temObs) { form.cod_gesac.push(element.cod_gesac); }
+        } else {
+          form.cod_gesac.push(element.cod_gesac);
+        }
+      });
+      form.cod_obs = codObs.value.cod_obs;
+      if (form.cod_gesac.length > 0) {
+    Swal({
+      title: 'Você tem certeza?',
+      html: `Tem certeza que deseja adicionar esta observação para ação?
+      Ela será adicionada em todos os GESACS selecionados que não a possuem.`,
+      type: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sim, adicionar!',
+      cancelButtonText: 'Não, cancelar',
+      reverseButtons: true
+    }).then(result => {
+      if (result.value) {
+        this.pontoPresencaService.salvarObsAcao(form)
+        .subscribe(
+          res => this.getObsSelecionadas(this.pegarSomenteCodsGesac(this.gesacObs)),
+          erro => console.error(erro)
+        );
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        this.apiServicesMsg.setMsg('error', 'Ação cancelada.', 3000);
       }
     });
-    form.cod_obs = codObs.value.cod_obs;
-    this.pontoPresencaService.salvarObsAcao(form)
-    .subscribe(
-      res => this.getObsSelecionadas(this.obsSelecionadas),
-      erro => console.error(erro)
-    );
+    } else {
+      this.apiServicesMsg.setMsg('warning', 'Todos os códigos GESAC já possuem essa observação para ação.', 3000);
+    }
+  }
   }
 
 
 
   removerobservacao(obsAction, cods_gesac) {
-    this.listRemoveObsAction = {cod_gesac: cods_gesac, cod_obs: obsAction };
+    Swal({
+      title: 'Você tem certeza?',
+      html: `Tem certeza que deseja remover esta observação para ação?
+      Ela será removida de todos os GESACS selecionados que a possuem.`,
+      type: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sim, remover!',
+      cancelButtonText: 'Não, manter',
+      reverseButtons: true
+    }).then(result => {
+      if (result.value) {
+        this.listRemoveObsAction = {cod_gesac: this.pegarSomenteCodsGesac(cods_gesac), cod_obs: obsAction };
     this.pontoPresencaService.removerObsAcao(this.listRemoveObsAction)
     .subscribe(
       res => {
         this.apiServicesMsg.setMsg('success', 'Observação para ação excluída com sucesso.', 3000);
-        this.getObsSelecionadas(this.obsSelecionadas);
+        this.getObsSelecionadas(this.pegarSomenteCodsGesac(this.gesacObs));
       },
       erro => console.error(erro)
     );
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        this.apiServicesMsg.setMsg('error', 'Ação cancelada.', 3000);
+      }
+    });
   }
 
   ngOnInit() {
     this.getObsAcao();
-    this.getObsSelecionadas(this.obsSelecionadas);
+    setTimeout(() => {
+      this.getObsSelecionadas(this.obsSelecionadas);
+    }, 500);
   }
 
 }
