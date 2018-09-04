@@ -21,7 +21,7 @@ export class ObsAcaoComponent implements OnInit {
   removerCodsObs: any;
   listRemoveObsAction: any;
 
-  ObeservacaoPontoPresenca = {
+  observacaoPontoPresenca = {
     descricao: '',
     cod_obs: ''
   };
@@ -120,7 +120,7 @@ export class ObsAcaoComponent implements OnInit {
 
 
 
-  removerObeservacao(obsAction, cods_gesac) {
+  removerobservacao(obsAction, cods_gesac) {
     this.listRemoveObsAction = {cod_gesac: cods_gesac, cod_obs: obsAction };
     this.pontoPresencaService.removerObsAcao(this.listRemoveObsAction)
     .subscribe(

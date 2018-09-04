@@ -29,7 +29,7 @@ export class PontoPresencaDetalheComponent implements OnInit {
   obsAcoes: Object;
 
 
-  ObeservacaoPontoPresenca = {
+  observacaoPontoPresenca = {
     descricao: '',
     cod_obs: ''
   };
@@ -488,11 +488,11 @@ export class PontoPresencaDetalheComponent implements OnInit {
   /*
  * Métodos para salvar a Obs Ações da tela e do banco
  */
-  salvarObeservacao(fAddObeservacao) {
-    fAddObeservacao.value.cod_obs !== ''
-      ? (fAddObeservacao.value.cod_gesac = this.params.id,
-        console.log(fAddObeservacao.value),
-        this.pontoPresencaService.salvarObsAcao(fAddObeservacao.value).subscribe(
+  salvarobservacao(fAddobservacao) {
+    fAddobservacao.value.cod_obs !== ''
+      ? (fAddobservacao.value.cod_gesac = this.params.id,
+        console.log(fAddobservacao.value),
+        this.pontoPresencaService.salvarObsAcao(fAddobservacao.value).subscribe(
           dados => {
             this.getObsAcaoporId();
           }

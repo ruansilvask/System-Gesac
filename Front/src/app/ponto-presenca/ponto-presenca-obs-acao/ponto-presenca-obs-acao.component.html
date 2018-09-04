@@ -24,7 +24,7 @@
     </p>
   </h5>
   <div class="ui raised attached segment">
-    <form class="ui form error" #fAddObeservacao="ngForm" (ngSubmit)="AddObsAction(fAddObeservacao)">
+    <form class="ui form error" #fAddobservacao="ngForm" (ngSubmit)="AddObsAction(fAddobservacao)">
 
       <div class="fields">
 
@@ -37,7 +37,7 @@
           </sui-select>
         </div>
         <div class="three wide field">
-          <div class="one wide column" suiPopup popupText="Adicionar Obeservacao" popupInverted [popupPlacement]="'top left'">
+          <div class="one wide column" suiPopup popupText="Adicionar observacao" popupInverted [popupPlacement]="'top left'">
             <button class="ui circular black icon button btnAdd" type="submit">
               <i class="plus icon"></i>
             </button>
@@ -53,9 +53,9 @@
 
     <div class="ui stackable three column grid">
 
-      <div class="column" *ngFor="let obs of removerCodsObs" suiPopup popupText="Remover Obeservacao"
+      <div class="column" *ngFor="let obs of removerCodsObs" suiPopup popupText="Remover observacao"
         popupInverted [popupPlacement]="'top left'">
-        <a class="fluid ui labeled icon button btn-Obeservacao" (click)="removerObeservacao(obs.cod_obs, obsSelecionadas)">
+        <a class="fluid ui labeled icon button btn-observacao" (click)="removerobservacao(obs.cod_obs, obsSelecionadas)">
           <i class="close icon"></i>
           {{obs?.descricao}}
         </a>

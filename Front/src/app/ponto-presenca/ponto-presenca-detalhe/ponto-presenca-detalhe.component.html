@@ -207,21 +207,21 @@
         <!--incio da aba Tipologia-->
         <div content>
           <div class="ui raised segment">
-            <form class="ui form error" #fAddObeservacao="ngForm" (ngSubmit)="salvarObeservacao(fAddObeservacao)">
+            <form class="ui form error" #fAddobservacao="ngForm" (ngSubmit)="salvarobservacao(fAddobservacao)">
 
               <div class="ui grid">
 
                 <div class="thirteen wide column">
                   <label>Observações de Ações</label>
 
-                  <select class="ui dropdown" name="cod_obs" [(ngModel)]="ObeservacaoPontoPresenca.cod_obs" required #Obeservacao>
+                  <select class="ui dropdown" name="cod_obs" [(ngModel)]="observacaoPontoPresenca.cod_obs" required #observacao>
                     <option value="">Selecione Observação de Ação</option>
-                    <option *ngFor="let obeservacao of obsAcoes" value="{{obeservacao.cod_obs}}">{{obeservacao.descricao}}</option>
+                    <option *ngFor="let observacao of obsAcoes" value="{{observacao.cod_obs}}">{{observacao.descricao}}</option>
                   </select>
 
                 </div>
                 <div class="two wide column">
-                  <div class="one wide column" suiPopup popupText="Adicionar Obeservacao" popupInverted [popupPlacement]="'top left'">
+                  <div class="one wide column" suiPopup popupText="Adicionar observacao" popupInverted [popupPlacement]="'top left'">
                     <button class="ui circular black icon button btnAdd" type="submit">
                       <i class="plus icon"></i>
                     </button>
@@ -235,11 +235,11 @@
 
             <div class="ui stackable four column grid">
 
-              <div class="column" *ngFor="let Obeservacao of obsAcoesCad" suiPopup popupText="Remover Obeservacao" popupInverted
+              <div class="column" *ngFor="let observacao of obsAcoesCad" suiPopup popupText="Remover observacao" popupInverted
                 [popupPlacement]="'top left'">
-                <a class="fluid ui labeled icon button btn-Obeservacao" (click)="removerObsAcao(Obeservacao)">
+                <a class="fluid ui labeled icon button btn-observacao" (click)="removerObsAcao(observacao)">
                   <i class="close icon"></i>
-                  {{Obeservacao?.descricao}}
+                  {{observacao?.descricao}}
                 </a>
               </div>
 
@@ -490,33 +490,33 @@
 
                   <label>Observações de Ações</label>
 
-                  <!-- <select class="ui dropdown" name="Obeservacao" [(ngModel)]="analiseDetalhe.cod_obs" required #Obeservacao>
+                  <!-- <select class="ui dropdown" name="observacao" [(ngModel)]="analiseDetalhe.cod_obs" required #observacao>
                     <option value="">Selecione Observação de Ação</option>
-                    <option *ngFor="let obeservacao of obsAcoes" value="{{obeservacao.cod_obs}}">{{obeservacao.descricao}}</option>
+                    <option *ngFor="let observacao of obsAcoes" value="{{observacao.cod_obs}}">{{observacao.descricao}}</option>
                   </select>
 
 
-                  <div  suiPopup popupText="Adicionar Obeservacao" popupInverted [popupPlacement]="'top left'">
-                    <button class="ui circular black icon button btnAdd" (click)="salvarObeservacaoAnalise()">
+                  <div  suiPopup popupText="Adicionar observacao" popupInverted [popupPlacement]="'top left'">
+                    <button class="ui circular black icon button btnAdd" (click)="salvarobservacaoAnalise()">
                       <i class="plus icon"></i>
                     </button>
                   </div> -->
                   <div content>
                     <div class="ui raised">
-                      <form class="ui form error" #fAddObeservacao="ngForm" (ngSubmit)="salvarObeservacao(fAddObeservacao)">
+                      <form class="ui form error" #fAddobservacao="ngForm" (ngSubmit)="salvarobservacao(fAddobservacao)">
 
                         <div class="ui grid">
 
                           <div class="thirteen wide column">
 
-                            <select class="ui dropdown" name="cod_obs" [(ngModel)]="ObeservacaoPontoPresenca.cod_obs" required #Obeservacao>
+                            <select class="ui dropdown" name="cod_obs" [(ngModel)]="observacaoPontoPresenca.cod_obs" required #observacao>
                               <option value="">Selecione Observação de Ação</option>
-                              <option *ngFor="let obeservacao of obsAcoes" value="{{obeservacao.cod_obs}}">{{obeservacao.descricao}}</option>
+                              <option *ngFor="let observacao of obsAcoes" value="{{observacao.cod_obs}}">{{observacao.descricao}}</option>
                             </select>
 
                           </div>
                           <div class="two wide column">
-                            <div class="one wide column" suiPopup popupText="Adicionar Obeservacao" popupInverted [popupPlacement]="'top left'">
+                            <div class="one wide column" suiPopup popupText="Adicionar observacao" popupInverted [popupPlacement]="'top left'">
                               <button class="ui circular black icon button btnAdd" type="submit">
                                 <i class="plus icon"></i>
                               </button>
@@ -530,11 +530,11 @@
 
                       <div class="ui stackable four column grid">
 
-                        <div class="column" *ngFor="let Obeservacao of obsAcoesCad" suiPopup popupText="Remover Obeservacao" popupInverted
+                        <div class="column" *ngFor="let observacao of obsAcoesCad" suiPopup popupText="Remover observacao" popupInverted
                           [popupPlacement]="'top left'">
-                          <a class="fluid ui labeled icon button btn-Obeservacao" (click)="removerObsAcao(Obeservacao)">
+                          <a class="fluid ui labeled icon button btn-observacao" (click)="removerObsAcao(observacao)">
                             <i class="close icon"></i>
-                            {{Obeservacao?.descricao}}
+                            {{observacao?.descricao}}
                           </a>
                         </div>
 
