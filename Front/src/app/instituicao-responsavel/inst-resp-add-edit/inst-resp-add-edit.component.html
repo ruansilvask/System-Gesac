@@ -11,8 +11,8 @@
         <a class="item"  [ngClass]="{'desativado': !params.id }" suiTabHeader="1" [(isActive)]="instResp">Instituição
           <br>Responsável</a>
 
-        <a class="item"  [ngClass]="{'desativado': !params.id }" suiTabHeader="2" [(isActive)]="contatos">Contatos</a>
-        <a class="item"  [ngClass]="{'desativado': !params.id }" suiTabHeader="3" [(isActive)]="respLegal">Representante
+        <a class="item"  [ngClass]="{'desativado': !params.id }" suiTabHeader="2" (click)="getTabContatos()" [(isActive)]="contatos">Contatos</a>
+        <a class="item"  [ngClass]="{'desativado': !params.id }" suiTabHeader="3" (click)="repLegal()" [(isActive)]="respLegal">Representante
           <br>Legal</a>
 
       </div>
@@ -356,13 +356,6 @@
           </div>
         </div>
     <div class="content">
-        <!-- <div class="ui stackable two column grid">
-            <div class="column">
-              <button (click)='copiarGesac(gesacVinculado)' class="ui left floated labeled icon mini ui button" >
-                <i class="angle double right icon"></i>Copiar GESACs</button>
-            </div>
-
-          </div> -->
         <table class="ui unstackable table">
             <thead>
               <tr>

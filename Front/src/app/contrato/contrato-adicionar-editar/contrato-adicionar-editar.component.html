@@ -4,7 +4,7 @@
     <!-- Tabs Menu -->
     <div class="ui top attached tabular menu">
       <a class="item" [ngClass]="{'desativado': !params.id }" suiTabHeader="1" [(isActive)]="contratos">Contratos</a>
-      <a class="item" [ngClass]="{'desativado': !params.id }" suiTabHeader="2" [(isActive)]="lotes">Lotes</a>
+      <a class="item" [ngClass]="{'desativado': !params.id }" suiTabHeader="2" (click)="getTabLotes()" [(isActive)]="lotes">Lotes</a>
     </div>
     <!-- Fim Tabs Menu -->
 

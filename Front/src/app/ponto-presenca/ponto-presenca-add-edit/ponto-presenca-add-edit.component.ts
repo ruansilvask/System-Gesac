@@ -25,8 +25,11 @@ import Swal from 'sweetalert2';
   styleUrls: ['./ponto-presenca-add-edit.component.scss']
 })
 export class PontoPresencaAddEditComponent implements OnInit {
+  obsAcoesCad: Object;
+  obsAcoes: Object;
   fecharmodal = true;
   parametroIdentificador: any;
+  modalObsAcao = false;
   /*
   *   Variaveis do de manipulacão das informacões de tipologia
   */
@@ -51,7 +54,7 @@ export class PontoPresencaAddEditComponent implements OnInit {
   instituicoesResp: any;
   instituicoesRespPag: any[] = [];
   params: any;
-  mostrarBotao: boolean;
+  novoEndereco: boolean;
   mostrarBtn = false;
 
   enderecos: any;
@@ -73,6 +76,14 @@ export class PontoPresencaAddEditComponent implements OnInit {
     cod_instituicao_pag: ''
   };
 
+/*
+*   Variaveis de observação
+*/
+  ObeservacaoPontoPresenca = {
+    descricao: '',
+    cod_obs: ''
+  };
+
   /*
 *   Variaveis do formulario do Endereco
 */
@@ -88,7 +99,7 @@ export class PontoPresencaAddEditComponent implements OnInit {
     longitude: null
   };
 
-  enderecosAntigos: any;
+  enderecosAntigos: any = [];
 
   /*
   * Variáveis do Modal
@@ -225,22 +236,21 @@ export class PontoPresencaAddEditComponent implements OnInit {
     *Método para trazer os endereços antigos
     */
   getEnderecosAntigos() {
-
-    if (this.parametroIdentificador) {
+    if (this.params.id || this.codGesac) {
       this.pontoPresencaService
 
-      .getEnderecoDetalhe(this.parametroIdentificador)
+      .getEnderecoDetalhe(this.params.id || this.codGesac)
       .subscribe(dados => {
         this.enderecosAntigos = dados;
-        console.log(this.enderecosAntigos.length);
+        console.log(dados);
         if (this.enderecosAntigos.length === 0) {
-          this.mostrarBotao = true;
+          this.novoEndereco = true;
         } else {
-          this.mostrarBotao = false;
+          this.novoEndereco = false;
         }
       });
     } else {
-      this.mostrarBotao = true;
+      this.novoEndereco = true;
     }
   }
 
@@ -255,9 +265,11 @@ export class PontoPresencaAddEditComponent implements OnInit {
           .putPontoPresenca(this.pontoPresenca.cod_pid, form.value)
           .subscribe(dados => {
             this.resp = dados;
-            this.contatoService.getContatos(this.parametroIdentificador, 'ponto');
+            // this.contatoService.getContatos(this.parametroIdentificador, 'ponto');
             this.secondActive = true;
             this.getEnderecosAntigos();
+            this.getObsAcao();
+            this.getObsAcaoporId(this.params.id ||  this.codGesac);
           });
       } else {
         this.pontoPresencaService
@@ -267,7 +279,7 @@ export class PontoPresencaAddEditComponent implements OnInit {
             this.getPontoPrensencaId(dados);
             this.contatoService.getContatos(this.codGesac, 'ponto');
             this.secondActive = true;
-            this.mostrarBotao = true;
+            this.novoEndereco = true;
           });
       }
     } else {
@@ -330,11 +342,11 @@ export class PontoPresencaAddEditComponent implements OnInit {
   }
 
   cancelAddEndereco() {
-    this.mostrarBotao = !this.mostrarBotao;
+    this.novoEndereco = !this.novoEndereco;
   }
 
   adicionarnewEnd() {
-    this.mostrarBotao =  !this.mostrarBotao;
+    this.novoEndereco =  !this.novoEndereco;
     if (this.enderecosAntigos.lenght !== 0) {
       for (let i = 0; i < this.enderecosAntigos.length; i++) {
         if (!this.enderecosAntigos[i].data_final) {
@@ -381,9 +393,14 @@ export class PontoPresencaAddEditComponent implements OnInit {
       form.value.longitude = null;
       form.value.data_inicio = this.apiServicesData.formatData(new Date());
       this.pontoPresencaService.postEndereco(form.value).subscribe(dados => {
+
         this.cancelAddEndereco();
         this.getEnderecosAntigos();
-        this.mostrarBotao = !this.mostrarBotao;
+        this.novoEndereco = !this.novoEndereco;
+        if (!this.params.id) {
+          this.obsAcao();
+          this.getObsAcao();
+        }
         this.apiServicesMsg.setMsg(
           'success',
           'Endereço cadastrado com sucesso.',
@@ -399,25 +416,128 @@ export class PontoPresencaAddEditComponent implements OnInit {
     }
   }
 
+
+ /*
+* Métodos para remover a Obs Ações da tela e do banco
+*/
+removerObsAcao(obs) {
+  if (this.admin) {
+    Swal({
+      title: 'Você tem certeza?',
+      html: `Tem certeza que deseja remover a Obeservação de Ação <i>${
+        obs.descricao
+        }</i>?`,
+      type: 'question',
+      showCancelButton: true,
+      confirmButtonText: 'Sim, remover!',
+      cancelButtonText: 'Não, mater',
+      reverseButtons: true
+    }).then(result => {
+      if (result.value) {
+        if (this.codGesac) {
+          obs.cod_gesac = this.params.id;
+          delete obs.descricao;
+          console.log(obs);
+          this.pontoPresencaService
+            .removerObsAcao(obs)
+            .subscribe(
+              res => {
+                this.removido = res;
+                this.getObsAcaoporId(this.codGesac || this.params.id);
+                this.apiServicesMsg.setMsg(
+                  'success',
+                  'Tipologia removida com sucesso.',
+                  3000
+                );
+              },
+              erro => Swal('Erro', `${erro.error}`, 'error')
+            );
+        }
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        this.apiServicesMsg.setMsg('error', 'Ação cancelada.', 3000);
+      }
+    });
+  } else {
+    Swal('Erro de acesso', `Este usuário não possui permissão para excluir!`, 'error');
+  }
+}
+
+  /*
+ * Métodos para abrir modal de observação ação
+ */
+
+obsAcao() {
+  this.modalObsAcao = true;
+}
+
+  /*
+* Método para salvar a observação
+*/
+
+salvarObeservacao(fAddObeservacao) {
+  fAddObeservacao.value.cod_obs !== ''
+    ? (fAddObeservacao.value.cod_gesac = this.params.id || this.codGesac,
+      console.log(fAddObeservacao.value),
+      this.pontoPresencaService.salvarObsAcao(fAddObeservacao.value).subscribe(
+        dados => {
+          this.getObsAcaoporId(this.codGesac || this.params.id);
+        }
+      ))
+    : (this.apiServicesMsg.setMsg(
+      'error',
+      'Não é possivel adicionar Observação de Ação vazio!!!',
+      3000
+    ));
+}
+
+  /*
+* Método para retornar observações
+*/
+
+getObsAcao() {
+  this.pontoPresencaService.getObsAcao().subscribe(dados => {
+    this.obsAcoes = dados;
+  });
+}
+
+  /*
+* Método para retornar observações
+*/
+
+getObsAcaoporId(gesac) {
+  this.pontoPresencaService.getObsAcaoporId(gesac).subscribe(dados => {
+    this.obsAcoesCad = dados;
+  });
+}
+
+  /*
+* Método fehcar modal
+*/
+
+closeModal() {
+  this.modalObsAcao = false;
+}
+
+
   /*
 * Método para retornar para a aba de adicionar/editar endereco
 */
   voltarEndereco() {
      if (this.params.id) {
       this.router.navigate(['pontPre', this.params.id]);
-      this.mostrarBotao = true;
+      this.novoEndereco = true;
     } else if (this.params.detalheappeditPP) {
-      this.mostrarBotao = true;
+      this.novoEndereco = true;
     } else  if (this.codGesac) {
       this.router.navigate(['pontPre', this.codGesac]);
-      this.mostrarBotao = true;
+      this.novoEndereco = true;
     }  else {
       this.router.navigate(['pontPre/novo']);
     }
   }
 
   editEndAtul() {
-    this.mostrarBotao = false;
+    this.novoEndereco = false;
   }
 
   /*
@@ -507,7 +627,6 @@ export class PontoPresencaAddEditComponent implements OnInit {
       this.router.navigate(['/pontPre', this.params.detalheappeditPP, 'detalhe']);
     }
   }
-  // pontPre/40005/detalhe
 
   /*
 * Métodos que serão executados quando o componente é iniciado
@@ -517,6 +636,7 @@ export class PontoPresencaAddEditComponent implements OnInit {
       this.admin = true;
     }
     this.route.params.subscribe(res => (this.params = res));
+
 
 
     setTimeout(() => {
@@ -557,6 +677,8 @@ export class PontoPresencaAddEditComponent implements OnInit {
             }, 200);
           });
           this.getEnderecosAntigos();
+          this.contatoService.getContatos(this.parametroIdentificador, 'ponto');
+          console.log(this.parametroIdentificador);
         }
     }, 200);
   }

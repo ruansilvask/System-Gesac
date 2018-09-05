@@ -145,59 +145,66 @@ export class ContratoAdicionarEditarComponent implements OnInit {
     }
   }
 
+
   /*
   * Método que carrega os dados do contrato
   */
-  getContrato(codContrato) {
-    this.contratoService
-      .getContrato(codContrato)
-      .subscribe(
-        dados => {
-          if (dados.length === 0) {
-            Swal({
-              title: 'Erro',
-              html: `Este contrato não existe! Deseja cadastrar um novo contrato?`,
-              type: 'warning',
-              showCancelButton: true,
-              confirmButtonText: 'Sim, deletar!',
-              cancelButtonText: 'Não, mater',
-              reverseButtons: true
-            }).then((result) => {
-              if (result.value) {
-                this.router.navigate(['contrato/novo']);
-              } else if (result.dismiss === Swal.DismissReason.cancel) {
-                this.router.navigate(['contrato']);
-              }
-            });
-          } else {
-            dados[0].data_inicio = new Date(dados[0].data_inicio);
-            dados[0].data_fim = new Date(dados[0].data_fim);
-            this.bContratos = dados[0];
-          }
+ getContrato(codContrato) {
+   this.contratoService
+   .getContrato(codContrato)
+   .subscribe(
+     dados => {
+       if (dados.length === 0) {
+         Swal({
+           title: 'Erro',
+           html: `Este contrato não existe! Deseja cadastrar um novo contrato?`,
+           type: 'warning',
+           showCancelButton: true,
+           confirmButtonText: 'Sim, deletar!',
+           cancelButtonText: 'Não, mater',
+           reverseButtons: true
+          }).then((result) => {
+            if (result.value) {
+              this.router.navigate(['contrato/novo']);
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+              this.router.navigate(['contrato']);
+            }
+          });
+        } else {
+          dados[0].data_inicio = new Date(dados[0].data_inicio);
+          dados[0].data_fim = new Date(dados[0].data_fim);
+          this.bContratos = dados[0];
         }
-      );
+      }
+    );
   }
 
   /*
   * Método que redireciona para lote e carega os lotes de acordo com o contrato contrato
   */
-  irParaLote(numContrato) {
-    this.getLotes(numContrato);
-    this.lotes = true;
+ irParaLote(numContrato) {
+   this.getLotes(numContrato);
+   this.lotes = true;
   }
 
   /*
+  * Método que carrega os lotes
+  */
+ getTabLotes() {
+  this.getLotes(this.params.id);
+ }
+  /*
   * Método para adicionar novos lotes no cotrato
   */
-  enviarNome(formAddLote: NgForm) {
-    Swal({
-      title: 'Você tem certeza?',
-      html: `Você tem certeza que deseja adicionar ${formAddLote.value.nomeLote}?`,
-      type: 'question',
-      showCancelButton: true,
-      confirmButtonText: 'Sim, adicionar!',
-      cancelButtonText: 'Não, cancelar',
-      reverseButtons: true
+ enviarNome(formAddLote: NgForm) {
+   Swal({
+     title: 'Você tem certeza?',
+     html: `Você tem certeza que deseja adicionar ${formAddLote.value.nomeLote}?`,
+     type: 'question',
+     showCancelButton: true,
+     confirmButtonText: 'Sim, adicionar!',
+     cancelButtonText: 'Não, cancelar',
+     reverseButtons: true
     }).then((result) => {
       if (result.value) {
 

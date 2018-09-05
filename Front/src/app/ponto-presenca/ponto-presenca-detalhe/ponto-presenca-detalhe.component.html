@@ -487,7 +487,6 @@
 
             <div class="ui stackable one column grid">
               <div class="column">
-
                   <label>Observações de Ações</label>
 
                   <!-- <select class="ui dropdown" name="observacao" [(ngModel)]="analiseDetalhe.cod_obs" required #observacao>
@@ -706,7 +705,7 @@
         </div>
 
         <!--Inicio do Modal Modal de add/edit Ponto de Presença -->
-        <sui-modal  style="height: 40em;" *ngIf="selcPP" [isClosable]="false" [transition]="'scale'" [isInverted]="true" [size]="'large'" [transitionDuration]="500"
+        <sui-modal  style="height: 40em;" *ngIf="selcPP" [mustScroll]="true" [isClosable]="false" [transition]="'scale'" [isInverted]="true" [size]="'large'" [transitionDuration]="500"
           #modal>
           <div class="header">
 
