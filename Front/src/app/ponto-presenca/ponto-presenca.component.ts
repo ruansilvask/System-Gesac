@@ -339,7 +339,6 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
 
   enviarMS(fmsolicitacoes: NgForm) {
     if (this.verificarData(fmsolicitacoes.value.data_oficio)) {
-      console.log(fmsolicitacoes.value);
       fmsolicitacoes.value.data_oficio = this.apiServicesData.formatData(fmsolicitacoes.value.data_oficio);
       if (!this.analiseShow) {
         delete fmsolicitacoes.value.cnpj_empresa;
@@ -353,6 +352,7 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
 
       if (this.solicitacaoSubmit) {
           fmsolicitacoes.value.cod_gesac = this.pontopresencaCod_gesac;
+          fmsolicitacoes.value.tipo_solicitacao = fmsolicitacoes.value.tipo_solicitacao.tipo_solicitacao;
           this.abrirNodal = false;
           this.analiseShow = false;
           this.pontoPresencaService.postMSolicitacoes(fmsolicitacoes.value).subscribe(resp => {
@@ -375,9 +375,11 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
   }
 
   ActiveInputAnalise(mSolicitacoes) {
-    if ( mSolicitacoes === '6' || mSolicitacoes === '7' || mSolicitacoes === '8' || mSolicitacoes === '9') {
+    if (mSolicitacoes && mSolicitacoes.tipo_permissao.toString() === '3') {
       this.analiseShow = true;
-    } else if (mSolicitacoes === '25' || mSolicitacoes === '26' || mSolicitacoes === '27') {
+      this.pendenciaShow = false;
+    } else if (mSolicitacoes && mSolicitacoes.tipo_permissao.toString() === '4') {
+      this.analiseShow = false;
       this.pendenciaShow = true;
     } else {
       this.analiseShow = false;
@@ -397,27 +399,6 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
       fmselecionarGesac.reset();
     }
     this.toggleAll(false);
-    // this.contador = 0;
-    // let i = 0;
-    // let k = 0;
-    // let j = 0;
-    // for (k; k < this.listaGesac.length; k++) {
-    //   if (this.listaGesac[k] !== '') {
-    //     for (i; i < this.allArrays.length; i++) {
-    //       if (j === 50) { j = 0; }
-    //       for (j; j < this.allArrays[i].length; j++) {
-    //         if (Number(this.listaGesac[k]) === this.allArrays[i][j].cod_gesac) {
-    //           this.allArrays[i][j].check = true;
-    //           this.pontopresencaCod_gesac.push(this.allArrays[i][j].cod_gesac);
-    //           this.pontoPresencaStatus.push(this.allArrays[i][j].cod_status);
-    //           this.numMarcados++;
-    //           this.contador++;
-    //           k++;
-    //         }
-    //       }
-    //     }
-    //   }
-    // }
     this.filterGsac(this.listaGesac, this.selecionados);
     if (this.allArrays) {
       this.botoesMSA = true;
@@ -489,7 +470,3 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
     }
   }
 }
-
-// (filtros.tipologia && !(pontoPres.tipologia.toLowerCase() === filtros.tipologia.toLowerCase()))) { valida = false; }
-
-

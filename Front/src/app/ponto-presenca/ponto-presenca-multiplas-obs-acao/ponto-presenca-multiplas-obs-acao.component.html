@@ -1,14 +1,16 @@
 <div class="ui segment">
   <form class="ui form">
     <div class="fields">
-      <div class="thirteen wide field">
+      <div class="eleven wide field">
         <label>Selecione uma observação para ação:</label>
         <sui-select class="selection" name="cod_obs" [(ngModel)]="searchObs" [options]="obsAcao" labelField="obsAcao.descricao"
           valueField="obsAcao.cod_obs" #searchObsAcao>
           <sui-select-option *ngFor="let o of searchObsAcao.filteredOptions" [value]="o">
           </sui-select-option>
         </sui-select>
-
+      </div>
+      <div class="two wide field">
+          <button class="ui button btnAdd" type="submit" autofocus (click)="searchTodos()"> Todos</button>
       </div>
       <div class="three wide field">
         <button class="ui button btnAdd" type="submit" autofocus (click)="searchObsAction(searchObs)"> Aplicar Filtro</button>
@@ -22,6 +24,7 @@
     Codigos do GESAC: <p>
       <ng-template ngFor let-obs [ngForOf]='gesacObs'> {{obs?.cod_gesac + '; '}}</ng-template>
     </p>
+    <p *ngIf="gesacObs.length === 0">Nenhum Gesac com esta observação para ação.</p>
   </h5>
   <div class="ui raised attached segment">
     <form class="ui form error" #fAddobservacao="ngForm" (ngSubmit)="AddObsAction(fAddobservacao)">
@@ -53,6 +56,7 @@
 
     <div class="ui stackable three column grid">
 
+      <p *ngIf="removerCodsObs.length === 0">Não possui.</p>
       <div class="column" *ngFor="let obs of removerCodsObs" suiPopup popupText="Remover observacao"
         popupInverted [popupPlacement]="'top left'">
         <a class="fluid ui labeled icon button btn-observacao" (click)="removerobservacao(obs.cod_obs, gesacObs)">
