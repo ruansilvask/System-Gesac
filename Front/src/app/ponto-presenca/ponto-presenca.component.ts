@@ -259,7 +259,17 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
   closeModal() {
     this.abrirNodal = false;
     this.selcGesac = false;
+    this.analiseShow = false;
+    this.pendenciaShow = false;
     this.contador = null;
+    this.mSolicitacoes = {
+      tipo_solicitacao: '',
+      num_doc_sei: null,
+      num_oficio: null,
+      data_oficio: null,
+      cnpj_empresa: '',
+      motivo: ''
+    };
   }
 
   closeObsAcao() {
@@ -353,20 +363,11 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
       if (this.solicitacaoSubmit) {
           fmsolicitacoes.value.cod_gesac = this.pontopresencaCod_gesac;
           fmsolicitacoes.value.tipo_solicitacao = fmsolicitacoes.value.tipo_solicitacao.tipo_solicitacao;
-          this.abrirNodal = false;
-          this.analiseShow = false;
           this.pontoPresencaService.postMSolicitacoes(fmsolicitacoes.value).subscribe(resp => {
             this.resp = resp;
-            this.mSolicitacoes = {
-              tipo_solicitacao: '',
-              num_doc_sei: null,
-              num_oficio: null,
-              data_oficio: null,
-              cnpj_empresa: '',
-              motivo: ''
-            };
             fmsolicitacoes.reset();
-            this.loadPontoPre();
+            this.loadPontoPre();      
+            this.closeModal();
           });
         }
     } else {

@@ -17,7 +17,7 @@
     </div>
 
     <div class="three wide column">
-        <button class="ui labeled icon button" (click)="openModalObsAcao()" name="obsAcao"
+        <button class="ui labeled icon button" (click)="openModalObsAcao()" name="obsAcao" [disabled]="!botoesMSA"
           #msolicitacoes data-position="left" suiPopup popupHeader="Obs Ação Múltiplos Pontos" popupInverted="true">
           <i class="right plus circle icon"></i>Realizar Obs Ação</button>
       </div>
