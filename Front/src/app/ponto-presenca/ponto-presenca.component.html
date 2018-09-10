@@ -184,7 +184,7 @@
             <div class="ui stackable one column grid" *ngIf="pendenciaShow">
               <div class="column">
                 <label>Motivo da Pendência</label>
-                <textarea [ngClass]="{'error': motivo.invalid && motivo.dirty }" #motivo="ngModel" [(ngModel)]="mSolicitacoes.motivo" name="pendencia" maxlength="1000" placeholder="Motivo da Pendência"
+                <textarea [ngClass]="{'error': motivo.invalid && motivo.dirty }" #motivo="ngModel" [(ngModel)]="mSolicitacoes.motivo" name="motivo" maxlength="1000" placeholder="Motivo da Pendência"
                 style="margin-top: 0px; margin-bottom: 0px; height: 112px;" required></textarea>
                 <div class="invalid-feedback" [ngClass]="{'active': motivo.invalid && motivo.dirty}">
                   Motivo da Pendência é um campo obrigatório!
@@ -233,7 +233,7 @@
     <!--Fim Modal do formulario  de Observação para ação -->
 
     <div class="four wide column">
-      <div class="ui compact right floated segment"><p><strong>{{totalItens}} {{(totalItens !== 1) ? 'itens' : 'item'}}</strong></p></div>
+      <div class="ui compact right floated segment"><p><strong [innerHTML]="totalItens + ' de ' + ((pontosPresenca) ? pontosPresenca.length : '0') + ' itens'"></strong></p></div>
     </div>
   </div>
 

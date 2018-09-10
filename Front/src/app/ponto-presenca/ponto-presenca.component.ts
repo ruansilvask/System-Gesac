@@ -33,7 +33,7 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
   /*
   * Variáveis do codigo ponto de presença do gesac
   */
-  pontopresencaCod_gesac: any[] = [];
+  pontopresencaCod_gesac: any = [];
   pontoPresencaStatus = [];
   selecionados = [];
   selecaoModalObsAcao = [];
@@ -293,15 +293,15 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
   openModal(multipla) {
     this.statusDiferentes = false;
     this.pontoPresencaStatus.filter(function (el) { return el !== empty; }).join('');
-    for (let i = 0; i < this.pontoPresencaStatus.length; i++) {
-      if (this.pontoPresencaStatus[i] !== undefined) {
-        if (this.pontoPresencaStatus[0] !== this.pontoPresencaStatus[i]) {
-          this.apiServicesMsg.setMsg('warning', 'Não é possivel executar esta ação, status diferentes.', 5000);
-          this.statusDiferentes = true;
-          break;
+      for (let i = 0; i < this.pontoPresencaStatus.length; i++) {
+        if (this.pontoPresencaStatus[i] !== undefined) {
+          if (this.pontoPresencaStatus[0] !== this.pontoPresencaStatus[i]) {
+            this.apiServicesMsg.setMsg('warning', 'Não é possivel executar esta ação, status diferentes.', 5000);
+            this.statusDiferentes = true;
+            break;
+          }
         }
       }
-    }
     if (this.statusDiferentes === false) {
       this.pontoPresencaService.getStatusSolicitacoes(this.pontoPresencaStatus[0]).subscribe(dados => {
         this.multiplasSolicitacoes = dados;
