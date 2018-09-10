@@ -1,0 +1,44 @@
+<div class="content">
+
+  <div class="ui raised segment">
+    <form class="ui form error" #fAddObeservacao="ngForm" (ngSubmit)="salvarObeservacao(fAddObeservacao)">
+
+      <div class="ui grid">
+
+        <div class="thirteen wide column">
+          <label>Observações de Ações</label>
+
+          <select class="ui dropdown" name="cod_obs" [(ngModel)]="ObeservacaoPontoPresenca.cod_obs" required #Obeservacao>
+            <option value="">Selecione Observação de Ação</option>
+            <option *ngFor="let obeservacao of obsAcoes" value="{{ obeservacao.cod_obs }}">{{obeservacao.descricao}}</option>
+          </select>
+
+
+        </div>
+        <div class="two wide column">
+          <div class="one wide column" suiPopup popupText="Adicionar Obeservacao" popupInverted [popupPlacement]="'top left'">
+            <button class="ui circular black icon button btnAdd" type="submit">
+              <i class="plus icon"></i>
+            </button>
+          </div>
+        </div>
+        <div class="sixteen wide column">
+        </div>
+      </div>
+
+    </form>
+
+    <div class="ui stackable four column grid">
+
+      <div class="column" *ngFor="let Obeservacao of obsAcoesCad" suiPopup popupText="Remover Obeservacao" popupInverted [popupPlacement]="'top left'">
+        <a class="fluid ui labeled icon button btn-Obeservacao" (click)="removerObsAcao(Obeservacao)">
+          <i class="close icon"></i>
+          {{Obeservacao?.descricao}}
+        </a>
+      </div>
+
+    </div>
+
+  </div>
+
+</div>
