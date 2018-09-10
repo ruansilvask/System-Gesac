@@ -16,7 +16,6 @@ export class ObsAcaoComponent implements OnInit {
   filterObsAction = '';
   resultSearchObsAction = [];
   searchObs = '';
-  returnObsAction = [{ num: 1 }];
   gesacObs: any = [];
   cod_gesac = [];
   removerCodsObs: any = [];

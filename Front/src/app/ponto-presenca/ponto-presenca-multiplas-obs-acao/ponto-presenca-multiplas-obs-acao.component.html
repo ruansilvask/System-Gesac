@@ -19,13 +19,12 @@
   </form>
 </div>
 
-<div class="ui segment" *ngIf="returnObsAction.length !== 0">
-  <h5 class="ui top attached header">
-    Codigos do GESAC: <p>
+<div class="ui segment">
+  <div class="ui top attached header">
+    <h5>Codigos do GESAC:</h5>
       <ng-template ngFor let-obs [ngForOf]='gesacObs'> {{obs?.cod_gesac + '; '}}</ng-template>
-    </p>
-    <p *ngIf="gesacObs.length === 0">Nenhum Gesac com esta observação para ação.</p>
-  </h5>
+      <p *ngIf="gesacObs.length === 0">Nenhum Gesac com esta observação para ação.</p>
+  </div>
   <div class="ui raised attached segment">
     <form class="ui form error" #fAddobservacao="ngForm" (ngSubmit)="AddObsAction(fAddobservacao)">
 
