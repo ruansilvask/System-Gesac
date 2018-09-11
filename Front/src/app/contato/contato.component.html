@@ -127,7 +127,7 @@
                 <div class="four wide field" [ngClass]="{'error': adicionarTelefone.fone.length !== 0 && !fone.invalid && tipo.value === ''}">
                   <div class="field">
                     <label>Tipo Telefone</label>
-                  <select class="ui fluid dropdown" name="tipo" #tipo='ngModel' [(ngModel)]="adicionarTelefone.tipo" [required]="true">
+                  <select class="ui fluid dropdown" name="tipo" #tipo='ngModel' [(ngModel)]="adicionarTelefone.tipo">
                     <option value="">Selecione o tipo telefone</option>
                     <option value="M">Móvel</option>
                     <option value="C">Casa</option>

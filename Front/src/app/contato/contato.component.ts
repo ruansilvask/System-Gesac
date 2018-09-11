@@ -137,35 +137,33 @@ export class ContatoComponent implements OnInit {
   }
 
   formatPost(type, codPessoa, codContato, form) {
-    switch (type) {
-      case 'instituicao':
-      return {
-        cod_pessoa: codPessoa.cod_pessoa,
-        cod_instituicao: codContato,
-        nome: form.nome,
-        cargo: form.cargo,
-        obs: form.obs
-      };
-      break;
-      case 'ponto' :
-      return {
-        cod_pessoa: codPessoa.cod_pessoa,
-        cod_gesac: codContato,
-        nome: form.nome,
-        cargo: form.cargo,
-        obs: form.obs
-      };
-      break;
-      case 'empresa' :
-      return {
-        cod_pessoa: codPessoa.cod_pessoa,
-        cnpj_empresa: codContato,
-        nome: form.nome,
-        cargo: form.cargo,
-        obs: form.obs
-      };
-      break;
+    let formatado = {};
+    if (type === 'instituicao') {
+      formatado = {
+            cod_pessoa: codPessoa.cod_pessoa,
+            cod_instituicao: codContato,
+            nome: form.nome,
+            cargo: form.cargo,
+            obs: form.obs
+          };
+    } else if (type === 'ponto') {
+      formatado = {
+            cod_pessoa: codPessoa.cod_pessoa,
+            cod_gesac: codContato,
+            nome: form.nome,
+            cargo: form.cargo,
+            obs: form.obs
+          };
+    } else if (type === 'empresa') {
+      formatado = {
+            cod_pessoa: codPessoa.cod_pessoa,
+            cnpj_empresa: codContato,
+            nome: form.nome,
+            cargo: form.cargo,
+            obs: form.obs
+          };
     }
+    return formatado;
   }
 
   // post de contatos
@@ -262,37 +260,23 @@ export class ContatoComponent implements OnInit {
       tipo: fAddTel.value.tipo
     };
     if (this.telefoneValido(this.telefone)) {
-      Swal({
-        title: 'Você tem certeza?',
-        text: `Você tem certeza que deseja adicionar estas informações a este contato?`,
-        type: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'Sim, adicionar!',
-        cancelButtonText: 'Não, cancelar',
-        reverseButtons: true
-      }).then(result => {
-        if (result.value) {
-          this.contatoService.postTelefone(this.telefone).subscribe(
-            res => {
-              fAddTel.reset();
-              this.getContatos(this.dadosPessoa.cod_pessoa);
-              this.adicionarTelefone = {
-                tipo: '',
-                fone: '',
-                email: ''
-              };
-              this.apiServicesMsg.setMsg(
-                'success',
-                'Telefone adicionado com sucesso.',
-                3000
-              );
-            },
-            erro => Swal('Erro', `${erro.error}`, 'error')
+      this.contatoService.postTelefone(this.telefone).subscribe(
+        res => {
+          fAddTel.reset();
+          this.getContatos(this.dadosPessoa.cod_pessoa);
+          this.adicionarTelefone = {
+            tipo: '',
+            fone: '',
+            email: ''
+          };
+          this.apiServicesMsg.setMsg(
+            'success',
+            'Telefone adicionado com sucesso.',
+            3000
           );
-        } else if (result.dismiss === Swal.DismissReason.cancel) {
-          this.apiServicesMsg.setMsg('error', 'Ação cancelada.', 3000);
-        }
-      });
+        },
+        erro => Swal('Erro', `${erro.error}`, 'error')
+      );
     }
   }
 
@@ -394,54 +378,24 @@ export class ContatoComponent implements OnInit {
   salvarContato(form) {
     console.log(form.value);
     if (!this.existeContato(this.dadosPessoa.cod_pessoa)) {
-      Swal({
-        title: 'Você tem certeza?',
-        text: `Você tem certeza que deseja salvar os dados de ${
-          this.dadosPessoa.nome
-        }?`,
-        type: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'Sim, salvar!',
-        cancelButtonText: 'Não, cancelar',
-        reverseButtons: true
-      }).then(result => {
-        if (result.value) {
-          this.contatoInfo.nome = form.value.nome;
-          this.funcaoContato('post', this.local, form.value);
-        } else if (result.dismiss === Swal.DismissReason.cancel) {
-          this.apiServicesMsg.setMsg('error', 'Ação cancelada.', 3000);
-        }
-      });
+      this.contatoInfo.nome = form.value.nome;
+      this.funcaoContato('post', this.local, form.value);
     } else {
-      Swal({
-        title: 'Você tem certeza?',
-        text: `Você tem certeza que deseja vincular ${this.dadosPessoa.nome} a este ponto?`,
-        type: 'question',
-        showCancelButton: true,
-        confirmButtonText: 'Sim, editar!',
-        cancelButtonText: 'Não, cancelar',
-        reverseButtons: true
-      }).then(result => {
-        if (result.value) {
-          form.value.cod_pessoa = this.dadosPessoa.cod_pessoa;
-          this.contatoService
-            .putContatoCadastrado(this.codContatoCadastrado, form.value)
-            .subscribe(
-              res => {
-                this.cancelarInfContato();
-                this.funcaoContato('get', this.local, this.codContato);
-                this.apiServicesMsg.setMsg(
-                  'success',
-                  'Dados editados com sucesso.',
-                  3000
-                );
-              },
-              erro => Swal('Erro', `${erro.error}`, 'error')
+      form.value.cod_pessoa = this.dadosPessoa.cod_pessoa;
+      this.contatoService
+        .putContatoCadastrado(this.codContatoCadastrado, form.value)
+        .subscribe(
+          res => {
+            this.cancelarInfContato();
+            this.funcaoContato('get', this.local, this.codContato);
+            this.apiServicesMsg.setMsg(
+              'success',
+              'Dados editados com sucesso.',
+              3000
             );
-        } else if (result.dismiss === Swal.DismissReason.cancel) {
-          this.apiServicesMsg.setMsg('error', 'Ação cancelada.', 3000);
-        }
-      });
+          },
+          erro => Swal('Erro', `${erro.error}`, 'error')
+        );
     }
   }
 
