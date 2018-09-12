@@ -242,7 +242,6 @@ export class PontoPresencaAddEditComponent implements OnInit {
       .getEnderecoDetalhe(this.params.id || this.codGesac)
       .subscribe(dados => {
         this.enderecosAntigos = dados;
-        console.log(dados);
         if (this.enderecosAntigos.length === 0) {
           this.novoEndereco = true;
         } else {
@@ -547,7 +546,7 @@ closeModal() {
     if (this.parametroIdentificador) {
       this.tipologia = {
         cod_tipologia: this.tipologiaPontoPresenca.cod_tipologia,
-        cod_pid: this.pontoPresenca.cod_pid
+        cod_gesac: this.parametroIdentificador
       };
       this.pontoPresencaService
         .postTipologia(this.tipologia)
@@ -598,9 +597,9 @@ closeModal() {
       reverseButtons: true
     }).then(result => {
       if (result.value) {
-        if (this.codGesac) {
+        if (this.parametroIdentificador) {
           this.pontoPresencaService
-            .removeTipologiaId(this.codGesac, tipologia.cod_tipologia)
+            .removeTipologiaId(this.parametroIdentificador, tipologia.cod_tipologia)
             .subscribe(
               res => {
                 this.removido = res;
@@ -660,6 +659,8 @@ closeModal() {
         this.fecharmodal = false;
         this.parametroIdentificador = this.params.detalheappeditPP;
       }
+      console.log(this.parametroIdentificador);
+      
 
       if (this.parametroIdentificador) {
         this.codGesac = this.parametroIdentificador;
@@ -678,7 +679,6 @@ closeModal() {
           });
           this.getEnderecosAntigos();
           this.contatoService.getContatos(this.parametroIdentificador, 'ponto');
-          console.log(this.parametroIdentificador);
         }
     }, 200);
   }
