@@ -1,5 +1,8 @@
+import { PontoPresencaObsAcaoService } from './ponto-presenca-obs-acao/ponto-presenca-obs-acao.service';
+import { PontoPresencaObsAcaoComponent } from './ponto-presenca-obs-acao/ponto-presenca-obs-acao.component';
 import { NgModule } from '@angular/core';
 import { HttpModule } from '@angular/http';
+import { RouterModule } from '@angular/router';
 import { SharedModule } from '../pipes/shared.module';
 import '../util/rxjs-extensions';
 
@@ -12,7 +15,6 @@ import { PontoPresencaDetalheComponent } from './ponto-presenca-detalhe/ponto-pr
 import { PontoPresencaComponent } from './ponto-presenca.component';
 import { PontoPresencaService } from './ponto-presenca.service';
 import { ContatoModule } from '../contato/contato.module';
-import { RouterModule } from '@angular/router';
 import { ObsAcaoComponent } from './ponto-presenca-multiplas-obs-acao/ponto-presenca-multiplas-obs-acao.component';
 
 @NgModule({
@@ -26,12 +28,14 @@ import { ObsAcaoComponent } from './ponto-presenca-multiplas-obs-acao/ponto-pres
         PontoPresencaComponent,
         PontoPresencaAddEditComponent,
         PontoPresencaDetalheComponent,
-        ObsAcaoComponent
+        ObsAcaoComponent,
+        PontoPresencaObsAcaoComponent
     ],
     exports: [
         PontoPresencaComponent
     ],
     providers: [
+        PontoPresencaObsAcaoService,
         PontoPresencaService,
         HttpModule
     ],

@@ -1,3 +1,4 @@
+import { PontoPresencaObsAcaoService } from './../ponto-presenca-obs-acao/ponto-presenca-obs-acao.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
@@ -22,7 +23,8 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-ponto-presenca-add-edit',
   templateUrl: './ponto-presenca-add-edit.component.html',
-  styleUrls: ['./ponto-presenca-add-edit.component.scss']
+  styleUrls: ['./ponto-presenca-add-edit.component.scss'],
+  providers: [PontoPresencaObsAcaoService]
 })
 export class PontoPresencaAddEditComponent implements OnInit {
   obsAcoesCad: Object;
@@ -55,7 +57,7 @@ export class PontoPresencaAddEditComponent implements OnInit {
   instituicoesRespPag: any[] = [];
   params: any;
   novoEndereco: boolean;
-  mostrarBtn = false;
+  mostrarBtn = true;
 
   enderecos: any;
 
@@ -132,12 +134,13 @@ export class PontoPresencaAddEditComponent implements OnInit {
 
   constructor(
     private apiServicesMsg: ApiServicesMsg,
-    private apiServiceEstadoMunicipio: ApiServiceEstadoMunicipio,
     private pontoPresencaService: PontoPresencaService,
-    private http: HttpClient,
-    private router: Router,
     private modalService: SuiModalService,
     private contatoService: ContatoService,
+    private pontoPresencaObsService: PontoPresencaObsAcaoService,
+    private apiServiceEstadoMunicipio: ApiServiceEstadoMunicipio,
+    private http: HttpClient,
+    private router: Router,
     private route: ActivatedRoute,
     private apiServicesData: ApiServicesData,
     private location: Location
@@ -264,17 +267,18 @@ export class PontoPresencaAddEditComponent implements OnInit {
           .putPontoPresenca(this.pontoPresenca.cod_pid, form.value)
           .subscribe(dados => {
             this.resp = dados;
-            // this.contatoService.getContatos(this.parametroIdentificador, 'ponto');
+            this.contatoService.getContatos(this.parametroIdentificador, 'ponto');
             this.secondActive = true;
             this.getEnderecosAntigos();
-            this.getObsAcao();
-            this.getObsAcaoporId(this.params.id ||  this.codGesac);
+            // this.getObsAcao();
+            // this.getObsAcaoporId(this.params.id ||  this.codGesac);
           });
       } else {
         this.pontoPresencaService
           .postPontoPresenca(this.pontoPresenca)
           .subscribe(dados => {
             this.codGesac = dados;
+            this.pontoPresencaObsService.addEmitirGesac(this.codGesac || this.parametroIdentificador);
             this.getPontoPrensencaId(dados);
             this.contatoService.getContatos(this.codGesac, 'ponto');
             this.secondActive = true;
@@ -396,9 +400,9 @@ export class PontoPresencaAddEditComponent implements OnInit {
         this.cancelAddEndereco();
         this.getEnderecosAntigos();
         this.novoEndereco = !this.novoEndereco;
-        if (!this.params.id) {
-          this.obsAcao();
-          this.getObsAcao();
+        if (this.params.id) {
+          this.obsAcaoModal();
+          // this.getObsAcao();
         }
         this.apiServicesMsg.setMsg(
           'success',
@@ -415,99 +419,30 @@ export class PontoPresencaAddEditComponent implements OnInit {
     }
   }
 
-
- /*
-* Métodos para remover a Obs Ações da tela e do banco
-*/
-removerObsAcao(obs) {
-  if (this.admin) {
-    Swal({
-      title: 'Você tem certeza?',
-      html: `Tem certeza que deseja remover a Obeservação de Ação <i>${
-        obs.descricao
-        }</i>?`,
-      type: 'question',
-      showCancelButton: true,
-      confirmButtonText: 'Sim, remover!',
-      cancelButtonText: 'Não, mater',
-      reverseButtons: true
-    }).then(result => {
-      if (result.value) {
-        if (this.codGesac) {
-          obs.cod_gesac = this.params.id;
-          delete obs.descricao;
-          console.log(obs);
-          this.pontoPresencaService
-            .removerObsAcao(obs)
-            .subscribe(
-              res => {
-                this.removido = res;
-                this.getObsAcaoporId(this.codGesac || this.params.id);
-                this.apiServicesMsg.setMsg(
-                  'success',
-                  'Tipologia removida com sucesso.',
-                  3000
-                );
-              },
-              erro => Swal('Erro', `${erro.error}`, 'error')
-            );
-        }
-      } else if (result.dismiss === Swal.DismissReason.cancel) {
-        this.apiServicesMsg.setMsg('error', 'Ação cancelada.', 3000);
-      }
-    });
-  } else {
-    Swal('Erro de acesso', `Este usuário não possui permissão para excluir!`, 'error');
-  }
-}
-
   /*
  * Métodos para abrir modal de observação ação
  */
-
-obsAcao() {
-  this.modalObsAcao = true;
+obsAcaoModal() {
+    this.modalObsAcao = true;
 }
 
-  /*
-* Método para salvar a observação
-*/
-
-salvarObeservacao(fAddObeservacao) {
-  fAddObeservacao.value.cod_obs !== ''
-    ? (fAddObeservacao.value.cod_gesac = this.params.id || this.codGesac,
-      console.log(fAddObeservacao.value),
-      this.pontoPresencaService.salvarObsAcao(fAddObeservacao.value).subscribe(
-        dados => {
-          this.getObsAcaoporId(this.codGesac || this.params.id);
-        }
-      ))
-    : (this.apiServicesMsg.setMsg(
-      'error',
-      'Não é possivel adicionar Observação de Ação vazio!!!',
-      3000
-    ));
+obsAcaoContato() {
+  if (!this.params.id) {
+    this.modalObsAcao = true;
+  }
 }
+
 
   /*
 * Método para retornar observações
 */
 
-getObsAcao() {
-  this.pontoPresencaService.getObsAcao().subscribe(dados => {
-    this.obsAcoes = dados;
-  });
-}
+// getObsAcao() {
+//   this.pontoPresencaService.getObsAcao().subscribe(dados => {
+//     this.obsAcoes = dados;
+//   });
+// }
 
-  /*
-* Método para retornar observações
-*/
-
-getObsAcaoporId(gesac) {
-  this.pontoPresencaService.getObsAcaoporId(gesac).subscribe(dados => {
-    this.obsAcoesCad = dados;
-  });
-}
 
   /*
 * Método fehcar modal
@@ -620,11 +555,11 @@ closeModal() {
   }
 
   backPP() {
-    if (this.params.id) {
+    // if (this.params.id) {
       this.router.navigate(['/pontPre']);
-    } else if (this.params.detalheappeditPP) {
-      this.router.navigate(['/pontPre', this.params.detalheappeditPP, 'detalhe']);
-    }
+    // } else if (this.params.detalheappeditPP) {
+    //   this.router.navigate(['/pontPre', this.params.detalheappeditPP, 'detalhe']);
+    // }
   }
 
   /*
@@ -635,8 +570,6 @@ closeModal() {
       this.admin = true;
     }
     this.route.params.subscribe(res => (this.params = res));
-
-
 
     setTimeout(() => {
       this.ufs = this.apiServiceEstadoMunicipio.getEstados();
@@ -652,7 +585,6 @@ closeModal() {
   */
 
       if (this.params.id) {
-        this.mostrarBtn = true;
         this.parametroIdentificador = this.params.id;
       } else if (this.params.detalheappeditPP) {
         this.mostrarBtn = false;
@@ -661,6 +593,8 @@ closeModal() {
       }
       console.log(this.parametroIdentificador);
       
+
+      // this.pontoPresencaObsService.gesacEmiter.subscribe();
 
       if (this.parametroIdentificador) {
         this.codGesac = this.parametroIdentificador;

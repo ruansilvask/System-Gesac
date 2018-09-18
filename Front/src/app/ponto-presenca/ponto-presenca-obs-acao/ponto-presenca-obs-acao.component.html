@@ -1,6 +1,4 @@
-<div class="content">
 
-  <!-- <div class="ui raised segment">
     <form class="ui form error" #fAddObeservacao="ngForm" (ngSubmit)="salvarObeservacao(fAddObeservacao)">
 
       <div class="ui grid">
@@ -8,7 +6,7 @@
         <div class="thirteen wide column">
           <label>Observações de Ações</label>
 
-          <select class="ui dropdown" name="cod_obs" [(ngModel)]="ObeservacaoPontoPresenca.cod_obs" required #Obeservacao>
+          <select class="ui dropdown" name="cod_obs" [(ngModel)]="obeservacaoPontoPresenca.cod_obs" required #Obeservacao>
             <option value="">Selecione Observação de Ação</option>
             <option *ngFor="let obeservacao of obsAcoes" value="{{ obeservacao.cod_obs }}">{{obeservacao.descricao}}</option>
           </select>
@@ -22,23 +20,18 @@
             </button>
           </div>
         </div>
-        <div class="sixteen wide column">
-        </div>
+
       </div>
 
     </form>
 
     <div class="ui stackable four column grid">
 
-      <div class="column" *ngFor="let Obeservacao of obsAcoesCad" suiPopup popupText="Remover Obeservacao" popupInverted [popupPlacement]="'top left'">
-        <a class="fluid ui labeled icon button btn-Obeservacao" (click)="removerObsAcao(Obeservacao)">
+      <div class="column" *ngFor="let obeservacao of obsAcoesCad" suiPopup popupText="Remover Obeservacao" popupInverted [popupPlacement]="'top left'">
+        <a class="fluid ui labeled icon button btn-Obeservacao" (click)="removerObsAcao(obeservacao)">
           <i class="close icon"></i>
-          {{Obeservacao?.descricao}}
+          {{obeservacao?.descricao}}
         </a>
       </div>
 
     </div>
-
-  </div> -->
-
-</div>
