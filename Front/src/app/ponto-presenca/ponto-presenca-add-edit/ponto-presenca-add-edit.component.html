@@ -339,7 +339,8 @@
           </div>
 
           <!--Inicio do Modal seleção de varios GESAC -->
-          <sui-modal *ngIf="modalObsAcao && (enderecosAntigos.length === 0)" [isClosable]="false" [transition]="'scale'" [transitionDuration]="500" #modal>
+          <!--   -->
+          <sui-modal *ngIf="modalObsAcao && (enderecosAntigos.length !== 0)" [isClosable]="false" [transition]="'scale'" [transitionDuration]="500" #modal>
             <div class="header">
 
               <div class="ui grid">
@@ -347,56 +348,24 @@
                   Observação ação
                 </div>
                 <div class="one wide column">
-                  <i class="close red link icon" (click)="closeModal()"></i>
+                  <i class="close red link icon" (click)="closeModal();"></i>
                 </div>
               </div>
-
             </div>
 
             <div class="content">
-
               <div class="ui raised segment">
-                <form class="ui form error" #fAddObeservacao="ngForm" (ngSubmit)="salvarObeservacao(fAddObeservacao)">
-
-                  <div class="ui grid">
-
-                    <div class="thirteen wide column">
-                      <label>Observações de Ações</label>
-
-                      <select class="ui dropdown" name="cod_obs" [(ngModel)]="ObeservacaoPontoPresenca.cod_obs" required #Obeservacao>
-                        <option value="">Selecione Observação de Ação</option>
-                        <option *ngFor="let obeservacao of obsAcoes" value="{{ obeservacao.cod_obs }}">{{obeservacao.descricao}}</option>
-                      </select>
-
-
-                    </div>
-                    <div class="two wide column">
-                      <div class="one wide column" suiPopup popupText="Adicionar Obeservacao" popupInverted [popupPlacement]="'top left'">
-                        <button class="ui circular black icon button btnAdd" type="submit">
-                          <i class="plus icon"></i>
-                        </button>
-                      </div>
-                    </div>
-                    <div class="sixteen wide column">
-                    </div>
-                  </div>
-
-                </form>
-
-                <div class="ui stackable four column grid">
-
-                  <div class="column" *ngFor="let Obeservacao of obsAcoesCad" suiPopup popupText="Remover Obeservacao" popupInverted [popupPlacement]="'top left'">
-                    <a class="fluid ui labeled icon button btn-Obeservacao" (click)="removerObsAcao(Obeservacao)">
-                      <i class="close icon"></i>
-                      {{Obeservacao?.descricao}}
-                    </a>
-                  </div>
-
-                </div>
-
+                <app-obs-acao-single></app-obs-acao-single>
               </div>
-
             </div>
+
+            <!-- <div class="ui stackable two column grid">
+              <div class="column">
+                <button class="ui right labeled icon button right floated" (click)="closeModal();backPP()">
+                  <i class="angle double right icon"></i>Finalizar</button>
+              </div>
+            </div> -->
+
 
             <!-- <app-ponto-presenca-obs-acao></app-ponto-presenca-obs-acao> -->
 
@@ -452,7 +421,7 @@
                 <i class="angle double left icon"></i>Voltar</button>
             </div>
             <div class="column">
-              <button class="ui right labeled icon button right floated" (click)="fourthActive = true">
+              <button class="ui right labeled icon button right floated" (click)="fourthActive = true;obsAcaoContato()">
                 <i class="angle double right icon"></i>Próximo</button>
             </div>
           </div>
@@ -476,7 +445,7 @@
                 <i class="angle double left icon"></i> Voltar</button>
             </div>
             <div *ngIf="mostrarBtn" class="column">
-              <button class="ui right labeled icon button right floated positive" type="submit" (click)="backPP()">
+              <button class="ui right labeled icon button right floated positive" type="submit" (click)="backPP()" >
                 <i class="angle double right icon"></i> Concluir
               </button>
             </div>

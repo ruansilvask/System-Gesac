@@ -18,8 +18,7 @@ const PontoPresencaRoutes = [
 ];
 @NgModule({
     imports: [RouterModule.forChild(PontoPresencaRoutes)],
-    exports: [RouterModule],
-    declarations: [PontoPresencaObsAcaoComponent]
+    exports: [RouterModule]
 })
 export class PontoPresencaRoutingModule { }
 
