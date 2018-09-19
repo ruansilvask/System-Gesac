@@ -12,11 +12,16 @@ ExportarExcelDAO.prototype.listarContatoExcel = function(callback){
 	this._connection.query('SELECT contato.cod_gesac, pessoa.cod_pessoa, pessoa.nome, contato.cargo, contato.obs, GROUP_CONCAT(telefone.fone SEPARATOR " ; ") AS telefones, GROUP_CONCAT(telefone.email SEPARATOR " ; ")  AS emails FROM contato LEFT JOIN gesac ON contato.cod_gesac = gesac.cod_gesac INNER JOIN pessoa ON contato.cod_pessoa = pessoa.cod_pessoa LEFT JOIN telefone ON pessoa.cod_pessoa = telefone.cod_pessoa GROUP BY contato.cod_contato', callback);
 }
 
+//Lista os dados de Solicitação para a terceira aba da planilha.
+ExportarExcelDAO.prototype.listarSolicitacaoExcel = function(callback){
+	this._connection.query('SELECT solicitacao.cod_gesac, tipo_solicitacao.tipo_solicitacao, tipo_solicitacao.descricao AS solicitacao, status.descricao AS status, solicitacao.motivo, solicitacao.num_oficio, solicitacao.data_oficio, solicitacao.num_doc_sei, solicitacao.data_sistema FROM solicitacao INNER JOIN tipo_solicitacao ON solicitacao.tipo_solicitacao = tipo_solicitacao.tipo_solicitacao INNER JOIN status ON tipo_solicitacao.muda_cod_status = status.cod_status', callback);
+}
+
+//Lista os dados de Interação para a quarta aba da planilha.
+ExportarExcelDAO.prototype.listarInteracaoExcel = function(callback){
+	this._connection.query('SELECT interacao.cod_gesac, tipo_interacao.descricao, interacao.assunto, interacao.relato, interacao.data_interacao, interacao.data, pessoa.cod_pessoa, pessoa.nome FROM interacao INNER JOIN tipo_interacao ON interacao.tipo_interacao = tipo_interacao.tipo_interacao LEFT JOIN pessoa ON interacao.cod_pessoa = pessoa.cod_pessoa;', callback);
+}
+
 module.exports = () => {
 	return ExportarExcelDAO;
 };
-
-
-/*
-SELECT contato.cod_gesac, pessoa.cod_pessoa, pessoa.nome, contato.cargo, contato.obs, GROUP_CONCAT(telefone.fone SEPARATOR' ; ') AS telefones, GROUP_CONCAT(telefone.email SEPARATOR ' ; ')  AS emails FROM contato LEFT JOIN gesac ON contato.cod_gesac = gesac.cod_gesac INNER JOIN pessoa ON contato.cod_pessoa = pessoa.cod_pessoa LEFT JOIN telefone ON pessoa.cod_pessoa = telefone.cod_pessoa GROUP BY contato.cod_contato;
-*/
