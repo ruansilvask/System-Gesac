@@ -20,7 +20,10 @@ module.exports = function(app){
                             
                             cod_usuario_cript = passwordHash.generate(resultado[0].cod_usuario.toString(), {saltLength: 200});
 
-                            console.log(`O usuário ${resultado[0].nome} acabou de logar.`);
+                            var date = new Date();
+                            var dataLogin = `${date.toISOString().slice(0,4)}-${date.toISOString().slice(5,7)}-${date.toISOString().slice(8,10)} ${date.toISOString().slice(11,13)-3}.${date.toISOString().slice(14,16)}.${date.toISOString().slice(17,19)}`;
+
+                            console.log(`O usuário ${resultado[0].nome} acabou de logar.  ${dataLogin}`);
                             res.status(200).json({token, 'cod_usuario': resultado[0].cod_usuario, 'nome': resultado[0].nome, cod_usuario_cript});
 
                         } else { res.status(401).send('Senha incorreta'); }
@@ -44,7 +47,10 @@ module.exports = function(app){
 
         knex.select('nome').from('usuario').where('cod_usuario', cod_usuario)
             .then(resultado => {
-                console.log(`O usuário ${resultado[0].nome} acabou de deslogar.`);
+                var date = new Date();
+                var dataLogof = `${date.toISOString().slice(0,4)}-${date.toISOString().slice(5,7)}-${date.toISOString().slice(8,10)} ${date.toISOString().slice(11,13)-3}.${date.toISOString().slice(14,16)}.${date.toISOString().slice(17,19)}`;
+
+                console.log(`O usuário ${resultado[0].nome} acabou de deslogar. ${dataLogof}`);
                 res.status(200).end();
             })
             .catch(erro => {
