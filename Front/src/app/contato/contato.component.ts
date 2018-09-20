@@ -376,7 +376,6 @@ export class ContatoComponent implements OnInit {
   }
 
   salvarContato(form) {
-    console.log(form.value);
     if (!this.existeContato(this.dadosPessoa.cod_pessoa)) {
       this.contatoInfo.nome = form.value.nome;
       this.funcaoContato('post', this.local, form.value);

@@ -591,8 +591,7 @@ closeModal() {
         this.fecharmodal = false;
         this.parametroIdentificador = this.params.detalheappeditPP;
       }
-      console.log(this.parametroIdentificador);
-      
+
 
       // this.pontoPresencaObsService.gesacEmiter.subscribe();
 
