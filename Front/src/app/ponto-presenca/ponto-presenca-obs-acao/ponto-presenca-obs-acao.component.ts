@@ -43,7 +43,6 @@ export class PontoPresencaObsAcaoComponent implements OnInit {
     } else {
       this.allParams = this.pontoPresencaObsService.getEmitirGesac();
     }
-    console.log(this.allParams);
 
     this.getObsAcaoporId(this.allParams);
     this.getObsAcao();
@@ -76,7 +75,6 @@ export class PontoPresencaObsAcaoComponent implements OnInit {
     if (permitido) {
       fAddObeservacao.value.cod_obs !== ''
         ? ((fAddObeservacao.value.cod_gesac = this.allParams),
-          console.log(fAddObeservacao.value),
           this.pontoPresencaService
             .salvarObsAcao(fAddObeservacao.value)
             .subscribe(dados => {
@@ -115,7 +113,6 @@ export class PontoPresencaObsAcaoComponent implements OnInit {
 * Métodos para remover a Obs Ações da tela e do banco
 */
   removerObsAcao(obs) {
-    console.log(obs);
     if (this.admin) {
       Swal({
         title: 'Você tem certeza?',
