@@ -91,7 +91,6 @@ export class PontoPresencaService {
   * Protocolo HTTP do Endereco para salvar no banco
   */
   postEndereco(form) {
-    console.log(form);
     return this.http
       .post<PontoPresenca>(`${API.GESAC_API}pontoEndereco`, form)
       .map(res => res);
@@ -341,7 +340,6 @@ export class PontoPresencaService {
     */
 
    salvarObsAcao(form) {
-     console.log(form);
     return this.http.post(`${API.GESAC_API}obsAcao`, form).map(res => res);
   }
 

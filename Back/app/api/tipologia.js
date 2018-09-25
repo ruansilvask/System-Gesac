@@ -32,41 +32,47 @@ module.exports = function(app){
     
     //Atualiza os dados de uma Tipologia.
     api.editaTipologia = (req, res) => {
-        const knex = app.conexao.conexaoBDKnex();
         const { cod_tipologia } = req.params;
-        const tipologia = req.body;
 
-        knex('tipologia').where('cod_tipologia', cod_tipologia).update(tipologia)
-            .then(resultado => {
-                knex.destroy();
-                res.status(200).end();
-            })
-            .catch(erro => {
-                console.log(erro);
-                knex.destroy();
-                res.status(500).send(app.api.erroPadrao());
-            });
+        if(cod_tipologia){
+            const knex = app.conexao.conexaoBDKnex();
+            const tipologia = req.body;
+    
+            knex('tipologia').where('cod_tipologia', cod_tipologia).update(tipologia)
+                .then(resultado => {
+                    knex.destroy();
+                    res.status(200).end();
+                })
+                .catch(erro => {
+                    console.log(erro);
+                    knex.destroy();
+                    res.status(500).send(app.api.erroPadrao());
+                });
+        } else { res.status(400).send(app.api.erroPadrao()); }
     }
     
     //Apaga uma Tipologia.
     api.apagaTipologia = (req, res) => {
-        const knex = app.conexao.conexaoBDKnex();
         const { cod_tipologia } = req.params;
 
-        knex('tipologia').where('cod_tipologia', cod_tipologia).delete()
-            .then(resultado => {
-                knex.destroy();
-                res.status(200).end();
-            })
-            .catch(erro => {
-                console.log(erro);
-                knex.destroy();
-                if(erro.errno == 1451){
-                    res.status(500).send('Esta tipologia não pode ser apagada pois existem outras informações associadas a ela.');
-                } else {
-                    res.status(500).send(app.api.erroPadrao());
-                }
-            });
+        if(cod_tipologia){
+            const knex = app.conexao.conexaoBDKnex();
+
+            knex('tipologia').where('cod_tipologia', cod_tipologia).delete()
+                .then(resultado => {
+                    knex.destroy();
+                    res.status(200).end();
+                })
+                .catch(erro => {
+                    console.log(erro);
+                    knex.destroy();
+                    if(erro.errno == 1451){
+                        res.status(500).send('Esta tipologia não pode ser apagada pois existem outras informações associadas a ela.');
+                    } else {
+                        res.status(500).send(app.api.erroPadrao());
+                    }
+                });
+        } else { res.status(400).send(app.api.erroPadrao()); }
     }
 
     return api;

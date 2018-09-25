@@ -29,10 +29,6 @@ export class PontoPresencaDetalheComponent implements OnInit {
   obsAcoes: Object;
 
 
-  observacaoPontoPresenca = {
-    descricao: '',
-    cod_obs: ''
-  };
 
   public selcPP: boolean;
   codGesac: any;
@@ -130,10 +126,10 @@ export class PontoPresencaDetalheComponent implements OnInit {
     this.route.params.subscribe(params => {
       this.params = params.id;
     });
+
     this.getPontoPrensenca();
     this.getObsAcao();
     this.getContatosInteracao();
-    this.getObsAcaoporId();
     setTimeout(() => {
       this.analiseCollapse();
       this.getContatosPonto();
@@ -195,15 +191,6 @@ export class PontoPresencaDetalheComponent implements OnInit {
     });
   }
 
-
-  /*
-* Métodos para trazer a obs de ação pelo id do ponto de presença
-*/
-  getObsAcaoporId() {
-    this.pontoPresencaService.getObsAcaoporId(this.params.id).subscribe(dados => {
-      this.obsAcoesCad = dados;
-    });
-  }
 
 
   /*
@@ -457,7 +444,6 @@ export class PontoPresencaDetalheComponent implements OnInit {
     analise.value.cod_gesac = this.params.id;
     analise.value.cnpj_empresa = this.analiseDetalhe.cnpj_empresa;
 
-
     if (this.condicaoAnalise) {
 
       if (this.justificativa) {
@@ -485,74 +471,5 @@ export class PontoPresencaDetalheComponent implements OnInit {
   }
 
 
-  /*
- * Métodos para salvar a Obs Ações da tela e do banco
- */
-  salvarobservacao(fAddobservacao) {
-    fAddobservacao.value.cod_obs !== ''
-      ? (fAddobservacao.value.cod_gesac = this.params.id,
-        console.log(fAddobservacao.value),
-        this.pontoPresencaService.salvarObsAcao(fAddobservacao.value).subscribe(
-          dados => {
-            this.getObsAcaoporId();
-          }
-        ))
-      : (this.apiServicesMsg.setMsg(
-        'error',
-        'Não é possivel adicionar Observação de Ação vazio!!!',
-        3000
-      ));
-  }
-
-
-
-  /*
-* Métodos para remover a Obs Ações da tela e do banco
-*/
-  removerObsAcao(obs) {
-  if (this.admin) {
-    Swal({
-      title: 'Você tem certeza?',
-      html: `Tem certeza que deseja remover a Obeservação de Ação <i>${
-        obs.descricao
-        }</i>?`,
-      type: 'question',
-      showCancelButton: true,
-      confirmButtonText: 'Sim, remover!',
-      cancelButtonText: 'Não, mater',
-      reverseButtons: true
-    }).then(result => {
-      if (result.value) {
-        if (this.codGesac) {
-          obs.cod_gesac = this.params.id;
-          delete obs.descricao;
-          console.log(obs);
-          this.pontoPresencaService
-            .removerObsAcao(obs)
-            .subscribe(
-              res => {
-                this.removido = res;
-                this.getObsAcaoporId();
-                this.apiServicesMsg.setMsg(
-                  'success',
-                  'Tipologia removida com sucesso.',
-                  3000
-                );
-              },
-              erro => Swal('Erro', `${erro.error}`, 'error')
-            );
-        }
-      } else if (result.dismiss === Swal.DismissReason.cancel) {
-        this.apiServicesMsg.setMsg('error', 'Ação cancelada.', 3000);
-      }
-    });
-  } else {
-    Swal('Erro de acesso', `Este usuário não possui permissão para excluir!`, 'error');
-  }
-}
-
-  // deleteObs(observacao) {
-  //   console.log(observacao);
-  // }
 
 }

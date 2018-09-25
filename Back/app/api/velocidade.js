@@ -3,15 +3,18 @@ module.exports = function(app){
     
     //Lista as Velocidades de um Lote.
     api.listaVelocidadeLote = (req, res) => {
-        const connection = app.conexao.conexaoBD();
-        const velocidadeDAO = new app.infra.VelocidadeDAO(connection);
         const { cod_lote } = req.params;
 
-        velocidadeDAO.listarVelocidadeLote(cod_lote, (erro, resultado) => {
-            erro ? (console.log(erro), res.status(500).send(app.api.erroPadrao())) : res.status(200).json(resultado);
-        });
-
-        connection.end();
+        if(cod_lote){
+            const connection = app.conexao.conexaoBD();
+            const velocidadeDAO = new app.infra.VelocidadeDAO(connection);
+    
+            velocidadeDAO.listarVelocidadeLote(cod_lote, (erro, resultado) => {
+                erro ? (console.log(erro), res.status(500).send(app.api.erroPadrao())) : res.status(200).json(resultado);
+            });
+    
+            connection.end();
+        } else { res.status(400).send(app.api.erroPadrao()); }
     };
 
     //Salva uma nova Velocidade.

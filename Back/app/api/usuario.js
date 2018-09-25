@@ -15,15 +15,18 @@ module.exports = function(app){
 
     //Lista os Usuários com base no cod_usuario.
     api.listaUsuarioId = (req, res) => {
-        const connection = app.conexao.conexaoBD();
-        const usuarioDAO = new app.infra.UsuarioDAO(connection);
         const { cod_usuario } = req.params; 
 
-        usuarioDAO.listarUsuarioId(cod_usuario, (erro, resultado) => {
-            erro ? (console.log(erro), res.status(500).send(app.api.erroPadrao())) : res.status(200).json(resultado);
-        });
-
-        connection.end();
+        if(cod_usuario){
+            const connection = app.conexao.conexaoBD();
+            const usuarioDAO = new app.infra.UsuarioDAO(connection);
+    
+            usuarioDAO.listarUsuarioId(cod_usuario, (erro, resultado) => {
+                erro ? (console.log(erro), res.status(500).send(app.api.erroPadrao())) : res.status(200).json(resultado);
+            });
+    
+            connection.end();
+        } else { res.status(400).send(app.api.erroPadrao()); }
     };
 
     //Salva um novo Usuário.
@@ -49,24 +52,27 @@ module.exports = function(app){
 
     //Atualiza os dados de um Usuário.
     api.editaUsuario = (req, res) => {
-        const knex = app.conexao.conexaoBDKnex();
         const { cod_usuario } = req.params;
-        const usuario = req.body;
 
-        knex('usuario').where('cod_usuario', cod_usuario).update(usuario)
-            .then(resultado => {
-                knex.destroy();
-                res.status(200).end();
-            })
-            .catch(erro => {
-                console.log(erro);
-                knex.destroy();
-                if(erro.errno == 1062){
-                    res.status(500).send('Este login já está cadastrado.');
-                } else {
-                    res.status(500).send(app.api.erroPadrao());
-                }
-            });
+        if(cod_usuario){
+            const knex = app.conexao.conexaoBDKnex();
+            const usuario = req.body;
+    
+            knex('usuario').where('cod_usuario', cod_usuario).update(usuario)
+                .then(resultado => {
+                    knex.destroy();
+                    res.status(200).end();
+                })
+                .catch(erro => {
+                    console.log(erro);
+                    knex.destroy();
+                    if(erro.errno == 1062){
+                        res.status(500).send('Este login já está cadastrado.');
+                    } else {
+                        res.status(500).send(app.api.erroPadrao());
+                    }
+                });
+        }else { res.status(400).send(app.api.erroPadrao()); }
     }
 
     //Alteração de Senha.
