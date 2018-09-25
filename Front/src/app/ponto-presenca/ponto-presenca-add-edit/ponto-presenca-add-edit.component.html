@@ -191,38 +191,32 @@
           </div>
           <div class="ui segment" *ngIf="novoEndereco === true">
             <form class="ui form error" #fAddEndereco="ngForm" (ngSubmit)="salvarEndereco(fAddEndereco)">
-              <div class="field">
-                <div class="fields">
-
-                  <div class="fourteen wide field" [ngClass]="{'error':  endereco.invalid && fAddEndereco.submitted ||  endereco.invalid && endereco.dirty}">
-                    <label for="endereco">Endereço</label>
-                    <input id="endereco" type="text" class="validate" name="endereco" #endereco="ngModel" [(ngModel)]="enderecoPontPre.endereco"
-                      required>
-                    <div class="invalid-feedback" [ngClass]="{'active':  endereco.invalid && fAddEndereco.submitted ||  endereco.invalid && endereco.dirty}">
-                      Endereço obrigatório!
-                    </div>
-                  </div>
-
-                  <div class="two wide field">
-                    <label for="numero">Nº</label>
-                    <input id="numero" type="tel" class="validate" name="numero" [(ngModel)]="enderecoPontPre.numero">
-                  </div>
-
-                  <div class="four wide field">
-                    <label for="bairro">Bairro</label>
-                    <input id="bairro" type="text" class="validate" name="bairro" [(ngModel)]="enderecoPontPre.bairro">
-                  </div>
-
-                  <div class="twelve wide field">
-                    <label for="complemento">Complemento</label>
-                    <input id="complemento" type="text" class="validate" name="complemento" [(ngModel)]="enderecoPontPre.complemento">
+              <div class="fields">
+                <div class="fourteen wide field" [ngClass]="{'error':  endereco.invalid && fAddEndereco.submitted ||  endereco.invalid && endereco.dirty}">
+                  <label for="endereco">Endereço</label>
+                  <input id="endereco" type="text" class="validate" name="endereco" #endereco="ngModel" [(ngModel)]="enderecoPontPre.endereco"
+                    required>
+                  <div class="invalid-feedback" [ngClass]="{'active':  endereco.invalid && fAddEndereco.submitted ||  endereco.invalid && endereco.dirty}">
+                    Endereço obrigatório!
                   </div>
                 </div>
+                <div class="two wide field">
+                  <label for="numero">Nº</label>
+                  <input id="numero" type="tel" class="validate" name="numero" [(ngModel)]="enderecoPontPre.numero">
+                </div>
+                <div class="four wide field">
+                  <label for="bairro">Bairro</label>
+                  <input id="bairro" type="text" class="validate" name="bairro" [(ngModel)]="enderecoPontPre.bairro">
+                </div>
 
+                <div class="twelve wide field">
+                  <label for="complemento">Complemento</label>
+                  <input id="complemento" type="text" class="validate" name="complemento" [(ngModel)]="enderecoPontPre.complemento">
+                </div>
               </div>
 
-              <div class="ui grid ">
-                <div class="three wide column field" [ngClass]="{'error': cep.invalid && fAddEndereco.submitted || cep.invalid && cep.dirty}">
+              <div class="fields">
+                <div class="two wide field" [ngClass]="{'error': cep.invalid && fAddEndereco.submitted || cep.invalid && cep.dirty}">
                   <label for="cep">CEP</label>
 
                   <input id="cep" type="text" mask="00.000-000" class="validate" name="cep" #cep='ngModel' [(ngModel)]="enderecoPontPre.cep"
@@ -232,7 +226,7 @@
                   </div>
                 </div>
 
-                <div class="three wide column field" [ngClass]="{'error': area.invalid && fAddEndereco.submitted ||  area.invalid && area.dirty}">
+                <div class="two wide field" [ngClass]="{'error': area.invalid && fAddEndereco.submitted ||  area.invalid && area.dirty}">
                   <label>Área</label>
                   <select class="ui fluid dropdown" name="area" #area='ngModel' [(ngModel)]="enderecoPontPre.area" required>
 
@@ -245,22 +239,91 @@
                   </div>
                 </div>
 
-
-                <div class="five wide column">
-                  <label for="latitude">Latitude(Inoperante para está versão)</label>
-                  <input id="latitude" type="text" class="validate" name="latitude" [readonly]="true" [(ngModel)]="enderecoPontPre.latitude">
+                <div class="two wide field">
+                  <label>Formato</label>
+                  <div class="grouped fields">
+                      <div class="field">
+                        <sui-radio-button name="latLongRadio" value="grau" [(ngModel)]="latLongRadio" (ngModelChange)="radioLatLong($event)">Grau</sui-radio-button>
+                      </div>
+                    <div class="field">
+                      <sui-radio-button name="latLongRadio" value="decimal" [(ngModel)]="latLongRadio" (ngModelChange)="radioLatLong($event)">Decimal</sui-radio-button>
+                    </div>
+                  </div>
                 </div>
+                <!-- Latitude e Longitude em decimal -->
+                <div class="ten wide field" *ngIf="!camposGraus">
+                  <div class="fields">
+                    <div class="eight wide field">
+                      <label for="latitude">Latitude</label>
+                      <input type="text" name="latitude" maxlength="10" [(ngModel)]="latLong.decimal.latitude" appLatitudeMask>
+                    </div>
+                    <div class="eight wide field">
+                      <label for="longitude">Longitude</label>
+                      <input type="text" name="longitude" maxlength="11" [(ngModel)]="latLong.decimal.longitude" appLongitudeMask>
+                    </div>
+                  </div>
+                </div>
+                <!-- Latitude e Longitude em graus -->
+                <div class="ten wide field" *ngIf="camposGraus">
+                  <div class="fields">
+                    <div class="eight wide field">
+                      <label for="latitude">Latitude</label>
+                      <div class="fields">
+                        <div class="four wide field">
+                          <sui-select class="selection" name="latTipo" [(ngModel)]="latLong.grau.latitude.latTipo" placeholder="...">
+                            <sui-select-option value="N">N</sui-select-option>
+                            <sui-select-option value="S">S</sui-select-option>
+                          </sui-select>
+                        </div>
+                        <div class="three wide field">
+                          <input type="text" name="latGrau" mask="99" [(ngModel)]="latLong.grau.latitude.latGrau">
+                          <b>Graus</b>
+                        </div>
+                        <b>º</b>
+                        <div class="three wide field">
+                          <input type="text" name="latMin" mask="99" [(ngModel)]="latLong.grau.latitude.latMin">
+                          <b>Minutos</b>
+                        </div>
+                        <b>'</b>
+                        <div class="five wide field">
+                          <input type="text" name="latSeg" mask="99.99" [dropSpecialCharacters]="false" [(ngModel)]="latLong.grau.latitude.latSeg">
+                          <b>Segundos</b>
+                        </div>
+                        <b>"</b>
+                      </div>
+                    </div>
 
-                <div class="five wide column">
-                  <label for="longitude">Longitude(Inoperante para está versão)</label>
-                  <input id="longitude" type="text" class="validate" name="longitude" [readonly]="true" [(ngModel)]="enderecoPontPre.longitude">
+                    <div class="eight wide field">
+                      <label for="latitude">Longitude</label>
+                      <div class="fields">
+                          <div class="four wide field">
+                            <sui-select class="selection" name="longTipo" [(ngModel)]="latLong.grau.longitude.longTipo" placeholder="...">
+                              <sui-select-option value="O">O</sui-select-option>
+                            </sui-select>
+                          </div>
+                          <div class="three wide field">
+                            <input type="text" name="longGrau" mask="99" [(ngModel)]="latLong.grau.longitude.longGrau">
+                            <b>Graus</b>
+                          </div>
+                          <b>º</b>
+                          <div class="three wide field">
+                            <input type="text" name="longMin" mask="99" [(ngModel)]="latLong.grau.longitude.longMin">
+                            <b>Minutos</b>
+                          </div>
+                          <b>'</b>
+                          <div class="five wide field">
+                            <input type="text" name="longSeg" mask="99.99" [dropSpecialCharacters]="false" [(ngModel)]="latLong.grau.longitude.longSeg">
+                            <b>Segundos</b>
+                          </div>
+                          <b>"</b>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <div class="ui stackable two column grid">
-                <div class="column">
+              <div class="fields">
+                <div class="sixteen wide field">
                   <button class="ui red button" type="button" (click)="cancelAddEndereco()" [disabled]="enderecosAntigos?.length <= 0">Cancelar</button>
-                </div>
-                <div class="column">
                   <button class="ui button right floated" type="submit">Salvar</button>
                 </div>
               </div>
@@ -339,7 +402,8 @@
           </div>
 
           <!--Inicio do Modal seleção de varios GESAC -->
-          <sui-modal *ngIf="modalObsAcao && (enderecosAntigos.length === 0)" [isClosable]="false" [transition]="'scale'" [transitionDuration]="500" #modal>
+          <sui-modal *ngIf="modalObsAcao && (enderecosAntigos.length === 0)" [isClosable]="false" [transition]="'scale'" [transitionDuration]="500"
+            #modal>
             <div class="header">
 
               <div class="ui grid">

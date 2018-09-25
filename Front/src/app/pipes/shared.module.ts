@@ -15,6 +15,8 @@ import { FilterPagadoraPipe } from './filter-pagadora.pipe';
 import { FilterHistoricoAcoesPipe } from './filter-historico-acoes.pipe';
 import { FilterRepresentantePipe } from './filter-representantes.pipe';
 import { FilterContatoPipe } from './filter-contato.pipe';
+import { LatitudeMaskDirective } from './directives/latitude-mask.directive';
+import { LongitudeMaskDirective } from './directives/longitude-mask.directive';
 
 
 @NgModule({
@@ -38,7 +40,9 @@ import { FilterContatoPipe } from './filter-contato.pipe';
     FilterPagadoraPipe,
     FilterHistoricoAcoesPipe,
     FilterContatoPipe,
-    FilterRepresentantePipe
+    FilterRepresentantePipe,
+    LatitudeMaskDirective,
+    LongitudeMaskDirective
   ],
   exports: [
     CommonModule,
@@ -58,7 +62,9 @@ import { FilterContatoPipe } from './filter-contato.pipe';
     FilterPagadoraPipe,
     FilterHistoricoAcoesPipe,
     FilterContatoPipe,
-    FilterRepresentantePipe
+    FilterRepresentantePipe,
+    LatitudeMaskDirective,
+    LongitudeMaskDirective
   ]
 })
 export class SharedModule {}
