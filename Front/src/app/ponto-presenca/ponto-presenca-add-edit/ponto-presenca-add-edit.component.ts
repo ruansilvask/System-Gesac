@@ -30,8 +30,32 @@ export class PontoPresencaAddEditComponent implements OnInit {
   obsAcoesCad: Object;
   obsAcoes: Object;
   fecharmodal = true;
+  camposGraus = true;
   parametroIdentificador: any;
   modalObsAcao = false;
+  latLongRadio = 'grau';
+
+  latLong = {
+    decimal: {
+      latitude: '',
+      longitude: ''
+    },
+    grau: {
+      latitude: {
+        latTipo: '',
+        latGrau: null,
+        latMin: null,
+        latSeg: null
+      },
+      longitude: {
+        longTipo: '',
+        longGrau: null,
+        longMin: null,
+        longSeg: null
+      }
+    }
+  };
+
   /*
   *   Variaveis do de manipulacão das informacões de tipologia
   */
@@ -157,6 +181,90 @@ export class PontoPresencaAddEditComponent implements OnInit {
       this.municipios = this.apiServiceEstadoMunicipio.getMunicipios(uf);
     }
     this.pontoPresenca.cod_ibge = '';
+  }
+
+  grauToDecimal() {
+    let lat = null;
+    let long = null;
+
+    const latGrau = Number(this.latLong.grau.latitude.latGrau);
+    const latMin = Number(this.latLong.grau.latitude.latMin);
+    const latSeg = Number(this.latLong.grau.latitude.latSeg);
+    const longGrau = Number(this.latLong.grau.longitude.longGrau);
+    const longMin = Number(this.latLong.grau.longitude.longMin);
+    const longSeg = Number(this.latLong.grau.longitude.longSeg);
+
+    // Latitude
+    if (!((latGrau === 0) && (latMin === 0) && (latSeg === 0))) {
+      lat = ( latGrau + ( (latMin / 60) + (latSeg / 3600) )).toFixed(6);
+      if ( this.latLong.grau.latitude.latTipo === 'S' ) {
+        this.latLong.decimal.latitude = `-${lat.toString()}`;
+      } else {
+        this.latLong.decimal.latitude = `+${lat.toString()}`;
+      }
+    } else {
+      this.latLong.decimal.latitude = '';
+    }
+
+    // Longitude
+    if (!((longGrau === 0) && (longMin === 0) && (longSeg === 0))) {
+      long = (longGrau + ( ( longMin / 60) + ( longSeg / 3600) )).toFixed(6);
+      this.latLong.decimal.longitude = `-${long.toString()}`;
+    } else {
+      this.latLong.decimal.longitude = '';
+    }
+  }
+
+  decimalToGrau(latitude, longitude) {
+    let latGrau = null;
+    let latMin = null;
+    let latSeg = null;
+    let latTipo = '';
+    let longGrau = null;
+    let longMin = null;
+    let longSeg = null;
+    const longTipo = 'O';
+    let latitudeDecimal = Number(latitude);
+    const longitudeDecimal = Number(longitude) * -1;
+
+    (latitudeDecimal < 0) ? (latTipo = 'S', latitudeDecimal = latitudeDecimal * -1) : latTipo = 'N';
+
+    if (latitude && !isNaN(latitude)) {
+      // Grau Latitude
+      latGrau = Math.trunc(latitudeDecimal);
+      // Minutos Latitude
+      latMin = Math.trunc((latitudeDecimal * 60) % 60);
+      // Segundos Latitude
+      latSeg = ((latitudeDecimal * 3600) % 60).toFixed(2);
+
+      this.latLong.grau.latitude.latTipo = latTipo;
+      this.latLong.grau.latitude.latGrau = latGrau;
+      this.latLong.grau.latitude.latMin = latMin;
+      this.latLong.grau.latitude.latSeg = latSeg;
+    } else {
+      this.latLong.grau.latitude.latTipo = '';
+      this.latLong.grau.latitude.latGrau = null;
+      this.latLong.grau.latitude.latMin = null;
+      this.latLong.grau.latitude.latSeg = null;
+    }
+    if (longitude && !isNaN(longitude)) {
+      // Grau Longitude
+      longGrau = Math.trunc(longitudeDecimal);
+      // Minutos Longitude
+      longMin = Math.trunc((longitudeDecimal * 60) % 60);
+      // Segundos Longitude
+      longSeg = ((longitudeDecimal * 3600) % 60).toFixed(2);
+
+      this.latLong.grau.longitude.longTipo = longTipo;
+      this.latLong.grau.longitude.longGrau = longGrau;
+      this.latLong.grau.longitude.longMin = longMin;
+      this.latLong.grau.longitude.longSeg = longSeg;
+    } else {
+      this.latLong.grau.longitude.longTipo = '';
+      this.latLong.grau.longitude.longGrau = null;
+      this.latLong.grau.longitude.longMin = null;
+      this.latLong.grau.longitude.longSeg = null;
+    }
   }
 
   /*
@@ -353,7 +461,6 @@ export class PontoPresencaAddEditComponent implements OnInit {
     if (this.enderecosAntigos.lenght !== 0) {
       for (let i = 0; i < this.enderecosAntigos.length; i++) {
         if (!this.enderecosAntigos[i].data_final) {
-
           this.enderecoPontPre = {
             cod_endereco: this.enderecosAntigos[i].cod_endereco,
             endereco: this.enderecosAntigos[i].endereco,
@@ -362,9 +469,14 @@ export class PontoPresencaAddEditComponent implements OnInit {
             complemento: this.enderecosAntigos[i].complemento,
             cep: this.enderecosAntigos[i].cep,
             area: this.enderecosAntigos[i].area,
-            latitude: null,
-            longitude: null
+            latitude: this.enderecosAntigos[i].latitude,
+            longitude: this.enderecosAntigos[i].longitude
           };
+          this.latLongRadio = 'grau';
+          this.camposGraus = true;
+          this.latLong.decimal.latitude = this.enderecosAntigos[i].latitude;
+          this.latLong.decimal.longitude = this.enderecosAntigos[i].longitude;
+          this.decimalToGrau(this.enderecosAntigos[i].latitude, this.enderecosAntigos[i].longitude);
         }
       }
     } else {
@@ -381,22 +493,57 @@ export class PontoPresencaAddEditComponent implements OnInit {
       };
     }
   }
+
+  longIsValid (lat) {
+    if (lat) {
+      lat = Number(lat);
+      return ((lat > -75) && (lat < -32));
+    } else {
+      return true;
+    }
+  }
+
+  latIsValid (long) {
+    if (long) {
+      long = Number(long);
+      return ((long < 6) && (long > -34));
+    } else {
+      return true;
+    }
+  }
   /*
 * Métodos para salvar/editar o Endereco no banco, caso seja passado um id na rota ocorrerá um put, caso contrario será um post
 */
   salvarEndereco(form) {
     // mostrar botão 'adicionar endereco' (quando clicado limpar os campos do endereco e setar variavel da clausula if)
     if (form.status !== 'INVALID') {
+      if (form.value.latLongRadio === 'grau') {
+        this.grauToDecimal();
+      }
+      const validLat = this.latIsValid(this.latLong.decimal.latitude);
+      const validLong = this.longIsValid(this.latLong.decimal.longitude);
+      if (validLat && validLong) {
+        const formEnvio: any = {};
+      if (form.value.latLongRadio === 'grau') {
+        this.grauToDecimal();
+      }
       this.enderecosAntigos.length !== 0
         ? (form.value.cod_endereco = this.enderecoPontPre.cod_endereco + 1)
         : (form.value.cod_endereco = 1);
 
-      form.value.cod_gesac = this.codGesac;
-      form.value.latitude = null;
-      form.value.longitude = null;
-      form.value.data_inicio = this.apiServicesData.formatData(new Date());
-      this.pontoPresencaService.postEndereco(form.value).subscribe(dados => {
+      formEnvio.cod_endereco = form.value.cod_endereco;
+      formEnvio.cod_gesac = this.codGesac;
+      formEnvio.endereco = form.value.endereco;
+      formEnvio.numero = form.value.numero;
+      formEnvio.bairro = form.value.bairro;
+      formEnvio.cep = form.value.cep;
+      formEnvio.complemento = form.value.complemento;
+      formEnvio.area = form.value.area;
+      formEnvio.latitude = this.latLong.decimal.latitude || null;
+      formEnvio.longitude = this.latLong.decimal.longitude || null;
+      formEnvio.data_inicio = this.apiServicesData.formatData(new Date());
 
+      this.pontoPresencaService.postEndereco(formEnvio).subscribe(dados => {
         this.cancelAddEndereco();
         this.getEnderecosAntigos();
         this.novoEndereco = !this.novoEndereco;
@@ -410,6 +557,17 @@ export class PontoPresencaAddEditComponent implements OnInit {
           3000
         );
       });
+      } else {
+        if (!validLat || !validLong) {
+          if (form.value.latLongRadio === 'grau' ) {
+            this.apiServicesMsg.setMsg('warning', `A latitude deve estar entre N 6º 00' 00" e S 34º 00' 00"
+                                                   e a longitude deve estar entre O 32º 00' 00" e O 75º 00' 00".`, 10000);
+          } else {
+            this.apiServicesMsg.setMsg('warning', `A latitude deve estar entre +6.000000 e -34.000000
+                                                   e a longitude deve estar entre -75.000000 e -32.000000.`, 10000);
+          }
+        }
+      }
     } else {
       this.apiServicesMsg.setMsg(
         'error',
@@ -560,6 +718,16 @@ closeModal() {
     // } else if (this.params.detalheappeditPP) {
     //   this.router.navigate(['/pontPre', this.params.detalheappeditPP, 'detalhe']);
     // }
+  }
+
+  radioLatLong(value) {
+    if (value === 'decimal') {
+      this.camposGraus = false;
+      this.grauToDecimal();
+    } else {
+      this.camposGraus = true;
+      this.decimalToGrau(this.latLong.decimal.latitude, this.latLong.decimal.longitude);
+    }
   }
 
   /*
