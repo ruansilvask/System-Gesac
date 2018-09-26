@@ -522,7 +522,7 @@ export class PontoPresencaAddEditComponent implements OnInit {
       }
       const validLat = this.latIsValid(this.latLong.decimal.latitude);
       const validLong = this.longIsValid(this.latLong.decimal.longitude);
-      if (validLat && validLong) {
+      if ((!this.latLong.decimal.latitude && !this.latLong.decimal.longitude) || (validLat && validLong)) {
         const formEnvio: any = {};
       if (form.value.latLongRadio === 'grau') {
         this.grauToDecimal();
