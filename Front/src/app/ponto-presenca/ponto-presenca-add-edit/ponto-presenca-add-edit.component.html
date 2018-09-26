@@ -253,13 +253,19 @@
                 <!-- Latitude e Longitude em decimal -->
                 <div class="ten wide field" *ngIf="!camposGraus">
                   <div class="fields">
-                    <div class="eight wide field">
+                    <div class="eight wide field" [ngClass]="{'error': latitude.value && (latitude.value.length > 3) && !latIsValid(latitude.value)}">
                       <label for="latitude">Latitude</label>
-                      <input type="text" name="latitude" maxlength="10" [(ngModel)]="latLong.decimal.latitude" appLatitudeMask>
+                      <input type="text" #latitude="ngModel" name="latitude" maxlength="10" [(ngModel)]="latLong.decimal.latitude" appLatitudeMask>
+                    <div class="invalid-feedback" [ngClass]="{'active': latitude.value && (latitude.value.length > 3) && !latIsValid(latitude.value)}">
+                      A latitude deve estar entre +6.000000 e -34.000000.
                     </div>
-                    <div class="eight wide field">
+                    </div>
+                    <div class="eight wide field" [ngClass]="{'error': longitude.value && (longitude.value.length > 3) && !longIsValid(longitude.value)}">
                       <label for="longitude">Longitude</label>
-                      <input type="text" name="longitude" maxlength="11" [(ngModel)]="latLong.decimal.longitude" appLongitudeMask>
+                      <input type="text" #longitude="ngModel" name="longitude" maxlength="11" [(ngModel)]="latLong.decimal.longitude" appLongitudeMask>
+                      <div class="invalid-feedback" [ngClass]="{'active': longitude.value && (longitude.value.length > 3) && !longIsValid(longitude.value)}">
+                        A longitude deve estar entre -75.000000 e -32.000000
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -400,7 +406,7 @@
                 <i class="angle double right icon"></i>Próximo</button>
             </div>
           </div>
-          
+
           <!--   -->
           <sui-modal *ngIf="modalObsAcao && (enderecosAntigos.length !== 0)" [isClosable]="false" [transition]="'scale'" [transitionDuration]="500" #modal>
             <div class="header">
