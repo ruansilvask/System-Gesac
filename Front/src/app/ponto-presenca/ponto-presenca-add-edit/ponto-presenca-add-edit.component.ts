@@ -494,21 +494,21 @@ export class PontoPresencaAddEditComponent implements OnInit {
     }
   }
 
-  longIsValid (lat) {
-    if (lat) {
-      lat = Number(lat);
-      return ((lat > -75) && (lat < -32));
+  longIsValid (long) {
+    if (long) {
+      long = Number(long);
+      return ((long > -75) && (long < -32));
     } else {
-      return true;
+      return false;
     }
   }
 
-  latIsValid (long) {
-    if (long) {
-      long = Number(long);
-      return ((long < 6) && (long > -34));
+  latIsValid (lat) {
+    if (lat) {
+      lat = Number(lat);
+      return ((lat < 6) && (lat > -34));
     } else {
-      return true;
+      return false;
     }
   }
   /*
@@ -559,12 +559,16 @@ export class PontoPresencaAddEditComponent implements OnInit {
       });
       } else {
         if (!validLat || !validLong) {
-          if (form.value.latLongRadio === 'grau' ) {
-            this.apiServicesMsg.setMsg('warning', `A latitude deve estar entre N 6º 00' 00" e S 34º 00' 00"
-                                                   e a longitude deve estar entre O 32º 00' 00" e O 75º 00' 00".`, 10000);
+          if (!(this.latLong.decimal.latitude) || !(this.latLong.decimal.longitude)) {
+            this.apiServicesMsg.setMsg('warning', `Os campos de latitude e longitude devem estar preenchidos.`, 3000);
           } else {
-            this.apiServicesMsg.setMsg('warning', `A latitude deve estar entre +6.000000 e -34.000000
-                                                   e a longitude deve estar entre -75.000000 e -32.000000.`, 10000);
+            if (form.value.latLongRadio === 'grau' ) {
+              this.apiServicesMsg.setMsg('warning', `A latitude deve estar entre N 6º 00' 00" e S 34º 00' 00"
+                                                     e a longitude deve estar entre O 32º 00' 00" e O 75º 00' 00".`, 10000);
+            } else {
+              this.apiServicesMsg.setMsg('warning', `A latitude deve estar entre +6.000000 e -34.000000
+                                                     e a longitude deve estar entre -75.000000 e -32.000000.`, 10000);
+            }
           }
         }
       }
