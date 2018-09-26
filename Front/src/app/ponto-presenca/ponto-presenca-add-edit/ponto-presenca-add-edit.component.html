@@ -242,9 +242,9 @@
                 <div class="two wide field">
                   <label>Formato</label>
                   <div class="grouped fields">
-                      <div class="field">
-                        <sui-radio-button name="latLongRadio" value="grau" [(ngModel)]="latLongRadio" (ngModelChange)="radioLatLong($event)">Grau</sui-radio-button>
-                      </div>
+                    <div class="field">
+                      <sui-radio-button name="latLongRadio" value="grau" [(ngModel)]="latLongRadio" (ngModelChange)="radioLatLong($event)">Grau</sui-radio-button>
+                    </div>
                     <div class="field">
                       <sui-radio-button name="latLongRadio" value="decimal" [(ngModel)]="latLongRadio" (ngModelChange)="radioLatLong($event)">Decimal</sui-radio-button>
                     </div>
@@ -256,9 +256,9 @@
                     <div class="eight wide field" [ngClass]="{'error': latitude.value && (latitude.value.length > 3) && !latIsValid(latitude.value)}">
                       <label for="latitude">Latitude</label>
                       <input type="text" #latitude="ngModel" name="latitude" maxlength="10" [(ngModel)]="latLong.decimal.latitude" appLatitudeMask>
-                    <div class="invalid-feedback" [ngClass]="{'active': latitude.value && (latitude.value.length > 3) && !latIsValid(latitude.value)}">
-                      A latitude deve estar entre +6.000000 e -34.000000.
-                    </div>
+                      <div class="invalid-feedback" [ngClass]="{'active': latitude.value && (latitude.value.length > 3) && !latIsValid(latitude.value)}">
+                        A latitude deve estar entre -34.000000 e +6.000000.
+                      </div>
                     </div>
                     <div class="eight wide field" [ngClass]="{'error': longitude.value && (longitude.value.length > 3) && !longIsValid(longitude.value)}">
                       <label for="longitude">Longitude</label>
@@ -281,47 +281,66 @@
                             <sui-select-option value="S">S</sui-select-option>
                           </sui-select>
                         </div>
-                        <div class="three wide field">
-                          <input type="text" name="latGrau" mask="99" [(ngModel)]="latLong.grau.latitude.latGrau">
+                        <div class="three wide field" [ngClass]="{'error': latGrau.value && (latGrau.value.length > 1) && latGrau.value > 34}">
+                          <input type="text" #latGrau="ngModel" name="latGrau" mask="99" [(ngModel)]="latLong.grau.latitude.latGrau">
                           <b>Graus</b>
+
                         </div>
                         <b>º</b>
-                        <div class="three wide field">
-                          <input type="text" name="latMin" mask="99" [(ngModel)]="latLong.grau.latitude.latMin">
+                        <div class="three wide field" [ngClass]="{'error': latMin.value && (latMin.value.length > 1) && latMin.value > 60}">
+                          <input type="text" #latMin="ngModel" name="latMin" mask="99" [(ngModel)]="latLong.grau.latitude.latMin">
                           <b>Minutos</b>
                         </div>
                         <b>'</b>
-                        <div class="five wide field">
-                          <input type="text" name="latSeg" mask="99.99" [dropSpecialCharacters]="false" [(ngModel)]="latLong.grau.latitude.latSeg">
+                        <div class="five wide field" [ngClass]="{'error': latSeg.value && (latSeg.value.length > 1) && latSeg.value > 60}">
+                          <input type="text" #latSeg="ngModel" name="latSeg" mask="99.99" [dropSpecialCharacters]="false" [(ngModel)]="latLong.grau.latitude.latSeg">
                           <b>Segundos</b>
                         </div>
                         <b>"</b>
                       </div>
+                      <div class="invalid-feedback" [ngClass]="{'active': latGrau.value && (latGrau.value.length > 1) && latGrau.value > 34}">
+                        O Grau deve estar entre Sul 34 e Norte 6
+                      </div>
+                      <div class="invalid-feedback" [ngClass]="{'active': latMin.value && (latMin.value.length > 1) && latMin.value > 60}">
+                        O Minuto deve estar entre 0 e 60
+                      </div>
+                      <div class="invalid-feedback" [ngClass]="{'active': latSeg.value && (latSeg.value.length > 1) && latSeg.value > 60}">
+                        O Segundo deve estar entre 0 e 60
+                      </div>
                     </div>
 
                     <div class="eight wide field">
-                      <label for="latitude">Longitude</label>
+                      <label for="longitude">Longitude</label>
                       <div class="fields">
-                          <div class="four wide field">
-                            <sui-select class="selection" name="longTipo" [(ngModel)]="latLong.grau.longitude.longTipo" placeholder="...">
-                              <sui-select-option value="O">O</sui-select-option>
-                            </sui-select>
-                          </div>
-                          <div class="three wide field">
-                            <input type="text" name="longGrau" mask="99" [(ngModel)]="latLong.grau.longitude.longGrau">
-                            <b>Graus</b>
-                          </div>
-                          <b>º</b>
-                          <div class="three wide field">
-                            <input type="text" name="longMin" mask="99" [(ngModel)]="latLong.grau.longitude.longMin">
-                            <b>Minutos</b>
-                          </div>
-                          <b>'</b>
-                          <div class="five wide field">
-                            <input type="text" name="longSeg" mask="99.99" [dropSpecialCharacters]="false" [(ngModel)]="latLong.grau.longitude.longSeg">
-                            <b>Segundos</b>
-                          </div>
-                          <b>"</b>
+                        <div class="four wide field">
+                          <sui-select class="selection" name="longTipo" [(ngModel)]="latLong.grau.longitude.longTipo" placeholder="...">
+                            <sui-select-option value="O">O</sui-select-option>
+                          </sui-select>
+                        </div>
+                        <div class="three wide field" [ngClass]="{'error': longGrau.value && (longGrau.value.length > 1) && ((longGrau.value > 75) || (longGrau.value < 32))}">
+                          <input type="text" #longGrau="ngModel" name="longGrau" mask="99" [(ngModel)]="latLong.grau.longitude.longGrau">
+                          <b>Graus</b>
+                        </div>
+                        <b>º</b>
+                        <div class="three wide field" [ngClass]="{'error': longMin.value && (longMin.value.length > 1) && longMin.value > 60}">
+                          <input type="text" #longMin="ngModel" name="longMin" mask="99" [(ngModel)]="latLong.grau.longitude.longMin">
+                          <b>Minutos</b>
+                        </div>
+                        <b>'</b>
+                        <div class="five wide field" [ngClass]="{'error': longSeg.value && (longSeg.value.length > 1) && longSeg.value > 60}">
+                          <input type="text" #longSeg="ngModel" name="longSeg" mask="99.99" [dropSpecialCharacters]="false" [(ngModel)]="latLong.grau.longitude.longSeg">
+                          <b>Segundos</b>
+                        </div>
+                        <b>"</b>
+                      </div>
+                      <div class="invalid-feedback" [ngClass]="{'active': longGrau.value && (longGrau.value.length > 1) && ((longGrau.value > 75) || (longGrau.value < 32))}">
+                        O Grau deve estar entre Oeste 32 e Oeste 75
+                      </div>
+                      <div class="invalid-feedback" [ngClass]="{'active': longMin.value && (longMin.value.length > 1) && longMin.value > 60}">
+                        O Minuto deve estar entre 0 e 60
+                      </div>
+                      <div class="invalid-feedback" [ngClass]="{'active': longSeg.value && (longSeg.value.length > 1) && longSeg.value > 60}">
+                        O Segundo deve estar entre 0 e 60
                       </div>
                     </div>
                   </div>
@@ -408,7 +427,8 @@
           </div>
 
           <!--   -->
-          <sui-modal *ngIf="modalObsAcao && (enderecosAntigos.length !== 0)" [isClosable]="false" [transition]="'scale'" [transitionDuration]="500" #modal>
+          <sui-modal *ngIf="modalObsAcao && (enderecosAntigos.length !== 0)" [isClosable]="false" [transition]="'scale'" [transitionDuration]="500"
+            #modal>
             <div class="header">
 
               <div class="ui grid">
@@ -513,7 +533,7 @@
                 <i class="angle double left icon"></i> Voltar</button>
             </div>
             <div *ngIf="mostrarBtn" class="column">
-              <button class="ui right labeled icon button right floated positive" type="submit" (click)="backPP()" >
+              <button class="ui right labeled icon button right floated positive" type="submit" (click)="backPP()">
                 <i class="angle double right icon"></i> Concluir
               </button>
             </div>
