@@ -42,13 +42,13 @@ export class PontoPresencaAddEditComponent implements OnInit {
     },
     grau: {
       latitude: {
-        latTipo: '',
+        latTipo: 'S',
         latGrau: null,
         latMin: null,
         latSeg: null
       },
       longitude: {
-        longTipo: '',
+        longTipo: 'O',
         longGrau: null,
         longMin: null,
         longSeg: null
