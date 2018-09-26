@@ -27,6 +27,10 @@ $placeholder: #000000;
   color: placeholder;
 }
 
+sui-select.ui.selection.dropdown {
+  min-width: 2em;
+}
+
 
 // div > div > label{
 //   opacity: 0.8;

@@ -89,6 +89,31 @@ export class PontoPresencaDetalheComponent implements OnInit {
     justificativa: null
   };
 
+  camposGraus = true;
+  latLongRadio = 'grau';
+
+  latLong = {
+    decimal: {
+      latitude: '',
+      longitude: ''
+    },
+    grau: {
+      latitude: {
+        latTipo: 'S',
+        latGrau: null,
+        latMin: null,
+        latSeg: null
+      },
+      longitude: {
+        longTipo: 'O',
+        longGrau: null,
+        longMin: null,
+        longSeg: null
+      }
+    }
+  };
+
+
   /*
 *   Variaveis da lista de ponto de presença
 */
@@ -120,7 +145,7 @@ export class PontoPresencaDetalheComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    if ( localStorage.getItem('currentUserCode') === '1' ) {
+    if (localStorage.getItem('currentUserCode') === '1') {
       this.admin = true;
     }
     this.route.params.subscribe(params => {
@@ -179,6 +204,8 @@ export class PontoPresencaDetalheComponent implements OnInit {
       .getContatosPonto(this.params.id)
       .subscribe(dados => {
         this.contatos = dados;
+        console.log(this.contatos);
+
       });
   }
 
@@ -385,7 +412,7 @@ export class PontoPresencaDetalheComponent implements OnInit {
               'Interação realizada com sucesso!',
               3000
             );
-            formInteracao.reset();
+          formInteracao.reset();
         },
         erro => Swal('Erro', `${erro.error}`, 'error')
       );
@@ -395,11 +422,11 @@ export class PontoPresencaDetalheComponent implements OnInit {
   }
 
   getInteração() {
-  this.pontoPresencaService.getTipoInteracao().subscribe(
-    res => {
-      this.tipo_interacoes = res;
-    }
-  );
+    this.pontoPresencaService.getTipoInteracao().subscribe(
+      res => {
+        this.tipo_interacoes = res;
+      }
+    );
 
   }
 
@@ -409,6 +436,7 @@ export class PontoPresencaDetalheComponent implements OnInit {
       if (res[0]) {
         //  this.abrirAnalisar = true;
         this.analiseDetalhe = res[0];
+        console.log(this.analiseDetalhe);
         this.condicaoAnalise = true;
 
         if (res[0].data_oficio) {
@@ -431,6 +459,118 @@ export class PontoPresencaDetalheComponent implements OnInit {
         }
       }
     });
+  }
+
+  grauToDecimal() {
+    let lat = null;
+    let long = null;
+
+    const latGrau = Number(this.latLong.grau.latitude.latGrau);
+    const latMin = Number(this.latLong.grau.latitude.latMin);
+    const latSeg = Number(this.latLong.grau.latitude.latSeg);
+    const longGrau = Number(this.latLong.grau.longitude.longGrau);
+    const longMin = Number(this.latLong.grau.longitude.longMin);
+    const longSeg = Number(this.latLong.grau.longitude.longSeg);
+
+    // Latitude
+    if (!((latGrau === 0) && (latMin === 0) && (latSeg === 0))) {
+      lat = (latGrau + ((latMin / 60) + (latSeg / 3600))).toFixed(6);
+      if (this.latLong.grau.latitude.latTipo === 'S') {
+        this.latLong.decimal.latitude = `-${lat.toString()}`;
+      } else {
+        this.latLong.decimal.latitude = `+${lat.toString()}`;
+      }
+    } else {
+      this.latLong.decimal.latitude = '';
+    }
+
+    // Longitude
+    if (!((longGrau === 0) && (longMin === 0) && (longSeg === 0))) {
+      long = (longGrau + ((longMin / 60) + (longSeg / 3600))).toFixed(6);
+      this.latLong.decimal.longitude = `-${long.toString()}`;
+    } else {
+      this.latLong.decimal.longitude = '';
+    }
+  }
+
+  decimalToGrau(latitude, longitude) {
+    let latGrau = null;
+    let latMin = null;
+    let latSeg = null;
+    let latTipo = '';
+    let longGrau = null;
+    let longMin = null;
+    let longSeg = null;
+    const longTipo = 'O';
+    let latitudeDecimal = Number(latitude);
+    const longitudeDecimal = Number(longitude) * -1;
+
+    (latitudeDecimal < 0) ? (latTipo = 'S', latitudeDecimal = latitudeDecimal * -1) : latTipo = 'N';
+
+    if (latitude && !isNaN(latitude)) {
+      // Grau Latitude
+      latGrau = Math.trunc(latitudeDecimal);
+      // Minutos Latitude
+      latMin = Math.trunc((latitudeDecimal * 60) % 60);
+      // Segundos Latitude
+      latSeg = ((latitudeDecimal * 3600) % 60).toFixed(2);
+
+      this.latLong.grau.latitude.latTipo = latTipo;
+      this.latLong.grau.latitude.latGrau = latGrau;
+      this.latLong.grau.latitude.latMin = latMin;
+      this.latLong.grau.latitude.latSeg = latSeg;
+    } else {
+      this.latLong.grau.latitude.latTipo = '';
+      this.latLong.grau.latitude.latGrau = null;
+      this.latLong.grau.latitude.latMin = null;
+      this.latLong.grau.latitude.latSeg = null;
+    }
+    if (longitude && !isNaN(longitude)) {
+      // Grau Longitude
+      longGrau = Math.trunc(longitudeDecimal);
+      // Minutos Longitude
+      longMin = Math.trunc((longitudeDecimal * 60) % 60);
+      // Segundos Longitude
+      longSeg = ((longitudeDecimal * 3600) % 60).toFixed(2);
+
+      this.latLong.grau.longitude.longTipo = longTipo;
+      this.latLong.grau.longitude.longGrau = longGrau;
+      this.latLong.grau.longitude.longMin = longMin;
+      this.latLong.grau.longitude.longSeg = longSeg;
+    } else {
+      this.latLong.grau.longitude.longTipo = '';
+      this.latLong.grau.longitude.longGrau = null;
+      this.latLong.grau.longitude.longMin = null;
+      this.latLong.grau.longitude.longSeg = null;
+    }
+  }
+
+  longIsValid(long) {
+    if (long) {
+      long = Number(long);
+      return ((long > -75) && (long < -32));
+    } else {
+      return false;
+    }
+  }
+
+  latIsValid(lat) {
+    if (lat) {
+      lat = Number(lat);
+      return ((lat < 6) && (lat > -34));
+    } else {
+      return false;
+    }
+  }
+
+  radioLatLong(value) {
+    if (value === 'decimal') {
+      this.camposGraus = false;
+      this.grauToDecimal();
+    } else {
+      this.camposGraus = true;
+      this.decimalToGrau(this.latLong.decimal.latitude, this.latLong.decimal.longitude);
+    }
   }
 
   salvarAnalise(analise) {

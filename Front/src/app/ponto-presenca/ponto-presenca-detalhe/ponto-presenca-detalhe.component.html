@@ -24,29 +24,41 @@
           <div class="ui raised segment">
             <div class="ui grid">
               <div class="twelve wide column">
-                <h4 class="ui header">Estabelecimento:</h4>{{pontospresencas?.nome}}</div>
+                <h4 class="ui header">Estabelecimento:</h4>{{pontospresencas?.nome}}
+              </div>
               <div class="four wide column">
-                <h4 class="ui header">Município-Uf:</h4>{{pontospresencas?.municipio}}</div>
+                <h4 class="ui header">Município-Uf:</h4>{{pontospresencas?.municipio}}
+              </div>
               <div class="four wide column">
-                <h4 class="ui header">Status:</h4> {{pontospresencas?.descricao}}</div>
+                <h4 class="ui header">Status:</h4> {{pontospresencas?.descricao}}
+              </div>
               <div class="four wide column">
-                <h4 class="ui header">Cod. Gesac:</h4> {{pontospresencas?.cod_gesac}}</div>
+                <h4 class="ui header">Cod. Gesac:</h4> {{pontospresencas?.cod_gesac}}
+              </div>
               <div class="four wide column">
-                <h4 class="ui header">Cod. Pid:</h4> {{pontospresencas?.cod_pid}}</div>
+                <h4 class="ui header">Cod. Pid:</h4> {{pontospresencas?.cod_pid}}
+              </div>
               <div class="four wide column">
-                <h4 class="ui header">Cod. Inep: </h4>{{pontospresencas?.inep}}</div>
+                <h4 class="ui header">Cod. Inep: </h4>{{pontospresencas?.inep}}
+              </div>
               <div class="four wide column">
-                <h4 class="ui header">Empresa:</h4> {{pontospresencas?.empresa}}</div>
+                <h4 class="ui header">Empresa:</h4> {{pontospresencas?.empresa}}
+              </div>
               <div class="four wide column">
-                <h4 class="ui header">Contrato:</h4> {{pontospresencas?.num_contrato}}</div>
+                <h4 class="ui header">Contrato:</h4> {{pontospresencas?.num_contrato}}
+              </div>
               <div class="four wide column">
-                <h4 class="ui header">Lote:</h4> {{pontospresencas?.lote}}</div>
+                <h4 class="ui header">Lote:</h4> {{pontospresencas?.lote}}
+              </div>
               <div class="four wide column">
-                <h4 class="ui header">Velocidade:</h4> {{pontospresencas?.velocidade}}</div>
+                <h4 class="ui header">Velocidade:</h4> {{pontospresencas?.velocidade}}
+              </div>
               <div class="eight wide column">
-                <h4 class="ui header">Instituição Responsavel:</h4> {{pontospresencas?.instituicao_resp}}</div>
+                <h4 class="ui header">Instituição Responsavel:</h4> {{pontospresencas?.instituicao_resp}}
+              </div>
               <div class="eight wide column">
-                <h4 class="ui header">Instituição Pagadora:</h4> {{pontospresencas?.instituicao_pag}}</div>
+                <h4 class="ui header">Instituição Pagadora:</h4> {{pontospresencas?.instituicao_pag}}
+              </div>
             </div>
           </div>
         </div>
@@ -71,33 +83,43 @@
             <div class="ui grid">
 
               <div class="fourteen wide column">
-                <h4 class="ui header">Endereço:</h4>{{endereco?.endereco}} </div>
+                <h4 class="ui header">Endereço:</h4>{{endereco?.endereco}}
+              </div>
 
               <div class="two wide column">
-                <h4 class="ui header">Nº:</h4>{{endereco?.numero}} </div>
+                <h4 class="ui header">Nº:</h4>{{endereco?.numero}}
+              </div>
             </div>
 
             <div class="ui grid">
               <div class="four wide column">
-                <h4 class="ui header">Bairro:</h4>{{endereco?.bairro}}</div>
+                <h4 class="ui header">Bairro:</h4>{{endereco?.bairro}}
+              </div>
 
               <div class="twelve wide column">
-                <h4 class="ui header">Complemento:</h4> {{endereco?.complemento}}</div>
+                <h4 class="ui header">Complemento:</h4> {{endereco?.complemento}}
+              </div>
             </div>
 
             <div class="ui grid">
               <div class="two wide column">
-                <h4 class="ui header">Cep</h4> {{endereco?.cep | cep}}</div>
+                <h4 class="ui header">Cep</h4> {{endereco?.cep | cep}}
+              </div>
               <div class="two wide column">
-                <h4 class="ui header">Área:</h4> {{endereco?.area}}</div>
+                <h4 class="ui header">Área:</h4> {{endereco?.area}}
+              </div>
               <div class="four wide column">
-                <h4 class="ui header">Latitude: </h4>{{endereco?.latitude}}</div>
+                <h4 class="ui header">Latitude: </h4>{{endereco?.latitude}}
+              </div>
               <div class="four wide column">
-                <h4 class="ui header">Longitude:</h4> {{endereco?.longitude}}</div>
+                <h4 class="ui header">Longitude:</h4> {{endereco?.longitude}}
+              </div>
               <div class="two wide column">
-                <h4 class="ui header">Data Inicial:</h4>{{endereco?.data_inicio | date: 'dd/MM/yyyy'}}</div>
+                <h4 class="ui header">Data Inicial:</h4>{{endereco?.data_inicio | date: 'dd/MM/yyyy'}}
+              </div>
               <div class="two wide column">
-                <h4 class="ui header">Data Final:</h4> {{endereco?.data_final | date: 'dd/MM/yyyy'}}</div>
+                <h4 class="ui header">Data Final:</h4> {{endereco?.data_final | date: 'dd/MM/yyyy'}}
+              </div>
             </div>
           </div>
           <br>
@@ -207,7 +229,7 @@
         <!--incio da aba Tipologia-->
         <div content>
           <div class="ui raised segment">
-                <app-obs-acao-single></app-obs-acao-single>
+            <app-obs-acao-single></app-obs-acao-single>
           </div>
         </div>
 
@@ -241,13 +263,14 @@
             <div class="ui stackable four column grid">
               <div class="column">
                 <label>Número do doc. ofício</label>
-                <input [(ngModel)]="analiseDetalhe.num_oficio" maxlength="20" name="num_oficio" placeholder="Número do ofício" type="text">
+                <input [(ngModel)]="analiseDetalhe.num_oficio" maxlength="20" name="num_oficio" placeholder="Número do ofício"
+                  type="text">
               </div>
 
               <div class="column field" [ngClass]="{'error': !!analiseSubmit?._directives[1]?.control?.invalid && !!analiseSubmit?._directives[1]?.control?.dirty}">
                 <label>Número do doc. Sei</label>
-                <input [(ngModel)]="analiseDetalhe.num_doc_sei" minlength="7" maxlength="7" name="num_doc_sei" placeholder="Número do ofício"
-                  type="text">
+                <input [(ngModel)]="analiseDetalhe.num_doc_sei" minlength="7" maxlength="7" name="num_doc_sei"
+                  placeholder="Número do ofício" type="text">
                 <div class="invalid-feedback" [ngClass]="{'active':  !!analiseSubmit?._directives[1]?.control?.invalid && !!analiseSubmit?._directives[1]?.control?.dirty}">
                   Telefone Inválido!
                 </div>
@@ -258,8 +281,8 @@
                 <div class="field">
                   <div class="ui left icon input">
                     <i class="calendar icon"></i>
-                    <input [(ngModel)]="analiseDetalhe.data_oficio" name="data_oficio" suiDatepicker [pickerMode]="'date'" [pickerFirstDayOfWeek]="0"
-                      [pickerUseNativeOnMobile]="false">
+                    <input [(ngModel)]="analiseDetalhe.data_oficio" name="data_oficio" suiDatepicker [pickerMode]="'date'"
+                      [pickerFirstDayOfWeek]="0" [pickerUseNativeOnMobile]="false">
                     <i class="close link icon iconRight" (click)="analiseDetalhe.data_oficio = undefined"></i>
                   </div>
                 </div>
@@ -271,8 +294,8 @@
                 <div class="field">
                   <div class="ui left icon input">
                     <i class="calendar icon"></i>
-                    <input [(ngModel)]="analiseDetalhe.data_instalacao" name="data_instalacao" suiDatepicker [pickerMode]="'date'" [pickerFirstDayOfWeek]="0"
-                      [pickerUseNativeOnMobile]="false">
+                    <input [(ngModel)]="analiseDetalhe.data_instalacao" name="data_instalacao" suiDatepicker
+                      [pickerMode]="'date'" [pickerFirstDayOfWeek]="0" [pickerUseNativeOnMobile]="false">
                     <i class="close link icon iconRight" (click)="analiseDetalhe.data_instalacao= undefined"></i>
                   </div>
                 </div>
@@ -285,7 +308,8 @@
             <div class="ui  grid">
               <div class="seven wide column">
                 <label>Empresa</label>
-                <select class="ui fluid dropdown" [(ngModel)]="analiseDetalhe.cnpj_empresa" name="cnpj_empresa" required>
+                <select class="ui fluid dropdown" [(ngModel)]="analiseDetalhe.cnpj_empresa" name="cnpj_empresa"
+                  required>
                   <option value="">Selecione Contrato</option>
                   <option *ngFor="let empresa of empresas" value="{{empresa.cnpj_empresa}}">{{empresa.empresa}}</option>
                 </select>
@@ -293,7 +317,8 @@
 
               <div class="four wide column">
                 <label>Teste vazão</label>
-                <input [(ngModel)]="analiseDetalhe.teste_vazao" maxlength="15" name="teste_vazao" placeholder="Teste Vazão" type="text">
+                <input [(ngModel)]="analiseDetalhe.teste_vazao" maxlength="15" name="teste_vazao" placeholder="Teste Vazão"
+                  type="text">
               </div>
 
               <div class="three wide column centered row">
@@ -391,8 +416,8 @@
 
               <div class="column field" [ngClass]="{'error':  !!analiseSubmit?._directives[21]?.control?.invalid}">
                 <label>Telefone 1</label>
-                <input [(ngModel)]="analiseDetalhe.telefone1" mask="(00) 00000-0000" minlength="10" name="telefone1" placeholder="Telefone"
-                  type="text" [required]="analiseDetalhe.assinatura_resp === 1">
+                <input [(ngModel)]="analiseDetalhe.telefone1" mask="(00) 00000-0000" minlength="10" name="telefone1"
+                  placeholder="Telefone" type="text" [required]="analiseDetalhe.assinatura_resp === 1">
                 <div class="invalid-feedback" [ngClass]="{'active':  !!analiseSubmit?._directives[21]?.control?.invalid}">
                   Telefone Inválido!
                 </div>
@@ -401,8 +426,8 @@
 
               <div class="column field" [ngClass]="{'error':  !!analiseSubmit?._directives[22]?.control?.invalid}">
                 <label>Telefone 2</label>
-                <input [(ngModel)]="analiseDetalhe.telefone2" mask="(00) 00000-0000" minlength="10" name="telefone2" placeholder="Telefone"
-                  type="text">
+                <input [(ngModel)]="analiseDetalhe.telefone2" mask="(00) 00000-0000" minlength="10" name="telefone2"
+                  placeholder="Telefone" type="text">
                 <div class="invalid-feedback" [ngClass]="{'active':  !!analiseSubmit?._directives[22]?.control?.invalid}">
                   Telefone Inválido!
                 </div>
@@ -436,7 +461,7 @@
               Latitude e longitude desativados temporariamente.
             </h3>
 
-            <div class="ui stackable four column grid">
+            <!-- <div class="ui stackable four column grid">
               <div class="column">
                 <label>Latitude</label>
                 <input placeholder="Latitude" type="text">
@@ -446,15 +471,132 @@
                 <label>Longitude</label>
                 <input placeholder="Longitude" type="text">
               </div>
+            </div> -->
+
+<div class="ui form">
+  <div class="fields">
+    <div class="two wide field">
+      <label>Formato</label>
+      <div class="grouped fields">
+        <div class="field">
+          <sui-radio-button name="latLongRadio" value="grau" [(ngModel)]="latLongRadio" (ngModelChange)="radioLatLong($event)">Grau</sui-radio-button>
+        </div>
+        <div class="field">
+          <sui-radio-button name="latLongRadio" value="decimal" [(ngModel)]="latLongRadio" (ngModelChange)="radioLatLong($event)">Decimal</sui-radio-button>
+        </div>
+      </div>
+    </div>
+    <!-- Latitude e Longitude em decimal -->
+    <div class="fourteen wide field" *ngIf="!camposGraus">
+      <div class="fields">
+        <div class="eight wide field" [ngClass]="{'error': latitude.value && (latitude.value.length > 3) && !latIsValid(latitude.value)}">
+          <label for="latitude">Latitude</label>
+          <input type="text" #latitude="ngModel" name="latitude" maxlength="10" [(ngModel)]="latLong.decimal.latitude"
+            appLatitudeMask>
+          <div class="invalid-feedback" [ngClass]="{'active': latitude.value && (latitude.value.length > 3) && !latIsValid(latitude.value)}">
+            A latitude deve estar entre -34.000000 e +6.000000.
+          </div>
+        </div>
+        <div class="eight wide field" [ngClass]="{'error': longitude.value && (longitude.value.length > 3) && !longIsValid(longitude.value)}">
+          <label for="longitude">Longitude</label>
+          <input type="text" #longitude="ngModel" name="longitude" maxlength="11" [(ngModel)]="latLong.decimal.longitude"
+            appLongitudeMask>
+          <div class="invalid-feedback" [ngClass]="{'active': longitude.value && (longitude.value.length > 3) && !longIsValid(longitude.value)}">
+            A longitude deve estar entre -75.000000 e -32.000000
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- Latitude e Longitude em graus -->
+    <div class="fourteen wide field" *ngIf="camposGraus">
+      <div class="fields">
+        <div class="eight wide field">
+          <label for="latitude">Latitude</label>
+          <div class="fields">
+            <div class="three wide field">
+              <sui-select class="selection" name="latTipo" [(ngModel)]="latLong.grau.latitude.latTipo"
+                placeholder="...">
+                <sui-select-option value="N">N</sui-select-option>
+                <sui-select-option value="S">S</sui-select-option>
+              </sui-select>
             </div>
+            <div class="three wide field" [ngClass]="{'error': latGrau.value && (latGrau.value.length > 1) && latGrau.value > 34}">
+              <input type="text" #latGrau="ngModel" name="latGrau" mask="99" [(ngModel)]="latLong.grau.latitude.latGrau">
+              <b>Graus</b>
+
+            </div>
+            <b>º</b>
+            <div class="three wide field" [ngClass]="{'error': latMin.value && (latMin.value.length > 1) && latMin.value > 60}">
+              <input type="text" #latMin="ngModel" name="latMin" mask="99" [(ngModel)]="latLong.grau.latitude.latMin">
+              <b>Minutos</b>
+            </div>
+            <b>'</b>
+            <div class="five wide field" [ngClass]="{'error': latSeg.value && (latSeg.value.length > 1) && latSeg.value > 60}">
+              <input type="text" #latSeg="ngModel" name="latSeg" mask="99.99" [dropSpecialCharacters]="false"
+                [(ngModel)]="latLong.grau.latitude.latSeg">
+              <b>Segundos</b>
+            </div>
+            <b>"</b>
+          </div>
+          <div class="invalid-feedback" [ngClass]="{'active': latGrau.value && (latGrau.value.length > 1) && latGrau.value > 34}">
+            O Grau deve estar entre Sul 34 e Norte 6
+          </div>
+          <div class="invalid-feedback" [ngClass]="{'active': latMin.value && (latMin.value.length > 1) && latMin.value > 60}">
+            O Minuto deve estar entre 0 e 60
+          </div>
+          <div class="invalid-feedback" [ngClass]="{'active': latSeg.value && (latSeg.value.length > 1) && latSeg.value > 60}">
+            O Segundo deve estar entre 0 e 60
+          </div>
+        </div>
+
+        <div class="eight wide field">
+          <label for="longitude">Longitude</label>
+          <div class="fields">
+            <div class="three wide field">
+              <sui-select class="selection" name="longTipo" [(ngModel)]="latLong.grau.longitude.longTipo"
+                placeholder="...">
+                <sui-select-option value="O">O</sui-select-option>
+              </sui-select>
+            </div>
+            <div class="three wide field" [ngClass]="{'error': longGrau.value && (longGrau.value.length > 1) && ((longGrau.value > 75) || (longGrau.value < 32))}">
+              <input type="text" #longGrau="ngModel" name="longGrau" mask="99" [(ngModel)]="latLong.grau.longitude.longGrau">
+              <b>Graus</b>
+            </div>
+            <b>º</b>
+            <div class="three wide field" [ngClass]="{'error': longMin.value && (longMin.value.length > 1) && longMin.value > 60}">
+              <input type="text" #longMin="ngModel" name="longMin" mask="99" [(ngModel)]="latLong.grau.longitude.longMin">
+              <b>Minutos</b>
+            </div>
+            <b>'</b>
+            <div class="five wide field" [ngClass]="{'error': longSeg.value && (longSeg.value.length > 1) && longSeg.value > 60}">
+              <input type="text" #longSeg="ngModel" name="longSeg" mask="99.99" [dropSpecialCharacters]="false"
+                [(ngModel)]="latLong.grau.longitude.longSeg">
+              <b>Segundos</b>
+            </div>
+            <b>"</b>
+          </div>
+          <div class="invalid-feedback" [ngClass]="{'active': longGrau.value && (longGrau.value.length > 1) && ((longGrau.value > 75) || (longGrau.value < 32))}">
+            O Grau deve estar entre Oeste 32 e Oeste 75
+          </div>
+          <div class="invalid-feedback" [ngClass]="{'active': longMin.value && (longMin.value.length > 1) && longMin.value > 60}">
+            O Minuto deve estar entre 0 e 60
+          </div>
+          <div class="invalid-feedback" [ngClass]="{'active': longSeg.value && (longSeg.value.length > 1) && longSeg.value > 60}">
+            O Segundo deve estar entre 0 e 60
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 
             <div class="ui stackable one column grid">
               <div class="column">
-                  <div content>
-                    <div class="ui raised">
-                      <app-obs-acao-single></app-obs-acao-single>
-                    </div>
+                <div content>
+                  <div class="ui raised">
+                    <app-obs-acao-single></app-obs-acao-single>
                   </div>
+                </div>
 
               </div>
             </div>
@@ -473,11 +615,13 @@
 
             <div class="ui grid">
               <div class="two wide column">
-                <button [disabled]="analiseSubmit.invalid" (click)="salvarAnalise(analiseSubmit)" class="ui blue icon button">{{ this.btnsAnalise.descricao[0] }}</button>
+                <button [disabled]="analiseSubmit.invalid" (click)="salvarAnalise(analiseSubmit)" class="ui blue icon button">{{
+                  this.btnsAnalise.descricao[0] }}</button>
               </div>
 
               <div class="four wide column">
-                <button [disabled]="analiseSubmit.invalid" class="ui red button" (click)="justificativa = true;">{{ this.btnsAnalise.descricao[1] }}</button>
+                <button [disabled]="analiseSubmit.invalid" class="ui red button" (click)="justificativa = true;">{{
+                  this.btnsAnalise.descricao[1] }}</button>
               </div>
 
 
@@ -485,7 +629,8 @@
 
             <!-- Modal da justificativa da analise caso a analise negado -->
 
-            <sui-modal *ngIf="justificativa === true" [isClosable]="false" [transition]="'scale'" [transitionDuration]="500" #modal>
+            <sui-modal *ngIf="justificativa === true" [isClosable]="false" [transition]="'scale'" [transitionDuration]="500"
+              #modal>
               <div class="header">Justificativa</div>
               <div class="content">
 
@@ -544,59 +689,53 @@
 
           <form class="ui form" #formInteracao='ngForm' (ngSubmit)="submitInteracao(formInteracao)">
 
-              <div class="field">
-                <div class="fields">
-                    <div class="six wide field">
-                        <label for="Nome">Tipo de interação </label>
-                        <select  class="ui fluid dropdown" name="tipo_interacao" ngModel (ngModelChange)="nomeInteracao($event)">
-                          <option value="">Selecione a interação</option>
-                          <option *ngFor="let tipo_int of tipo_interacoes" [ngValue]="tipo_int">{{tipo_int.descricao}}</option>
-                        </select>
-                      </div>
-                  </div>
+            <div class="field">
+              <div class="fields">
+                <div class="six wide field">
+                  <label for="Nome">Tipo de interação </label>
+                  <select class="ui fluid dropdown" name="tipo_interacao" ngModel (ngModelChange)="nomeInteracao($event)">
+                    <option value="">Selecione a interação</option>
+                    <option *ngFor="let tipo_int of tipo_interacoes" [ngValue]="tipo_int">{{tipo_int.descricao}}</option>
+                  </select>
+                </div>
+              </div>
             </div>
 
             <div class="field">
-                <div class="fields">
-                    <div class="six wide field">
-                      <label>Assunto</label>
-                      <input name="assunto" #assunto='ngModel' ngModel placeholder="assunto" type="text" maxlength="100">
-                    </div>
+              <div class="fields">
+                <div class="six wide field">
+                  <label>Assunto</label>
+                  <input name="assunto" #assunto='ngModel' ngModel placeholder="assunto" type="text" maxlength="100">
+                </div>
 
-                    <div class="three wide field">
-                      <label>Data da interação</label>
-                      <div class="field">
-                          <div class="ui left icon input">
-                              <i class="calendar icon"></i>
-                              <input
-                              [(ngModel)]='data_interacao'
-                              name="data_interacao"
-                              suiDatepicker
-                              [pickerMode]="'date'"
-                              [pickerFirstDayOfWeek]="0"
-                              [pickerUseNativeOnMobile]="false"
-                              readonly >
-                              <i class="close link icon iconRight"
-                              (click)="data_interacao = undefined"></i>
-                            </div>
-                      </div>
-                    </div>
-                    <div  class="seven wide field">
-                      <label for="Nome">Nome </label>
-                      <select [disabled]="bloquearNome === 0" class="ui fluid dropdown" name="cod_pessoa" [(ngModel)]="formInteracao.value.cod_pessoa">
-                        <option >Selecione o pessoa</option>
-                        <option  *ngFor="let pessoa of pessoasInterecao" value="{{pessoa.cod_pessoa}}">{{pessoa.nome}}</option>
-                      </select>
+                <div class="three wide field">
+                  <label>Data da interação</label>
+                  <div class="field">
+                    <div class="ui left icon input">
+                      <i class="calendar icon"></i>
+                      <input [(ngModel)]='data_interacao' name="data_interacao" suiDatepicker [pickerMode]="'date'"
+                        [pickerFirstDayOfWeek]="0" [pickerUseNativeOnMobile]="false" readonly>
+                      <i class="close link icon iconRight" (click)="data_interacao = undefined"></i>
                     </div>
                   </div>
+                </div>
+                <div class="seven wide field">
+                  <label for="Nome">Nome </label>
+                  <select [disabled]="bloquearNome === 0" class="ui fluid dropdown" name="cod_pessoa" [(ngModel)]="formInteracao.value.cod_pessoa">
+                    <option>Selecione o pessoa</option>
+                    <option *ngFor="let pessoa of pessoasInterecao" value="{{pessoa.cod_pessoa}}">{{pessoa.nome}}</option>
+                  </select>
+                </div>
+              </div>
             </div>
 
             <div class="field">
-                <div [ngClass]="{'error': relato.invalid && relato.dirty}" class=" field">
-                    <label>Relato</label>
-                    <textarea name="relato" #relato='ngModel' ngModel placeholder="relato" type="text" maxlength="1000" required></textarea>
-                  </div>
-          </div>
+              <div [ngClass]="{'error': relato.invalid && relato.dirty}" class=" field">
+                <label>Relato</label>
+                <textarea name="relato" #relato='ngModel' ngModel placeholder="relato" type="text" maxlength="1000"
+                  required></textarea>
+              </div>
+            </div>
 
             <br>
             <button [disabled]="formInteracao.invalid === true" class="ui button" type="submit">Salvar interação</button>
@@ -619,8 +758,8 @@
         </div>
 
         <!--Inicio do Modal Modal de add/edit Ponto de Presença -->
-        <sui-modal  style="height: 40em;" *ngIf="selcPP" [mustScroll]="true" [isClosable]="false" [transition]="'scale'" [isInverted]="true" [size]="'large'" [transitionDuration]="500"
-          #modal>
+        <sui-modal style="height: 40em;" *ngIf="selcPP" [mustScroll]="true" [isClosable]="false" [transition]="'scale'"
+          [isInverted]="true" [size]="'large'" [transitionDuration]="500" #modal>
           <div class="header">
 
             <div class="ui grid">
@@ -635,7 +774,7 @@
 
           <div class="content">
             <router-outlet></router-outlet>
-            </div>
+          </div>
 
         </sui-modal>
         <!--Fim do Modal de add/edit Ponto de Presença -->
@@ -664,8 +803,8 @@
                   <ng-template let-option #optionTemplate>
                     {{ option.name }}
                   </ng-template>
-                  <sui-select class="selection" [(ngModel)]="hitorico" [options]="options" labelField="name" [optionTemplate]="optionTemplate"
-                    [isSearchable]="false" placeholder='Selecione a ação' #templated>
+                  <sui-select class="selection" [(ngModel)]="hitorico" [options]="options" labelField="name"
+                    [optionTemplate]="optionTemplate" [isSearchable]="false" placeholder='Selecione a ação' #templated>
                     <sui-select-option *ngFor="let o of templated.filteredOptions" [value]="o"></sui-select-option>
                   </sui-select>
                 </th>
@@ -675,15 +814,16 @@
               </tr>
             </thead>
             <tbody>
-              <tr *ngFor="let historicoAcao of pontoHistorico | filterHistoricoAcoes : hitorico ; index as posicao" class="ui center aligned collapsing">
+              <tr *ngFor="let historicoAcao of pontoHistorico | filterHistoricoAcoes : hitorico ; index as posicao"
+                class="ui center aligned collapsing">
                 <td>{{historicoAcao.acao}}</td>
                 <td>{{historicoAcao.data| date : 'dd/MM/y HH:mm:ss'}}</td>
                 <!-- <td>{{historicoAcao.data}}</td> -->
 
                 <td>{{historicoAcao.usuario}}</td>
                 <td>
-                  <a class="mini ui icon button circular" (click)="openModal(historicoAcao.acao, historicoAcao)" suiPopup popupHeader="Visualizar"
-                    popupInverted="true">
+                  <a class="mini ui icon button circular" (click)="openModal(historicoAcao.acao, historicoAcao)"
+                    suiPopup popupHeader="Visualizar" popupInverted="true">
                     <i class="search icon"></i>
                   </a>
                 </td>
@@ -840,7 +980,8 @@
 
             <div class="eight wide column">
               <label>Nome responsável ponto</label>
-              <input [readonly]="true" [value]="historicoAnalises.nome_resp" placeholder="Nome responsável assinatura" type="text">
+              <input [readonly]="true" [value]="historicoAnalises.nome_resp" placeholder="Nome responsável assinatura"
+                type="text">
             </div>
 
             <div class="four wide column centered row">
@@ -953,7 +1094,8 @@
               </div>
               <div class="five wide field">
                 <label>Data do Registro Solicitação</label>
-                <input [readonly]="true" [ngModel]='solicitacao?.data_sistema | date : "dd/MM/y HH:mm:ss"' name="data_sistema" type="text">
+                <input [readonly]="true" [ngModel]='solicitacao?.data_sistema | date : "dd/MM/y HH:mm:ss"' name="data_sistema"
+                  type="text">
               </div>
             </div>
             <div class="fields">
@@ -967,7 +1109,8 @@
               </div>
               <div class="five wide field">
                 <label>Data do Ofício</label>
-                <input [readonly]="true" [ngModel]='solicitacao?.data_oficio | date : "dd/MM/y"' name="data_oficio" type="text">
+                <input [readonly]="true" [ngModel]='solicitacao?.data_oficio | date : "dd/MM/y"' name="data_oficio"
+                  type="text">
               </div>
             </div>
 
