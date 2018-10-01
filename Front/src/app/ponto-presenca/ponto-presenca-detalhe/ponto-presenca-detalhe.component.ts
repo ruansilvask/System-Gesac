@@ -60,7 +60,7 @@ export class PontoPresencaDetalheComponent implements OnInit {
     descricao: '',
     tipo_solicitacao: ''
   };
-  analiseDetalhe = {
+  analiseDetalhe: any = {
     aceite: null,
     cod_gesac: null,
     tipo_solicitacao: null,
@@ -84,10 +84,12 @@ export class PontoPresencaDetalheComponent implements OnInit {
     email: null,
     cod_obs: '',
     obs: '',
-    // latitude: null,
-    // longitude: null,
+    latitude: null,
+    longitude: null,
     justificativa: null
   };
+
+  enderecoAntigo: any = {};
 
   camposGraus = true;
   latLongRadio = 'grau';
@@ -204,8 +206,6 @@ export class PontoPresencaDetalheComponent implements OnInit {
       .getContatosPonto(this.params.id)
       .subscribe(dados => {
         this.contatos = dados;
-        console.log(this.contatos);
-
       });
   }
 
@@ -250,9 +250,20 @@ export class PontoPresencaDetalheComponent implements OnInit {
 * Métodos para atualizar a analise
 */
 
-  putAnalise(analise, codAnalise) {
+  putAnalise(analise, codAnalise, aEndereco) {
     this.pontoPresencaService.putAnalise(analise.value, codAnalise).subscribe(
       res => {
+        if (aEndereco) {
+          if ((Number(this.latLong.decimal.latitude).toFixed(4) !== Number(this.enderecoAntigo.latitude).toFixed(4)) || (Number(this.latLong.decimal.longitude).toFixed(4) !== Number(this.enderecoAntigo.longitude).toFixed(4))) {
+            this.enderecoAntigo.latitude = Number(this.latLong.decimal.latitude);
+            this.enderecoAntigo.longitude = Number(this.latLong.decimal.longitude);
+            this.enderecoAntigo.cod_endereco++;
+            this.pontoPresencaService.postEndereco(this.enderecoAntigo)
+              .subscribe(res => this.getPontoPrensencaEndereco(),
+                erro => Swal('Erro', `${erro.error}`, 'error')
+              );
+          }
+        }
         analise.reset();
         this.getAnaliseByID();
         this.abrirAnalisar = false;
@@ -434,9 +445,9 @@ export class PontoPresencaDetalheComponent implements OnInit {
   getAnaliseByID() {
     this.pontoPresencaService.getAnaliseID(this.params.id).subscribe(res => {
       if (res[0]) {
+
         //  this.abrirAnalisar = true;
         this.analiseDetalhe = res[0];
-        console.log(this.analiseDetalhe);
         this.condicaoAnalise = true;
 
         if (res[0].data_oficio) {
@@ -457,6 +468,20 @@ export class PontoPresencaDetalheComponent implements OnInit {
           this.btnsAnalise.descricao = res[0].descricao.split(';');
           this.btnsAnalise.tipo_solicitacao = res[0].solicitacao.split(';');
         }
+        this.latLong.decimal.latitude = this.analiseDetalhe.latitude;
+        this.latLong.decimal.longitude = this.analiseDetalhe.longitude;
+        this.decimalToGrau(this.analiseDetalhe.latitude, this.analiseDetalhe.longitude);
+        this.enderecoAntigo.cod_gesac = res[0].cod_gesac;
+        this.enderecoAntigo.cod_endereco = res[0].cod_endereco;
+        this.enderecoAntigo.endereco = res[0].enderecoAtual;
+        this.enderecoAntigo.numero = res[0].numero;
+        this.enderecoAntigo.bairro = res[0].bairro;
+        this.enderecoAntigo.cep = res[0].cep;
+        this.enderecoAntigo.complemento = res[0].complemento;
+        this.enderecoAntigo.area = res[0].area;
+        this.enderecoAntigo.latitude = res[0].latitude;
+        this.enderecoAntigo.longitude = res[0].longitude;
+        this.enderecoAntigo.data_inicio = this.apiServicesData.formatData(new Date());
       }
     });
   }
@@ -574,6 +599,10 @@ export class PontoPresencaDetalheComponent implements OnInit {
   }
 
   salvarAnalise(analise) {
+    if (analise.value.latLongRadio === 'grau') {
+      this.grauToDecimal();
+    }
+
     analise.value.data_oficio = this.apiServicesData.formatData(
       analise.value.data_oficio
     );
@@ -584,16 +613,35 @@ export class PontoPresencaDetalheComponent implements OnInit {
     analise.value.cod_gesac = this.params.id;
     analise.value.cnpj_empresa = this.analiseDetalhe.cnpj_empresa;
 
+    if (this.latLongRadio === 'grau') {
+      delete analise.value.latGrau;
+      delete analise.value.latMin;
+      delete analise.value.latSeg;
+      delete analise.value.latTipo;
+      delete analise.value.longGrau;
+      delete analise.value.longMin;
+      delete analise.value.longSeg;
+      delete analise.value.longTipo;
+      delete analise.value.latLongRadio;
+    }
+    else {
+      delete analise.value.latitude;
+      delete analise.value.longitude;
+      delete analise.value.latLongRadio;
+    }
+
     if (this.condicaoAnalise) {
 
       if (this.justificativa) {
+        console.log(analise.value);
+
         analise.value.tipo_solicitacao = this.btnsAnalise.tipo_solicitacao[1];
         analise.value.justificativa = this.analiseDetalhe.justificativa;
         analise.value.aceite = false;
 
         if (!!analise.value.justificativa) {
 
-          this.putAnalise(analise, this.analiseDetalhe.cod_analise);
+          this.putAnalise(analise, this.analiseDetalhe.cod_analise, false);
           if (this.errorJustificativa = true) {
             this.errorJustificativa = false;
           }
@@ -601,10 +649,14 @@ export class PontoPresencaDetalheComponent implements OnInit {
           this.errorJustificativa = true;
         }
       } else {
+        console.log(this.enderecoAntigo);
+
+
         analise.value.tipo_solicitacao = this.btnsAnalise.tipo_solicitacao[0];
         analise.value.justificativa = null;
         analise.value.aceite = true;
-        this.putAnalise(analise, this.analiseDetalhe.cod_analise);
+        console.log(analise.value);
+        this.putAnalise(analise, this.analiseDetalhe.cod_analise, true);
       }
     }
 
