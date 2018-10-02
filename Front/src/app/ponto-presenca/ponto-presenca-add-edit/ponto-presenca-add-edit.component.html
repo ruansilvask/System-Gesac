@@ -8,10 +8,10 @@
     <div class="row ">
       <sui-tabset>
         <div class="ui top attached tabular menu">
-          <a class="item" [ngClass]="{'desativado': !params.id }" suiTabHeader="1" [(isActive)]="firstActive">Ponto de Presença</a>
-          <a class="item" [ngClass]="{'desativado': !params.id }" suiTabHeader="2" [(isActive)]="secondActive">Endereço</a>
-          <a class="item" [ngClass]="{'desativado': !params.id }" suiTabHeader="3" [(isActive)]="thirdActive">Tipologia</a>
-          <a class="item" [ngClass]="{'desativado': !params.id }" suiTabHeader="4" [(isActive)]="fourthActive">Contatos</a>
+          <a class="item" [ngClass]="{'desativado': !(params.id || params.detalheappeditPP)}" suiTabHeader="1" [(isActive)]="firstActive">Ponto de Presença</a>
+          <a class="item" [ngClass]="{'desativado': !(params.id || params.detalheappeditPP)}" suiTabHeader="2" [(isActive)]="secondActive">Endereço</a>
+          <a class="item" [ngClass]="{'desativado': !(params.id || params.detalheappeditPP)}" suiTabHeader="3" [(isActive)]="thirdActive">Tipologia</a>
+          <a class="item" [ngClass]="{'desativado': !(params.id || params.detalheappeditPP)}" suiTabHeader="4" [(isActive)]="fourthActive">Contatos</a>
         </div>
 
         <!--incio da aba Ponto de presença-->

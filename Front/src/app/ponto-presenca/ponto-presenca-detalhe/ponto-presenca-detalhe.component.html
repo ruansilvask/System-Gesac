@@ -393,11 +393,17 @@
 
               <div class="eight wide column">
                 <label>Nome responsável ponto</label>
-                <input [(ngModel)]="analiseDetalhe.nome_resp" maxlength="100" name="nome_resp" placeholder="Nome responsável assinatura"
-                  type="text">
+                <select name="cod_pessoa_resp" [(ngModel)]="analiseDetalhe.cod_pessoa_resp" (ngModelChange)="selectTelefones($event)">
+                  <option>Selecione o Responsável</option>
+                  <option *ngFor="let pessoa of pessoasInterecao" value="{{pessoa.cod_pessoa}}">{{pessoa.nome}}</option>
+                </select>
+              </div>
+              <div class="four wide column">
+                <button type="button" class="ui  primary button btnAdd" (click)="abrirContato()">Editar ou Adicionar
+                  Responsável</button>
               </div>
 
-              <div class="four wide column centered row">
+              <div class="four wide column">
                 <label>Responsável assinou?</label>
                 <div class="field">
 
@@ -408,42 +414,53 @@
 
                 </div>
               </div>
+
+
+
+              <div class="sixteen wide column">
+                <table class="ui selectable striped table" *ngIf="contatoAnalise">
+                  <thead>
+                    <tr>
+                      <th class="ui center aligned collapsing">Fone</th>
+                      <th class="ui center aligned collapsing">Tipo do telefone</th>
+                      <th class="ui center aligned collapsing">E-mail</th>
+
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let contAnalise of contatoAnalise">
+                      <td [innerHTML]="contAnalise?.fone | telefone"></td>
+                      <td [innerHTML]="contAnalise?.tipo | tipoTel"></td>
+                      <td [innerHTML]="contAnalise?.email"></td>
+                    </tr>
+
+                  </tbody>
+                </table>
+
+              </div>
             </div>
 
+            <!--Inicio do Modal Modal de add/edit Ponto de Presença -->
+            <sui-modal style="height: 40em;" *ngIf="modalContato" [mustScroll]="true" [isClosable]="false" [transition]="'scale'"
+              [isInverted]="true" [size]="'large'" [transitionDuration]="500" #modal>
+              <div class="header">
 
-            <div class="ui stackable three column grid">
-
-
-              <div class="column field" [ngClass]="{'error':  !!analiseSubmit?._directives[21]?.control?.invalid}">
-                <label>Telefone 1</label>
-                <input [(ngModel)]="analiseDetalhe.telefone1" mask="(00) 00000-0000" minlength="10" name="telefone1"
-                  placeholder="Telefone" type="text" [required]="analiseDetalhe.assinatura_resp === 1">
-                <div class="invalid-feedback" [ngClass]="{'active':  !!analiseSubmit?._directives[21]?.control?.invalid}">
-                  Telefone Inválido!
+                <div class="ui grid">
+                  <div class="fifteen wide column">
+                  </div>
+                  <div class="one wide column">
+                    <i class="close red link icon" (click)="closeModal()"></i>
+                  </div>
                 </div>
+
               </div>
 
-
-              <div class="column field" [ngClass]="{'error':  !!analiseSubmit?._directives[22]?.control?.invalid}">
-                <label>Telefone 2</label>
-                <input [(ngModel)]="analiseDetalhe.telefone2" mask="(00) 00000-0000" minlength="10" name="telefone2"
-                  placeholder="Telefone" type="text">
-                <div class="invalid-feedback" [ngClass]="{'active':  !!analiseSubmit?._directives[22]?.control?.invalid}">
-                  Telefone Inválido!
-                </div>
+              <div class="content">
+                <app-contato></app-contato>
               </div>
 
-              <div class="column field" [ngClass]="{'error':  !!analiseSubmit?._directives[23]?.control?.invalid}">
-                <label>Email</label>
-                <input [(ngModel)]="analiseDetalhe.email" maxlength="100" name="email" pattern="^[a-zA-Z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
-                  placeholder="E-mail" type="text">
-                <div class="invalid-feedback" [ngClass]="{'active':  !!analiseSubmit?._directives[23]?.control?.invalid}">
-                  Email Inválido!
-                </div>
-              </div>
-
-            </div>
-
+            </sui-modal>
+            <!--Fim do Modal de add/edit Ponto de Presença -->
 
             <!--
               <div class="ui stackable four column grid">
@@ -473,122 +490,122 @@
               </div>
             </div> -->
 
-<div class="ui form">
-  <div class="fields">
-    <div class="two wide field">
-      <label>Formato</label>
-      <div class="grouped fields">
-        <div class="field">
-          <sui-radio-button name="latLongRadio" value="grau" [(ngModel)]="latLongRadio" (ngModelChange)="radioLatLong($event)">Grau</sui-radio-button>
-        </div>
-        <div class="field">
-          <sui-radio-button name="latLongRadio" value="decimal" [(ngModel)]="latLongRadio" (ngModelChange)="radioLatLong($event)">Decimal</sui-radio-button>
-        </div>
-      </div>
-    </div>
-    <!-- Latitude e Longitude em decimal -->
-    <div class="fourteen wide field" *ngIf="!camposGraus">
-      <div class="fields">
-        <div class="eight wide field" [ngClass]="{'error': latitude.value && (latitude.value.length > 3) && !latIsValid(latitude.value)}">
-          <label for="latitude">Latitude</label>
-          <input type="text" #latitude="ngModel" name="latitude" maxlength="10" [(ngModel)]="latLong.decimal.latitude"
-            appLatitudeMask>
-          <div class="invalid-feedback" [ngClass]="{'active': latitude.value && (latitude.value.length > 3) && !latIsValid(latitude.value)}">
-            A latitude deve estar entre -34.000000 e +6.000000.
-          </div>
-        </div>
-        <div class="eight wide field" [ngClass]="{'error': longitude.value && (longitude.value.length > 3) && !longIsValid(longitude.value)}">
-          <label for="longitude">Longitude</label>
-          <input type="text" #longitude="ngModel" name="longitude" maxlength="11" [(ngModel)]="latLong.decimal.longitude"
-            appLongitudeMask>
-          <div class="invalid-feedback" [ngClass]="{'active': longitude.value && (longitude.value.length > 3) && !longIsValid(longitude.value)}">
-            A longitude deve estar entre -75.000000 e -32.000000
-          </div>
-        </div>
-      </div>
-    </div>
-    <!-- Latitude e Longitude em graus -->
-    <div class="fourteen wide field" *ngIf="camposGraus">
-      <div class="fields">
-        <div class="eight wide field">
-          <label for="latitude">Latitude</label>
-          <div class="fields">
-            <div class="three wide field">
-              <sui-select class="selection" name="latTipo" [(ngModel)]="latLong.grau.latitude.latTipo"
-                placeholder="...">
-                <sui-select-option value="N">N</sui-select-option>
-                <sui-select-option value="S">S</sui-select-option>
-              </sui-select>
-            </div>
-            <div class="three wide field" [ngClass]="{'error': latGrau.value && (latGrau.value.length > 1) && latGrau.value > 34}">
-              <input type="text" #latGrau="ngModel" name="latGrau" mask="99" [(ngModel)]="latLong.grau.latitude.latGrau">
-              <b>Graus</b>
+            <div class="ui form">
+              <div class="fields">
+                <div class="two wide field">
+                  <label>Formato</label>
+                  <div class="grouped fields">
+                    <div class="field">
+                      <sui-radio-button name="latLongRadio" value="grau" [(ngModel)]="latLongRadio" (ngModelChange)="radioLatLong($event)">Grau</sui-radio-button>
+                    </div>
+                    <div class="field">
+                      <sui-radio-button name="latLongRadio" value="decimal" [(ngModel)]="latLongRadio" (ngModelChange)="radioLatLong($event)">Decimal</sui-radio-button>
+                    </div>
+                  </div>
+                </div>
+                <!-- Latitude e Longitude em decimal -->
+                <div class="fourteen wide field" *ngIf="!camposGraus">
+                  <div class="fields">
+                    <div class="eight wide field" [ngClass]="{'error': latitude.value && (latitude.value.length > 3) && !latIsValid(latitude.value)}">
+                      <label for="latitude">Latitude</label>
+                      <input type="text" #latitude="ngModel" name="latitude" maxlength="10" [(ngModel)]="latLong.decimal.latitude"
+                        appLatitudeMask>
+                      <div class="invalid-feedback" [ngClass]="{'active': latitude.value && (latitude.value.length > 3) && !latIsValid(latitude.value)}">
+                        A latitude deve estar entre -34.000000 e +6.000000.
+                      </div>
+                    </div>
+                    <div class="eight wide field" [ngClass]="{'error': longitude.value && (longitude.value.length > 3) && !longIsValid(longitude.value)}">
+                      <label for="longitude">Longitude</label>
+                      <input type="text" #longitude="ngModel" name="longitude" maxlength="11" [(ngModel)]="latLong.decimal.longitude"
+                        appLongitudeMask>
+                      <div class="invalid-feedback" [ngClass]="{'active': longitude.value && (longitude.value.length > 3) && !longIsValid(longitude.value)}">
+                        A longitude deve estar entre -75.000000 e -32.000000
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Latitude e Longitude em graus -->
+                <div class="fourteen wide field" *ngIf="camposGraus">
+                  <div class="fields">
+                    <div class="eight wide field">
+                      <label for="latitude">Latitude</label>
+                      <div class="fields">
+                        <div class="three wide field">
+                          <sui-select class="selection" name="latTipo" [(ngModel)]="latLong.grau.latitude.latTipo"
+                            placeholder="...">
+                            <sui-select-option value="N">N</sui-select-option>
+                            <sui-select-option value="S">S</sui-select-option>
+                          </sui-select>
+                        </div>
+                        <div class="three wide field" [ngClass]="{'error': latGrau.value && (latGrau.value.length > 1) && latGrau.value > 34}">
+                          <input type="text" #latGrau="ngModel" name="latGrau" mask="99" [(ngModel)]="latLong.grau.latitude.latGrau">
+                          <b>Graus</b>
 
-            </div>
-            <b>º</b>
-            <div class="three wide field" [ngClass]="{'error': latMin.value && (latMin.value.length > 1) && latMin.value > 60}">
-              <input type="text" #latMin="ngModel" name="latMin" mask="99" [(ngModel)]="latLong.grau.latitude.latMin">
-              <b>Minutos</b>
-            </div>
-            <b>'</b>
-            <div class="five wide field" [ngClass]="{'error': latSeg.value && (latSeg.value.length > 1) && latSeg.value > 60}">
-              <input type="text" #latSeg="ngModel" name="latSeg" mask="99.99" [dropSpecialCharacters]="false"
-                [(ngModel)]="latLong.grau.latitude.latSeg">
-              <b>Segundos</b>
-            </div>
-            <b>"</b>
-          </div>
-          <div class="invalid-feedback" [ngClass]="{'active': latGrau.value && (latGrau.value.length > 1) && latGrau.value > 34}">
-            O Grau deve estar entre Sul 34 e Norte 6
-          </div>
-          <div class="invalid-feedback" [ngClass]="{'active': latMin.value && (latMin.value.length > 1) && latMin.value > 60}">
-            O Minuto deve estar entre 0 e 60
-          </div>
-          <div class="invalid-feedback" [ngClass]="{'active': latSeg.value && (latSeg.value.length > 1) && latSeg.value > 60}">
-            O Segundo deve estar entre 0 e 60
-          </div>
-        </div>
+                        </div>
+                        <b>º</b>
+                        <div class="three wide field" [ngClass]="{'error': latMin.value && (latMin.value.length > 1) && latMin.value > 60}">
+                          <input type="text" #latMin="ngModel" name="latMin" mask="99" [(ngModel)]="latLong.grau.latitude.latMin">
+                          <b>Minutos</b>
+                        </div>
+                        <b>'</b>
+                        <div class="five wide field" [ngClass]="{'error': latSeg.value && (latSeg.value.length > 1) && latSeg.value > 60}">
+                          <input type="text" #latSeg="ngModel" name="latSeg" mask="99.99" [dropSpecialCharacters]="false"
+                            [(ngModel)]="latLong.grau.latitude.latSeg">
+                          <b>Segundos</b>
+                        </div>
+                        <b>"</b>
+                      </div>
+                      <div class="invalid-feedback" [ngClass]="{'active': latGrau.value && (latGrau.value.length > 1) && latGrau.value > 34}">
+                        O Grau deve estar entre Sul 34 e Norte 6
+                      </div>
+                      <div class="invalid-feedback" [ngClass]="{'active': latMin.value && (latMin.value.length > 1) && latMin.value > 60}">
+                        O Minuto deve estar entre 0 e 60
+                      </div>
+                      <div class="invalid-feedback" [ngClass]="{'active': latSeg.value && (latSeg.value.length > 1) && latSeg.value > 60}">
+                        O Segundo deve estar entre 0 e 60
+                      </div>
+                    </div>
 
-        <div class="eight wide field">
-          <label for="longitude">Longitude</label>
-          <div class="fields">
-            <div class="three wide field">
-              <sui-select class="selection" name="longTipo" [(ngModel)]="latLong.grau.longitude.longTipo"
-                placeholder="...">
-                <sui-select-option value="O">O</sui-select-option>
-              </sui-select>
+                    <div class="eight wide field">
+                      <label for="longitude">Longitude</label>
+                      <div class="fields">
+                        <div class="three wide field">
+                          <sui-select class="selection" name="longTipo" [(ngModel)]="latLong.grau.longitude.longTipo"
+                            placeholder="...">
+                            <sui-select-option value="O">O</sui-select-option>
+                          </sui-select>
+                        </div>
+                        <div class="three wide field" [ngClass]="{'error': longGrau.value && (longGrau.value.length > 1) && ((longGrau.value > 75) || (longGrau.value < 32))}">
+                          <input type="text" #longGrau="ngModel" name="longGrau" mask="99" [(ngModel)]="latLong.grau.longitude.longGrau">
+                          <b>Graus</b>
+                        </div>
+                        <b>º</b>
+                        <div class="three wide field" [ngClass]="{'error': longMin.value && (longMin.value.length > 1) && longMin.value > 60}">
+                          <input type="text" #longMin="ngModel" name="longMin" mask="99" [(ngModel)]="latLong.grau.longitude.longMin">
+                          <b>Minutos</b>
+                        </div>
+                        <b>'</b>
+                        <div class="five wide field" [ngClass]="{'error': longSeg.value && (longSeg.value.length > 1) && longSeg.value > 60}">
+                          <input type="text" #longSeg="ngModel" name="longSeg" mask="99.99" [dropSpecialCharacters]="false"
+                            [(ngModel)]="latLong.grau.longitude.longSeg">
+                          <b>Segundos</b>
+                        </div>
+                        <b>"</b>
+                      </div>
+                      <div class="invalid-feedback" [ngClass]="{'active': longGrau.value && (longGrau.value.length > 1) && ((longGrau.value > 75) || (longGrau.value < 32))}">
+                        O Grau deve estar entre Oeste 32 e Oeste 75
+                      </div>
+                      <div class="invalid-feedback" [ngClass]="{'active': longMin.value && (longMin.value.length > 1) && longMin.value > 60}">
+                        O Minuto deve estar entre 0 e 60
+                      </div>
+                      <div class="invalid-feedback" [ngClass]="{'active': longSeg.value && (longSeg.value.length > 1) && longSeg.value > 60}">
+                        O Segundo deve estar entre 0 e 60
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
-            <div class="three wide field" [ngClass]="{'error': longGrau.value && (longGrau.value.length > 1) && ((longGrau.value > 75) || (longGrau.value < 32))}">
-              <input type="text" #longGrau="ngModel" name="longGrau" mask="99" [(ngModel)]="latLong.grau.longitude.longGrau">
-              <b>Graus</b>
-            </div>
-            <b>º</b>
-            <div class="three wide field" [ngClass]="{'error': longMin.value && (longMin.value.length > 1) && longMin.value > 60}">
-              <input type="text" #longMin="ngModel" name="longMin" mask="99" [(ngModel)]="latLong.grau.longitude.longMin">
-              <b>Minutos</b>
-            </div>
-            <b>'</b>
-            <div class="five wide field" [ngClass]="{'error': longSeg.value && (longSeg.value.length > 1) && longSeg.value > 60}">
-              <input type="text" #longSeg="ngModel" name="longSeg" mask="99.99" [dropSpecialCharacters]="false"
-                [(ngModel)]="latLong.grau.longitude.longSeg">
-              <b>Segundos</b>
-            </div>
-            <b>"</b>
-          </div>
-          <div class="invalid-feedback" [ngClass]="{'active': longGrau.value && (longGrau.value.length > 1) && ((longGrau.value > 75) || (longGrau.value < 32))}">
-            O Grau deve estar entre Oeste 32 e Oeste 75
-          </div>
-          <div class="invalid-feedback" [ngClass]="{'active': longMin.value && (longMin.value.length > 1) && longMin.value > 60}">
-            O Minuto deve estar entre 0 e 60
-          </div>
-          <div class="invalid-feedback" [ngClass]="{'active': longSeg.value && (longSeg.value.length > 1) && longSeg.value > 60}">
-            O Segundo deve estar entre 0 e 60
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
 
             <div class="ui stackable one column grid">
               <div class="column">
@@ -722,7 +739,7 @@
                 <div class="seven wide field">
                   <label for="Nome">Nome </label>
                   <select [disabled]="bloquearNome === 0" class="ui fluid dropdown" name="cod_pessoa" [(ngModel)]="formInteracao.value.cod_pessoa">
-                    <option>Selecione o pessoa</option>
+                    <option>Selecione a pessoa</option>
                     <option *ngFor="let pessoa of pessoasInterecao" value="{{pessoa.cod_pessoa}}">{{pessoa.nome}}</option>
                   </select>
                 </div>
@@ -980,8 +997,7 @@
 
             <div class="eight wide column">
               <label>Nome responsável ponto</label>
-              <input [readonly]="true" [value]="historicoAnalises.nome_resp" placeholder="Nome responsável assinatura"
-                type="text">
+              <input [readonly]="true" [value]="historicoAnalises.nome" placeholder="Nome responsável assinatura" type="text">
             </div>
 
             <div class="four wide column centered row">
@@ -993,43 +1009,26 @@
 
               </div>
             </div>
-          </div>
+            <div class="sixteen wide column">
+              <table class="ui selectable striped table" *ngIf="contatoAnalise">
+                <thead>
+                  <tr>
+                    <th class="ui center aligned collapsing">Fone</th>
+                    <th class="ui center aligned collapsing">Tipo do telefone</th>
+                    <th class="ui center aligned collapsing">E-mail</th>
 
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let contAnalise of contatoAnalise">
+                    <td [innerHTML]="contAnalise?.fone | telefone"></td>
+                    <td [innerHTML]="contAnalise?.tipo | tipoTel"></td>
+                    <td [innerHTML]="contAnalise?.email"></td>
+                  </tr>
 
+                </tbody>
+              </table>
 
-          <div class="ui stackable three column grid">
-
-            <div class="column">
-              <label>Telefone 1</label>
-              <input [readonly]="true" [value]="historicoAnalises.telefone1" type="text">
-            </div>
-
-            <div class="column">
-              <label>Telefone 2</label>
-              <input [readonly]="true" [value]="historicoAnalises.telefone2" type="text">
-            </div>
-
-            <div class="column">
-              <label>Email</label>
-              <input [readonly]="true" [value]="historicoAnalises.email" placeholder="E-mail" type="text">
-            </div>
-          </div>
-
-          <div class="ui stackable four column grid">
-            <div class="column">
-              <label>Latitude</label>
-              <input [readonly]="true" [value]="historicoAnalises.num_doc_sei" placeholder="Latitude" type="text">
-            </div>
-            <div class="column">
-              <label>Longitude</label>
-              <input [readonly]="true" [value]="historicoAnalises.num_doc_sei" placeholder="Longitude" type="text">
-            </div>
-          </div>
-
-          <div class="ui stackable one column grid">
-            <div class="column">
-              <label>Observação da Ação:</label>
-              <input [readonly]="true" [value]="historicoAnalises.descricao" placeholder="ObsAcao" type="text">
             </div>
           </div>
 
@@ -1100,7 +1099,7 @@
             </div>
             <div class="fields">
               <div class="six wide field">
-                <label>Processo Documento do SEI</label>
+                <label>Documento do SEI</label>
                 <input [readonly]="true" [ngModel]='solicitacao?.num_doc_sei' name="num_doc_sei" type="text">
               </div>
               <div class="five wide field">
