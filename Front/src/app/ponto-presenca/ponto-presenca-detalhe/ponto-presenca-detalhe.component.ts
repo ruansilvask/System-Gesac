@@ -77,11 +77,8 @@ export class PontoPresencaDetalheComponent implements OnInit {
     tecnico_resp: null,
     fotos: null,
     internet: null,
-    nome_resp: null,
+    cod_pessoa_resp: null,
     assinatura_resp: null,
-    telefone1: null,
-    telefone2: null,
-    email: null,
     cod_obs: '',
     obs: '',
     latitude: null,
@@ -114,6 +111,9 @@ export class PontoPresencaDetalheComponent implements OnInit {
       }
     }
   };
+
+  modalContato: boolean;
+  contatoAnalise: any =[];
 
 
   /*
@@ -266,6 +266,7 @@ export class PontoPresencaDetalheComponent implements OnInit {
         }
         analise.reset();
         this.getAnaliseByID();
+        this.contatoAnalise = [];
         this.abrirAnalisar = false;
         this.justificativa = false;
         this.FecharCollapseAnalise = false;
@@ -306,6 +307,7 @@ export class PontoPresencaDetalheComponent implements OnInit {
       .subscribe(res => {
         this.historicoAnalises = res[0];
         this.abrirNodal = true;
+        this.selectTelefones(this.historicoAnalises.cod_pessoa_resp);
       });
   }
 
@@ -326,7 +328,9 @@ export class PontoPresencaDetalheComponent implements OnInit {
   getContatosInteracao() {
     this.contatoService
       .getContatosPonto(this.params.id)
-      .subscribe(res => (this.pessoasInterecao = res));
+      .subscribe(res => {
+        this.pessoasInterecao = res;
+      });
   }
 
   /*
@@ -364,6 +368,10 @@ export class PontoPresencaDetalheComponent implements OnInit {
   closeModal() {
     this.abrirNodal = false;
     this.selcPP = false;
+    if (this.modalContato === true) {
+      this.modalContato = false;
+      this.getContatosInteracao();
+    }
   }
 
 
@@ -484,6 +492,18 @@ export class PontoPresencaDetalheComponent implements OnInit {
         this.enderecoAntigo.data_inicio = this.apiServicesData.formatData(new Date());
       }
     });
+  }
+
+  abrirContato() {
+    this.modalContato = true;
+    setTimeout(() => {
+      this.contatoService.getContatos(this.params.id, 'ponto');
+    }, 500);
+  }
+
+  selectTelefones(codPessoa) {
+    this.contatoService.getContatoById(codPessoa)
+      .subscribe(res => this.contatoAnalise = res)
   }
 
   grauToDecimal() {
@@ -633,7 +653,6 @@ export class PontoPresencaDetalheComponent implements OnInit {
     if (this.condicaoAnalise) {
 
       if (this.justificativa) {
-        console.log(analise.value);
 
         analise.value.tipo_solicitacao = this.btnsAnalise.tipo_solicitacao[1];
         analise.value.justificativa = this.analiseDetalhe.justificativa;
@@ -649,13 +668,10 @@ export class PontoPresencaDetalheComponent implements OnInit {
           this.errorJustificativa = true;
         }
       } else {
-        console.log(this.enderecoAntigo);
-
 
         analise.value.tipo_solicitacao = this.btnsAnalise.tipo_solicitacao[0];
         analise.value.justificativa = null;
         analise.value.aceite = true;
-        console.log(analise.value);
         this.putAnalise(analise, this.analiseDetalhe.cod_analise, true);
       }
     }

@@ -584,6 +584,7 @@ export class ContatoComponent implements OnInit {
         },
         erro => console.error(erro)
       );
+
     this.contatoService.emitirCodContatos.subscribe(codigo => {
       if (codigo.codContato !== '') {
         this.funcaoContato('get', codigo.local, codigo.codContato);
