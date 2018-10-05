@@ -63,7 +63,7 @@ module.exports = function(app){
     //Verifica o Token de acesso do Usuário.
     api.verificaToken = (req, res, next) => {
         let token = req.headers['x-access-token'];
-        let cod_usuario = req.headers['cod_usuario']
+        let cod_usuario = req.headers['cod_usuario'];
         let cod_usuario_cript = req.headers['cod_usuario_cript'];
         
         if(req.headers['access-control-request-headers'])

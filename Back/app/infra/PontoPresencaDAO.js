@@ -5,7 +5,7 @@ function PontoPresencaDAO(connection){
 //---------------Querys de Pontos de Presença---------------//
 //Lista os Pontos de Presença.
 PontoPresencaDAO.prototype.listarPontoPresenca = function(callback){
-	this._connection.query('SELECT gesac.cod_gesac, pid.nome, municipio.uf, municipio.nome_municipio, status.descricao, status.cod_status, GROUP_CONCAT(tipologia.nome SEPARATOR "; ") AS "tipologia" FROM gesac INNER JOIN pid ON gesac.cod_pid = pid.cod_pid INNER JOIN status ON gesac.cod_status = status.cod_status LEFT JOIN pid_tipologia ON pid.cod_pid = pid_tipologia.cod_pid LEFT JOIN tipologia ON pid_tipologia.cod_tipologia = tipologia.cod_tipologia INNER JOIN municipio ON pid.cod_ibge = municipio.cod_ibge GROUP BY pid_tipologia.cod_pid, gesac.cod_gesac ORDER BY gesac.cod_gesac;', callback);
+	this._connection.query('SELECT gesac.cod_gesac, pid.nome, municipio.uf, municipio.nome_municipio, status.descricao, status.cod_status, GROUP_CONCAT(tipologia.nome SEPARATOR "; ") AS "tipologia" FROM gesac INNER JOIN pid ON gesac.cod_pid = pid.cod_pid INNER JOIN status ON gesac.cod_status = status.cod_status LEFT JOIN pid_tipologia ON pid.cod_pid = pid_tipologia.cod_pid LEFT JOIN tipologia ON pid_tipologia.cod_tipologia = tipologia.cod_tipologia INNER JOIN municipio ON pid.cod_ibge = municipio.cod_ibge GROUP BY pid_tipologia.cod_pid, gesac.cod_gesac ORDER BY gesac.cod_gesac', callback);
 }
 
 //Lista as informações de Ponto para visualização em Pontos de Presença.
@@ -41,7 +41,7 @@ PontoPresencaDAO.prototype.listarPontoTipologia = function(cod_gesac, callback){
 //---------------Querys de Contato---------------//
 //Lista as informações de Contato para visualização em Pontos de Presença.
 PontoPresencaDAO.prototype.visualizarPontoContato = function(cod_gesac, callback){
-	this._connection.query(`SELECT pessoa.nome, contato.cargo, contato.obs, telefone.tipo, telefone.fone, telefone.email, interacao.data FROM gesac INNER JOIN contato ON gesac.cod_gesac = contato.cod_gesac INNER JOIN pessoa ON contato.cod_pessoa = pessoa.cod_pessoa LEFT JOIN telefone ON pessoa.cod_pessoa = telefone.cod_pessoa LEFT JOIN interacao ON pessoa.cod_pessoa = interacao.cod_pessoa WHERE gesac.cod_gesac = ${cod_gesac};`, callback);
+	this._connection.query(`SELECT pessoa.nome, contato.cargo, contato.obs, telefone.tipo, telefone.fone, telefone.email, max(interacao.data_interacao) AS data FROM gesac INNER JOIN contato ON gesac.cod_gesac = contato.cod_gesac INNER JOIN pessoa ON contato.cod_pessoa = pessoa.cod_pessoa LEFT JOIN telefone ON pessoa.cod_pessoa = telefone.cod_pessoa LEFT JOIN interacao ON pessoa.cod_pessoa = interacao.cod_pessoa AND interacao.tipo_interacao <> 1 AND interacao.tipo_interacao <> 3 WHERE contato.cod_gesac = ${cod_gesac} GROUP BY telefone.cod_telefone, telefone.cod_pessoa;`, callback);
 }
 
 
@@ -65,12 +65,12 @@ PontoPresencaDAO.prototype.listarTipoSolicitacao = function(cod_status, callback
 //---------------Querys de Analisar---------------//
 //Lista as informações de Análise para visualização em Pontos de Presença.
 PontoPresencaDAO.prototype.visualizarPontoAnalise = function(cod_gesac, callback){
-	this._connection.query(`SELECT group_concat(tipo_solicitacao.tipo_solicitacao separator ';') as solicitacao, group_concat(tipo_solicitacao.descricao separator ';') as descricao, permissao.tipo_permissao, analise.* FROM analise inner join gesac on analise.cod_gesac = gesac.cod_gesac inner join status on gesac.cod_status = status.cod_status inner join permissao on status.cod_status = permissao.cod_status inner join tipo_solicitacao on permissao.tipo_solicitacao = tipo_solicitacao.tipo_solicitacao WHERE analise.cod_gesac = ${cod_gesac} AND analise.aceite is null`, callback);
+	this._connection.query(`SELECT group_concat(tipo_solicitacao.tipo_solicitacao SEPARATOR ';') AS solicitacao, group_concat(tipo_solicitacao.descricao SEPARATOR ';') AS descricao, permissao.tipo_permissao, endereco.cod_endereco, endereco.endereco as enderecoAtual, endereco.numero, endereco.bairro, endereco.cep, endereco.complemento, endereco.area, endereco.latitude, endereco.longitude, analise.* FROM analise INNER JOIN gesac ON analise.cod_gesac = gesac.cod_gesac INNER JOIN status ON gesac.cod_status = status.cod_status INNER JOIN permissao ON status.cod_status = permissao.cod_status INNER JOIN tipo_solicitacao ON permissao.tipo_solicitacao = tipo_solicitacao.tipo_solicitacao INNER JOIN pid ON gesac.cod_pid = pid.cod_pid LEFT JOIN endereco ON pid.cod_pid = endereco.cod_pid AND endereco.data_final IS NULL WHERE analise.cod_gesac = ${cod_gesac} AND analise.aceite IS NULL` , callback);
 }
 
 //Lista uma Análise com base no Id.
 PontoPresencaDAO.prototype.listarAnaliseId = function(cod_analise, callback){
-	this._connection.query(`SELECT analise.*, empresa.empresa FROM analise INNER JOIN empresa ON analise.cnpj_empresa = empresa.cnpj_empresa WHERE analise.cod_analise = ${cod_analise}`, callback);
+	this._connection.query(`SELECT analise.*, empresa.empresa, pessoa.nome FROM analise INNER JOIN empresa ON analise.cnpj_empresa = empresa.cnpj_empresa LEFT JOIN pessoa ON analise.cod_pessoa_resp = pessoa.cod_pessoa WHERE analise.cod_analise = ${cod_analise}`, callback);
 }
 
 

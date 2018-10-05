@@ -593,36 +593,40 @@ module.exports = function(app){
 
     //Apaga uma Observação de Ação de um Ponto de Presença.
     api.apagaObsAcao = (req, res) => {
-        const { cod_gesac, cod_obs } = req.query;
+        const cod_usuario = req.headers['cod_usuario'];
 
-        if(cod_gesac && cod_obs){
-            const knex = app.conexao.conexaoBDKnex();
-            let gesac_obs_acao = [];
-    
-            if(cod_gesac){
-                const cods_gesac = cod_gesac.split(",");
-    
-                if(Array.isArray(cods_gesac)){
-                    for(let i=0; i<cods_gesac.length; i++){
-                        gesac_obs_acao[i] = [cods_gesac[i], cod_obs];
+        if(cod_usuario == 1){
+            const { cod_gesac, cod_obs } = req.query;
+
+            if(cod_gesac && cod_obs){
+                const knex = app.conexao.conexaoBDKnex();
+                let gesac_obs_acao = [];
+        
+                if(cod_gesac){
+                    const cods_gesac = cod_gesac.split(",");
+        
+                    if(Array.isArray(cods_gesac)){
+                        for(let i=0; i<cods_gesac.length; i++){
+                            gesac_obs_acao[i] = [cods_gesac[i], cod_obs];
+                        }
+                    } else {
+                        gesac_obs_acao[0] = [cod_gesac, cod_obs];
                     }
-                } else {
-                    gesac_obs_acao[0] = [cod_gesac, cod_obs];
-                }
-    
-                knex('gesac_obs_acao').whereIn(['cod_gesac', 'cod_obs'], gesac_obs_acao).delete()
-                    .then(resultado => {
-                        knex.destroy();
-                        res.status(200).end();
-                    })
-                    .catch(erro => {
-                        console.log(erro);
-                        knex.destroy();
-                        res.status(500).send(app.api.erroPadrao());
-                    });   
-    
-            } else { res.status(400).send(app.api.erroPadrao()); }
-        } else { res.status(400).send(app.api.erroPadrao()); }
+        
+                    knex('gesac_obs_acao').whereIn(['cod_gesac', 'cod_obs'], gesac_obs_acao).delete()
+                        .then(resultado => {
+                            knex.destroy();
+                            res.status(200).end();
+                        })
+                        .catch(erro => {
+                            console.log(erro);
+                            knex.destroy();
+                            res.status(500).send(app.api.erroPadrao());
+                        });   
+        
+                } else { res.status(400).send(app.api.erroPadrao()); }
+            } else { res.status(400).send(app.api.erroPadrao()); };
+        } else { res.status(418).send('Este usuário não possui permisão para excluir essa Observações para ação.'); }
     }
     
     return api;    
