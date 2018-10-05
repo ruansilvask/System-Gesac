@@ -90,9 +90,10 @@ module.exports = function(app){
             contratosDAO.visualizarContratoLote(num_contrato, (erro, resultado) => {
                 erro ? (console.log(erro), res.status(500).send(app.api.erroPadrao())) : res.status(200).json(resultado);
             });
-        } else { res.status(400).send(app.api.erroPadrao()); }
 
-        connection.end();
+            connection.end();
+        } else { res.status(400).send(app.api.erroPadrao()); }
+        
     };
         
     return api;

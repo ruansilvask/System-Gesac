@@ -114,13 +114,19 @@ module.exports = (app) => {
                                     displayName: 'Instituição Pagadora',
                                     headerStyle: styles.header,
                                     cellStyle: '', 
-                                    width: 170 
+                                    width: 380 
                                 },
                                 tipologias: {
                                     displayName: 'Tipologia',
                                     headerStyle: styles.header,
                                     cellStyle: '', 
                                     width: 200 
+                                },
+                                obs_acao: {
+                                    displayName: 'Observação para Ação',
+                                    headerStyle: styles.header,
+                                    cellStyle: '', 
+                                    width: 250 
                                 },
                                 endereco: {
                                     displayName: 'Endereço',
