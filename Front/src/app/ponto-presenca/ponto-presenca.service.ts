@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 
 import 'rxjs/add/operator/map';
@@ -14,6 +14,9 @@ export class PontoPresencaService {
     'Content-Type': 'application/json'
   });
 
+  atualizaObsAcao = new EventEmitter();
+  filtroObsAcao = new EventEmitter();
+  
   constructor(private http: HttpClient) {}
 
   /*
@@ -364,6 +367,13 @@ export class PontoPresencaService {
     return this.http
       .delete(`${API.GESAC_API}obsAcao`, {params: params})
       .map(res => res);
+  }
+
+  atualizarObsAcao(gesac){
+    this.atualizaObsAcao.emit(gesac.id);
+  }
+  filtrarObsAcao(gesacs){
+    this.filtroObsAcao.emit(gesacs);    
   }
 
 }

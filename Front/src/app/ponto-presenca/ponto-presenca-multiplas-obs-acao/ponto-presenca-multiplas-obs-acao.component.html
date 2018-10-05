@@ -1,7 +1,7 @@
 <div class="ui segment">
   <form class="ui form">
     <div class="fields">
-      <div class="eleven wide field">
+      <div class="seven wide field">
         <label>Selecione uma observação para ação:</label>
         <sui-select class="selection" name="cod_obs" [(ngModel)]="searchObs" [options]="obsAcao" labelField="obsAcao.descricao"
           valueField="obsAcao.cod_obs" #searchObsAcao>
@@ -14,6 +14,9 @@
       </div>
       <div class="three wide field">
         <button class="ui button btnAdd" type="submit" autofocus (click)="searchObsAction(searchObs)"> Aplicar Filtro</button>
+      </div>
+      <div class="four wide field">
+        <button class="ui button btnAdd" type="submit" autofocus (click)="filtrarPagina(searchObs)"> Filtrar na Página</button>
       </div>
     </div>
   </form>
@@ -31,7 +34,7 @@
       <div class="fields">
 
         <div class="thirteen wide field">
-          <label>Observações de Ações</label>
+          <label>Observações para Ações</label>
           <sui-select class="selection" name="cod_obs" [(ngModel)]="observacao"  [options]="obsAcao" labelField="obsAcao.descricao"
             valueField="obsAcao.cod_obs" #select>
             <sui-select-option *ngFor="let o of select.filteredOptions" [value]="o">

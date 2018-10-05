@@ -15,7 +15,6 @@
           <div class="field" [ngClass]="{'error': cnpj_empresa.invalid && cnpj_empresa.dirty}">
             <label>Selecionar Empresa</label>
             <select class="ui fluid dropdown" name="cnpj_empresa" #cnpj_empresa="ngModel" [ngModel]="bContratos.cnpj_empresa" required>
-              <option value="">Selecione a empresa</option>
               <option *ngFor="let empresa of selectEmpresa" value="{{empresa.cnpj_empresa}}" [innerHTML]="empresa.empresa"></option>
             </select>
             <div class="invalid-feedback" [ngClass]="{'active': cnpj_empresa.invalid && cnpj_empresa.dirty}">

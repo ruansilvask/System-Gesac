@@ -170,7 +170,6 @@
             <div class="field" [ngClass]="{'error': cnpj_empresa.invalid}" *ngIf="analiseShow">
                 <label>Nome da Empresa</label>
                 <select class="ui dropdown" name="cnpj_empresa" #cnpj_empresa="ngModel" [(ngModel)]="mSolicitacoes.cnpj_empresa" #empresaModel=ngModel required>
-                  <option value="">Selecione Instituição</option>
                   <option *ngFor="let empresa of empresas" value="{{empresa.cnpj_empresa}}">{{empresa.empresa}}</option>
                 </select>
                 <div class="invalid-feedback" [ngClass]="{'active': cnpj_empresa.invalid}">

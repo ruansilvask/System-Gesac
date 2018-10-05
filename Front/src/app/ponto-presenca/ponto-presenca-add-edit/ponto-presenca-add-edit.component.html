@@ -53,7 +53,6 @@
                   <label>Contrato</label>
                   <select class="ui fluid dropdown" name="contrato" #contrato='ngModel' [(ngModel)]="pontoPresenca.num_contrato" (change)="selectContrato(pontoPresenca.num_contrato)"
                     required>
-                    <option value="">Selecione Contrato</option>
                     <option *ngFor="let contrato of contratos" value="{{contrato.num_contrato}}">{{contrato.nome_empresa}}</option>
                   </select>
 
@@ -66,7 +65,6 @@
                   <label>Lote</label>
                   <select class="ui fluid dropdown" name="lote" #lote='ngModel' [(ngModel)]="pontoPresenca.cod_lote" (change)="selectlote(pontoPresenca.cod_lote)"
                     required>
-                    <option value="">Selecione lote</option>
                     <option *ngFor="let lote of lotes" value="{{lote.cod_lote}}">{{lote.lote}}</option>
                   </select>
                   <div class="invalid-feedback" [ngClass]="{'active':  lote.invalid && fAddPontoPresenca.submitted || lote.invalid && lote.dirty}">
@@ -78,7 +76,6 @@
                 <div class="five wide field" [ngClass]="{'error': velocidade.invalid && fAddPontoPresenca.submitted || velocidade.invalid && velocidade.dirty}">
                   <label>Velocidade</label>
                   <select class="ui fluid dropdown" name="velocidade" #velocidade='ngModel' [(ngModel)]="pontoPresenca.cod_velocidade" required>
-                    <option value="">Selecione velocidade</option>
                     <option *ngFor="let velocidade of velocidades" value="{{velocidade.cod_velocidade}}">{{velocidade.descricao}}</option>
                   </select>
                   <div class="invalid-feedback" [ngClass]="{'active':  velocidade.invalid && fAddPontoPresenca.submitted || velocidade.invalid && velocidade.dirty}">
@@ -98,7 +95,6 @@
                   <label>Estado</label>
                   <select class="ui dropdown" #uf='ngModel' [(ngModel)]="pontoPresenca.uf" name="uf" (change)="selectEstado(pontoPresenca.uf)"
                     required>
-                    <option value="">Selecione Estado</option>
                     <option *ngFor="let uf of ufs" value="{{uf.uf}}">{{uf.uf}}</option>
                   </select>
                   <div class="invalid-feedback" [ngClass]="{'active':  uf.invalid && fAddPontoPresenca.submitted || uf.invalid && uf.dirty}">
@@ -109,7 +105,6 @@
                 <div class="field" [ngClass]="{'error': municipio.invalid && fAddPontoPresenca.submitted || municipio.invalid && municipio.dirty}">
                   <label>Município</label>
                   <select class="ui dropdown" name="cod_ibge" #municipio='ngModel' [(ngModel)]="pontoPresenca.cod_ibge" required>
-                    <option value="">Selecione Município</option>
                     <option *ngFor="let municipio of municipios" value="{{municipio.cod_ibge}}">{{municipio.nome_municipio}}</option>
                   </select>
                   <div class="invalid-feedback" [ngClass]="{'active':  municipio.invalid && fAddPontoPresenca.submitted || municipio.invalid && municipio.dirty}">
@@ -122,7 +117,6 @@
                   <label>Instituição Responsavel</label>
                   <select class="ui dropdown" name="cod_instituicao_resp" #instituicaoResp='ngModel' [(ngModel)]="pontoPresenca.cod_instituicao_resp"
                     required>
-                    <option value="">Selecione Instituição</option>
                     <option *ngFor="let instituicaoResp of instituicoesResp" value="{{instituicaoResp.cod_instituicao}}">{{instituicaoResp.sigla}}</option>
                   </select>
                   <div class="invalid-feedback" [ngClass]="{'active':  instituicaoResp.invalid && fAddPontoPresenca.submitted ||  instituicaoResp.invalid && instituicaoResp.dirty}">
@@ -134,7 +128,6 @@
                   <label>Instituição Pagadora</label>
                   <select class="ui dropdown" name="cod_instituicao_pag" #instituicaoPag='ngModel' [(ngModel)]="pontoPresenca.cod_instituicao_pag"
                     required>
-                    <option value="">Selecione Instituição</option>
                     <option *ngFor="let instituicaoPag of instituicoesRespPag" value="{{instituicaoPag.cod_instituicao}}">{{instituicaoPag.sigla}}</option>
                   </select>
                   <div class="invalid-feedback" [ngClass]="{'active':  instituicaoPag.invalid && fAddPontoPresenca.submitted || instituicaoPag.invalid && instituicaoPag.dirty}">
@@ -229,8 +222,6 @@
                 <div class="two wide field" [ngClass]="{'error': area.invalid && fAddEndereco.submitted ||  area.invalid && area.dirty}">
                   <label>Área</label>
                   <select class="ui fluid dropdown" name="area" #area='ngModel' [(ngModel)]="enderecoPontPre.area" required>
-
-                    <option value="" selected>Selecione a Área</option>
                     <option value="Rural" selected>Rural</option>
                     <option value="Urbano" selected>Urbano</option>
                   </select>
@@ -476,7 +467,6 @@
               <div class="column">
                 <label>Tipologia</label>
                 <select class="ui dropdown" name="tipologia" [(ngModel)]="tipologiaPontoPresenca.cod_tipologia" required #tipologia>
-                  <option value="">Selecione Tipologia</option>
                   <option *ngFor="let tipologia of tipologias" value="{{tipologia.cod_tipologia}}">{{tipologia.nome}}</option>
                 </select>
               </div>

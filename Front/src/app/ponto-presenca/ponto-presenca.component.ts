@@ -125,6 +125,17 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
       this.funcaoPaginacao(this.pontosPresenca);
     });
   }
+  loadPontoPreRealizarSolicitacao(cod_gesac) {
+    this.segmentDimmed = true;
+    this.paginacao = this.pontoPresencaService.getPontoPresenca().subscribe(dados => {
+      this.pontosPresenca = dados;
+      this.pontopresencaCod_gesac = [];
+      this.pontoPresencaStatus = [];
+      this.numMarcados = 0;
+      this.botoesMSA = false;
+      this.filtroRealizarSolicitacao(cod_gesac);
+    });
+  }
 
   getEstados() {
     this.ufsPP = this.apiServiceEstadoMunicipio.getEstados();
@@ -142,6 +153,9 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+    this.pontoPresencaService.filtroObsAcao.subscribe(gesacs => {
+      this.loadPontoPreRealizarSolicitacao(gesacs);
+    });
     setTimeout(() => {
       this.ufs = this.apiServiceEstadoMunicipio.getEstados();
     }, 500);
@@ -361,18 +375,29 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
       }
 
       if (this.solicitacaoSubmit) {
+        let cod_gesac = this.pontopresencaCod_gesac;
           fmsolicitacoes.value.cod_gesac = this.pontopresencaCod_gesac;
           fmsolicitacoes.value.tipo_solicitacao = fmsolicitacoes.value.tipo_solicitacao.tipo_solicitacao;
           this.pontoPresencaService.postMSolicitacoes(fmsolicitacoes.value).subscribe(resp => {
             this.resp = resp;
             fmsolicitacoes.reset();
-            this.loadPontoPre();      
+            this.loadPontoPreRealizarSolicitacao(cod_gesac); 
             this.closeModal();
           });
         }
     } else {
       Swal('', 'A Data do Ofício selecionada é maior que Data Atual', 'warning');
     }
+  }
+
+  filtroRealizarSolicitacao(gesac){
+    let valida;
+    const ponto = this.pontosPresenca.filter(pontoPres => {
+      valida = false;
+      gesac.forEach(elemento => {if (elemento.toString() === pontoPres.cod_gesac.toString()) { valida = true; return false;}})
+      return valida;
+    });
+    this.funcaoPaginacao(ponto);
   }
 
   ActiveInputAnalise(mSolicitacoes) {
