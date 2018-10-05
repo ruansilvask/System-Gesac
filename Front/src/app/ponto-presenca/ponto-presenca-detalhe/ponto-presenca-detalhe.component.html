@@ -223,7 +223,7 @@
 
         <div title class="ui big label">
           <i class="dropdown icon"></i>
-          <span class="titleDel">Observações de Ações</span>
+          <span class="titleDel">Observações para Ações</span>
         </div>
 
         <!--incio da aba Tipologia-->
@@ -310,7 +310,6 @@
                 <label>Empresa</label>
                 <select class="ui fluid dropdown" [(ngModel)]="analiseDetalhe.cnpj_empresa" name="cnpj_empresa"
                   required>
-                  <option value="">Selecione Contrato</option>
                   <option *ngFor="let empresa of empresas" value="{{empresa.cnpj_empresa}}">{{empresa.empresa}}</option>
                 </select>
               </div>
@@ -394,7 +393,6 @@
               <div class="eight wide column">
                 <label>Nome responsável ponto</label>
                 <select name="cod_pessoa_resp" [(ngModel)]="analiseDetalhe.cod_pessoa_resp" (ngModelChange)="selectTelefones($event)">
-                  <option>Selecione o Responsável</option>
                   <option *ngFor="let pessoa of pessoasInterecao" value="{{pessoa.cod_pessoa}}">{{pessoa.nome}}</option>
                 </select>
               </div>
@@ -462,35 +460,11 @@
             </sui-modal>
             <!--Fim do Modal de add/edit Ponto de Presença -->
 
-            <!--
-              <div class="ui stackable four column grid">
-                <div class="column">
-                  <label>Latitude</label>
-                  <input  [(ngModel)]="analiseDetalhe.latitude" name="latitude" placeholder="Latitude" type="text">
-                </div>
-                <div class="column">
-                  <label>Longitude</label>
-                  <input  [(ngModel)]="analiseDetalhe.longitude" name="longitude" placeholder="Longitude" type="text">
-                </div>
-              </div> -->
-
-            <h3 class=" invalid-feedback active">
+            <!-- <h3 class=" invalid-feedback active">
               Latitude e longitude desativados temporariamente.
-            </h3>
+            </h3> -->
 
-            <!-- <div class="ui stackable four column grid">
-              <div class="column">
-                <label>Latitude</label>
-                <input placeholder="Latitude" type="text">
-              </div>
-
-              <div class="column">
-                <label>Longitude</label>
-                <input placeholder="Longitude" type="text">
-              </div>
-            </div> -->
-
-            <div class="ui form">
+            <div class="ui stackable four column grid">
               <div class="fields">
                 <div class="two wide field">
                   <label>Formato</label>
@@ -711,8 +685,13 @@
                 <div class="six wide field">
                   <label for="Nome">Tipo de interação </label>
                   <select class="ui fluid dropdown" name="tipo_interacao" ngModel (ngModelChange)="nomeInteracao($event)">
-                    <option value="">Selecione a interação</option>
                     <option *ngFor="let tipo_int of tipo_interacoes" [ngValue]="tipo_int">{{tipo_int.descricao}}</option>
+                  </select>
+                </div>
+                <div class="ten wide field">
+                  <label for="Nome">Nome </label>
+                  <select [disabled]="bloquearNome === 0" class="ui fluid dropdown" name="cod_pessoa" [(ngModel)]="formInteracao.value.cod_pessoa">
+                    <option *ngFor="let pessoa of pessoasInterecao" value="{{pessoa.cod_pessoa}}">{{pessoa.nome}}</option>
                   </select>
                 </div>
               </div>
@@ -720,12 +699,12 @@
 
             <div class="field">
               <div class="fields">
-                <div class="six wide field">
+                <div class="ten wide field">
                   <label>Assunto</label>
                   <input name="assunto" #assunto='ngModel' ngModel placeholder="assunto" type="text" maxlength="100">
                 </div>
 
-                <div class="three wide field">
+                <div class="six wide field">
                   <label>Data da interação</label>
                   <div class="field">
                     <div class="ui left icon input">
@@ -735,13 +714,6 @@
                       <i class="close link icon iconRight" (click)="data_interacao = undefined"></i>
                     </div>
                   </div>
-                </div>
-                <div class="seven wide field">
-                  <label for="Nome">Nome </label>
-                  <select [disabled]="bloquearNome === 0" class="ui fluid dropdown" name="cod_pessoa" [(ngModel)]="formInteracao.value.cod_pessoa">
-                    <option>Selecione a pessoa</option>
-                    <option *ngFor="let pessoa of pessoasInterecao" value="{{pessoa.cod_pessoa}}">{{pessoa.nome}}</option>
-                  </select>
                 </div>
               </div>
             </div>
@@ -759,6 +731,29 @@
 
 
           </form>
+          
+          <sui-modal *ngIf="modalObsAcaoInteracao" [isClosable]="false" [transition]="'scale'" [transitionDuration]="500"
+          #modal>
+          <div class="header">
+
+            <div class="ui grid">
+              <div class="fifteen wide column">
+                Observação ação
+              </div>
+              <div class="one wide column">
+                <i class="close red link icon" (click)="closeModal();"></i>
+              </div>
+            </div>
+          </div>
+
+          <div class="content">
+            <div class="ui raised segment">
+              <app-obs-acao-single></app-obs-acao-single>
+            </div>
+          </div>
+
+        </sui-modal>
+
           <br>
           <div class="ui stackable four column grid">
 

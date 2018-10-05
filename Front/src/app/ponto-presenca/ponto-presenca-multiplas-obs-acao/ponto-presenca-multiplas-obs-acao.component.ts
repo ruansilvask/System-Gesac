@@ -92,25 +92,33 @@ export class ObsAcaoComponent implements OnInit {
     );
   }
 
+filtrarGesacs(gesac){
+  return this.gesacObs.filter(element => {
+    let valido = false;
+    if (element.cod_obs) {
+      element.cod_obs.forEach(el => {
+        if (el.toString() === gesac.toString()) {
+          valido = true;
+          return false;
+        }
+      });
+    }
+    return valido;
+  });
+}
+
   searchObsAction(obs) {
     this.getObsSelecionadas(this.obsSelecionadas);
     setTimeout(() => {
       let array = [];
-      array = this.gesacObs.filter(element => {
-        let valido = false;
-        if (element.cod_obs) {
-          element.cod_obs.forEach(el => {
-            if (el.toString() === obs.toString()) {
-              valido = true;
-              return false;
-            }
-          });
-        }
-        return valido;
-      });
+      array = this.filtrarGesacs(obs);
       this.gesacObs = array;
       this.getObsSelecionadas(this.pegarSomenteCodsGesac(this.gesacObs));
     }, 500);
+  }
+
+  filtrarPagina(obs){
+    this.pontoPresencaService.filtrarObsAcao(this.pegarSomenteCodsGesac(this.filtrarGesacs(obs)));
   }
 
   pegarSomenteCodsGesac(array) {
@@ -219,7 +227,7 @@ export class ObsAcaoComponent implements OnInit {
                 this.pegarSomenteCodsGesac(this.gesacObs)
               );
             },
-            erro => console.error(erro)
+            erro => Swal('Erro', `${erro.error}`, 'error')
           );
       } else if (result.dismiss === Swal.DismissReason.cancel) {
         this.apiServicesMsg.setMsg('error', 'Ação cancelada.', 3000);

@@ -59,7 +59,6 @@
               <label>Estado</label>
               <select class="ui fluid dropdown" name="estado" #uf="ngModel" [(ngModel)]="empresaForm.uf" (change)="selectEstado(empresaForm.uf)"
                 required>
-                <option value="">Selecione o estado</option>
                 <option *ngFor="let uf of ufs" value="{{uf.uf}}" [innerHTML]="uf.uf"></option>
               </select>
               <div class="invalid-feedback" [ngClass]="{'active': uf.invalid && uf.dirty}">
@@ -69,7 +68,6 @@
             <div class="three wide field" [ngClass]="{'error': cod_ibge.invalid && cod_ibge.dirty}">
               <label>Município</label>
               <select class="ui fluid dropdown" name="cod_ibge" #cod_ibge="ngModel" [(ngModel)]="empresaForm.cod_ibge" required>
-                <option value="">Selecione o município</option>
                 <option *ngFor="let municipio of municipios" value="{{municipio.cod_ibge}}" [innerHTML]="municipio.nome_municipio"></option>
               </select>
               <div class="invalid-feedback" [ngClass]="{'active': cod_ibge.invalid && cod_ibge.dirty}">
@@ -89,7 +87,6 @@
               <label>Selecione a empresa responsável pelo contrato:</label>
               <select class="ui fluid dropdown" name="cnpj_empresa_pai" #cnpj_empresa_pai="ngModel" [(ngModel)]="empresaForm.cnpj_empresa_pai"
                 required>
-                <option value="">Selecione a empresa</option>
                 <option *ngFor="let emp of empresasPai" value="{{emp?.cnpj_empresa}}">{{emp?.empresa}}</option>
               </select>
               <div class="invalid-feedback" [ngClass]="{'active': consorcio && cnpj_empresa_pai.invalid && cnpj_empresa_pai.dirty}">

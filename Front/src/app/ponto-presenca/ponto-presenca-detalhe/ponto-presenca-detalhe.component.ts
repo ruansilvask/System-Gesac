@@ -1,8 +1,9 @@
 import { ApiServicesData } from '../../api-services/api-services-data';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Location } from '@angular/common';
-import { SuiModalService } from 'ng2-semantic-ui';
+import { SuiModalService, SuiLocalizationService } from 'ng2-semantic-ui';
+import pt from 'ng2-semantic-ui/locales/pt';
 
 import { PontoPresencaService } from '../ponto-presenca.service';
 import { NgForm } from '@angular/forms';
@@ -115,6 +116,9 @@ export class PontoPresencaDetalheComponent implements OnInit {
   modalContato: boolean;
   contatoAnalise: any =[];
 
+  modalObsAcaoInteracao: boolean;
+
+
 
   /*
 *   Variaveis da lista de ponto de presença
@@ -138,13 +142,15 @@ export class PontoPresencaDetalheComponent implements OnInit {
   constructor(
     private apiServicesMsg: ApiServicesMsg,
     private modalService: SuiModalService,
+    private localizationService: SuiLocalizationService,
     private pontoPresencaService: PontoPresencaService,
     private contatoService: ContatoService,
     private route: ActivatedRoute,
     private router: Router,
     private location: Location,
     private apiServicesData: ApiServicesData
-  ) { }
+  ) { localizationService.load('pt', pt);
+    localizationService.setLanguage('pt');}
 
   ngOnInit() {
     if (localStorage.getItem('currentUserCode') === '1') {
@@ -350,7 +356,9 @@ export class PontoPresencaDetalheComponent implements OnInit {
 */
 
   nomeInteracao(objInt) {
-    this.bloquearNome = objInt.tratamento;
+    if(objInt){
+      this.bloquearNome = objInt.tratamento;
+    }
   }
 
   /*
@@ -367,9 +375,17 @@ export class PontoPresencaDetalheComponent implements OnInit {
  */
   closeModal() {
     this.abrirNodal = false;
-    this.selcPP = false;
+    
     if (this.modalContato === true) {
       this.modalContato = false;
+      this.getContatosInteracao();
+    }
+    else if (this.modalObsAcaoInteracao === true) {
+      this.modalObsAcaoInteracao = false;
+      this.pontoPresencaService.atualizarObsAcao(this.params);
+    }
+    else if (this.selcPP === true) {
+      this.selcPP = false;
       this.getContatosInteracao();
     }
   }
@@ -425,6 +441,7 @@ export class PontoPresencaDetalheComponent implements OnInit {
 
       this.pontoPresencaService.postInteracao(formInteracao.value).subscribe(
         res => {
+          this.modalObsAcaoInteracao = true;
           this.getPontoHistorico(),
             this.apiServicesMsg.setMsg(
               'success',

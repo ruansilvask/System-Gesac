@@ -87,7 +87,6 @@
               <div class="ui five wide field">
                 <label for="Município">UF </label>
                 <select class="ui fluid dropdown" [(ngModel)]="formInstituicaoResp.uf" name="uf" (change)="selectEstado(formInstituicaoResp.uf)">
-                  <option value="">Selecione o estado</option>
                   <option *ngFor="let uf of ufs" value="{{uf.uf}}">{{uf.uf}}</option>
                 </select>
 
