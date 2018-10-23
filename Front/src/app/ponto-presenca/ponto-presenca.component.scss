@@ -1,6 +1,6 @@
 $cor-azul-padrao: #002e9d;
 
-.container{
+.container {
   display: flex;
   min-height: 100vh;
   flex-direction: column;
@@ -14,7 +14,25 @@ $cor-azul-padrao: #002e9d;
 
 
 .text-area {
-  margin-top: 0px; 
-  margin-bottom: 0px; 
+  margin-top: 0px;
+  margin-bottom: 0px;
   height: 112px;
+}
+
+
+#btnExportar {
+  margin-right: -50px;
+  margin-top: 3px;
+  color: black;
+  background-color: white;
+  cursor: pointer;
+  z-index: 3;
+}
+
+#btnExportar:hover{
+background-color: #cccccc;
+}
+
+#qntGesac{
+  z-index: -1;
 }

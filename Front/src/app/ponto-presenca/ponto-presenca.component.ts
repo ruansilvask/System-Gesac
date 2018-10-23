@@ -13,6 +13,7 @@ import { ApiServiceEstadoMunicipio } from '../api-services/api-services-estado-m
 import { ApiServicesData } from '../api-services/api-services-data';
 import { ApiServicesMsg } from '../api-services/api-services-msg';
 import { ApiServicesPagination } from '../api-services/api-services-pagination';
+import { saveAs } from 'file-saver';
 
 @Component({
   selector: 'app-ponto-presenca',
@@ -398,6 +399,17 @@ export class PontoPresencaComponent implements OnInit, OnDestroy {
       return valida;
     });
     this.funcaoPaginacao(ponto);
+  }
+
+  gerarExcelId(){
+    const date = new Date();
+    const dataDocumento = `${date.toISOString().slice(8, 10)}-${date.toISOString().slice(5, 7)}-${date.toISOString().slice(0, 4)}`;
+    this.pontoPresencaService.gerarExcelId(this.pontopresencaCod_gesac)
+    .subscribe(
+      res => saveAs(res, `SGsacFiltrado ${dataDocumento}.xlsx`),
+      erro => Swal('Erro', 'Ocorreu um erro, por favor recarregue a página e tente novamente.' +
+      ' Se o erro persistir favor entrar em contato com a COSIS - 2027-6040.', 'error')
+    )
   }
 
   ActiveInputAnalise(mSolicitacoes) {
