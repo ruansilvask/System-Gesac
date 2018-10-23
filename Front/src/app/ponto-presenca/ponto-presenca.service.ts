@@ -16,8 +16,8 @@ export class PontoPresencaService {
 
   atualizaObsAcao = new EventEmitter();
   filtroObsAcao = new EventEmitter();
-  
-  constructor(private http: HttpClient) {}
+
+  constructor(private http: HttpClient) { }
 
   /*
   * Protocolos HTTP do Ponto de presenca
@@ -114,8 +114,8 @@ export class PontoPresencaService {
 
   deleteEnderecoPonto(cod_endereco, gesac) {
     return this.http
-    .delete(`${API.GESAC_API}pontoEndereco/${cod_endereco}/${gesac}`)
-    .map(res => res);
+      .delete(`${API.GESAC_API}pontoEndereco/${cod_endereco}/${gesac}`)
+      .map(res => res);
   }
 
   /*
@@ -163,11 +163,11 @@ export class PontoPresencaService {
   /*
   * Protocolo HTTP do Status para trazer do banco
   */
- getStatusPP() {
-  return this.http
-  .get(`${API.GESAC_API}listStatusPP`)
-  .map(res => res);
-}
+  getStatusPP() {
+    return this.http
+      .get(`${API.GESAC_API}listStatusPP`)
+      .map(res => res);
+  }
 
 
 
@@ -250,7 +250,7 @@ export class PontoPresencaService {
     * Protocolo HTTP do detalhe da interacao
     */
 
-   getHistoricoInteracao(cod_interacao, cod_gesac) {
+  getHistoricoInteracao(cod_interacao, cod_gesac) {
     return this.http
       .get(`${API.GESAC_API}pontoInteracao/${cod_interacao}/${cod_gesac}`)
       .map(res => res);
@@ -260,7 +260,7 @@ export class PontoPresencaService {
     * Protocolo HTTP para capturar tipo de interacao
     */
 
-   getTipoInteracao() {
+  getTipoInteracao() {
     return this.http
       .get(`${API.GESAC_API}pontoInteracao`)
       .map(res => res);
@@ -269,7 +269,7 @@ export class PontoPresencaService {
     * Protocolo HTTP do detalhe da Solicitacao
     */
 
-   getHistoricoSolicitacao(data, cod_gesac, tipo_solicitacao) {
+  getHistoricoSolicitacao(data, cod_gesac, tipo_solicitacao) {
     return this.http
       .get(
         `${API.GESAC_API}pontoSolicitacao/${data}/${tipo_solicitacao}/${cod_gesac}`
@@ -305,9 +305,9 @@ export class PontoPresencaService {
       .map(res => res);
   }
 
-/*
-    * Protocolo HTTP retornar os historico da analise
-    */
+  /*
+      * Protocolo HTTP retornar os historico da analise
+      */
 
   getHistoricoAnalise(cod_analise) {
     return this.http
@@ -324,56 +324,66 @@ export class PontoPresencaService {
   /*
   * Protocolo HTTP para inserir uma nova analise
   */
-   getObsAcao() {
+  getObsAcao() {
     return this.http.get(`${API.GESAC_API}obsAcao`).map(res => res);
   }
 
   /*
   * Protocolo HTTP para inserir uma nova analise
   */
- getObsAcaoSelecionadas(arrayCodsGsacs) {
-  let params = new HttpParams();
-  params = params.append('cod_gesac', arrayCodsGsacs);
-  return this.http.get(`${API.GESAC_API}multObsAcao`, {params: params}).map(res => res);
-}
+  getObsAcaoSelecionadas(arrayCodsGsacs) {
+    let params = new HttpParams();
+    params = params.append('cod_gesac', arrayCodsGsacs);
+    return this.http.get(`${API.GESAC_API}multObsAcao`, { params: params }).map(res => res);
+  }
 
 
-   /*
-    * Protocolo HTTP para inserir uma nova analise
-    */
+  /*
+   * Protocolo HTTP para inserir uma nova analise
+   */
 
-   salvarObsAcao(form) {
+  salvarObsAcao(form) {
     return this.http.post(`${API.GESAC_API}obsAcao`, form).map(res => res);
   }
 
-     /*
-    * Protocolo HTTP para inserir uma nova analise
-    */
+  /*
+ * Protocolo HTTP para inserir uma nova analise
+ */
 
-   getObsAcaoporId(cod_gesac) {
+  getObsAcaoporId(cod_gesac) {
     return this.http
       .get(`${API.GESAC_API}obsAcao/${cod_gesac}`)
       .map(res => res);
   }
 
-/*
-    * Protocolo HTTP retornar os historico da analise
-    */
+  /*
+      * Protocolo HTTP retornar os historico da analise
+      */
 
   removerObsAcao(form) {
     let params = new HttpParams();
     params = params.append('cod_gesac', form.cod_gesac);
     params = params.append('cod_obs', form.cod_obs);
     return this.http
-      .delete(`${API.GESAC_API}obsAcao`, {params: params})
+      .delete(`${API.GESAC_API}obsAcao`, { params: params })
       .map(res => res);
   }
 
-  atualizarObsAcao(gesac){
+  atualizarObsAcao(gesac) {
     this.atualizaObsAcao.emit(gesac.id);
   }
-  filtrarObsAcao(gesacs){
-    this.filtroObsAcao.emit(gesacs);    
+  filtrarObsAcao(gesacs) {
+    this.filtroObsAcao.emit(gesacs);
+  }
+  gerarExcelId(gesacs) {
+    let params = new HttpParams();
+    params = params.append('cod_gesac', gesacs);
+    return this.http
+      .get(`${API.GESAC_API}geraExcelId`, {
+        params: params,
+        responseType: 'blob',
+        headers: new HttpHeaders().append('Content-Type', 'applicantion/json')
+      });
   }
 
 }

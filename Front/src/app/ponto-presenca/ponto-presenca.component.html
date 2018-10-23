@@ -6,21 +6,22 @@
 
   <div class="ui grid">
     <div class="three wide column">
-      <button class="ui labeled icon button" data-position="left" [routerLink]="['novo']" suiPopup popupHeader="Adicionar PP" popupInverted="true">
+      <button class="ui labeled icon button" data-position="left" [routerLink]="['novo']" suiPopup popupHeader="Adicionar PP"
+        popupInverted="true">
         <i class="right plus circle icon"></i>Ponto de Presença</button>
     </div>
 
     <div class="three wide column">
-      <button class="ui labeled icon button" name="mselecoes" (click)="modalGesacOpen()" #mselecoes suiPopup popupHeader="Selecionar por GESACs"
-        popupInverted="true">
+      <button class="ui labeled icon button" name="mselecoes" (click)="modalGesacOpen()" #mselecoes suiPopup
+        popupHeader="Selecionar por GESACs" popupInverted="true">
         <i class="check circle icon"></i>Filtro Avançado</button>
     </div>
 
     <div class="three wide column">
-        <button class="ui labeled icon button" (click)="openModalObsAcao()" name="obsAcao" [disabled]="!botoesMSA"
-          #msolicitacoes data-position="left" suiPopup popupHeader="Obs Ação Múltiplos Pontos" popupInverted="true">
-          <i class="right plus circle icon"></i>Realizar Obs Ação</button>
-      </div>
+      <button class="ui labeled icon button" (click)="openModalObsAcao()" name="obsAcao" [disabled]="!botoesMSA"
+        #msolicitacoes data-position="left" suiPopup popupHeader="Obs Ação Múltiplos Pontos" popupInverted="true">
+        <i class="right plus circle icon"></i>Realizar Obs Ação</button>
+    </div>
 
     <div class="three wide column">
       <button class="ui labeled icon button" (click)="openModal(msolicitacoes.name)" [disabled]="!botoesMSA" name="msolicitacoes"
@@ -46,20 +47,13 @@
 
       <div class="content">
         <form class="ui form" #fmselecionarGesac="ngForm" (ngSubmit)="selecoesGesacs(SelecionarG.campoN, fmselecionarGesac)">
-            <div class="ui grid">
+          <div class="ui grid">
             <div class="sixteen wide column">
               <ng-template let-option #optionTemplatePPT>
                 {{ option.nome }}
               </ng-template>
-              <sui-multi-select
-                placeholder='Selecione as Tipologias'
-                [(ngModel)]="selecionados"
-                [ngModelOptions]="{standalone: true}"
-                [options]="tipologias"
-                labelField="nome"
-                [maxSelected]="10"
-                icon="list"
-                [optionTemplate]="optionTemplatePPT"
+              <sui-multi-select placeholder='Selecione as Tipologias' [(ngModel)]="selecionados" [ngModelOptions]="{standalone: true}"
+                [options]="tipologias" labelField="nome" [maxSelected]="10" icon="list" [optionTemplate]="optionTemplatePPT"
                 #selectPPT>
                 <div class="ui icon search input">
                   <i class="search icon"></i>
@@ -123,7 +117,9 @@
             <div class="two fields">
               <div class="field" [ngClass]="{'error': tipo_solicitacao.invalid && tipo_solicitacao.dirty}">
                 <label>Selecionar Solicitação</label>
-                <select class="ui fluid search dropdown" name="tipo_solicitacao" #tipo_solicitacao="ngModel" [(ngModel)]="mSolicitacoes.tipo_solicitacao"  (change)="ActiveInputAnalise(mSolicitacoes.tipo_solicitacao)" required>
+                <select class="ui fluid search dropdown" name="tipo_solicitacao" #tipo_solicitacao="ngModel"
+                  [(ngModel)]="mSolicitacoes.tipo_solicitacao" (change)="ActiveInputAnalise(mSolicitacoes.tipo_solicitacao)"
+                  required>
                   <option value="">Selecione</option>
                   <option *ngFor="let multiplaSolicitacao of multiplasSolicitacoes" [ngValue]="multiplaSolicitacao">{{multiplaSolicitacao.descricao}}</option>
                 </select>
@@ -149,16 +145,9 @@
                 <div class="field">
                   <div class="ui left icon input">
                     <i class="calendar icon"></i>
-                    <input placeholder="Selecione a data"
-                    suiDatepicker
-                    name="data_oficio"
-                    [(ngModel)]="mSolicitacoes.data_oficio"
-                    [pickerMode]="'date'"
-                    [pickerFirstDayOfWeek]="0"
-                    [pickerUseNativeOnMobile]="false"
-                    autocomplete="off"
-                    #data_inicio="ngModel"
-                    readonly>
+                    <input placeholder="Selecione a data" suiDatepicker name="data_oficio" [(ngModel)]="mSolicitacoes.data_oficio"
+                      [pickerMode]="'date'" [pickerFirstDayOfWeek]="0" [pickerUseNativeOnMobile]="false" autocomplete="off"
+                      #data_inicio="ngModel" readonly>
                     <i class="close link icon iconRight" (click)="mSolicitacoes.data_oficio = undefined"></i>
                   </div>
                 </div>
@@ -168,14 +157,15 @@
             </div>
 
             <div class="field" [ngClass]="{'error': cnpj_empresa.invalid}" *ngIf="analiseShow">
-                <label>Nome da Empresa</label>
-                <select class="ui dropdown" name="cnpj_empresa" #cnpj_empresa="ngModel" [(ngModel)]="mSolicitacoes.cnpj_empresa" #empresaModel=ngModel required>
-                  <option *ngFor="let empresa of empresas" value="{{empresa.cnpj_empresa}}">{{empresa.empresa}}</option>
-                </select>
-                <div class="invalid-feedback" [ngClass]="{'active': cnpj_empresa.invalid}">
-                  Empresa obrigatoria!
-                </div>
+              <label>Nome da Empresa</label>
+              <select class="ui dropdown" name="cnpj_empresa" #cnpj_empresa="ngModel" [(ngModel)]="mSolicitacoes.cnpj_empresa"
+                #empresaModel=ngModel required>
+                <option *ngFor="let empresa of empresas" value="{{empresa.cnpj_empresa}}">{{empresa.empresa}}</option>
+              </select>
+              <div class="invalid-feedback" [ngClass]="{'active': cnpj_empresa.invalid}">
+                Empresa obrigatoria!
               </div>
+            </div>
 
             <!-- Motivo da pendência: Tem q esperar o thiago e o weverton mandarem os dados certos do banco
             pra terminar de mexer em motivo de pendência. -->
@@ -183,8 +173,9 @@
             <div class="ui stackable one column grid" *ngIf="pendenciaShow">
               <div class="column">
                 <label>Motivo da Pendência</label>
-                <textarea [ngClass]="{'error': motivo.invalid && motivo.dirty }" #motivo="ngModel" [(ngModel)]="mSolicitacoes.motivo" name="motivo" maxlength="1000" placeholder="Motivo da Pendência"
-                style="margin-top: 0px; margin-bottom: 0px; height: 112px;" required></textarea>
+                <textarea [ngClass]="{'error': motivo.invalid && motivo.dirty }" #motivo="ngModel" [(ngModel)]="mSolicitacoes.motivo"
+                  name="motivo" maxlength="1000" placeholder="Motivo da Pendência" style="margin-top: 0px; margin-bottom: 0px; height: 112px;"
+                  required></textarea>
                 <div class="invalid-feedback" [ngClass]="{'active': motivo.invalid && motivo.dirty}">
                   Motivo da Pendência é um campo obrigatório!
                 </div>
@@ -195,7 +186,8 @@
               <div class="tow column row">
                 <div class="right floated column">
                   <button class="ui red right floated button" (click)="closeModal(false)">Cancel</button>
-                  <button class="ui green right floated button" type="submit" [disabled]="fmsolicitacoes.invalid" autofocus> Aplicar</button>
+                  <button class="ui green right floated button" type="submit" [disabled]="fmsolicitacoes.invalid"
+                    autofocus> Aplicar</button>
                 </div>
               </div>
 
@@ -211,34 +203,49 @@
     <!--Fim Modal do formulario  de ações de multipos pontos -->
 
 
-     <!--Inicio Observação para ação -->
-     <sui-modal *ngIf="obsAcaoModal" [isClosable]="false" [mustScroll]="true" [transition]="'scale'" [transitionDuration]="500" #modal>
+    <!--Inicio Observação para ação -->
+    <sui-modal *ngIf="obsAcaoModal" [isClosable]="false" [mustScroll]="true" [transition]="'scale'"
+      [transitionDuration]="500" #modal>
       <div class="header">
-          <div class="ui grid">
-              <div class="fifteen wide column">
-                Observação para Ação
-              </div>
-              <div class="one wide column">
-                <i class="close red link icon" (click)="closeObsAcao()"></i>
-              </div>
-            </div>
+        <div class="ui grid">
+          <div class="fifteen wide column">
+            Observação para Ação
+          </div>
+          <div class="one wide column">
+            <i class="close red link icon" (click)="closeObsAcao()"></i>
+          </div>
+        </div>
 
       </div>
 
       <div class="content">
-          <app-obs-acao [obsSelecionadas]="selecaoModalObsAcao"></app-obs-acao>
+        <app-obs-acao [obsSelecionadas]="selecaoModalObsAcao"></app-obs-acao>
       </div>
     </sui-modal>
     <!--Fim Modal do formulario  de Observação para ação -->
 
+
+
     <div class="four wide column">
-      <div class="ui compact right floated segment"><p><strong [innerHTML]="totalItens + ' de ' + ((pontosPresenca) ? pontosPresenca.length : '0') + ' itens'"></strong></p></div>
+      <div class="ui grid">
+        <div class="six wide column">
+          <button class="ui large icon right floated button circular" [disabled]="!botoesMSA" id="btnExportar" suiPopup popupHeader="Exportar GESACs filtrados"
+            popupInverted="true" (click)="gerarExcelId()">
+            <i class="table icon"></i>
+          </button>
+        </div>
+        <div class="ten wide column" id="qntGesac">
+          <div class="ui compact right floated segment">
+            <p><strong [innerHTML]="totalItens + ' de ' + ((pontosPresenca) ? pontosPresenca.length : '0') + ' itens'"></strong></p>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 
 
   <!-- <form class="form-table"> -->
-    <table class="ui celled table">
+  <table class="ui celled table">
     <thead>
       <tr>
         <th class="ui center aligned collapsing">
@@ -248,19 +255,22 @@
         </th>
         <th class="ui center aligned collapsing">
           <div class="ui icon input">
-            <input class="tituloTabela inputPequeno" type="text" name="gesac" [(ngModel)]="filtros.gesac" placeholder="Gesac" (ngModelChange)="filtroPonto (filtros)">
+            <input class="tituloTabela inputPequeno" type="text" name="gesac" [(ngModel)]="filtros.gesac" placeholder="Gesac"
+              (ngModelChange)="filtroPonto (filtros)">
             <i class="search icon"></i>
           </div>
         </th>
         <th class="ui center aligned collapsing">
           <div class="ui icon input">
-            <input class="tituloTabela inputMini" type="text" name="uf" [(ngModel)]="filtros.uf" placeholder="Uf" (ngModelChange)="filtroPonto (filtros)">
+            <input class="tituloTabela inputMini" type="text" name="uf" [(ngModel)]="filtros.uf" placeholder="Uf"
+              (ngModelChange)="filtroPonto (filtros)">
             <i class="search icon"></i>
           </div>
         </th>
         <th class="ui center aligned collapsing">
           <div class="ui icon input">
-            <input class="tituloTabela inputP" type="text" name="municipio" [(ngModel)]="filtros.municipio" placeholder="Município" (ngModelChange)="filtroPonto (filtros)">
+            <input class="tituloTabela inputP" type="text" name="municipio" [(ngModel)]="filtros.municipio" placeholder="Município"
+              (ngModelChange)="filtroPonto (filtros)">
             <i class="search icon"></i>
           </div>
         </th>
@@ -269,9 +279,9 @@
           <ng-template let-option #optionTemplate>
             {{ option.descricao || 'Todos' }}
           </ng-template>
-          <sui-select class="selection" [(ngModel)]="filtros.status" [valueField]="" [options]="optionsPontoPre" labelField="descricao" [isSearchable]='true'
-            [optionTemplate]="optionTemplate" placeholder='Selecione a status' (ngModelChange)="filtroPonto (filtros)"
-            #templated>
+          <sui-select class="selection" [(ngModel)]="filtros.status" [valueField]="" [options]="optionsPontoPre"
+            labelField="descricao" [isSearchable]='true' [optionTemplate]="optionTemplate" placeholder='Selecione a status'
+            (ngModelChange)="filtroPonto (filtros)" #templated>
             <sui-select-option *ngFor="let o of templated.filteredOptions" [value]="o"></sui-select-option>
           </sui-select>
         </th>
@@ -284,7 +294,8 @@
         </th>
         <th class="ui center aligned collapsing">
           <div class="ui icon input">
-            <input class="tituloTabela inputP" type="text" name="tipologia" [(ngModel)]="filtros.tipologia" placeholder="Tipologia" (ngModelChange)="filtroPonto (filtros)">
+            <input class="tituloTabela inputP" type="text" name="tipologia" [(ngModel)]="filtros.tipologia" placeholder="Tipologia"
+              (ngModelChange)="filtroPonto (filtros)">
             <i class="search icon"></i>
           </div>
         </th>
@@ -308,11 +319,12 @@
         <td>{{ponto.nome}}</td>
         <td>{{ponto.tipologia}}</td>
         <td class="ui center aligned collapsing">
-          <a class="mini ui icon button circular" [routerLink]="['/pontPre', ponto.cod_gesac, 'detalhe']" suiPopup popupHeader="Detalhe"
-            popupInverted="true">
+          <a class="mini ui icon button circular" [routerLink]="['/pontPre', ponto.cod_gesac, 'detalhe']" suiPopup
+            popupHeader="Detalhe" popupInverted="true">
             <i class="search icon"></i>
           </a>
-          <a class="mini ui icon button circular" [routerLink]="['/pontPre/', ponto.cod_gesac]" suiPopup popupHeader="Editar" popupInverted="true">
+          <a class="mini ui icon button circular" [routerLink]="['/pontPre/', ponto.cod_gesac]" suiPopup popupHeader="Editar"
+            popupInverted="true">
             <i class="pencil alternate icon"></i>
           </a>
           <!-- <a class="ui icon button circular" suiPopup popupHeader="Remover" popupInverted="true">
@@ -326,8 +338,8 @@
 
         <th colspan="8">
           <div class="ui right floated pagination menu">
-            <sui-pagination [collectionSize]='totalItens' [pageSize]="numeroPagina" [maxSize]="10" [hasEllipses]="true" [(page)]="pagina"
-              (click)="page(pagina)">
+            <sui-pagination [collectionSize]='totalItens' [pageSize]="numeroPagina" [maxSize]="10" [hasEllipses]="true"
+              [(page)]="pagina" (click)="page(pagina)">
 
             </sui-pagination>
           </div>
