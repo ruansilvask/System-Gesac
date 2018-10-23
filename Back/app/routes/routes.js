@@ -260,5 +260,8 @@ module.exports = function(app){
     app.route('/gesac/geraExcel')
         .get(exportar.exportaExcel);
 
+    app.route('/gesac/geraExcelId')
+        .get(exportar.exportaExcelId);
+
 
 }

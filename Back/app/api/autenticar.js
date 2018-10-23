@@ -1,6 +1,8 @@
 var jwt = require('jsonwebtoken'),
     passwordHash = require('password-hash');
 
+//let usuarioLogado = [];
+
 module.exports = function(app){
     let api = {};
 
@@ -13,23 +15,27 @@ module.exports = function(app){
             .then(resultado => {
                 knex.destroy();
                 if(resultado[0]){
-                    if(resultado[0].status === 'A'){
-                        if(resultado[0].senha === user.senha){
-                            var token = jwt.sign({login: resultado[0].login}, app.get('secret'), { expiresIn: 43200 }); //28800s = 8H
-                            res.set({'x-access-token': token});
-                            
-                            cod_usuario_cript = passwordHash.generate(resultado[0].cod_usuario.toString(), {saltLength: 200});
-
-                            var date = new Date();
-                            var dataLogin = `${date.toISOString().slice(0,4)}-${date.toISOString().slice(5,7)}-${date.toISOString().slice(8,10)} ${date.toISOString().slice(11,13)-3}.${date.toISOString().slice(14,16)}.${date.toISOString().slice(17,19)}`;
-
-                            console.log(`O usuário ${resultado[0].nome} acabou de logar.  ${dataLogin}`);
-                            res.status(200).json({token, 'cod_usuario': resultado[0].cod_usuario, 'nome': resultado[0].nome, cod_usuario_cript});
-
-                        } else { res.status(401).send('Senha incorreta'); }
-
-                    } else { res.status(401).send('Este login está inativo.'); }
-
+                    //if(!(usuarioLogado.some(i=>i==resultado[0].cod_usuario))){
+                        if(resultado[0].status === 'A'){
+                            if(resultado[0].senha === user.senha){
+                                var token = jwt.sign({login: resultado[0].login}, app.get('secret'), { expiresIn: 43200 }); //28800s = 8H
+                                res.set({'x-access-token': token});
+                                
+                                cod_usuario_cript = passwordHash.generate(resultado[0].cod_usuario.toString(), {saltLength: 200});
+    
+                                var date = new Date();
+                                var dataLogin = `${date.toISOString().slice(0,4)}-${date.toISOString().slice(5,7)}-${date.toISOString().slice(8,10)} ${date.toISOString().slice(11,13)-3}.${date.toISOString().slice(14,16)}.${date.toISOString().slice(17,19)}`;
+    
+                                console.log(`O usuário ${resultado[0].nome} acabou de logar.  ${dataLogin}`);
+    
+                                //usuarioLogado.push(resultado[0].cod_usuario);
+    
+                                res.status(200).json({token, 'cod_usuario': resultado[0].cod_usuario, 'nome': resultado[0].nome, cod_usuario_cript});
+    
+                            } else { res.status(401).send('Senha incorreta'); }
+    
+                        } else { res.status(401).send('Este login está inativo.'); }
+                   // } else { res.status(401).send('Este usuário já está logado.'); }
                 } else { res.status(401).send('Este login não existe.'); }
 
             })
@@ -45,10 +51,12 @@ module.exports = function(app){
         const knex = app.conexao.conexaoBDKnex();
         const cod_usuario = req.body.cod_usuario;
 
-        knex.select('nome').from('usuario').where('cod_usuario', cod_usuario)
+        knex.select('cod_usuario', 'nome').from('usuario').where('cod_usuario', cod_usuario)
             .then(resultado => {
                 var date = new Date();
                 var dataLogof = `${date.toISOString().slice(0,4)}-${date.toISOString().slice(5,7)}-${date.toISOString().slice(8,10)} ${date.toISOString().slice(11,13)-3}.${date.toISOString().slice(14,16)}.${date.toISOString().slice(17,19)}`;
+
+               // usuarioLogado.splice(usuarioLogado.indexOf(resultado[0].cod_usuario), 1)
 
                 console.log(`O usuário ${resultado[0].nome} acabou de deslogar. ${dataLogof}`);
                 res.status(200).end();

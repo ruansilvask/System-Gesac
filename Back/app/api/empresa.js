@@ -49,6 +49,7 @@ module.exports = function(app){
         
         knex('empresa').insert(empresa)
             .then(resultado => {
+                //app.api.sisLog(knex, req.headers['cod_usuario'], 'empresa', 'insert', null, null, null, null, req.body.cnpj_empresa, req.body.cnpj_empresa_pai, null);
                 knex.destroy();
                 res.status(200).json(resultado[0]);
             })
