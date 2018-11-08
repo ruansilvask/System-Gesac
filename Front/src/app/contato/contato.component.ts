@@ -518,7 +518,7 @@ export class ContatoComponent implements OnInit {
     }).then(result => {
       if (result.value) {
         this.contatoService
-          .deletarContatoCadastrado(contato.cod_contato)
+          .deletarContatoCadastrado(contato.cod_contato, contato.cod_pessoa)
           .subscribe(
             res => {
               this.funcaoContato('get', this.local, this.codContato);

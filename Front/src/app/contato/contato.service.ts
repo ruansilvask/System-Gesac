@@ -108,9 +108,9 @@ export class ContatoService {
       .map(res => res);
   }
 
-  deletarContatoCadastrado(codContato) {
+  deletarContatoCadastrado(codContato, codPessoa) {
     return this.http
-      .delete(`${API.GESAC_API}contato/${codContato}`)
+      .delete(`${API.GESAC_API}contato/${codContato}/${codPessoa}`)
       .map(res => res);
   }
 

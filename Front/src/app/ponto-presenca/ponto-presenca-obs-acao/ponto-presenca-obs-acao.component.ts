@@ -96,8 +96,6 @@ export class PontoPresencaObsAcaoComponent implements OnInit {
 */
 
   getObsAcaoporId(gesac) {
-    console.log('alguma coisa', gesac);
-
     this.pontoPresencaService.getObsAcaoporId(gesac).subscribe(dados => {
       this.obsAcoesCad = dados;
     });
