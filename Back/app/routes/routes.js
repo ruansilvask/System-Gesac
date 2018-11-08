@@ -121,7 +121,7 @@ module.exports = function(app){
     app.route('/gesac/contatoPonto/:cod_gesac')
         .get(contato.listaContatoPonto);
 
-    app.route('/gesac/contato/:cod_contato')
+    app.route('/gesac/contato/:cod_contato/:cod_pessoa')
         .put(contato.editaContato)
         .delete(contato.apagaContato);
 

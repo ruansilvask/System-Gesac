@@ -18,6 +18,16 @@ PontoPresencaDAO.prototype.detalhePontoPresenca = function(cod_gesac, callback){
     this._connection.query(`SELECT pid.nome, CONCAT(municipio.nome_municipio, " - ", municipio.uf) AS municipio, municipio.cod_ibge, municipio.uf, status.descricao, gesac.cod_status, gesac.cod_gesac, pid.cod_pid, pid.inep, empresa.empresa, contrato.num_contrato, lote.lote, velocidade.descricao AS velocidade, (SELECT instituicao_resp.sigla FROM instituicao_resp INNER JOIN gesac ON instituicao_resp.cod_instituicao = gesac.cod_instituicao_resp WHERE gesac.cod_gesac = ${cod_gesac}) AS instituicao_resp, (SELECT instituicao_resp.sigla FROM instituicao_resp INNER JOIN gesac ON instituicao_resp.cod_instituicao = gesac.cod_instituicao_pag WHERE gesac.cod_gesac = ${cod_gesac}) AS instituicao_pag FROM gesac INNER JOIN pid ON gesac.cod_pid = pid.cod_pid INNER JOIN status ON gesac.cod_status = status.cod_status INNER JOIN municipio ON pid.cod_ibge = municipio.cod_ibge INNER JOIN lote ON gesac.cod_lote = lote.cod_lote INNER JOIN contrato ON lote.num_contrato = contrato.num_contrato INNER JOIN empresa ON contrato.cnpj_empresa = empresa.cnpj_empresa INNER JOIN velocidade ON gesac.cod_velocidade = velocidade.cod_velocidade WHERE gesac.cod_gesac = ${cod_gesac}`, callback);
 }
 
+//Lista PID concatenado com base no cod_pid.
+PontoPresencaDAO.prototype.listarPidLog = function(cod_pid, callback){
+	this._connection.query(`SELECT CONCAT_WS('', cod_pid,";", cod_ibge,";", nome,";", inep) AS espelho FROM pid WHERE cod_pid = ${cod_pid}`, callback);
+}
+
+//Lista GESAC concatenado com base no cod_gesac.
+PontoPresencaDAO.prototype.listarGesacLog = function(cod_gesac, callback){
+	this._connection.query(`SELECT CONCAT_WS('', cod_gesac,";", cod_pid,";", cod_lote,";", cod_velocidade,";", cod_status,";", cod_instituicao_resp,";", cod_instituicao_pag) AS espelho FROM gesac WHERE cod_gesac = ${cod_gesac}`, callback);
+}
+
 
 //---------------Querys de Endereco ---------------//
 //Lista as informações de todos os Endereço de um Ponto de Presença.
@@ -28,6 +38,11 @@ PontoPresencaDAO.prototype.listarPontoEndereco = function(cod_gesac, callback){
 //Lista as informações do Endereço atual de um Pontos de Presença.
 PontoPresencaDAO.prototype.listarPontoEnderecoAtual = function(cod_gesac, callback){
 	this._connection.query(`SELECT endereco.* FROM endereco INNER JOIN pid ON endereco.cod_pid = pid.cod_pid INNER JOIN gesac ON pid.cod_pid = gesac.cod_pid WHERE gesac.cod_gesac = ${cod_gesac} AND endereco.data_final IS NULL`, callback);
+}
+
+//Lista GESAC concatenado com base no cod_gesac.
+PontoPresencaDAO.prototype.listarEnderecoLog = function(cod_endereco, cod_pid, callback){
+	this._connection.query(`SELECT CONCAT_WS('', cod_endereco,";", cod_pid,";", endereco,";", numero,";", bairro,";", cep,";", complemento,";", area,";", latitude,";", longitude,";", data_inicio,";", data_final) AS espelho FROM endereco WHERE cod_endereco = ${cod_endereco} AND cod_pid = ${cod_pid}`, callback);
 }
 
 
@@ -71,6 +86,11 @@ PontoPresencaDAO.prototype.visualizarPontoAnalise = function(cod_gesac, callback
 //Lista uma Análise com base no Id.
 PontoPresencaDAO.prototype.listarAnaliseId = function(cod_analise, callback){
 	this._connection.query(`SELECT analise.*, empresa.empresa, pessoa.nome FROM analise INNER JOIN empresa ON analise.cnpj_empresa = empresa.cnpj_empresa LEFT JOIN pessoa ON analise.cod_pessoa_resp = pessoa.cod_pessoa WHERE analise.cod_analise = ${cod_analise}`, callback);
+}
+
+//Lista uma Análise concatenado com base no cod_analise.
+PontoPresencaDAO.prototype.listarAnaliseLog = function(cod_analise, callback){
+	this._connection.query(`SELECT CONCAT_WS('', cod_analise,";", cod_gesac,";", cnpj_empresa,";", tipo_solicitacao,";", cod_pessoa_resp,";", num_oficio,";", num_doc_sei,";", data_oficio,";", data_instalacao,";", data_analise,";", assinatura_resp,";", teste_vazao,";", estabelecimento,";", endereco,";", tipp,";", fotos,";", internet,";", tecnico_resp,";", obs,";", aceite,";", justificativa) AS espelho FROM analise WHERE cod_analise = ${cod_analise}`, callback);
 }
 
 

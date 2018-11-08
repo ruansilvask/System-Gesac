@@ -22,6 +22,11 @@ InstituicaoResponsavelDAO.prototype.listarInstituicaoResponsavelId = function(co
 	this._connection.query(`SELECT instituicao_resp.*, municipio.uf, municipio.nome_municipio FROM instituicao_resp LEFT JOIN municipio ON instituicao_resp.cod_ibge = municipio.cod_ibge WHERE cod_instituicao = ${cod_instituicao}`, callback);
 }
 
+//Lista Instituição Responsável concatenada com base no cod_instituicao.
+InstituicaoResponsavelDAO.prototype.listarInstituicaoResponsavelLog = function(cod_instituicao, callback){
+	this._connection.query(`SELECT CONCAT_WS('', cod_instituicao,";", cod_ibge,";", cnpj_instituicao,";", nome,";", sigla,";", pagadora,";", dou,";", termo_coop,";", num_processo,";", cep,";", endereco,";", numero,";", bairro,";", complemento) AS espelho FROM instituicao_resp WHERE cod_instituicao = ${cod_instituicao};`, callback);
+}
+
 module.exports = () => {
 	return InstituicaoResponsavelDAO;
 };

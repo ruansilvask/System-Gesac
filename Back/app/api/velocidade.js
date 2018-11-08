@@ -21,9 +21,11 @@ module.exports = function(app){
     api.salvaVelocidade = (req, res) => {
         const knex = app.conexao.conexaoBDKnex();
         const velocidade = req.body;
+        const logDAO = new app.infra.LogDAO(knex);
         
         knex('velocidade').insert(velocidade)
             .then(resultado => {
+                logDAO.logVelocidade(req.headers['cod_usuario'], 'velocidade', 'i', null, resultado[0]);
                 knex.destroy();
                 res.status(200).end();
             })

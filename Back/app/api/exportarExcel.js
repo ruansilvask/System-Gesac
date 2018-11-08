@@ -12,7 +12,7 @@ module.exports = (app) => {
                 exportarExcelDAO.listarSolicitacaoExcel((erroSolicitacao, resultadoSolicitacao) => {
                     exportarExcelDAO.listarInteracaoExcel((erroInteracao, resultadoInteracao) => {
                         if(erroGesac || erroContato || erroSolicitacao || erroInteracao){
-                            console.log(erroGesac, erroContato, erroSolicitacao, erroInteracao);
+                            console.error(erroGesac, erroContato, erroSolicitacao, erroInteracao);
                             connection.end();
                             res.status(500).send(app.api.erroPadrao());
                         }else{

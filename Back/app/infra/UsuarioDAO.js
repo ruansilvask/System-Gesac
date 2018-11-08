@@ -12,6 +12,11 @@ UsuarioDAO.prototype.listarUsuarioId = function(cod_usuario, callback){
 	this._connection.query(`SELECT * FROM usuario WHERE cod_usuario = ${cod_usuario}`, callback);
 }
 
+//Lista Usuário concatenado com base no cod_usuario.
+UsuarioDAO.prototype.listarUsuarioLog = function(cod_usuario, callback){
+	this._connection.query(`SELECT CONCAT_WS('', cod_usuario,";", nome,";", email,";", status,";", login,";", senha) AS espelho FROM usuario WHERE cod_usuario = ${cod_usuario}`, callback);
+}
+
 module.exports = () => {
 	return UsuarioDAO;
 };

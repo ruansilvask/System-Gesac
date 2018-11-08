@@ -45,9 +45,11 @@ module.exports = function(app){
     api.salvaInstituicaoResponsavel = (req, res) => {
         const knex = app.conexao.conexaoBDKnex();
         const instituicaoResponsavel = req.body;
+        const logDAO = new app.infra.LogDAO(knex);
          
         knex('instituicao_resp').insert(instituicaoResponsavel)
             .then(resultado => {
+                logDAO.logInstituicaoResponsavel(req.headers['cod_usuario'], 'instituicao_resp', 'i', null, resultado[0]);
                 knex.destroy();
                 res.status(200).json(resultado[0]);
             })
@@ -79,19 +81,32 @@ module.exports = function(app){
         const { cod_instituicao } = req.params;
 
         if(cod_instituicao){
-            const knex = app.conexao.conexaoBDKnex();
             const instituicaoResponsavel = req.body;
-    
-            knex('instituicao_resp').where('cod_instituicao', cod_instituicao).update(instituicaoResponsavel)
-                .then(resultado => {
-                    knex.destroy();
-                    res.status(200).end();
-                })
-                .catch(erro => {
+            const connection = app.conexao.conexaoBD();
+            const instituicaoResponsavelDAO = new app.infra.InstituicaoResponsavelDAO(connection);
+            instituicaoResponsavelDAO.listarInstituicaoResponsavelLog(cod_instituicao, (erro, resultado) => {
+                if(erro){
                     console.log(erro);
-                    knex.destroy();
-                    res.status(500).send(app.api.erroPadrao())
-                });
+                    res.status(500).send(app.api.erroPadrao()); 
+                }
+                else{
+                    const knex = app.conexao.conexaoBDKnex();
+                    const logDAO = new app.infra.LogDAO(knex);
+                    let espelho = resultado[0].espelho;
+                    knex('instituicao_resp').where('cod_instituicao', cod_instituicao).update(instituicaoResponsavel)
+                        .then(resultado => {
+                            logDAO.logInstituicaoResponsavel(req.headers['cod_usuario'], 'instituicao_resp', 'u', espelho, cod_instituicao);
+                            knex.destroy();
+                            res.status(200).end();
+                        })
+                        .catch(erro => {
+                            console.log(erro);
+                            knex.destroy();
+                            res.status(500).send(app.api.erroPadrao())
+                        });
+                }
+            });
+            connection.end();
         } else { res.status(400).send(app.api.erroPadrao()); }
     }
 
@@ -100,22 +115,35 @@ module.exports = function(app){
         const { cod_instituicao } = req.params;
 
         if(cod_instituicao){
-            const knex = app.conexao.conexaoBDKnex();
-
-            knex('instituicao_resp').where('cod_instituicao', cod_instituicao).delete()
-                .then(resultado => {
-                    knex.destroy();
-                    res.status(200).end();
-                })
-                .catch(erro => {
+            const connection = app.conexao.conexaoBD();
+            const instituicaoResponsavelDAO = new app.infra.InstituicaoResponsavelDAO(connection);
+            instituicaoResponsavelDAO.listarInstituicaoResponsavelLog(cod_instituicao, (erro, resultado) => {
+                if(erro){
                     console.log(erro);
-                    knex.destroy();
-                    if(erro.errno == 1451){
-                        res.status(500).send('Esta instituição responsável não pode ser apagada pois existem outras informações associadas a ela.');
-                    } else {
-                        res.status(500).send(app.api.erroPadrao());
-                    }
-                });
+                    res.status(500).send(app.api.erroPadrao());                    
+                }
+                else{            
+                    const knex = app.conexao.conexaoBDKnex();
+                    const logDAO = new app.infra.LogDAO(knex);
+                    let espelho = resultado[0].espelho;
+                    knex('instituicao_resp').where('cod_instituicao', cod_instituicao).delete()
+                        .then(resultado => {
+                            logDAO.logInstituicaoResponsavel(req.headers['cod_usuario'], 'instituicao_resp', 'd', espelho, cod_instituicao);
+                            knex.destroy();
+                            res.status(200).end();
+                        })
+                        .catch(erro => {
+                            console.log(erro);
+                            knex.destroy();
+                            if(erro.errno == 1451){
+                                res.status(500).send('Esta instituição responsável não pode ser apagada pois existem outras informações associadas a ela.');
+                            } else {
+                                res.status(500).send(app.api.erroPadrao());
+                            }
+                        });
+                }
+            });
+            connection.end();
         } else { res.status(400).send(app.api.erroPadrao()); }
     }
         
