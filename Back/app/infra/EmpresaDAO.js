@@ -18,6 +18,10 @@ EmpresaDAO.prototype.listarEmpresaPai = function(callback){
 	this._connection.query('SELECT cnpj_empresa, empresa FROM empresa WHERE cnpj_empresa = cnpj_empresa_pai', callback);
 }
 
+//Lista Empresa concatenada com base no cnpj_empresa.
+EmpresaDAO.prototype.listarEmpresaLog = function(cnpj_empresa, callback){
+	this._connection.query(`SELECT CONCAT_WS('', cnpj_empresa,";", cnpj_empresa_pai,";", cod_ibge,";", empresa,";", cep,";", endereco,";", numero,";", bairro,";", complemento) AS espelho FROM empresa WHERE cnpj_empresa = ${cnpj_empresa}`, callback);
+}
 
 //---------------Querys de Contato---------------//
 //Lista as informações dos Contatos de uma Empresa.

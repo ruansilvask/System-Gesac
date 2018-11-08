@@ -46,10 +46,11 @@ module.exports = function(app){
     api.salvaEmpresa = (req, res) => {
     	const knex = app.conexao.conexaoBDKnex();
         const empresa = req.body;
-        
+        const logDAO = new app.infra.LogDAO(knex);
+
         knex('empresa').insert(empresa)
             .then(resultado => {
-                //app.api.sisLog(knex, req.headers['cod_usuario'], 'empresa', 'insert', null, null, null, null, req.body.cnpj_empresa, req.body.cnpj_empresa_pai, null);
+                logDAO.logEmpresa(req.headers['cod_usuario'], 'empresa', 'i', null, empresa.cnpj_empresa);
                 knex.destroy();
                 res.status(200).json(resultado[0]);
             })
@@ -67,46 +68,72 @@ module.exports = function(app){
     //Atualiza os dados de uma Empresa.
     api.editaEmpresa = (req, res) => {
         const { cnpj_empresa } = req.params;
-
         if(cnpj_empresa){
-            const knex = app.conexao.conexaoBDKnex();
             const empresa = req.body;
-    
-            knex('empresa').where('cnpj_empresa', cnpj_empresa).update(empresa)
-                .then(resultado => {
-                    knex.destroy();
-                    res.status(200).end();
-                })
-                .catch(erro => {
+            const connection = app.conexao.conexaoBD();
+            const empresaDAO = new app.infra.EmpresaDAO(connection);
+            empresaDAO.listarEmpresaLog(cnpj_empresa, (erro, resultado) => {
+                if(erro){
                     console.log(erro);
-                    knex.destroy();
                     res.status(500).send(app.api.erroPadrao());
-                });
+                }
+                else{
+                    const knex = app.conexao.conexaoBDKnex();
+                    const logDAO = new app.infra.LogDAO(knex);
+                    let espelho = resultado[0].espelho;                  
+                    knex('empresa').where('cnpj_empresa', cnpj_empresa).update(empresa)
+                        .then(resultado => {
+                            logDAO.logEmpresa(req.headers['cod_usuario'], 'empresa', 'u', espelho, empresa.cnpj_empresa);
+                            knex.destroy();
+                            res.status(200).end();
+                        })
+                        .catch(erro => {
+                            console.log(erro);
+                            knex.destroy();
+                            res.status(500).send(app.api.erroPadrao());
+                        });                    
+                }
+            });
+            connection.end();      
         } else { res.status(400).send(app.api.erroPadrao()); }
     }
 
     //Apaga uma Empresa.
     api.apagaEmpresa = (req, res) => {
         const { cnpj_empresa } = req.params;
-
         if(cnpj_empresa){
-            const knex = app.conexao.conexaoBDKnex();
-
-            knex('empresa').where('cnpj_empresa', cnpj_empresa).delete()
-                .then(resultado => {
-                    knex.destroy();
-                    res.status(200).end();
-                })
-                .catch(erro => {
+            const connection = app.conexao.conexaoBD();
+            const empresaDAO = new app.infra.EmpresaDAO(connection);
+            
+            empresaDAO.listarEmpresaLog(cnpj_empresa, (erro, resultado) => {
+                if(erro){
                     console.log(erro);
-                    knex.destroy();
-                    if(erro.errno == 1451){
-                        res.status(500).send('Esta empresa não pode ser apagada pois existem outras informações associadas a ela.');
-                    } else {
-                        res.status(500).send(app.api.erroPadrao());
-                    }
-                });
+                    res.status(500).send(app.api.erroPadrao());
+                }
+                else{
+                    const knex = app.conexao.conexaoBDKnex();
+                    const logDAO = new app.infra.LogDAO(knex);
+                    let espelho = resultado[0].espelho;
+                    knex('empresa').where('cnpj_empresa', cnpj_empresa).delete()
+                        .then(resultado => {
+                            logDAO.logEmpresa(req.headers['cod_usuario'], 'empresa', 'd', espelho, cnpj_empresa);
+                            knex.destroy();
+                            res.status(200).end();
+                        })
+                        .catch(erro => {
+                            console.log(erro);
+                            knex.destroy();
+                            if(erro.errno == 1451){
+                                res.status(500).send('Esta empresa não pode ser apagada pois existem outras informações associadas a ela.');
+                            } else {
+                                res.status(500).send(app.api.erroPadrao());
+                            }
+                        });
+                }
+            });
+            connection.end();
         } else { res.status(400).send(app.api.erroPadrao()); }
+
     }
 
 

@@ -20,17 +20,19 @@ module.exports = function(app){
     	const knex = app.conexao.conexaoBDKnex();
         const { cod_ibge, nome, inep } = req.body;
         const pid = {cod_ibge, nome, inep};
+        const logDAO = new app.infra.LogDAO(knex);
                 
         knex('pid').insert(pid)
             .then(resultado => {
                 const cod_pid = resultado[0];
+                logDAO.logPid(req.headers['cod_usuario'], 'pid', 'i', null, cod_pid);
                 const cod_status = 1;
                 const { cod_lote, cod_velocidade, cod_instituicao_resp, cod_instituicao_pag  } = req.body;
-            
                 const gesac = {cod_pid, cod_lote, cod_velocidade, cod_status, cod_instituicao_resp, cod_instituicao_pag};
             
                 return knex('gesac').insert(gesac)
                     .then(result => {
+                        logDAO.logGesac(req.headers['cod_usuario'], 'gesac', 'i', null, result[0]);
                         knex.destroy();
                         res.status(200).json(result[0]);
                 })
@@ -63,29 +65,48 @@ module.exports = function(app){
         const { cod_pid } = req.params;
 
         if(cod_pid){
-            const knex = app.conexao.conexaoBDKnex();
-            const { cod_ibge, nome, inep } = req.body;
+            const { cod_ibge, nome, inep, cod_gesac } = req.body;
             const pid = {cod_ibge, nome, inep};
-    
-            knex('pid').where('cod_pid', cod_pid).update(pid)
-                .then(resultado => {
-                    const { cod_instituicao_resp, cod_instituicao_pag  } = req.body;
-                    const cod_lote = req.body.lote;
-                    const cod_velocidade = req.body.velocidade;
-                
-                    const gesac = {cod_lote, cod_velocidade, cod_instituicao_resp, cod_instituicao_pag};
-                
-                    return knex('gesac').where('cod_pid', cod_pid).update(gesac)
-                        .then(result => {
-                            knex.destroy();
-                            res.status(200).end();
-                    })
-                })
-                .catch(erro => {
-                    console.log(erro);
-                    knex.destroy();
-                    res.sendStatus(500);
+            const connection = app.conexao.conexaoBD();
+            const pontoPresencaDAO = new app.infra.PontoPresencaDAO(connection);
+            pontoPresencaDAO.listarPidLog(cod_pid, (erro, resultado) => {
+                pontoPresencaDAO.listarGesacLog(cod_gesac, (erroGesac, resultadoGesac) => {
+                    if(erro || erroGesac){
+                        console.log(erro);
+                        console.log(erroGesac);
+                        connection.end();
+                        res.status(500).send(app.api.erroPadrao()); 
+                    }
+                    else{
+                        const knex = app.conexao.conexaoBDKnex();
+                        const logDAO = new app.infra.LogDAO(knex);
+                        let espelho = resultado[0].espelho;
+                        knex('pid').where('cod_pid', cod_pid).update(pid)
+                            .then(resultado => {
+                                const { cod_instituicao_resp, cod_instituicao_pag  } = req.body;
+                                const cod_lote = req.body.lote;
+                                const cod_velocidade = req.body.velocidade;
+                                const gesac = {cod_lote, cod_velocidade, cod_instituicao_resp, cod_instituicao_pag};
+                                logDAO.logPid(req.headers['cod_usuario'], 'pid', 'u', espelho, cod_pid);
+                                espelho = resultadoGesac[0].espelho;
+
+                                return knex('gesac').where('cod_pid', cod_pid).update(gesac)
+                                    .then(result => {
+                                        logDAO.logGesac(req.headers['cod_usuario'], 'gesac', 'u', espelho, cod_gesac);
+                                        knex.destroy();
+                                        connection.end();
+                                        res.status(200).end();
+                                })
+                            })
+                            .catch(erro => {
+                                console.log(erro);
+                                knex.destroy();
+                                connection.end();
+                                res.sendStatus(500);
+                            });
+                    }
                 });
+            });
         } else { res.status(400).send(app.api.erroPadrao()); }
     }
 
@@ -95,8 +116,8 @@ module.exports = function(app){
     api.salvaPontoEndereco = (req, res) => {
         const knex = app.conexao.conexaoBDKnex();
         const endereco = req.body;
-
         const { cod_endereco, cod_gesac } = req.body;
+        const logDAO = new app.infra.LogDAO(knex);
 
         knex.select('cod_pid').from('gesac').where('cod_gesac', cod_gesac)
             .then(resultado => {
@@ -108,6 +129,7 @@ module.exports = function(app){
                 if(cod_endereco === 1){
                     knex('endereco').insert(endereco)
                         .then(resultado => {
+                            logDAO.logEndereco(req.headers['cod_usuario'], 'endereco', 'i', null, cod_endereco, cod_pid);
                             knex.destroy();
                             res.status(200).end();
                         })
@@ -116,6 +138,7 @@ module.exports = function(app){
                     
                     knex('endereco').insert(endereco)
                         .then(resultado => {
+                            logDAO.logEndereco(req.headers['cod_usuario'], 'endereco', 'i', null, cod_endereco, cod_pid);
                             return knex('endereco').where('cod_endereco', cod_endereco-1).andWhere('cod_pid', cod_pid).update({ data_final })
                                 .then(result => {
                                     knex.destroy();
@@ -168,15 +191,30 @@ module.exports = function(app){
         const { cod_endereco, cod_gesac } = req.params;
 
         if(cod_endereco && cod_gesac){
+            const connection = app.conexao.conexaoBD();
+            const pontoPresencaDAO = new app.infra.PontoPresencaDAO(connection);
+            
             const knex = app.conexao.conexaoBDKnex();
-
             knex.select('cod_pid').from('gesac').where('cod_gesac', cod_gesac)
                 .then(resultado => {
-                    return knex('endereco').where('cod_endereco', cod_endereco).andWhere('cod_pid', resultado[0].cod_pid).delete()
-                        .then(resultado => {
-                            knex.destroy();
-                            res.status(200).end();
-                        })
+                    const cod_pid = resultado[0].cod_pid
+                    pontoPresencaDAO.listarEnderecoLog(cod_endereco, cod_pid, (erroEndereco, resultadoEndereco) => {
+                        if(erroEndereco){
+                            console.log(erroEndereco);
+                            res.status(500).send(app.api.erroPadrao());  
+                        }
+                        else{
+                            logDAO = new app.infra.LogDAO(knex);
+                            let espelho = resultadoEndereco[0].espelho;
+                            return knex('endereco').where('cod_endereco', cod_endereco).andWhere('cod_pid', cod_pid).delete()
+                                .then(resultado => {
+                                    logDAO.logEndereco(req.headers['cod_usuario'], 'endereco', 'd', espelho, cod_endereco, cod_pid);
+                                    knex.destroy();
+                                    res.status(200).end();
+                                })
+                        }
+                    });
+                    connection.end();
                 })
                 .catch(erro => {
                     console.log(erro);
@@ -208,48 +246,46 @@ module.exports = function(app){
     api.salvaPontoTipologia = (req, res) => {
         const knex = app.conexao.conexaoBDKnex();
         const pontoTipologia = req.body;
+        const logDAO = new app.infra.LogDAO(knex);
 
-        knex.select('cod_pid').from('gesac').where('cod_gesac', pontoTipologia.cod_gesac).then(resultado => {
-            delete pontoTipologia.cod_gesac;
-            pontoTipologia.cod_pid = resultado[0].cod_pid;
-            
-            return knex('pid_tipologia').insert(pontoTipologia)
-                .then(resultado => {
-                    knex.destroy();
-                    res.status(200).end();
+        knex.select('cod_pid').from('gesac').where('cod_gesac', pontoTipologia.cod_gesac)
+            .then(resultado => {
+                delete pontoTipologia.cod_gesac;
+                pontoTipologia.cod_pid = resultado[0].cod_pid;
+                return knex('pid_tipologia').insert(pontoTipologia)
+                    .then(resultado => {
+                        logDAO.logPidTipologia(req.headers['cod_usuario'], 'pid_tipologia', 'i', null, pontoTipologia.cod_pid, pontoTipologia.cod_tipologia);
+                        knex.destroy();
+                        res.status(200).end();
+                    })
                 })
-            })
-            .catch(erro => {
-                console.log(erro);
-                knex.destroy();
-                if(erro.errno == 1062){
-                    res.status(500).send('Esta tipologia já está cadastrado neste ponto de presença.');
-                } else {
-                    res.status(500).send(app.api.erroPadrao());
-                }
-            });
+                .catch(erro => {
+                    console.log(erro);
+                    knex.destroy();
+                    if(erro.errno == 1062){
+                        res.status(500).send('Esta tipologia já está cadastrado neste ponto de presença.');
+                    } else {
+                        res.status(500).send(app.api.erroPadrao());
+                    }
+                });
     };
 
     //Apaga uma Tipologia de um Ponto de Presença.
     api.apagaPontoTipologia = (req, res) => {
         const { cod_gesac, cod_tipologia } = req.params;
-
+        
         if(cod_gesac && cod_tipologia){
             const knex = app.conexao.conexaoBDKnex();
-        
-            knex('pid_tipologia')
-                .where('cod_tipologia', cod_tipologia)
-                .whereIn('cod_pid', function(){
-                    this.select('cod_pid')
-                        .from('gesac')
-                        .where('cod_gesac',  cod_gesac);
-            })
-            .delete()
-    
-    //        knex('pid_tipologia').where('cod_pid', cod_pid).andWhere('cod_tipologia', cod_tipologia).delete()
-                .then(resultado => {
-                    knex.destroy();
-                    res.status(200).end();
+            const logDAO = new app.infra.LogDAO(knex);
+            
+            knex.select('cod_pid').from('gesac').where('cod_gesac', cod_gesac)
+                .then(resultadoSelect => {
+                    return knex('pid_tipologia').where('cod_tipologia', cod_tipologia).andWhere('cod_pid', resultadoSelect[0].cod_pid).delete()
+                        .then(resultadoDelete => {
+                            logDAO.logPidTipologia(req.headers['cod_usuario'], 'pid_tipologia', 'd', null, resultadoSelect[0].cod_pid, cod_tipologia);
+                            knex.destroy();
+                            res.status(200).end();
+                        })
                 })
                 .catch(erro => {
                     console.log(erro);
@@ -328,7 +364,9 @@ module.exports = function(app){
         const knex = app.conexao.conexaoBDKnex();
         const cods_gesac = req.body.cod_gesac;
         const { tipo_solicitacao, num_oficio, data_oficio, num_doc_sei, cnpj_empresa, motivo } = req.body;
+        const logDAO = new app.infra.LogDAO(knex);
         let dados = [];
+        const connection = app.conexao.conexaoBD();
 
         for(let i=0; i<cods_gesac.length; i++){
             dados[i] = { cod_gesac: cods_gesac[i], tipo_solicitacao, num_oficio, data_oficio, num_doc_sei };
@@ -341,6 +379,13 @@ module.exports = function(app){
 
             knex('analise').insert(dados)
                 .then(resultado => {
+                    let cod_analise = [];
+                    let contador = resultado[0];
+                    for(let i=0; i<dados.length; i++){
+                        cod_analise[i] = contador;
+                        contador++;                        
+                    }                
+                    logDAO.logAnalise(req.headers['cod_usuario'], 'analise', 'i', null, cod_analise);
                     knex.destroy();
                     res.status(200).end();
                 })
@@ -357,10 +402,16 @@ module.exports = function(app){
                 }
             }
             
-            knex('solicitacao').insert(dados)
-                .then(resultado => {
-                    knex.destroy();
-                    res.status(200).end();
+            knex('solicitacao').returning('cod_gesac').insert(dados)
+                .then(resultado => {                  
+                    return knex.select('data_sistema').from('solicitacao').orderBy('data_sistema', 'desc').limit(1)
+                        .then(resultadoSelect => {
+                            var date = new Date(resultadoSelect[0].data_sistema);
+                            var data_sistema = `${date.toISOString().slice(0,4)}-${date.toISOString().slice(5,7)}-${date.toISOString().slice(8,10)} ${date.toISOString().slice(11,13)-(date.getTimezoneOffset()/60)}:${date.toISOString().slice(14,16)}:${date.toISOString().slice(17,19)}`;
+                            logDAO.logSolicitacao(req.headers['cod_usuario'], 'solicitacao', 'i', null, data_sistema, tipo_solicitacao, cods_gesac);
+                            knex.destroy();
+                            res.status(200).end();
+                        })
                 })
                 .catch(erro => {
                     console.log(erro);
@@ -393,19 +444,32 @@ module.exports = function(app){
         const { cod_analise } = req.params;
 
         if(cod_analise){
-            const knex = app.conexao.conexaoBDKnex();
             const analise = req.body;
-    
-            knex('analise').where('cod_analise', cod_analise).update(analise)
-                .then(resultado => {
-                    knex.destroy();
-                    res.status(200).end();
-                })
-                .catch(erro => {
+            const connection = app.conexao.conexaoBD();
+            const pontoPresencaDAO = new app.infra.PontoPresencaDAO(connection);
+            pontoPresencaDAO.listarAnaliseLog(cod_analise, (erro, resultado) => {
+                if(erro){
                     console.log(erro);
-                    knex.destroy();
                     res.status(500).send(app.api.erroPadrao());
-                });
+                }
+                else{
+                    const knex = app.conexao.conexaoBDKnex();
+                    const logDAO = new app.infra.LogDAO(knex);
+                    let espelho = resultado[0].espelho;
+                    knex('analise').where('cod_analise', cod_analise).update(analise)
+                        .then(resultado => {
+                            logDAO.logAnalise(req.headers['cod_usuario'], 'analise', 'u', espelho, cod_analise);
+                            knex.destroy();
+                            res.status(200).end();
+                        })
+                        .catch(erro => {
+                            console.log(erro);
+                            knex.destroy();
+                            res.status(500).send(app.api.erroPadrao());
+                        });
+                }
+            });
+            connection.end();   
         } else { res.status(400).send(app.api.erroPadrao()); }
     }
 
@@ -459,11 +523,18 @@ module.exports = function(app){
     api.salvaInteracao = (req, res) => {
         const knex = app.conexao.conexaoBDKnex();
         const interacao = req.body;
+        const logDAO = new app.infra.LogDAO(knex);
 
         knex('interacao').insert(interacao)
             .then(resultado => {
-                knex.destroy();
-                res.status(200).end();
+                return knex.select('data').from('interacao').orderBy('data', 'desc').limit(1)
+                    .then(resultadoSelect => {
+                        var date = new Date(resultadoSelect[0].data);
+                        var data_sistema = `${date.toISOString().slice(0,4)}-${date.toISOString().slice(5,7)}-${date.toISOString().slice(8,10)} ${date.toISOString().slice(11,13)-(date.getTimezoneOffset()/60)}:${date.toISOString().slice(14,16)}:${date.toISOString().slice(17,19)}`;
+                        logDAO.logInteracao(req.headers['cod_usuario'], 'interacao', 'i', null, data_sistema, interacao.cod_gesac);
+                        knex.destroy();
+                        res.status(200).end();
+                })
             })
             .catch(erro => {
                 console.log(erro);
@@ -539,6 +610,7 @@ module.exports = function(app){
         const knex = app.conexao.conexaoBDKnex();
         const obs_acao = req.body;
         let gesac_obs_acao = [];
+        const logDAO = new app.infra.LogDAO(knex);
 
         if(Array.isArray(obs_acao.cod_gesac)){
             for(let i=0; i<obs_acao.cod_gesac.length; i++){
@@ -550,6 +622,7 @@ module.exports = function(app){
 
         knex('gesac_obs_acao').insert(gesac_obs_acao)
             .then(resultado => {
+                logDAO.logGesacObsAcao(req.headers['cod_usuario'], 'gesac_obs_acao', 'i', null, obs_acao.cod_gesac, obs_acao.cod_obs);
                 knex.destroy();
                 res.status(200).end();
             })
@@ -601,6 +674,7 @@ module.exports = function(app){
             if(cod_gesac && cod_obs){
                 const knex = app.conexao.conexaoBDKnex();
                 let gesac_obs_acao = [];
+                const logDAO = new app.infra.LogDAO(knex);
         
                 if(cod_gesac){
                     const cods_gesac = cod_gesac.split(",");
@@ -615,6 +689,7 @@ module.exports = function(app){
         
                     knex('gesac_obs_acao').whereIn(['cod_gesac', 'cod_obs'], gesac_obs_acao).delete()
                         .then(resultado => {
+                            logDAO.logGesacObsAcao(req.headers['cod_usuario'], 'gesac_obs_acao', 'd', null, cods_gesac, cod_obs);
                             knex.destroy();
                             res.status(200).end();
                         })

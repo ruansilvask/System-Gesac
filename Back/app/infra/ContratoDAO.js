@@ -13,6 +13,11 @@ ContratoDAO.prototype.listarContratoId = function(num_contrato, callback){
 	this._connection.query(`SELECT contrato.*, empresa.empresa FROM contrato INNER JOIN empresa ON contrato.cnpj_empresa = empresa.cnpj_empresa WHERE num_contrato = ${num_contrato}`, callback);
 }
 
+//Lista Contrato concatenada com base no num_contrato.
+ContratoDAO.prototype.listarContratoLog = function(num_contrato, callback){
+	this._connection.query(`SELECT CONCAT_WS('', num_contrato,";", cnpj_empresa,";", quant_pontos,";", processo_sei,";", data_inicio,";", data_fim) AS espelho FROM contrato WHERE num_contrato = ${num_contrato}`, callback);
+}
+
 
 //---------------Querys de Lotes ---------------//
 //Lista os Lotes e suas Velocidades de um Contrato.

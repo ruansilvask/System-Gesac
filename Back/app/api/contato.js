@@ -6,6 +6,7 @@ module.exports = function(app){
         const knex = app.conexao.conexaoBDKnex();
         const { cnpj_empresa, cod_instituicao, cod_gesac, cargo, obs, cod_pessoa, nome } = req.body; 
         let contato;
+        const logDAO = new app.infra.LogDAO(knex);
 
         if(cnpj_empresa){
             contato = { cnpj_empresa, cod_pessoa, cargo, obs };
@@ -14,22 +15,35 @@ module.exports = function(app){
         } else if(cod_gesac){
             contato =  { cod_gesac, cod_pessoa, cargo, obs };
         }
-        
-        knex('contato').insert(contato)
-            .then(resultado => {
-                const pessoa = { nome };
-                
-                knex('pessoa').where('cod_pessoa', cod_pessoa).update(pessoa)
-                    .then(result => {
-                        knex.destroy();
-                        res.status(200).end();
+
+        const connection = app.conexao.conexaoBD();
+        const contatoDAO = new app.infra.ContatoDAO(connection);
+        contatoDAO.listarPessoaLog(cod_pessoa, (erroPessoa, resultadoPessoa) => {
+            if(erroPessoa){
+                console.log(erroPessoa);
+                res.status(500).send(app.api.erroPadrao()); 
+            }
+            else{
+                knex('contato').insert(contato)
+                    .then(resultado => {
+                        logDAO.logContato(req.headers['cod_usuario'], 'contato', 'i', null, resultado[0], cod_pessoa);
+                        const pessoa = { nome };
+                        let espelho = resultadoPessoa[0].espelho;
+                        knex('pessoa').where('cod_pessoa', cod_pessoa).update(pessoa)
+                            .then(result => {
+                                logDAO.logPessoa(req.headers['cod_usuario'], 'pessoa', 'u', espelho, cod_pessoa);
+                                knex.destroy();
+                                res.status(200).end();
+                            })
                     })
-            })
-            .catch(erro => {
-                console.log(erro);
-                knex.destroy();
-                res.status(500).send(app.api.erroPadrao());
-            });
+                    .catch(erro => {
+                        console.log(erro);
+                        knex.destroy();
+                        res.status(500).send(app.api.erroPadrao());
+                    });
+            }
+        });
+        connection.end();
     };
     
     //Lista os Contatos com base em uma String (nome ou telefone) digitada.
@@ -130,50 +144,82 @@ module.exports = function(app){
         const { cod_contato } = req.params;
 
         if(cod_contato){
-            const knex = app.conexao.conexaoBDKnex();
             const { cargo, obs, cod_pessoa, nome } = req.body;
-
             const contato = { cargo, obs};
+            const connection = app.conexao.conexaoBD();
+            const contatoDAO = new app.infra.ContatoDAO(connection);
+            contatoDAO.listarContatoLog(cod_contato, (erro, resultado) => {
+                contatoDAO.listarPessoaLog(cod_pessoa, (erroPessoa, resultadoPessoa) => {
+                    if(erro || erroPessoa){
+                        console.log(erro);
+                        console.log(erroPessoa);
+                        connection.end();
+                        res.status(500).send(app.api.erroPadrao()); 
+                    }
+                    else{
+                        const knex = app.conexao.conexaoBDKnex();
+                        const logDAO = new app.infra.LogDAO(knex);
+                        let espelho = resultado[0].espelho;
+                        knex('contato').where('cod_contato', cod_contato).update(contato)
+                            .then(resultado => {
+                                const pessoa = { nome };
+                                logDAO.logContato(req.headers['cod_usuario'], 'contato', 'u', espelho, cod_contato, cod_pessoa);
+                                espelho = resultadoPessoa[0].espelho;
 
-            knex('contato').where('cod_contato', cod_contato).update(contato)
-                .then(resultado => {
-                    const pessoa = { nome };
-
-                    knex('pessoa').where('cod_pessoa', cod_pessoa).update(pessoa)
-                        .then(result => {
-                            knex.destroy();
-                            res.status(200).end();
-                        })
-                })
-                .catch(erro => {
-                    console.log(erro);
-                    knex.destroy();
-                    res.status(500).send(app.api.erroPadrao());
+                                knex('pessoa').where('cod_pessoa', cod_pessoa).update(pessoa)
+                                    .then(result => {
+                                        logDAO.logPessoa(req.headers['cod_usuario'], 'pessoa', 'u', espelho, cod_pessoa);
+                                        knex.destroy();
+                                        connection.end();
+                                        res.status(200).end();
+                                    })
+                            })
+                            .catch(erro => {
+                                console.log(erro);
+                                knex.destroy();
+                                connection.end();
+                                res.status(500).send(app.api.erroPadrao());
+                            });
+                        }
                 });
+            });
         } else { res.status(400).send(app.api.erroPadrao()); }
     }
 
     //Apaga um Contato com base no cod_contato.
     api.apagaContato = (req, res) => {
-        const { cod_contato } = req.params;
+        const { cod_contato , cod_pessoa } = req.params;
 
         if(cod_contato){
-            const knex = app.conexao.conexaoBDKnex();
-
-            knex('contato').where('cod_contato', cod_contato).delete()
-                .then(resultado => {
-                    knex.destroy();
-                    res.status(200).end();
-                })
-                .catch(erro => {
+            const connection = app.conexao.conexaoBD();
+            const contatoDAO = new app.infra.ContatoDAO(connection);
+            contatoDAO.listarContatoLog(cod_contato, (erro, resultado) => {
+                if(erro){
                     console.log(erro);
-                    knex.destroy();
-                    if(erro.errno == 1451){
-                        res.status(500).send('Este contato não pode ser apagado pois existem outras informações associadas a ele.');
-                    } else {
-                        res.status(500).send(app.api.erroPadrao());
-                    }
-                });
+                    res.status(500).send(app.api.erroPadrao());  
+                }
+                else{
+                    const knex = app.conexao.conexaoBDKnex();
+                    const logDAO = new app.infra.LogDAO(knex);
+                    let espelho = resultado[0].espelho;
+                    knex('contato').where('cod_contato', cod_contato).delete()
+                        .then(resultado => {
+                            logDAO.logContato(req.headers['cod_usuario'], 'contato', 'd', espelho, cod_contato, cod_pessoa);
+                            knex.destroy();
+                            res.status(200).end();
+                        })
+                        .catch(erro => {
+                            console.log(erro);
+                            knex.destroy();
+                            if(erro.errno == 1451){
+                                res.status(500).send('Este contato não pode ser apagado pois existem outras informações associadas a ele.');
+                            } else {
+                                res.status(500).send(app.api.erroPadrao());
+                            }
+                        });
+                }
+            });
+            connection.end();
         } else { res.status(400).send(app.api.erroPadrao()); }
     }
 
@@ -183,9 +229,11 @@ module.exports = function(app){
     api.salvaTelefone = (req, res) => {
         const knex = app.conexao.conexaoBDKnex();
         const telefone = req.body;
+        const logDAO = new app.infra.LogDAO(knex);
         
         knex('telefone').insert(telefone)
             .then(resultado => {
+                logDAO.logTelefone(req.headers['cod_usuario'], 'telefone', 'i', null, telefone.cod_telefone, telefone.cod_pessoa);
                 knex.destroy();
                 res.status(200).end();
             })
@@ -201,19 +249,36 @@ module.exports = function(app){
         const { cod_telefone, cod_pessoa } = req.params;
 
         if(cod_telefone && cod_pessoa){
-            const knex = app.conexao.conexaoBDKnex();
             const telefone = req.body;
-
-            knex('telefone').where('cod_telefone', cod_telefone).andWhere('cod_pessoa', cod_pessoa).update(telefone)
-                .then(resultado => {
-                    knex.destroy();
-                    res.status(200).end();
-                })
-                .catch(erro => {
+            console.log(req);
+            console.log(req.body);
+            
+            
+            const connection = app.conexao.conexaoBD();
+            const contatoDAO = new app.infra.ContatoDAO(connection);
+            contatoDAO.listarTelefoneLog(cod_telefone, cod_pessoa, (erro, resultado) => {
+                if(erro){
                     console.log(erro);
-                    knex.destroy();
-                    res.status(500).send(app.api.erroPadrao());
-                });
+                    res.status(500).send(app.api.erroPadrao()); 
+                }
+                else{
+                    const knex = app.conexao.conexaoBDKnex();
+                    const logDAO = new app.infra.LogDAO(knex);
+                    let espelho = resultado[0].espelho;
+                    knex('telefone').where('cod_telefone', cod_telefone).andWhere('cod_pessoa', cod_pessoa).update(telefone)
+                        .then(resultado => {
+                            logDAO.logTelefone(req.headers['cod_usuario'], 'telefone', 'u', espelho, cod_telefone, cod_pessoa);
+                            knex.destroy();
+                            res.status(200).end();
+                        })
+                        .catch(erro => {
+                            console.log(erro);
+                            knex.destroy();
+                            res.status(500).send(app.api.erroPadrao());
+                        });
+                }
+            });
+            connection.end();
         } else { res.status(400).send(app.api.erroPadrao()); }
     }
 
@@ -222,18 +287,31 @@ module.exports = function(app){
         const { cod_telefone, cod_pessoa } = req.params;
 
         if(cod_telefone && cod_pessoa){
-            const knex = app.conexao.conexaoBDKnex();
-
-            knex('telefone').where('cod_telefone', cod_telefone).andWhere('cod_pessoa', cod_pessoa).delete()
-                .then(resultado => {
-                    knex.destroy();
-                    res.status(200).end();
-                })
-                .catch(erro => {
+            const connection = app.conexao.conexaoBD();
+            const contatoDAO = new app.infra.ContatoDAO(connection);
+            contatoDAO.listarTelefoneLog(cod_telefone, cod_pessoa, (erro, resultado) => {
+                if(erro){
                     console.log(erro);
-                    knex.destroy();
-                    res.status(500).send(app.api.erroPadrao());
-                });
+                    res.status(500).send(app.api.erroPadrao());  
+                }
+                else{
+                    const knex = app.conexao.conexaoBDKnex();
+                    const logDAO = new app.infra.LogDAO(knex);
+                    let espelho = resultado[0].espelho;
+                    knex('telefone').where('cod_telefone', cod_telefone).andWhere('cod_pessoa', cod_pessoa).delete()
+                        .then(resultado => {
+                            logDAO.logTelefone(req.headers['cod_usuario'], 'telefone', 'd', espelho, cod_telefone, cod_pessoa);
+                            knex.destroy();
+                            res.status(200).end();
+                        })
+                        .catch(erro => {
+                            console.log(erro);
+                            knex.destroy();
+                            res.status(500).send(app.api.erroPadrao());
+                        });
+                }
+            });
+            connection.end();
         } else { res.status(400).send(app.api.erroPadrao()); }
     }
 
@@ -243,9 +321,11 @@ module.exports = function(app){
     api.salvaPessoa = (req, res) => {
         const knex = app.conexao.conexaoBDKnex();
         const pessoa = req.body;
+        const logDAO = new app.infra.LogDAO(knex);
         
         knex('pessoa').insert(pessoa)
             .then(resultado => {
+                logDAO.logPessoa(req.headers['cod_usuario'], 'pessoa', 'i', null, resultado[0]);
                 knex.destroy();
                 res.status(200).json(resultado[0]);
             })
@@ -261,22 +341,35 @@ module.exports = function(app){
         const { cod_pessoa } = req.params;
 
         if(cod_pessoa){
-            const knex = app.conexao.conexaoBDKnex();
-
-            knex('pessoa').where('cod_pessoa', cod_pessoa).delete()
-                .then(resultado => {
-                    knex.destroy();
-                    res.status(200).end();
-                })
-                .catch(erro => {
+            const connection = app.conexao.conexaoBD();
+            const contatoDAO = new app.infra.ContatoDAO(connection);
+            contatoDAO.listarPessoaLog(cod_pessoa, (erro, resultado) => {
+                if(erro){
                     console.log(erro);
-                    knex.destroy();
-                    if(erro.errno == 1451){
-                        res.status(500).send('Esta pessoa não pode ser apagada pois existem outras informações associadas a ela.');
-                    } else {
-                        res.status(500).send(app.api.erroPadrao());
-                    }
-                });
+                    res.status(500).send(app.api.erroPadrao());
+                }
+                else{
+                    const knex = app.conexao.conexaoBDKnex();
+                    const logDAO = new app.infra.LogDAO(knex);
+                    let espelho = resultado[0].espelho;
+                    knex('pessoa').where('cod_pessoa', cod_pessoa).delete()
+                        .then(resultado => {
+                            logDAO.logPessoa(req.headers['cod_usuario'], 'pessoa', 'd', espelho, cod_pessoa);
+                            knex.destroy();
+                            res.status(200).end();
+                        })
+                        .catch(erro => {
+                            console.log(erro);
+                            knex.destroy();
+                            if(erro.errno == 1451){
+                                res.status(500).send('Esta pessoa não pode ser apagada pois existem outras informações associadas a ela.');
+                            } else {
+                                res.status(500).send(app.api.erroPadrao());
+                            }
+                        });
+                }
+            });
+            connection.end();
         } else { res.status(400).send(app.api.erroPadrao()); }
     }
         

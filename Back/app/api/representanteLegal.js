@@ -37,9 +37,11 @@ module.exports = function(app){
     api.salvaRepresentanteLegal = (req, res) => {
         const knex = app.conexao.conexaoBDKnex();
         const representanteLegal = req.body;
+        const logDAO = new app.infra.LogDAO(knex);
         
         knex('representante_legal').insert(representanteLegal)
             .then(resultado => {
+                logDAO.logRepresentanteLegal(req.headers['cod_usuario'], 'representante_legal', 'i', null, resultado[0]);
                 knex.destroy();
                 res.status(200).end();
             })
@@ -55,19 +57,32 @@ module.exports = function(app){
         const { cod_representante } = req.params;
 
         if(cod_representante){
-            const knex = app.conexao.conexaoBDKnex();
             const representanteLegal = req.body;
-    
-            knex('representante_legal').where('cod_representante', cod_representante).update(representanteLegal)
-                .then(resultado => {
-                    knex.destroy();
-                    res.status(200).end();
-                })
-                .catch(erro => {
+            const connection = app.conexao.conexaoBD();
+            const representanteLegalDAO = new app.infra.RepresentanteLegalDAO(connection);
+            representanteLegalDAO.listarRepresentanteLegalLog(cod_representante, (erro, resultado) =>{
+                if(erro){
                     console.log(erro);
-                    knex.destroy();
-                    res.status(500).send(app.api.erroPadrao());
-                });
+                    res.status(500).send(app.api.erroPadrao()); 
+                }
+                else{
+                    const knex = app.conexao.conexaoBDKnex();
+                    const logDAO = new app.infra.LogDAO(knex);
+                    let espelho = resultado[0].espelho;
+                    knex('representante_legal').where('cod_representante', cod_representante).update(representanteLegal)
+                        .then(resultado => {
+                            logDAO.logRepresentanteLegal(req.headers['cod_usuario'], 'representante_legal', 'u', espelho, cod_representante);
+                            knex.destroy();
+                            res.status(200).end();
+                        })
+                        .catch(erro => {
+                            console.log(erro);
+                            knex.destroy();
+                            res.status(500).send(app.api.erroPadrao());
+                        });
+                }
+            });
+            connection.end();
         } else { res.status(400).send(app.api.erroPadrao()); }
     }
 
