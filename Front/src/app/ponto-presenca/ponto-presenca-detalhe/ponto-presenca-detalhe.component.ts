@@ -164,10 +164,10 @@ export class PontoPresencaDetalheComponent implements OnInit {
     this.getObsAcao();
     this.getContatosInteracao();
     setTimeout(() => {
-      this.analiseCollapse();
       this.getContatosPonto();
       this.getPontoPrensencaEndereco();
       this.tipologiaIdPontoPr();
+      this.analiseCollapse();
     }, 500);
     this.getAnaliseByID();
     this.getEmpresas();

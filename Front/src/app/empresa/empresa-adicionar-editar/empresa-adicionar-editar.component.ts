@@ -121,29 +121,39 @@ export class EmpresaAdicionarEditarComponent implements OnInit {
   /*
   * Método para adicionar/editar a empresa, caso seja passado um id na rota ocorrerá um put, caso contrario será um post
   */
-  salvarEmpresa(form, consorcio) {
-    if (this.radio === 'sim') {form.value.cnpj_empresa_pai = form.value.cnpj_empresa; }
-    form = this.formatEmpresa(form.value);
-    if (this.params.id) {
-      this.empresaService.putEmpresa(this.params.id, form)
-      .subscribe(res => {
-        this.codigo = form.cnpj_empresa;
-        this.contatoService.getContatos(this.codigo, 'empresa');
-        this.contatos = true;
-        this.apiServicesMsg.setMsg('success', 'Editado com sucesso.', 3000);
-      });
-    } else {
-      this.empresaService.postEmpresa(form)
-      .subscribe(res => {
-        this.codigo = form.cnpj_empresa;
-        this.contatoService.getContatos(this.codigo, 'empresa');
-        this.contatos = true;
-        this.apiServicesMsg.setMsg('success', 'Cadastrada com sucesso.', 3000);
-      },
-      erro =>
-      Swal('Erro', `${erro.error}`, 'error')
-    );
-    }
+  salvarEmpresa(formulario, consorcio) {
+      if (this.radio === 'sim') {formulario.value.cnpj_empresa_pai = formulario.value.cnpj_empresa; }
+      let form = this.formatEmpresa(formulario.value);
+      let codigo = form.cnpj_empresa;
+      if (this.params.id) {
+        
+        console.log("oi");
+        console.log(formulario.touched);
+        
+        if(formulario.touched){
+          console.log("oi 2");
+          this.empresaService.putEmpresa(this.params.id, form)
+          .subscribe(res => {
+            this.contatoService.getContatos(codigo, 'empresa');
+            this.contatos = true;
+            this.apiServicesMsg.setMsg('success', 'Editado com sucesso.', 3000);
+        });
+        } else {
+          this.contatoService.getContatos(codigo, 'empresa');
+          this.contatos = true;
+      }
+      } else {
+        this.empresaService.postEmpresa(form)
+        .subscribe(res => {
+          this.contatoService.getContatos(codigo, 'empresa');
+          this.contatos = true;
+          this.apiServicesMsg.setMsg('success', 'Cadastrada com sucesso.', 3000);
+        },
+        erro =>
+        Swal('Erro', `${erro.error}`, 'error')
+      );
+      }
+
   }
 
   /*

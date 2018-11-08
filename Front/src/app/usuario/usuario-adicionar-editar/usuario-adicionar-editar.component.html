@@ -55,7 +55,7 @@
                     <i class="angle double left icon"></i>
                     Cancelar
                   </button>
-                <button class="ui right labeled icon button right floated" [disabled]="!senhaCorreta || fAddUsuario.invalid" type="submit">
+                <button class="ui right labeled icon button right floated" [disabled]="!senhaCorreta || fAddUsuario.invalid || fAddUsuario.pristine" type="submit">
                   <i class="angle double right icon"></i>
                   Salvar
                 </button>

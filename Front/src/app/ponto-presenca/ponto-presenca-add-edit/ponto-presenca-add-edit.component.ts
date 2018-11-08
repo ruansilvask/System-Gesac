@@ -370,17 +370,22 @@ export class PontoPresencaAddEditComponent implements OnInit {
   salvarPontoPresenca(form) {
     if (form.status !== 'INVALID') {
       if (this.parametroIdentificador) {
-        form.value.cod_gesac = this.codGesac;
-        this.pontoPresencaService
-          .putPontoPresenca(this.pontoPresenca.cod_pid, form.value)
-          .subscribe(dados => {
-            this.resp = dados;
-            this.contatoService.getContatos(this.parametroIdentificador, 'ponto');
-            this.secondActive = true;
-            this.getEnderecosAntigos();
-            // this.getObsAcao();
-            // this.getObsAcaoporId(this.params.id ||  this.codGesac);
-          });
+        if(form.touched){
+          form.value.cod_gesac = this.codGesac;
+          this.pontoPresencaService
+            .putPontoPresenca(this.pontoPresenca.cod_pid, form.value)
+            .subscribe(dados => {
+              this.contatoService.getContatos(this.parametroIdentificador, 'ponto');
+              this.secondActive = true;
+              this.getEnderecosAntigos();
+              this.apiServicesMsg.setMsg('success', 'Editado com sucesso.', 3000);
+            });
+        }
+        else{
+          this.contatoService.getContatos(this.parametroIdentificador, 'ponto');
+          this.secondActive = true;
+          this.getEnderecosAntigos();
+        }
       } else {
         this.pontoPresencaService
           .postPontoPresenca(this.pontoPresenca)
@@ -391,6 +396,7 @@ export class PontoPresencaAddEditComponent implements OnInit {
             this.contatoService.getContatos(this.codGesac, 'ponto');
             this.secondActive = true;
             this.novoEndereco = true;
+            this.apiServicesMsg.setMsg('success', 'Cadastrada com sucesso.', 3000);
           });
       }
     } else {

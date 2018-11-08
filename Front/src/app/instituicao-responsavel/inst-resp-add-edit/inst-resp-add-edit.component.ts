@@ -121,6 +121,7 @@ export class InstRespAddEditComponent implements OnInit {
       if (this.idRepresentante()) {
         delete this.formInstituicaoResp.nome_municipio;
         delete this.formInstituicaoResp.uf;
+        if(form.touched){
         this.serviceInstiResp
           .putInstResp(this.params.id, this.formInstituicaoResp)
           .subscribe(
@@ -135,6 +136,10 @@ export class InstRespAddEditComponent implements OnInit {
             },
             erro => Swal('Erro', `${erro.error}`, 'error')
           );
+        }
+        else{
+          this.contatos = true;
+        }
         this.contatoService.getContatos(this.params.id, 'instituicao');
       } else {
         delete this.formInstituicaoResp.uf;
