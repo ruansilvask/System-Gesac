@@ -123,7 +123,7 @@ export class ContratoAdicionarEditarComponent implements OnInit {
     form.value.data_fim = this.apiServicesData.formatData(form.value.data_fim);
     this.fContratos = form.value;
     if (this.params.id) {
-      if(form.touched){
+      if (form.touched) {
         this.contratoService
         .putContrato(this.params.id, form.value)
         .subscribe(
@@ -133,8 +133,7 @@ export class ContratoAdicionarEditarComponent implements OnInit {
           },
           erro => Swal('Erro', `${erro.error}`, 'error')
         );
-      }
-      else{
+      } else {
         this.irParaLote(this.params.id);
       }
     } else {

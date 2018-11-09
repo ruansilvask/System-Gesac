@@ -19,6 +19,11 @@ export class UsuarioService {
     .map(res => res);
   }
 
+  getUsuarioByLogin(login) {
+    return this.http.get<Usuario>(`${API.GESAC_API}usuario/login/${login}`)
+    .map(res => res);
+  }
+
   postUsuario(form) {
     return this.http.post(`${API.GESAC_API}usuario`, form)
     .map(res => res);

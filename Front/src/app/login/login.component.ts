@@ -5,6 +5,7 @@ import { AuthenticationService } from '../services';
 
 import { Usuario } from './usuario';
 import Swal from 'sweetalert2';
+import { StorageService } from '../services/storage.service';
 
 @Component({
   selector: 'app-login',
@@ -19,26 +20,28 @@ export class LoginComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private router: Router,
+    private storageService: StorageService,
     private authenticationService: AuthenticationService
 
   ) { }
 
   ngOnInit() {
     // reset login status
-    this.authenticationService.logout();
-
-    // get return url from route parameters or default to '/'
-    this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/';
+    if (this.storageService.getLocalUser() !== null) {
+      this.router.navigate(['/home']);
+    } else {
+      this.authenticationService.logout();
+    }
   }
 
   fazerLogin() {
     this.authenticationService.login(this.usuario.nome, this.usuario.senha)
       .subscribe(
-        data => {
-          this.router.navigate([this.returnUrl]);
+        res => {
+          this.authenticationService.successfulLogin(res.token);
+          this.router.navigate(['/home']);
         },
-        erro => Swal('Erro', `${erro.error}`, 'error')
-      );
+        erro => Swal('Erro', erro.error, 'error'));
   }
 
 

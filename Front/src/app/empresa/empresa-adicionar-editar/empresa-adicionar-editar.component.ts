@@ -126,12 +126,7 @@ export class EmpresaAdicionarEditarComponent implements OnInit {
       let form = this.formatEmpresa(formulario.value);
       let codigo = form.cnpj_empresa;
       if (this.params.id) {
-        
-        console.log("oi");
-        console.log(formulario.touched);
-        
-        if(formulario.touched){
-          console.log("oi 2");
+        if (formulario.touched){
           this.empresaService.putEmpresa(this.params.id, form)
           .subscribe(res => {
             this.contatoService.getContatos(codigo, 'empresa');
@@ -194,6 +189,25 @@ export class EmpresaAdicionarEditarComponent implements OnInit {
     }
   }
 
+  empresaNaoExiste() {
+    Swal({
+      title: 'Erro',
+      text: `Desculpe, mas esta empresa não existe! Deseja cadastrar uma nova empresa?`,
+      type: 'warning',
+      allowOutsideClick: false,
+      showCancelButton: true,
+      confirmButtonText: 'Sim',
+      cancelButtonText: 'Não, voltar para empresas',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.value) {
+        this.router.navigate(['empresa/novo']);
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        this.router.navigate(['empresa']);
+      }
+    });
+  }
+
   /*
   * Métodos que serão executados quando o componente é iniciado
   */
@@ -221,22 +235,7 @@ export class EmpresaAdicionarEditarComponent implements OnInit {
         this.empresaService.getEmpresa(this.params.id)
         .subscribe(dados =>  {
           if (dados.length === 0) {
-            Swal({
-              title: 'Erro',
-              text: `Desculpe, mas esta empresa não existe! Deseja cadastrar uma nova empresa?`,
-              type: 'warning',
-              allowOutsideClick: false,
-              showCancelButton: true,
-              confirmButtonText: 'Sim',
-              cancelButtonText: 'Não, voltar para empresas',
-              reverseButtons: true
-            }).then((result) => {
-              if (result.value) {
-                this.router.navigate(['empresa/novo']);
-              } else if (result.dismiss === Swal.DismissReason.cancel) {
-                this.router.navigate(['empresa']);
-              }
-            });
+            this.empresaNaoExiste();
           } else {
             this.municipios = this.apiServiceEstadoMunicipio.getMunicipios(dados[0].uf);
 
@@ -251,6 +250,9 @@ export class EmpresaAdicionarEditarComponent implements OnInit {
 
             this.empresaForm = dados[0];
           }
+        },
+        error => {
+          this.empresaNaoExiste();
         });
         this.editCnpj = true;
       }
