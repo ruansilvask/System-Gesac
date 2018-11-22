@@ -40,7 +40,6 @@ node_modules/
 jspm_packages/
 assets/
 app/conexao
-services/
 
 # Arquivos para ignorar
 app.api.ts
