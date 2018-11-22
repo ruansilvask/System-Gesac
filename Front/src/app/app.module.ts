@@ -34,8 +34,8 @@ import { ApiServicesMsg } from './api-services/api-services-msg';
 import { ApiServiceHandleError } from './api-services/api-service-handleError';
 import { ApiServiceExcel } from './api-services/api-service-excel';
 import { StorageService } from './services/storage.service';
-import { ErrorInterceptorProvider } from './services/error.interceptor';
 import { Erro404Component } from './erro404/erro404.component';
+import { ErrorInterceptorProvider } from './services/error.interceptor';
 @NgModule({
   imports: [
     BrowserModule,
@@ -64,15 +64,15 @@ import { Erro404Component } from './erro404/erro404.component';
     ApiServiceCnpj,
     ApiServiceExcel,
     ApiServiceHandleError,
-    StorageService,
-    AuthService,
-    AuthenticationService,
-    JwtInterceptorService,
     ErrorInterceptorProvider,
+    JwtInterceptorService,
     {
       provide: LOCALE_ID,
       useValue: 'pt-BR'
     },
+    AuthenticationService,
+    AuthService,
+    StorageService,
     ContratoService,
     AuthGuard,
     UsuarioService
