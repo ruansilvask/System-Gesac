@@ -228,13 +228,13 @@
 
     <div class="four wide column">
       <div class="ui grid">
-        <div class="six wide column">
+        <div class="five wide column">
           <button class="ui large icon right floated button circular" [disabled]="!botoesMSA" id="btnExportar" suiPopup popupHeader="Exportar GESACs filtrados"
             popupInverted="true" (click)="gerarExcelId()">
             <i class="table icon"></i>
           </button>
         </div>
-        <div class="ten wide column" id="qntGesac">
+        <div class="eleven wide column" id="qntGesac">
           <div class="ui compact right floated segment">
             <p><strong [innerHTML]="totalItens + ' de ' + ((pontosPresenca) ? pontosPresenca.length : '0') + ' itens'"></strong></p>
           </div>

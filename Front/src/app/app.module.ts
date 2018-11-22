@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule, LOCALE_ID } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 
 import { registerLocaleData } from '@angular/common';
 import localePt from '@angular/common/locales/pt';
@@ -9,7 +9,7 @@ registerLocaleData(localePt, 'pt-BR');
 import './util/rxjs-extensions';
 
 import { SuiModule, SuiCheckboxModule, SuiRatingModule } from 'ng2-semantic-ui';
-import { JwtInterceptor, AuthenticationService } from './services';
+import { JwtInterceptor, AuthenticationService, JwtInterceptorService } from './services';
 
 import { AuthGuard } from './guards/auth.guard.service';
 import { ContratoService } from './contrato/contrato.service';
@@ -33,6 +33,9 @@ import { ApiServicesData } from './api-services/api-services-data';
 import { ApiServicesMsg } from './api-services/api-services-msg';
 import { ApiServiceHandleError } from './api-services/api-service-handleError';
 import { ApiServiceExcel } from './api-services/api-service-excel';
+import { StorageService } from './services/storage.service';
+import { ErrorInterceptorProvider } from './services/error.interceptor';
+import { Erro404Component } from './erro404/erro404.component';
 @NgModule({
   imports: [
     BrowserModule,
@@ -50,7 +53,8 @@ import { ApiServiceExcel } from './api-services/api-service-excel';
     LoginComponent,
     HeaderComponent,
     HomeComponent,
-    FooterComponent
+    FooterComponent,
+    Erro404Component
   ],
   providers: [
     ApiServicesPagination,
@@ -60,18 +64,16 @@ import { ApiServiceExcel } from './api-services/api-service-excel';
     ApiServiceCnpj,
     ApiServiceExcel,
     ApiServiceHandleError,
-    {
-      provide: HTTP_INTERCEPTORS,
-      useClass: JwtInterceptor,
-      multi: true
-    },
+    StorageService,
+    AuthService,
+    AuthenticationService,
+    JwtInterceptorService,
+    ErrorInterceptorProvider,
     {
       provide: LOCALE_ID,
       useValue: 'pt-BR'
     },
     ContratoService,
-    AuthService,
-    AuthenticationService,
     AuthGuard,
     UsuarioService
   ],

@@ -48,11 +48,10 @@ export class UsuarioAdicionarEditarComponent implements OnInit {
 
   salvarUsuario(fAddUsuario: NgForm) {
     if (this.params.id) {
-      if (this.authenticationService.verificaUser() === '1') {
+      if (this.authenticationService.verificaUser() === 1) {
         this.usuarioService.putUsuario(this.params.id, fAddUsuario.value)
         .subscribe(
           res => {
-            this.authenticationService.getUser();
             this.router.navigate(['usuario']);
             this.apiServicesMsg.setMsg('success', `As alterações foram salvas com sucesso.`, 3000);
           },
@@ -62,7 +61,7 @@ export class UsuarioAdicionarEditarComponent implements OnInit {
         this.apiServicesMsg.setMsg('warning', `Você não tem permissão para editar usuário.`, 3000);
       }
     } else {
-      if (this.authenticationService.verificaUser() === '1') {
+      if (this.authenticationService.verificaUser() === 1) {
       if (fAddUsuario.value.senha === fAddUsuario.value.senhaNovamente) {
         delete fAddUsuario.value.senhaNovamente;
         this.usuarioService.postUsuario(fAddUsuario.value)

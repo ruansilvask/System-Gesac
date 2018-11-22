@@ -1,5 +1,5 @@
 import { ApiServicesMsg } from '../api-services/api-services-msg';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterContentChecked } from '@angular/core';
 
 import { AuthenticationService } from '../services';
 import { UsuarioService } from '../usuario/usuario.service';
@@ -7,6 +7,7 @@ import { saveAs } from 'file-saver';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { ApiServiceExcel } from '../api-services/api-service-excel';
+import { StorageService } from '../services/storage.service';
 
 @Component({
   moduleId: 'module.id',
@@ -14,7 +15,7 @@ import { ApiServiceExcel } from '../api-services/api-service-excel';
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss']
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, AfterContentChecked {
 
 mostrarMenu = false;
 usuario: any = {};
@@ -24,7 +25,8 @@ baixando: boolean;
     private apiServicesMsg: ApiServicesMsg,
     private authenticationService: AuthenticationService,
     private usuarioService: UsuarioService,
-    private apiServiceExcel: ApiServiceExcel
+    private apiServiceExcel: ApiServiceExcel,
+    private storageService: StorageService
   ) {
 
   }
@@ -51,7 +53,7 @@ baixando: boolean;
   }
 
   verificarCode() {
-    if (this.authenticationService.verificaUser() === '1') {
+    if (this.authenticationService.verificaUser() === 1) {
       return true;
     } else {
       return false;
@@ -77,25 +79,16 @@ baixando: boolean;
   }
 
 
-  ngOnInit() {
-    this.authenticationService.emitirUsuario.subscribe(
-      res => {
-      this.usuarioService.getUsuario(this.authenticationService.verificaUser())
-        .subscribe(
-          result => {
-            this.usuario = result[0];
-          }
-        );
-      }
-    );
-    if (this.authenticationService.verificaUser()) {
-      this.usuarioService.getUsuario(this.authenticationService.verificaUser())
-        .subscribe(
-          result => {
-            this.usuario = result[0];
-          }
-        );
+  ngOnInit() {}
+
+  ngAfterContentChecked() {
+    if (this.usuario && (this.storageService.getLocalUser() !== null) && (this.storageService.getLocalUser().user !== this.usuario.login)) {
+        this.usuarioService.getUsuario(this.authenticationService.verificaUser())
+          .subscribe(
+            result => {
+              this.usuario = result[0];
+            },
+            erro => Swal('Erro', erro.error, 'error'));
     }
   }
-
 }

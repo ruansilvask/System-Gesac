@@ -48,7 +48,7 @@ export class UsuarioComponent implements OnInit {
   pagina = 1;
 
   getUsuarios() {
-    if (this.authenticationService.verificaUser() === '1') {
+    if (this.authenticationService.verificaUser() === 1) {
       this.usuarioService.getUsuarios()
         .subscribe(usuarios => {
         this.totalItens = usuarios.length;
