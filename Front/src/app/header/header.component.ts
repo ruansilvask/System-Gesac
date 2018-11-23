@@ -82,7 +82,7 @@ baixando: boolean;
   ngOnInit() {}
 
   ngAfterContentChecked() {
-    if (this.usuario && (this.storageService.getLocalUser() !== null) && (this.storageService.getLocalUser().user !== this.usuario.login)) {
+    if ((this.storageService.getLocalUser() !== null) && (this.storageService.getLocalUser().user !== this.usuario.login)) {
         this.usuarioService.getUsuario(this.authenticationService.verificaUser())
           .subscribe(
             result => {

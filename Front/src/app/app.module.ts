@@ -63,8 +63,8 @@ import { ErrorInterceptorProvider } from './services/error.interceptor';
     ApiServicesData,
     ApiServiceCnpj,
     ApiServiceExcel,
-    ApiServiceHandleError,
     ErrorInterceptorProvider,
+    ApiServiceHandleError,
     JwtInterceptorService,
     {
       provide: LOCALE_ID,

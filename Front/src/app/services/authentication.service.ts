@@ -31,11 +31,15 @@ export class AuthenticationService {
       coduser: this.helper.decodeToken(token).cod_usuario
     };
     this.storageService.setLocalUser(localUser);
+    this.emitirUsuario.emit(localUser);
   }
 
   verificaUser() {
-    const token = this.storageService.getLocalUser().token;
-    return this.helper.decodeToken(token).cod_usuario;
+    if (this.storageService.getLocalUser()) {
+      const token = this.storageService.getLocalUser().token;
+      return this.helper.decodeToken(token).cod_usuario;
+    }
+    return false;
   }
 
   logout() {
