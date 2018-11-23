@@ -1,7 +1,7 @@
 ﻿import { Injectable } from '@angular/core';
-import { HttpRequest, HttpEvent, HttpInterceptor, HttpResponse, HTTP_INTERCEPTORS, HttpHandler } from '@angular/common/http';
+// tslint:disable-next-line:max-line-length
+import { HttpRequest, HttpEvent, HttpInterceptor, HttpResponse, HTTP_INTERCEPTORS, HttpHandler, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import Swal from 'sweetalert2';
 import { StorageService } from './storage.service';
 
 @Injectable()
@@ -17,13 +17,14 @@ export class JwtInterceptor implements HttpInterceptor {
         const localUser = this.storageService.getLocalUser();
 
         if (localUser) {
-            const authReq = req.clone({
-                headers: req.headers.set('x-access-token', localUser.token).append('cod_usuario', localUser.user)
+            req = req.clone({
+                setHeaders: {
+                    'x-access-token' : localUser.token.toString(),
+                    'cod_usuario': localUser.coduser.toString()
+                  }
             });
-            return next.handle(authReq);
-        } else {
-            return next.handle(req);
         }
+        return next.handle(req);
     }
 }
 
