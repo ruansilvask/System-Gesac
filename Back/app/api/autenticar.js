@@ -1,5 +1,4 @@
-var jwt = require('jsonwebtoken'),
-    passwordHash = require('password-hash');
+var jwt = require('jsonwebtoken');
 
 //let usuarioLogado = [];
 
@@ -18,25 +17,22 @@ module.exports = function(app){
                     //if(!(usuarioLogado.some(i=>i==resultado[0].cod_usuario))){
                         if(resultado[0].status === 'A'){
                             if(resultado[0].senha === user.senha){
-                                var token = jwt.sign({login: resultado[0].login}, app.get('secret'), { expiresIn: 43200 }); //28800s = 8H
+                                var token = jwt.sign({login: resultado[0].login, cod_usuario: resultado[0].cod_usuario}, app.get('secret'), { expiresIn: 43200 }); //28800s = 8H
                                 res.set({'x-access-token': token});
-                                
-                                cod_usuario_cript = passwordHash.generate(resultado[0].cod_usuario.toString(), {saltLength: 200});
-    
+
                                 var date = new Date();
                                 var dataLogin = `${date.toISOString().slice(0,4)}-${date.toISOString().slice(5,7)}-${date.toISOString().slice(8,10)} ${date.toISOString().slice(11,13)-3}.${date.toISOString().slice(14,16)}.${date.toISOString().slice(17,19)}`;
     
                                 console.log(`O usuário ${resultado[0].nome} acabou de logar.  ${dataLogin}`);
     
                                 //usuarioLogado.push(resultado[0].cod_usuario);
+                                res.status(200).json({token});
     
-                                res.status(200).json({token, 'cod_usuario': resultado[0].cod_usuario, 'nome': resultado[0].nome, cod_usuario_cript});
+                            } else { console.log('Senha Incorreta.'); res.status(401).send('Senha incorreta'); }
     
-                            } else { res.status(401).send('Senha incorreta'); }
-    
-                        } else { res.status(401).send('Este login está inativo.'); }
+                        } else { console.log('Login inativo'); res.status(401).send('Este login está inativo.'); }
                    // } else { res.status(401).send('Este usuário já está logado.'); }
-                } else { res.status(401).send('Este login não existe.'); }
+                } else { console.log('Login não existe'); res.status(401).send('Este login não existe.'); }
 
             })
             .catch(erro => {
@@ -72,7 +68,6 @@ module.exports = function(app){
     api.verificaToken = (req, res, next) => {
         let token = req.headers['x-access-token'];
         let cod_usuario = req.headers['cod_usuario'];
-        let cod_usuario_cript = req.headers['cod_usuario_cript'];
         
         if(req.headers['access-control-request-headers'])
         return next();
@@ -82,7 +77,7 @@ module.exports = function(app){
                 if(erro){
                     return res.sendStatus(401);
                 }else{
-                    if(passwordHash.verify(cod_usuario, cod_usuario_cript)){
+                    if(cod_usuario == decoded.cod_usuario){
                         req.usuario = decoded;
                         next();
                     }else{
