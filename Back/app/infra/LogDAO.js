@@ -110,8 +110,13 @@ class LogDAO {
     //Insere Logs da tabela analise     - cod_analise recebe um array com todos códigos da requisição
     logAnalise(cod_usuario, nome_tabela, operacao, espelho, cod_analise){
         let insertLog = [];
-        for(let i=0; i<cod_analise.length; i++){                      
-            insertLog [i] = {cod_usuario, nome_tabela, operacao, espelho, cod_int_1: cod_analise[i]};
+        if(Array.isArray(cod_analise)){
+            for(let i=0; i<cod_analise.length; i++){                      
+                insertLog [i] = {cod_usuario, nome_tabela, operacao, espelho, cod_int_1: cod_analise[i]};
+            }
+        }
+        else{
+            insertLog [0] = {cod_usuario, nome_tabela, operacao, espelho, cod_int_1: cod_analise};
         }
         this._knex('log').insert(insertLog)
             .then(() => {})

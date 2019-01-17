@@ -456,6 +456,8 @@ module.exports = function(app){
                     const knex = app.conexao.conexaoBDKnex();
                     const logDAO = new app.infra.LogDAO(knex);
                     let espelho = resultado[0].espelho;
+
+                    analise.data_analise = new Date();
                     knex('analise').where('cod_analise', cod_analise).update(analise)
                         .then(resultado => {
                             logDAO.logAnalise(req.headers['cod_usuario'], 'analise', 'u', espelho, cod_analise);
