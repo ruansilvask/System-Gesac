@@ -85,7 +85,7 @@ PontoPresencaDAO.prototype.visualizarPontoAnalise = function(cod_gesac, callback
 
 //Lista uma Análise com base no Id.
 PontoPresencaDAO.prototype.listarAnaliseId = function(cod_analise, callback){
-	this._connection.query(`SELECT analise.*, empresa.empresa, pessoa.nome FROM analise INNER JOIN empresa ON analise.cnpj_empresa = empresa.cnpj_empresa LEFT JOIN pessoa ON analise.cod_pessoa_resp = pessoa.cod_pessoa WHERE analise.cod_analise = ${cod_analise}`, callback);
+	this._connection.query(`SELECT analise.*, empresa.empresa, pessoa.nome, tipo_solicitacao.descricao FROM analise INNER JOIN empresa ON analise.cnpj_empresa = empresa.cnpj_empresa LEFT JOIN pessoa ON analise.cod_pessoa_resp = pessoa.cod_pessoa INNER JOIN tipo_solicitacao ON analise.tipo_solicitacao = tipo_solicitacao.tipo_solicitacao WHERE analise.cod_analise = ${cod_analise}`, callback);
 }
 
 //Lista uma Análise concatenado com base no cod_analise.
@@ -109,7 +109,7 @@ PontoPresencaDAO.prototype.ListarInteracaoId = function(data, cod_gesac, callbac
 //---------------Querys de Histórico---------------//
 //Lista os dados do Histórico do Pontos de Presença
 PontoPresencaDAO.prototype.listarHistoricoPontoPresenca = function(cod_gesac, callback){
-	this._connection.query(`SELECT * FROM ((SELECT "solicitação" AS acao, solicitacao.data_sistema AS data, solicitacao.tipo_solicitacao, NULL AS cod_analise FROM solicitacao WHERE solicitacao.cod_gesac = ${cod_gesac}) UNION ALL (SELECT "interação", interacao.data, NULL, NULL FROM interacao WHERE interacao.cod_gesac = ${cod_gesac}) UNION ALL (SELECT "análise", analise.data_analise, NULL, analise.cod_analise FROM analise WHERE analise.cod_gesac = ${cod_gesac})) AS tab ORDER BY tab.data DESC`, callback);
+	this._connection.query(`SELECT * FROM ((SELECT "solicitação" AS acao, solicitacao.data_sistema AS data, solicitacao.tipo_solicitacao, NULL AS cod_analise, usuario.nome FROM solicitacao LEFT JOIN log ON solicitacao.data_sistema = log.cod_data AND solicitacao.tipo_solicitacao = log.cod_int_1 AND solicitacao.cod_gesac = log.cod_int_2 LEFT JOIN usuario ON log.cod_usuario = usuario.cod_usuario WHERE solicitacao.cod_gesac = ${cod_gesac}) UNION ALL (SELECT "interação", interacao.data, NULL, NULL, usuario.nome FROM interacao LEFT JOIN log ON interacao.data = log.cod_data AND interacao.cod_gesac = log.cod_int_1 LEFT JOIN usuario ON log.cod_usuario = usuario.cod_usuario WHERE interacao.cod_gesac = ${cod_gesac}) UNION ALL (SELECT "análise", analise.data_analise, NULL, analise.cod_analise, usuario.nome FROM analise LEFT JOIN log ON analise.cod_analise = log.cod_int_1 AND log.operacao = 'u' LEFT JOIN usuario ON log.cod_usuario = usuario.cod_usuario WHERE analise.cod_gesac = ${cod_gesac})) AS tab ORDER BY tab.data DESC`, callback);
 }
 
 
