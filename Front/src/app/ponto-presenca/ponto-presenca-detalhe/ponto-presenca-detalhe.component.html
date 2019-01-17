@@ -834,7 +834,7 @@
                 <td>{{historicoAcao.data| date : 'dd/MM/y HH:mm:ss'}}</td>
                 <!-- <td>{{historicoAcao.data}}</td> -->
 
-                <td>{{historicoAcao.usuario}}</td>
+                <td>{{historicoAcao.nome}}</td>
                 <td>
                   <a class="mini ui icon button circular" (click)="openModal(historicoAcao.acao, historicoAcao)"
                     suiPopup popupHeader="Visualizar" popupInverted="true">
@@ -1031,8 +1031,23 @@
 
           <div class="ui stackable one column grid">
             <div class="column">
+              <label>Resultado Análise </label>
+              <input [readonly]="true" [value]="historicoAnalises.descricao" placeholder="Resultado" type="text">
+            </div>
+          </div>
+
+          <div class="ui stackable one column grid">
+            <div class="column">
               <label>Obeservação</label>
               <textarea [readonly]="true" [value]="historicoAnalises.obs" placeholder="Observação" style="margin-top: 0px; margin-bottom: 0px; height: 112px;">
+            </textarea>
+            </div>
+          </div>
+
+          <div class="ui stackable one column grid">
+            <div class="column">
+              <label>Justificativa</label>
+              <textarea [readonly]="true" [value]="historicoAnalises.justificativa" placeholder="Justificativa" style="margin-top: 0px; margin-bottom: 0px; height: 56px;">
             </textarea>
             </div>
           </div>
