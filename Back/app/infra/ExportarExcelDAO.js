@@ -27,6 +27,11 @@ ExportarExcelDAO.prototype.listarInteracaoExcel = function(callback){
 	this._connection.query('SELECT interacao.cod_gesac, tipo_interacao.descricao, interacao.assunto, interacao.relato, interacao.data_interacao, interacao.data, pessoa.cod_pessoa, pessoa.nome FROM interacao INNER JOIN tipo_interacao ON interacao.tipo_interacao = tipo_interacao.tipo_interacao LEFT JOIN pessoa ON interacao.cod_pessoa = pessoa.cod_pessoa ORDER BY interacao.data DESC', callback);
 }
 
+//Lista os dados da Análise para a quinta aba da planilha.
+ExportarExcelDAO.prototype.listarAnaliseExcel = function(callback){
+	this._connection.query(`SELECT analise.*, usuario.nome, tipo_solicitacao.descricao FROM analise	LEFT JOIN log ON analise.cod_analise = log.cod_int_1 AND log.nome_tabela = 'analise' AND operacao = 'u'	INNER JOIN usuario ON log.cod_usuario = usuario.cod_usuario	INNER JOIN tipo_solicitacao ON tipo_solicitacao.tipo_solicitacao = substring_index(substring_index(log.espelho, ';', 4), ';', -1) WHERE aceite IS NOT NULL order by analise.cod_gesac;`, callback);
+}
+
 module.exports = () => {
 	return ExportarExcelDAO;
 };
