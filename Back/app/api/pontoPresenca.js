@@ -670,7 +670,7 @@ module.exports = function(app){
     api.apagaObsAcao = (req, res) => {
         const cod_usuario = req.headers['cod_usuario'];
 
-        if(cod_usuario < 4){
+        if(cod_usuario < 4 || cod_usuario == 6 || cod_usuario == 23){
             const { cod_gesac, cod_obs } = req.query;
 
             if(cod_gesac && cod_obs){
