@@ -14,7 +14,7 @@
     "cors": "^2.8.4",
     "express": "^4.16.2",
     "jsonwebtoken": "^8.2.1",
-    "knex": "^0.14.5",
+    "knex": "^0.20.1",
     "mysql": "^2.15.0",
     "node-excel-export": "^1.4.4",
     "npm": "^6.4.1",
